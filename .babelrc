@@ -1,0 +1,58 @@
+{
+	"presets": [
+		"@babel/preset-flow",
+		[
+			"@babel/preset-env",
+			{
+				"targets": {
+					"browsers": ["last 2 versions"]
+				}
+			}
+		],
+		"@babel/preset-react"
+	],
+	"env": {
+		"development": {
+			"plugins": ["flow-react-proptypes"]
+		}
+	},
+	"plugins": [
+		[
+			"babel-plugin-module-resolver",
+			{
+				"root": ["./app"],
+				"extensions": [".js", ".web.js", ".native.js"],
+				"alias": {
+					"Constants": "./app/constants",
+					"Components": "./app/components",
+					"Views": "./app/views",
+					"Styles": "./app/styles",
+					"Actions": "./app/redux/actions",
+					"API": "./app/api",
+					"Stubs": "./app/jest/stubs",
+					"Types": "./app/types",
+					"Utils": "./app/utils",
+					"Queries": "./app/queries",
+					"Storybook": "./.storybook"
+				},
+				"cwd": "babelrc"
+			}
+		],
+		[
+			"babel-plugin-transform-imports",
+			{
+				"react-automata": {
+					"transform": "react-automata/lib/${member}",
+					"preventFullImport": true
+				}
+			}
+		],
+		"babel-plugin-styled-components",
+		"@babel/plugin-proposal-class-properties",
+		"@babel/plugin-proposal-object-rest-spread",
+		"react-hot-loader/babel",
+		"graphql-tag",
+		"lodash",
+		"ramda"
+	]
+}

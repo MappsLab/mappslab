@@ -1,0 +1,15 @@
+{
+	"name": "mappslab-api",
+	"version": "0.0.1",
+	"description": "Express-based central API backend for MappsLab",
+	"main": "index.js",
+	"scripts": {
+		"test": "jest"
+	},
+	"author": "Joseph Thomas | Good Idea Studio",
+	"license": "ISC",
+	"dependencies": {
+		"express": "^4.16.3",
+		"react": "^16.3.2"
+	}
+}

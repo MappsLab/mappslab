@@ -1,0 +1,21 @@
+{
+  "name": "mappslab-client",
+  "version": "0.0.1",
+  "description": "React.js front-end for MappsLab",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Joseph Thomas | Good Idea Studio",
+  "license": "ISC",
+  "dependencies": {
+		"axios": "^0.18.0",
+		"ramda": "^0.25.0",
+		"react": "^16.3.2",
+		"react-dom": "^16.3.2",
+		"react-native": "^0.55.3",
+		"react-router": "^4.2.0",
+		"react-router-dom": "^4.2.2",
+		"styled-components": "^3.2.6"
+	}
+}
