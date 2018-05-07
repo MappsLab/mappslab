@@ -1,0 +1,23 @@
+{
+  "name": "@mappslab/map",
+  "version": "0.0.1",
+  "description": "The base Map component used in MappsLab",
+  "main": "index.js",
+  "scripts": {
+    "build": "babel ./src --out-dir ./dist --config-file ../../.babelrc",
+    "test": "jest"
+  },
+  "author": "Joseph Thomas | Good Idea Studio",
+  "license": "ISC",
+  "devDependencies": {
+    "react": "^16.3.2"
+  },
+  "dependencies": {
+    "@babel/cli": "^7.0.0-beta.46",
+    "@babel/core": "^7.0.0-beta.46",
+    "@babel/polyfill": "^7.0.0-beta.46",
+    "@babel/preset-env": "^7.0.0-beta.46",
+    "@babel/preset-flow": "^7.0.0-beta.46",
+    "@babel/preset-react": "^7.0.0-beta.46"
+  }
+}
