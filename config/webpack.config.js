@@ -43,9 +43,9 @@ const development = merge([
 		entry: [
 			'babel-polyfill',
 			'react-hot-loader/patch',
-			'webpack-dev-server/client?https://localhost:8080',
+			'webpack-dev-server/client?http://localhost:8080',
 			'webpack/hot/only-dev-server',
-			'./app/index.js',
+			'./app/index.dev.js',
 		],
 		output: {
 			path: path.resolve(__dirname, '/js'),
@@ -71,7 +71,7 @@ const development = merge([
 			host: '0.0.0.0',
 			proxy: {
 				'/api': {
-					target: 'https://localhost:3000',
+					target: 'http://localhost:3000',
 					pathRewrite: { '^/api': '' },
 					secure: false,
 				},

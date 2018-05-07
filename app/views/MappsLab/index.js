@@ -8,6 +8,7 @@ import Mapp from 'mapp'
 
 const MappsLab = () => (
 	<main>
+		<p>helloo</p>
 		<Mapp />
 	</main>
 )
