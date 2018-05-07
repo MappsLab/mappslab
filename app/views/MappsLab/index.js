@@ -8,8 +8,7 @@ import Mapp from 'mapp'
 
 const MappsLab = () => (
 	<main>
-		<p>helloo</p>
-		<Mapp />
+		<Mapp APIKey="AIzaSyCOqxjWmEzFlHKC9w-iUZ5zL2rIyBglAag" />
 	</main>
 )
 

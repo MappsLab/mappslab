@@ -12,7 +12,8 @@
 				"root": ["./app"],
 				"extensions": [".js", ".web.js", ".native.js"],
 				"alias": {
-					"App": "./app/"
+					"App": "./app/",
+					"mapp": "./packages/mapp/src"
 				},
 				"cwd": "babelrc"
 			}

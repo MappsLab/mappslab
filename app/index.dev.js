@@ -19,9 +19,6 @@ const renderApp = (Component) => {
 
 renderApp(MappsLab)
 
-console.log('!!!!!!!')
-console.log(module.hot)
-
 if (module.hot) {
 	module.hot.accept('./views/MappsLab/index.js', () => {
 		// eslint-disable-next-line

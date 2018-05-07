@@ -38,6 +38,8 @@ module.name_mapper='^[./a-zA-Z0-9$_-]+\.\(bmp\|gif\|jpg\|jpeg\|png\|psd\|svg\|we
 
 ; Mirror the babel & webpack aliases
 module.name_mapper='^App' -> '<PROJECT_ROOT>/app'
+module.name_mapper='^mapp$' -> '<PROJECT_ROOT>/packages/mapp/src'
+
 
 suppress_type=$FlowIssue
 suppress_type=$FlowFixMe
