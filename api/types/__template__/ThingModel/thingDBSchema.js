@@ -1,13 +1,13 @@
 // @flow
 import Joi from 'joi'
-import type { PinInput } from '../PinTypes'
+import type { ThingInput } from '../ThingTypes'
 import { promisePipe, filterNullAndUndefined } from '../../../utils'
 
 /**
  * Schema
  */
 
-export const pinSchema = (isNew: boolean = true) =>
+export const thingSchema = (isNew: boolean = true) =>
 	Joi.object().keys({
 		uid: process.env.TEST_DB === 'true' ? Joi.string() : Joi.any().forbidden(),
 		title: isNew
@@ -22,19 +22,19 @@ export const pinSchema = (isNew: boolean = true) =>
 		lang: isNew ? Joi.number().isRequired() : Joi.number(),
 		createdAt: isNew ? Joi.date().required() : Joi.any().forbidden(),
 		updatedAt: Joi.date().required(),
-		type: Joi.any().only('pin'),
+		type: Joi.any().only('thing'),
 	})
 
 export const defaultValues = {
-	type: 'pin',
+	type: 'thing',
 	updatedAt: new Date(),
 }
 
-export const validateNew = (pinData: PinInput) => Joi.validate(pinData, pinSchema(true))
-export const validateUpdate = (pinData: PinInput) => Joi.validate(pinData, pinSchema(false))
+export const validateNew = (thingData: ThingInput) => Joi.validate(thingData, thingSchema(true))
+export const validateUpdate = (thingData: ThingInput) => Joi.validate(thingData, thingSchema(false))
 
 /**
  * Clean
  */
 
-export const clean = async (pinData: PinInput = {}): Promise<PinInput> => promisePipe(filterNullAndUndefined)(pinData)
+export const clean = async (thingData: ThingInput = {}): Promise<ThingInput> => promisePipe(filterNullAndUndefined)(thingData)

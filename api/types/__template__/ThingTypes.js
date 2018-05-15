@@ -3,7 +3,7 @@
 import type { UserType } from '../User/UserTypes'
 import type { MapType } from '../Map/Types'
 
-export type PinType = {
+export type ThingType = {
 	uid: string,
 	title?: string,
 	lat: number,
@@ -12,7 +12,7 @@ export type PinType = {
 	maps?: Array<MapType>,
 }
 
-export type PinInput = {
+export type ThingInput = {
 	title?: string,
 	lat?: number,
 	lang?: number,

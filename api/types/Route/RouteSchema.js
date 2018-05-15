@@ -1,13 +1,36 @@
 // @flow
 
-const Pin = /* GraphQL */ `
+const Route = /* GraphQL */ `
 	type Route implements Node {
 		uid: ID!
+		title: String
+		owner: User
+		lines: [Line]
+		maps: [Maps]
+	}
+
+	type Line {
+		from: Pin
+		to: Pin
 	}
 
 	input RouteInput {
 		title: String!
 	}
+
+	# Relationships
+
+	type RouteEdge implements Edge {
+		cursor: ID!
+		node: Route
+	}
+
+	type RouteConnection implements Connection {
+		pageInfo: PageInfo!
+		edges: [RouteEdge]!
+	}
+
+	# Queries & Mutations
 
 	extend type Query {
 		route(uid: ID!): Route!
@@ -20,4 +43,4 @@ const Pin = /* GraphQL */ `
 	}
 `
 
-export default Pin
+export default Route

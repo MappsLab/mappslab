@@ -1,13 +1,32 @@
 // @flow
 
-const Pin = /* GraphQL */ `
+const Map = /* GraphQL */ `
 	type Map implements Node {
 		uid: ID!
+		title: String
+		owner: User
+		classroom: Classroom
+		pins: PinConnection 
+		routes: RouteConnection
 	}
 
 	input MapInput {
 		title: String!
 	}
+
+	# Relationships
+
+	type MapEdge implements Edge {
+		cursor: ID!
+		node: Classroom
+	}
+
+	type MapConnection implements Connection {
+		pageInfo: PageInfo!
+		edges: [MapEdge]!
+	}
+
+	# Queries & Mutations
 
 	extend type Query {
 		map(uid: ID!): Map!
@@ -20,4 +39,4 @@ const Pin = /* GraphQL */ `
 	}
 `
 
-export default Pin
+export default Map

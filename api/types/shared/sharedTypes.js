@@ -16,9 +16,8 @@ type Edge = {
 	node: Object,
 }
 
-type PageInfo = {
+export type PageInfo = {
 	hasNextPage: boolean,
-	hasPreviousPage: boolean,
 	lastCursor: string,
 }
 

@@ -17,6 +17,19 @@ export const coreTypes = /* GraphQL */ `
 		uid: ID
 	}
 
+	interface ListPage {
+		pageInfo: PageInfo!
+	}
+
+	interface Edge {
+		cursor: String!
+	}
+
+	interface Connection {
+		pageInfo: PageInfo!
+		edges: [Node]!
+	}
+
 	enum QueryOperator {
 		EQ
 		NOTEQ
@@ -36,16 +49,6 @@ export const coreTypes = /* GraphQL */ `
 
 	type PageInfo {
 		hasNextPage: Boolean!
-		hasPreviousPage: Boolean!
 		lastCursor: ID
 	}
-
-	interface ListPage {
-		pageInfo: PageInfo!
-	}
-
-	interface Edge {
-		cursor: String!
-	}
-
 `

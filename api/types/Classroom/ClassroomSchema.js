@@ -1,16 +1,35 @@
 // @flow
 
-const Pin = /* GraphQL */ `
+const Classroom = /* GraphQL */ `
 	type Classroom implements Node {
 		uid: ID!
+		title: String
+		students: UserConnection
+		teachers: UserConnection
+		maps: MapConnection
 	}
 
 	input ClassroomInput {
 		title: String!
 	}
 
+	# Relationships
+
+	type ClassroomEdge implements Edge {
+		cursor: ID!
+		node: Classroom
+	}
+
+	type ClassroomConnection implements Connection {
+		pageInfo: PageInfo!
+		edges: [ClassroomEdge]!
+	}
+
+	# Queries & Mutations
+
 	extend type Query {
 		classroom(uid: ID!): Classroom!
+		classrooms(input: PaginationInput!): ClassroomList
 	}
 
 	extend type Mutation {
@@ -20,4 +39,4 @@ const Pin = /* GraphQL */ `
 	}
 `
 
-export default Pin
+export default Classroom

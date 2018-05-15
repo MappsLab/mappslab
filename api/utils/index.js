@@ -1,5 +1,6 @@
 // @flow
 import * as R from 'ramda'
+import type { NestedArray } from 'ramda'
 
 export const filterNullAndUndefined = (obj: Object): Promise<Object> =>
 	new Promise((resolve) => resolve(R.filter((a) => a !== null && a !== undefined)(obj)))
@@ -8,3 +9,5 @@ export const filterNullAndUndefined = (obj: Object): Promise<Object> =>
 export const promisify = (f: Function): Function => async (...args) => f(...args)
 
 export const promisePipe = (...funcs: Array<Function>) => R.pipeP(...funcs.map(promisify))
+
+export const arrayify = (...things: NestedArray<mixed>): Array<mixed> => R.flatten(things)

@@ -48,12 +48,6 @@ const resolvers = merge(
 )
 
 module.exports = {
-	typeDefs: [
-		Root,
-		mediaTypes,
-		coreTypes,
-		scalarTypes,
-		UserSchema
-	],
+	typeDefs: [Root, mediaTypes, coreTypes, scalarTypes, UserSchema],
 	resolvers,
-)
+}

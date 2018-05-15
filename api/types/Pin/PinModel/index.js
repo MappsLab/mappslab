@@ -1,18 +1,13 @@
-import { getUser, getUsers, getViewer } from './userRead'
-import { getFollowers, createFriendship, removeFriendship } from './userSocial'
-import { updateUser } from './userUpdate'
-import { createUser, removeUser } from './userCreation'
-import { checkPassword } from './userAuth'
+// @flow
+import { getPin, getPins } from './readPin'
+import { updatePin } from './updatePin'
+import { createPin } from './createPin'
+import { deletePin } from './deletePin'
 
 module.exports = {
-	getUser,
-	getUsers,
-	getViewer,
-	getFollowers,
-	checkPassword,
-	createUser,
-	createFriendship,
-	removeFriendship,
-	removeUser,
-	updateUser,
+	getPin,
+	getPins,
+	updatePin,
+	createPin,
+	deletePin,
 }

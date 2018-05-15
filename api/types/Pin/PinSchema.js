@@ -7,7 +7,8 @@ const Pin = /* GraphQL */ `
 		lat: Number!
 		lang: Number!
 		owner: User
-		maps: [Map]
+		maps: MapConnection
+		routes: RouteConnection
 	}
 
 	input PinInput {
@@ -15,6 +16,21 @@ const Pin = /* GraphQL */ `
 		lat: Number!
 		lang: Number!
 	}
+
+	# Relationships
+
+	type PinEdge implements Edge {
+		cursor: ID!
+		node: Pin
+	}
+
+	type PinConnection implements Connection {
+		pageInfo: PageInfo!
+		edges: [PinEdge]!
+	}
+
+
+	# Queries & Mutations
 
 	extend type Query {
 		pin(uid: ID!): Pin!

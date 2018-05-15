@@ -1,18 +1,19 @@
 // @flow
 
-import type { UserType } from '../User/UserTypes'
-import type { MapType } from '../Map/Types'
+import type { TeacherType, UserType } from '../User/UserTypes'
+import type { MapType } from '../Map/MapTypes'
 
-export type PinType = {
+export type ClassroomType = {
 	uid: string,
 	title?: string,
 	lat: number,
 	lang: number,
-	owner?: UserType,
+	students?: Array<UserType>,
+	teachers?: Array<TeacherType>,
 	maps?: Array<MapType>,
 }
 
-export type PinInput = {
+export type ClassroomInput = {
 	title?: string,
 	lat?: number,
 	lang?: number,

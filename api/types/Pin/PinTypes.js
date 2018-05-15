@@ -1,7 +1,8 @@
 // @flow
 
 import type { UserType } from '../User/UserTypes'
-import type { MapType } from '../Map/Types'
+import type { MapType } from '../Map/MapTypes'
+import type { RouteType } from '../Route/RouteTypes'
 
 export type PinType = {
 	uid: string,
@@ -10,6 +11,7 @@ export type PinType = {
 	lang: number,
 	owner?: UserType,
 	maps?: Array<MapType>,
+	routes?: Array<RouteType>,
 }
 
 export type PinInput = {

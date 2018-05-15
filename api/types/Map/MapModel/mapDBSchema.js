@@ -1,13 +1,13 @@
 // @flow
 import Joi from 'joi'
-import type { PinInput } from '../PinTypes'
+import type { MapInput } from '../MapTypes'
 import { promisePipe, filterNullAndUndefined } from '../../../utils'
 
 /**
  * Schema
  */
 
-export const pinSchema = (isNew: boolean = true) =>
+export const mapSchema = (isNew: boolean = true) =>
 	Joi.object().keys({
 		uid: process.env.TEST_DB === 'true' ? Joi.string() : Joi.any().forbidden(),
 		title: isNew
@@ -18,23 +18,21 @@ export const pinSchema = (isNew: boolean = true) =>
 			: Joi.string()
 					.min(3)
 					.max(35),
-		lat: isNew ? Joi.number().isRequired() : Joi.number(),
-		lang: isNew ? Joi.number().isRequired() : Joi.number(),
 		createdAt: isNew ? Joi.date().required() : Joi.any().forbidden(),
 		updatedAt: Joi.date().required(),
-		type: Joi.any().only('pin'),
+		type: Joi.any().only('map'),
 	})
 
 export const defaultValues = {
-	type: 'pin',
+	type: 'map',
 	updatedAt: new Date(),
 }
 
-export const validateNew = (pinData: PinInput) => Joi.validate(pinData, pinSchema(true))
-export const validateUpdate = (pinData: PinInput) => Joi.validate(pinData, pinSchema(false))
+export const validateNew = (mapData: MapInput) => Joi.validate(mapData, mapSchema(true))
+export const validateUpdate = (mapData: MapInput) => Joi.validate(mapData, mapSchema(false))
 
 /**
  * Clean
  */
 
-export const clean = async (pinData: PinInput = {}): Promise<PinInput> => promisePipe(filterNullAndUndefined)(pinData)
+export const clean = async (mapData: MapInput = {}): Promise<MapInput> => promisePipe(filterNullAndUndefined)(mapData)

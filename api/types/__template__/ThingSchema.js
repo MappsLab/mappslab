@@ -1,6 +1,6 @@
 // @flow
 
-const Pin = /* GraphQL */ `
+const Thing = /* GraphQL */ `
 	type Thing implements Node {
 		uid: ID!
 	}
@@ -20,4 +20,4 @@ const Pin = /* GraphQL */ `
 	}
 `
 
-export default Pin
+export default Thing
