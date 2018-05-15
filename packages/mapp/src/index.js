@@ -32,7 +32,7 @@ class Mapp extends React.Component<Props> {
 			streetViewControlOptions: false,
 		}
 		// $FlowFixMe
-		this.map = new window.google.maps.Map(this.mapRef.current, options) // eslint-disable-line no-undef
+		this.map = new google.maps.Map(this.mapRef.current, options) // eslint-disable-line no-undef
 	}
 
 	mapRef: { current: any }
