@@ -6,6 +6,8 @@
 	"scripts": {
 		"test": "jest",
 		"dev:app": "webpack-dev-server --colors --env development --config ./config/webpack.config.js",
+		"dev:api": "cross-env NODE_PATH=./ cross-env NODE_ENV=development cross-env DEBUG=build*,api*,shared:middlewares*,-api:resolvers cross-env DIR=api backpack",
+		"build:api": "cross-env NODE_PATH=./ cross-env DIR=api backpack build",
 		"build": "babel ./src --out-dir ./dist"
 	},
 	"repository": {

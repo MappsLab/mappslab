@@ -6,18 +6,6 @@
 		}
 	},
 	"plugins": [
-		[
-			"babel-plugin-module-resolver",
-			{
-				"root": ["./app"],
-				"extensions": [".js", ".web.js", ".native.js"],
-				"alias": {
-					"App": "./app/",
-					"mapp": "./packages/mapp/src"
-				},
-				"cwd": "babelrc"
-			}
-		],
 		"babel-plugin-styled-components",
 		"@babel/plugin-proposal-class-properties",
 		"@babel/plugin-proposal-object-rest-spread",
