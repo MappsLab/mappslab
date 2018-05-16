@@ -10,7 +10,7 @@ import { promisePipe, filterNullAndUndefined } from '../../../utils'
 export const classroomSchema = (isNew: boolean = true) =>
 	Joi.object().keys({
 		uid: process.env.TEST_DB === 'true' ? Joi.string() : Joi.any().forbidden(),
-		classroomName: isNew
+		title: isNew
 			? Joi.string()
 					.min(3)
 					.max(35)

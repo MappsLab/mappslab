@@ -9,10 +9,10 @@ import type { DBEdge } from '../../../../types/shared/sharedTypes'
 // TODO: Seed with disabled users
 
 const generateClassroom = (): Object => {
-	const classroomName = `${faker.commerce.productAdjective()} ${faker.commerce.department()}`
+	const title = `${faker.commerce.productAdjective()} ${faker.commerce.department()}`
 	const createdAt = faker.date.past(2)
 	return {
-		classroomName,
+		title,
 		createdAt,
 	}
 }

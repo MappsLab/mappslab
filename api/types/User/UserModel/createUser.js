@@ -2,7 +2,7 @@
 import type { UserType } from '../UserTypes'
 import { clean, defaultValues, validateNew } from './userDBSchema'
 import { ValidationError } from '../../../errorTypes'
-import { createNode, createEdge } from '../../../database'
+import { createNode } from '../../../database'
 
 const debug = require('debug')('api:user')
 

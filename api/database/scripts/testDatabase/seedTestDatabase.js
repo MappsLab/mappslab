@@ -1,9 +1,10 @@
 // @flow
 import faker from 'faker'
 import { dbClient } from '../../index'
-import { generateUsers, generateClassrooms, generateClassroomConnections } from './generate'
+import { generateUsers, generateClassrooms, generateClassroomConnections, generatePins } from './generate'
 import { createUser } from '../../../types/User/UserModel'
 import { createClassroom, createClassroomConnection } from '../../../types/Classroom/ClassroomModel'
+import { createPin, createPinConnection } from '../../../types/Pin/PinModel'
 
 const dgraph = require('dgraph-js')
 const debug = require('debug')('api:testDatabase')
@@ -51,8 +52,17 @@ const seedDatabase = async () => {
 	)
 	debug(`🏫  Assigned students and teachers to classrooms`)
 
-	// debug('📍  Creating some pins for students..')
-	// debug(`📍  Created ${pins.length} pins for ${students.length} students`)
+	debug('📍  Creating some pins for students..')
+
+	const pins = await students.reduce(async (accP, student) => {
+		const pinCount = faker.random.number({ min: 0, max: 20 })
+		const newPins = await promiseSerial(generatePins(pinCount).map((pinData) => () => createPin(pinData)))
+		await promiseSerial(newPins.map((p) => () => createPinConnection({ fromUid: student.uid, pred: 'pinned', toUid: p.uid })))
+		const acc = await accP
+		return [...acc, ...newPins]
+	}, [])
+
+	debug(`📍  Created ${pins.length} pins for ${students.length} students`)
 
 	debug('🌻 🌻 🌻 Successfully seeded test database 🌻 🌻 🌻 ')
 }

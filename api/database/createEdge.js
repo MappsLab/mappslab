@@ -5,11 +5,7 @@ import type { DBEdge } from '../types/shared/sharedTypes'
 const dgraph = require('dgraph-js')
 const debug = require('debug')('api')
 
-type ClassroomEdge = DBEdge & {
-	pred: 'teaches_in' | 'learns_in',
-}
-
-const createEdge = async ({ fromUid, pred, toUid }: ClassroomEdge): Promise<true | Error> => {
+const createEdge = async ({ fromUid, pred, toUid }: DBEdge): Promise<true | Error> => {
 	const txn = dbClient.newTxn()
 	try {
 		const mu = new dgraph.Mutation()
