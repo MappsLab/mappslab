@@ -3,9 +3,13 @@
 import type { UserType } from '../User/UserTypes'
 
 export type DBEdge = {
-	fromId: string,
+	fromUid: string,
 	pred: string,
-	toId: string,
+	toUid: string,
+}
+
+export type DBNode = Object & {
+	uid: string,
 }
 
 export type PaginationArgs = {

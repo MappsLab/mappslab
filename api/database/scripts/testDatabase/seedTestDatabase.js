@@ -1,6 +1,6 @@
 // @flow
 import faker from 'faker'
-import db from '../../index'
+import { dbClient } from '../../index'
 import { generateUsers, generateClassrooms, generateClassroomConnections } from './generate'
 import { createUser } from '../../../types/User/UserModel'
 import { createClassroom, createClassroomConnection } from '../../../types/Classroom/ClassroomModel'
@@ -13,7 +13,7 @@ faker.seed()
 const dropAll = async () => {
 	const op = new dgraph.Operation()
 	op.setDropAll(true)
-	await db.alter(op)
+	await dbClient.alter(op)
 }
 const promiseSerial = (funcs) =>
 	funcs.reduce((promise, func) => promise.then((result) => func().then(Array.prototype.concat.bind(result))), Promise.resolve([]))
@@ -27,7 +27,7 @@ const setSchema = async () => {
 	`
 	const op = new dgraph.Operation()
 	op.setSchema(schema)
-	await db.alter(op)
+	await dbClient.alter(op)
 }
 
 const seedDatabase = async () => {

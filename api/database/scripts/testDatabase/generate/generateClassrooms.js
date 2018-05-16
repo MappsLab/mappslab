@@ -1,7 +1,6 @@
 // @flow
 import * as R from 'ramda'
 import faker from 'faker'
-import { mostLikely } from './utils'
 import defaultClassrooms from '../../../stubs/classrooms'
 import type { UserType } from '../../../../types/User/UserTypes'
 import type { ClassroomType } from '../../../../types/Classroom/ClassroomTypes'
