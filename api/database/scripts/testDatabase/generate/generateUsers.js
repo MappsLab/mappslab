@@ -1,29 +1,27 @@
 // @flow
 import * as R from 'ramda'
 import faker from 'faker'
-import { probably, probablyNot } from './utils'
+import { mostLikely } from './utils'
 import { users as defaultUsers } from '../../../stubs/'
 
 // TODO: Seed with disabled users
 
-const locales = ['en', 'de', 'jp', 'us']
-
 const generateUser = (): Object => {
 	const name = faker.name.findName()
-	const joinDate = faker.date.past(2)
+	const createdAt = faker.date.past(2)
 	return {
-		displayName: name,
+		name,
 		email: faker.internet
 			.email(name)
 			.toLowerCase()
 			.replace(/[.]+/, '.'),
-		bioLine: faker.company.catchPhrase(),
-		username: faker.internet.userName(name).replace(/\./g, '-'),
-		joinDate,
-		locale: faker.helpers.shuffle(locales)[0],
-		website: probably(faker.internet.url(), undefined),
-		disabled: probablyNot(true, false),
+		role: mostLikely('student', 'teacher'),
+		createdAt,
+		disabled: mostLikely(false, true),
 	}
 }
 
-export const generateUsers = (count: number): Array<mixed> => [...defaultUsers, ...R.times(generateUser, count)]
+export const generateUsers = (count: number): Array<mixed> => [
+	...defaultUsers,
+	...R.times(generateUser, count - defaultUsers.length),
+]

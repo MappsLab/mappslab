@@ -5,9 +5,10 @@ import type { ClassroomType } from '../Classroom/ClassroomTypes'
 
 export type UserType = {
 	uid: string,
+	username: string,
 	name?: string,
 	email?: string,
-	classrooms: Array<ClassroomType>,
+	classrooms?: Array<ClassroomType>,
 	maps?: Array<MapType>,
 	role: 'student',
 }

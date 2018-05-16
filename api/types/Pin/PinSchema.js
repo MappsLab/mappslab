@@ -4,8 +4,8 @@ const Pin = /* GraphQL */ `
 	type Pin implements Node {
 		uid: ID!
 		title: String!
-		lat: Number!
-		lang: Number!
+		lat: Float!
+		lang: Float!
 		owner: User
 		maps: MapConnection
 		routes: RouteConnection
@@ -13,8 +13,8 @@ const Pin = /* GraphQL */ `
 
 	input PinInput {
 		title: String!
-		lat: Number!
-		lang: Number!
+		lat: Float!
+		lang: Float!
 	}
 
 	# Relationships
@@ -39,7 +39,7 @@ const Pin = /* GraphQL */ `
 	extend type Mutation {
 		addPin(input: PinInput!): Pin!
 		modifyPin(input: PinInput!): Pin!
-		removePin(uid: ID!: Boolean!
+		removePin(uid: ID!): Boolean!
 	}
 `
 

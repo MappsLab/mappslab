@@ -1,15 +1,14 @@
 // @flow
 import faker from 'faker'
 import db from '../../index'
-import { flatten } from 'ramda'
-
-import { generateUsers, generateFollowerConnections } from './generate'
-import { createUser, createFriendship } from '../../../types/User/UserModel'
+import { generateUsers, generateClassrooms, generateClassroomConnections } from './generate'
+import { createUser } from '../../../types/User/UserModel'
+import { createClassroom, createClassroomConnection } from '../../../types/Classroom/ClassroomModel'
 
 const dgraph = require('dgraph-js')
 const debug = require('debug')('api:testDatabase')
 
-faker.seed(666)
+faker.seed()
 
 const dropAll = async () => {
 	const op = new dgraph.Operation()
@@ -21,11 +20,10 @@ const promiseSerial = (funcs) =>
 
 const setSchema = async () => {
 	const schema = `
+		role: string @index(hash) .
 		type: string @index(hash) .
-		username: string @index(hash) .
-		email: string @index(hash) .
-		follows: uid @reverse @count .
-		locale: string @index(hash) .
+		teaches_in: uid @reverse .
+		learns_in: uid @reverse .
 	`
 	const op = new dgraph.Operation()
 	op.setSchema(schema)
@@ -37,21 +35,25 @@ const seedDatabase = async () => {
 	await setSchema()
 	debug('🌻 🌻 🌻 Seeding Test Database... 🌻 🌻 🌻 ')
 	debug('👶  Creating and inserting users...')
-	const newUsers = await promiseSerial(generateUsers(50).map((u) => () => createUser(u)))
-	debug(`👶  Created ${newUsers.length} users`)
+	const users = await promiseSerial(generateUsers(100).map((u) => () => createUser(u)))
+	const students = users.filter((u) => u.role === 'student')
+	const teachers = users.filter((u) => u.role === 'teacher')
+	debug(`👶  Created ${students.length} students and ${teachers.length} teachers`)
 
-	debug('🤝  Making some friends..')
-	const userKeys = newUsers.map((u) => u.uid)
-	const makeFriends = generateFollowerConnections(userKeys)
-	const friendships = flatten(await Promise.all(newUsers.map(makeFriends))).filter(
-		({ userUid, followedUid }) => userUid !== followedUid,
+	debug('🏫  Adding some classrooms owned by teachers..')
+	const cCount = Math.floor(teachers.length * 2)
+	const classrooms = await promiseSerial(generateClassrooms(cCount).map((c) => () => createClassroom(c)))
+	debug(`🏫  Made ${classrooms.length} classrooms`)
+
+	debug('🏫  Assigning students and teachers to classrooms..')
+	await promiseSerial(
+		generateClassroomConnections(users, classrooms).map((connection) => () => createClassroomConnection(connection)),
 	)
+	debug(`🏫  Assigned students and teachers to classrooms`)
 
-	const connections = await promiseSerial(
-		friendships.map(({ userUid, followedUid, date }) => () => createFriendship(userUid, followedUid, date)),
-	)
+	// debug('📍  Creating some pins for students..')
+	// debug(`📍  Created ${pins.length} pins for ${students.length} students`)
 
-	debug(`🤝  Made ${connections.length} friendships`)
 	debug('🌻 🌻 🌻 Successfully seeded test database 🌻 🌻 🌻 ')
 }
 

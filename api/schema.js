@@ -1,11 +1,13 @@
 // @flow
 import { merge } from 'lodash'
-import { makeExecutableSchema } from 'graphql-tools'
 
 import { coreTypes, coreTypeResolvers, coreQueryResolvers } from './types/core'
 import { scalarTypes, scalarResolvers } from './types/Scalars'
+import { ClassroomSchema, ClassroomQueryResolvers, ClassroomMutationResolvers } from './types/Classroom'
+import { MapSchema, MapQueryResolvers, MapMutationResolvers } from './types/Map'
+import { PinSchema, PinQueryResolvers, PinMutationResolvers } from './types/Pin'
+import { RouteSchema, RouteQueryResolvers, RouteMutationResolvers } from './types/Route'
 import { UserSchema, UserQueryResolvers, UserMutationResolvers } from './types/User'
-import { mediaTypes, mediaQueryResolvers } from './types/Media'
 
 const Root = /* GraphQL */ `
 	type Query {
@@ -34,12 +36,19 @@ const resolvers = merge(
 	 */
 	coreQueryResolvers,
 	coreTypeResolvers,
-	mediaQueryResolvers,
 	scalarResolvers,
+	ClassroomQueryResolvers,
+	MapQueryResolvers,
+	PinQueryResolvers,
+	RouteQueryResolvers,
 	UserQueryResolvers,
 	/**
 	 * Mutations
 	 */
+	ClassroomMutationResolvers,
+	MapMutationResolvers,
+	PinMutationResolvers,
+	RouteMutationResolvers,
 	UserMutationResolvers,
 
 	/**
@@ -48,6 +57,6 @@ const resolvers = merge(
 )
 
 module.exports = {
-	typeDefs: [Root, mediaTypes, coreTypes, scalarTypes, UserSchema],
+	typeDefs: [Root, coreTypes, scalarTypes, ClassroomSchema, MapSchema, PinSchema, RouteSchema, UserSchema],
 	resolvers,
 }

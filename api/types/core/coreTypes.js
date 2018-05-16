@@ -17,10 +17,6 @@ export const coreTypes = /* GraphQL */ `
 		uid: ID
 	}
 
-	interface ListPage {
-		pageInfo: PageInfo!
-	}
-
 	interface Edge {
 		cursor: String!
 	}

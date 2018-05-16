@@ -1,6 +1,12 @@
 // @flow
 
-import type { ViewerType } from '../User/UserType'
+import type { UserType } from '../User/UserTypes'
+
+export type DBEdge = {
+	fromId: string,
+	pred: string,
+	toId: string,
+}
 
 export type PaginationArgs = {
 	first: number,
@@ -8,7 +14,7 @@ export type PaginationArgs = {
 }
 
 export type GraphQLContext = {
-	viewer: ViewerType,
+	user: UserType,
 }
 
 type Edge = {

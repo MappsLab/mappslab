@@ -12,5 +12,8 @@ export const randomAmount = ({ max, min }: { max: number, min: number }, cb: Fun
 	return result
 }
 
-export const probably = (positive: any, negative: any = null): any => (faker.random.number(100) > 20 ? positive : negative)
+export const probably = (positive: any, negative: any = null): any => (faker.random.number(100) > 25 ? positive : negative)
 export const probablyNot = (positive: any, negative: any = null): any => probably(negative, positive)
+
+export const mostLikely = (positive: any, negative: any = null): any => (faker.random.number(100) > 5 ? positive : negative)
+export const mostLikelyNot = (positive: any, negative: any = null): any => mostLikely(negative, positive)

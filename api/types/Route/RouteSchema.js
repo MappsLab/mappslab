@@ -6,7 +6,7 @@ const Route = /* GraphQL */ `
 		title: String
 		owner: User
 		lines: [Line]
-		maps: [Maps]
+		maps: [Map]
 	}
 
 	type Line {

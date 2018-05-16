@@ -8,9 +8,9 @@ debug(`> Building ${dir}, entry: ${dir}/index.js, output: build-${dir}/main.js`)
 
 module.exports = {
 	webpack: (config, options, webpack) => {
-		config.entry.main = [`./${dir}/index.js`]
+		config.entry.main = [`./index.js`]
 
-		config.output.path = path.join(process.cwd(), `build-${dir}`)
+		config.output.path = path.join(process.cwd(), '..', `build-${dir}`)
 		const nodePath = (process.env.NODE_PATH || '')
 			.split(path.delimiter)
 			.filter((folder) => folder && !path.isAbsolute(folder))
@@ -28,6 +28,7 @@ module.exports = {
 		)
 		config.resolve.modules = config.resolve.modules || []
 		config.resolve.modules.push(nodePath)
+		console.log(config)
 		return config
 	},
 }

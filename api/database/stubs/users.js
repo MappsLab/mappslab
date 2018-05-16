@@ -1,28 +1,26 @@
 // @flow
 export const joseph = {
-	uid: '0x1000',
-	displayName: 'Joseph Thomas',
-	username: 'joseph-thomas',
-	bioLine: 'I ❤️️Frank',
+	// uid: '0x1000',
+	name: 'Joseph Thomas',
+	role: 'student',
 	email: 'joseph@good-idea.studio',
-	website: 'https://www.good-idea.studio',
-	password: 'Password#1',
 	disabled: false,
-	locale: 'us',
 }
 
 export const waverly = {
-	uid: '0x1001',
-	displayName: 'Waverly Mandel',
-	username: 'waverly-xyz',
-	bioLine: 'I ❤️Ursa',
-	email: 'waverly@waverly.xyz',
-	website: 'http://www.waverly.xyz',
-	password: 'Password#1',
+	// uid: '0x1001',
+	name: 'Alex Johnstone',
+	role: 'student',
 	disabled: false,
-	locale: 'us',
 }
 
-const defaultUsers = [joseph, waverly]
+export const john = {
+	// uid: '0x1002',
+	name: 'Mr. Schaefer',
+	role: 'teacher',
+	email: 'john@cmwworld.com',
+}
+
+const defaultUsers = [joseph, waverly, john]
 
 export default defaultUsers

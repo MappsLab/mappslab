@@ -1,9 +1,11 @@
 // @flow
 
 import { generateUsers } from './generateUsers'
-import { generateFollowerConnections } from './generateFollowerConnections'
+import { generateClassrooms, generateClassroomConnections } from './generateClassrooms'
+// import { generateFollowerConnections } from './generateFollowerConnections'
 
 module.exports = {
 	generateUsers,
-	generateFollowerConnections,
+	generateClassrooms,
+	generateClassroomConnections,
 }

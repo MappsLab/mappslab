@@ -29,7 +29,7 @@ const Classroom = /* GraphQL */ `
 
 	extend type Query {
 		classroom(uid: ID!): Classroom!
-		classrooms(input: PaginationInput!): ClassroomList
+		classrooms(input: PaginationInput!): ClassroomConnection! 
 	}
 
 	extend type Mutation {

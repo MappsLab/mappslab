@@ -9,24 +9,24 @@
 
 const coreQueryResolvers = {
 	Node: {
-		__resolveType(obj, context, info) {
-			if (obj.username) return 'User'
-			if (obj.publicId) return 'CloudinaryImage'
-			if (obj.url) return 'UrlImage'
-			return null
-		},
-	},
-
-	ListPage: {
-		__resolveType(obj) {
-			if (obj.edges[0].username) return 'UsersList'
+		__resolveType(obj: { type?: string }): string | null {
+			if (obj.type) return obj.type
 			return null
 		},
 	},
 
 	Edge: {
-		__resolveType(obj) {
-			if (obj.edge.username) return 'UserEdge'
+		__resolveType(obj: { edge: { type?: string } }): string | null {
+			if (obj.edge.type) return `${obj.edge.type.toUpperCase()}Edge`
+			return null
+		},
+	},
+
+	Connection: {
+		__resolveType(obj: { edges: Array<{ type?: string }> }): string | null {
+			if (obj.edges[0] && obj.edges[0].type) {
+				return `${obj.edges[0].type.toUpperCase()}Connection`
+			}
 			return null
 		},
 	},

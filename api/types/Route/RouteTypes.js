@@ -1,7 +1,7 @@
 // @flow
 
 import type { UserType } from '../User/UserTypes'
-import type { MapType } from '../Map/Types'
+import type { MapType } from '../Map/MapTypes'
 
 export type RouteType = {
 	uid: string,
