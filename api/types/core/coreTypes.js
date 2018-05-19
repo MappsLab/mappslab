@@ -18,12 +18,11 @@ export const coreTypes = /* GraphQL */ `
 	}
 
 	interface Edge {
-		cursor: String!
+		cursor: ID!
 	}
 
 	interface Connection {
 		pageInfo: PageInfo!
-		edges: [Node]!
 	}
 
 	enum QueryOperator {

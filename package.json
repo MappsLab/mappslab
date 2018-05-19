@@ -8,7 +8,7 @@
 		"dev:app": "webpack-dev-server --colors --env development --config ./config/webpack.config.js",
 		"dev:api": "cross-env ENV=development cross-env DEBUG=api nodemon --watch api api/server.js --exec babel-node",
 		"dev:db:init": "docker-compose -f ./api/database/docker-compose.yml up -d",
-		"dev:db:start": "docker start mappslab_dgraph-zero mappslab_dgraph-server mappslab_dgraph-ratel",
+		"dev:db:start": "docker kill $(docker ps -q) && docker start mappslab_dgraph-zero mappslab_dgraph-server mappslab_dgraph-ratel",
 		"dev:db:stop": "docker stop mappslab_dgraph-zero mappslab_dgraph-server mappslab_dgraph-ratel",
 		"build:api": "cross-env NODE_PATH=./ cross-env DIR=api backpack build",
 		"test:api": "cross-env ENV=development cross-env DEBUG=test cross-env TEST_DB=true jest --projects ./api",

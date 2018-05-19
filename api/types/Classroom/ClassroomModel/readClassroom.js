@@ -1,6 +1,6 @@
 // @flow
 import { prop, last, head } from 'ramda'
-import db from '../../../database'
+import { dbClient } from '../../../database'
 import { getEdgesOfFirst } from '../../../utils/dbUtils'
 import type { ClassroomType } from '../ClassroomTypes'
 import type { TeacherType } from '../../User/UserTypes'
@@ -23,7 +23,7 @@ export const getUsers = (userType: string): Function => async (
 		}
 	}`
 
-	const result = await db
+	const result = await dbClient
 		.newTxn()
 		.query(query)
 		.catch((e) => {

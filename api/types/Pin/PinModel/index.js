@@ -1,5 +1,5 @@
 // @flow
-import { getPin, getPins } from './readPin'
+import { getPin, getPins, getPinsByUser } from './readPin'
 import { updatePin } from './updatePin'
 import { createPin, createPinConnection } from './createPin'
 import { deletePin } from './deletePin'
@@ -7,6 +7,7 @@ import { deletePin } from './deletePin'
 module.exports = {
 	getPin,
 	getPins,
+	getPinsByUser,
 	updatePin,
 	createPin,
 	createPinConnection,

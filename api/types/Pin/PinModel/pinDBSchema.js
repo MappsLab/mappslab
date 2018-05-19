@@ -30,6 +30,8 @@ export const defaultValues = {
 	updatedAt: new Date(),
 }
 
+export const publicFields = ['uid', 'title', 'lat', 'lang', 'createdAt', 'updatedAt', 'type'].join('\n')
+
 export const validateNew = (pinData: PinInput) => Joi.validate(pinData, pinSchema(true))
 export const validateUpdate = (pinData: PinInput) => Joi.validate(pinData, pinSchema(false))
 

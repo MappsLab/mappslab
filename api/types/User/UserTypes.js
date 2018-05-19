@@ -28,3 +28,7 @@ export type UserInput = {
 	lang?: number,
 	email?: string,
 }
+
+export type GetUserArgs = {
+	uid: string,
+}

@@ -7,6 +7,7 @@ const userFields = /* GraphQL */ `
 	classrooms: ClassroomConnection
 	maps: MapConnection
 	role: String
+	pins(input: PaginationInput): PinConnection
 `
 
 const User = /* GraphQL */ `

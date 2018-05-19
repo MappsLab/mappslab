@@ -2,6 +2,14 @@
 
 import type { UserType } from '../User/UserTypes'
 
+type Operator = 'eq' | 'le' | 'lt' | 'ge' | 'gt' | 'uid' | 'allofterms' | 'anyofterms' | 'regexp' | 'alloftext' | 'uid_in' | 'has'
+
+export type Filter = {
+	key: string,
+	value: string,
+	operator?: Operator,
+}
+
 export type DBEdge = {
 	fromUid: string,
 	pred: string,
