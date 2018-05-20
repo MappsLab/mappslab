@@ -5,6 +5,7 @@ import { withClassroomsQuery } from 'App/queries'
 import { Column, ListItem } from 'App/components/Layout'
 import { Loading } from 'App/components/Loading'
 import { Header2 } from 'App/components/Text'
+import type { ClassroomType } from 'App/types'
 
 /**
  * MyComponent
@@ -12,7 +13,7 @@ import { Header2 } from 'App/components/Text'
 
 type Props = {
 	loading: boolean,
-	classrooms: Array<Object>,
+	classrooms?: Array<ClassroomType>,
 }
 
 const Classrooms = (props: Props) => {
@@ -25,16 +26,21 @@ const Classrooms = (props: Props) => {
 				<Fragment>
 					<Header2>Select Your Classroom</Header2>
 					<div>
-						{classrooms.map((c) => (
-							<Link to={`/classrooms/${c.slug}`} key={c.slug}>
-								<ListItem title={c.title} line1={c.teachers.map((t) => t.name).join(', ')} />
-							</Link>
-						))}
+						{classrooms &&
+							classrooms.map((c) => (
+								<Link to={`/classrooms/${c.slug}`} key={c.slug}>
+									<ListItem title={c.title} line1={c.teachers.map((t) => t.name).join(', ')} />
+								</Link>
+							))}
 					</div>
 				</Fragment>
 			)}
 		</Column>
 	)
+}
+
+Classrooms.defaultProps = {
+	classrooms: [],
 }
 
 export default withClassroomsQuery(Classrooms)

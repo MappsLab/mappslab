@@ -1,6 +1,5 @@
 // @flow
 import gql from 'graphql-tag'
-import * as R from 'ramda'
 import { makeQuery, unwindEdges } from '../utils'
 
 export const query = gql/* GraphQL */ `
@@ -19,6 +18,8 @@ export const query = gql/* GraphQL */ `
 						edges {
 							node {
 								name
+								uid
+								role
 							}
 						}
 					}
@@ -33,7 +34,7 @@ const config = {
 		const { loading, classrooms, ...rest } = unwindEdges(data)
 		return {
 			loading,
-			classrooms: classrooms || [],
+			classrooms,
 			request: {
 				...rest,
 			},
