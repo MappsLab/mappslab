@@ -18,9 +18,9 @@ export const makeQuery = R.curry(_makeQuery)
 
 export const unwindEdges = (prop: string, data: Object): Object | Array<Object> => {
 	return R.pipe(
-		R.when(
+		R.ifElse(
+			// If prop -> edges exists
 			R.path([prop, 'edges']),
-
 			R.pipe(
 				// Get the prop -> edges
 				R.path([prop, 'edges']),
@@ -39,6 +39,8 @@ export const unwindEdges = (prop: string, data: Object): Object | Array<Object> 
 					),
 				),
 			),
+			// Otherwise, return an empty array
+			() => [],
 		),
 	)(data)
 }

@@ -13,6 +13,10 @@ injectGlobal`
 		font-weight: 300;
 	}
 
+	body {
+		background-color: #e2e2e2;
+	}
+
 	form {
 		margin: 0;
 	}
