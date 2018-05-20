@@ -1,7 +1,7 @@
 // @flow
 import React, { Fragment } from 'react'
 import { Link } from 'react-router-dom'
-import { withClassroomQuery } from 'App/queries'
+import { withClassroomsQuery } from 'App/queries'
 import { Column, ListItem } from 'App/components/Layout'
 import { Loading } from 'App/components/Loading'
 import { Header2 } from 'App/components/Text'
@@ -13,24 +13,23 @@ import type { ClassroomType } from 'App/types'
 
 type Props = {
 	loading: boolean,
-	classroom?: void | ClassroomType,
+	classrooms?: Array<ClassroomType>,
 }
 
-const Classroom = (props: Props) => {
-	const { loading, classroom } = props
+const Classrooms = (props: Props) => {
+	const { loading, classrooms } = props
 	return (
 		<Column>
 			{loading ? (
 				<Loading />
 			) : (
 				<Fragment>
-					<Header2>Select your User</Header2>
+					<Header2>Select Your Classroom</Header2>
 					<div>
-						{classroom &&
-							classroom.students &&
-							classroom.students.map((s) => (
-								<Link to={`/classrooms/${s.uid}`} key={s.uid}>
-									<ListItem title={s.name} />
+						{classrooms &&
+							classrooms.map((c) => (
+								<Link to={`/login/classrooms/${c.slug}`} key={c.slug}>
+									<ListItem title={c.title} line1={c.teachers.map((t) => t.name).join(', ')} />
 								</Link>
 							))}
 					</div>
@@ -40,8 +39,8 @@ const Classroom = (props: Props) => {
 	)
 }
 
-Classroom.defaultProps = {
-	classroom: null,
+Classrooms.defaultProps = {
+	classrooms: [],
 }
 
-export default withClassroomQuery(Classroom)
+export default withClassroomsQuery(Classrooms)

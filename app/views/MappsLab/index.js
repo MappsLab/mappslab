@@ -1,8 +1,8 @@
 // @flow
 import React from 'react'
 import { Switch, Route, Redirect } from 'react-router-dom'
-import Classrooms from '../Classrooms'
-import Classroom from '../Classroom'
+import Classrooms from '../Login/Classrooms'
+import Classroom from '../Login/Classroom'
 
 /**
  * MappsLab

@@ -1,19 +1,16 @@
 // @flow
 import React, { Fragment } from 'react'
 import { Link } from 'react-router-dom'
-import { withClassroomsQuery } from 'App/queries'
-import { Column, ListItem } from 'App/components/Layout'
-import { Loading } from 'App/components/Loading'
-import { Header2 } from 'App/components/Text'
-import type { ClassroomType } from 'App/types'
+import { withViewerLoginMutation } from 'App/queries'
+import type { UserType } from 'App/types'
 
 /**
- * MyComponent
+ * UserLogin
  */
 
 type Props = {
-	loading: boolean,
-	classrooms?: Array<ClassroomType>,
+	user: UserType,
+	selectUser: Function,
 }
 
 const Classrooms = (props: Props) => {
@@ -28,7 +25,7 @@ const Classrooms = (props: Props) => {
 					<div>
 						{classrooms &&
 							classrooms.map((c) => (
-								<Link to={`/classrooms/${c.slug}`} key={c.slug}>
+								<Link to={`/login/classrooms/${c.slug}`} key={c.slug}>
 									<ListItem title={c.title} line1={c.teachers.map((t) => t.name).join(', ')} />
 								</Link>
 							))}
@@ -43,4 +40,4 @@ Classrooms.defaultProps = {
 	classrooms: [],
 }
 
-export default withClassroomsQuery(Classrooms)
+export default withViewerLoginMutation(Classrooms)

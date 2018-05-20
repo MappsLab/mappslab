@@ -1,0 +1,57 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Avatar Component Mounts Correctly 1`] = `
+.c1 {
+  position: relative;
+  max-width: 100%;
+  margin: 0;
+}
+
+.c3 {
+  max-width: 100%;
+}
+
+.c2 {
+  position: relative;
+  width: 100%;
+  padding-bottom: 100%;
+  overflow: hidden;
+}
+
+.c2 + img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.c0 {
+  border: none;
+  border-radius: 50rem;
+  overflow: hidden;
+  position: relative;
+  width: 40px;
+  height: 40px;
+}
+
+<div
+  class="c0"
+>
+  <figure
+    class="c1"
+  >
+    <div
+      class="c2"
+    />
+    <img
+      alt=""
+      class="c3"
+      sizes="40px"
+      src="https://res.cloudinary.com/good-idea/image/upload//a4a4a44eecd7a9b092ffd7010925ec6035air_pop"
+      srcset="https://res.cloudinary.com/good-idea/image/upload/w_32/a4a4a44eecd7a9b092ffd7010925ec6035air_pop 32w, https://res.cloudinary.com/good-idea/image/upload/w_64/a4a4a44eecd7a9b092ffd7010925ec6035air_pop 64w, https://res.cloudinary.com/good-idea/image/upload/w_150/a4a4a44eecd7a9b092ffd7010925ec6035air_pop 150w, https://res.cloudinary.com/good-idea/image/upload/w_300/a4a4a44eecd7a9b092ffd7010925ec6035air_pop 300w"
+    />
+  </figure>
+</div>
+`;

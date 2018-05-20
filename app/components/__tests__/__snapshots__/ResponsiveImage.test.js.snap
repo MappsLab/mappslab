@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ResponsiveImage Component Mounts Correctly 1`] = `
+<ResponsiveImageweb__Figure>
+  <ResponsiveImageweb__FigurePadding
+    ratio={false}
+  />
+  <ResponsiveImageweb__Img
+    alt=""
+    sizes="100vw"
+    src="https://example.com/original.jpg"
+    srcSet=""
+  />
+</ResponsiveImageweb__Figure>
+`;

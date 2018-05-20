@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Form Component Mounts Correctly 1`] = `
+<ReactFinalForm
+  disabled={false}
+  render={[Function]}
+  showSubmitButton={true}
+  submitButtonText="Submit"
+  validate={[Function]}
+/>
+`;

@@ -1,0 +1,102 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`UserHeader Component Mounts Correctly 1`] = `
+<Column>
+  <UserHeaderweb__Wrapper>
+    <UserHeaderweb__ProfileHeaderTop>
+      <Avatar
+        size="large"
+        user={
+          Object {
+            "avatar": Object {
+              "publicId": "a4a4a44eecd7a9b092ffd7010925ec6035air_pop",
+              "width": 411,
+            },
+            "bioLine": "Co-founder of Available Works and Beta Pictures. Founder of the Peanut Dress Company.",
+            "displayName": "Air Pop",
+            "location": "Los Angeles",
+            "occupation": "Artist",
+            "username": "airpop",
+            "website": "http://www.matthewdouglasmorgan.com",
+            "works": Array [
+              Object {
+                "title": "My First Meme",
+              },
+              Object {
+                "title": "Pretty Dumb (CD)",
+              },
+            ],
+          }
+        }
+      />
+      <UserHeaderweb__ProfileHeaderBody>
+        <Textweb__Header3
+          weight="regular"
+        >
+          Air Pop
+        </Textweb__Header3>
+        <Textweb__Header4
+          color="middleGray"
+          weight="light"
+        >
+          @
+          airpop
+        </Textweb__Header4>
+        <Textweb__Header4
+          color="lightGray"
+          weight="semi"
+        >
+          Los Angeles
+        </Textweb__Header4>
+        <UserHeaderweb__ButtonRow>
+          <UserHeaderweb__IconWrapper>
+            <a
+              href="http://www.matthewdouglasmorgan.com"
+              target="_blank"
+            >
+              <Icon
+                active={false}
+                circle={false}
+                data-test="web"
+                id="website"
+                noFill={false}
+              />
+            </a>
+          </UserHeaderweb__IconWrapper>
+          <Apollo(Apollo(Apollo(Apollo(FollowButtonLoader))))
+            user={
+              Object {
+                "avatar": Object {
+                  "publicId": "a4a4a44eecd7a9b092ffd7010925ec6035air_pop",
+                  "width": 411,
+                },
+                "bioLine": "Co-founder of Available Works and Beta Pictures. Founder of the Peanut Dress Company.",
+                "displayName": "Air Pop",
+                "location": "Los Angeles",
+                "occupation": "Artist",
+                "username": "airpop",
+                "website": "http://www.matthewdouglasmorgan.com",
+                "works": Array [
+                  Object {
+                    "title": "My First Meme",
+                  },
+                  Object {
+                    "title": "Pretty Dumb (CD)",
+                  },
+                ],
+              }
+            }
+          />
+        </UserHeaderweb__ButtonRow>
+      </UserHeaderweb__ProfileHeaderBody>
+    </UserHeaderweb__ProfileHeaderTop>
+    <Textweb__Header4
+      align="center"
+      color="darkGray"
+      weight="light"
+    >
+      Co-founder of Available Works and Beta Pictures. Founder of the Peanut Dress Company.
+    </Textweb__Header4>
+  </UserHeaderweb__Wrapper>
+</Column>
+`;

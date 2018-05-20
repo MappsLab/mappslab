@@ -1,0 +1,181 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Component Title Component Mounts Correctly 1`] = `
+.c3 {
+  display: block;
+}
+
+.c4 {
+  display: none;
+}
+
+.c0 {
+  margin-left: -14px;
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  width: calc(100% + 14px * 2);
+  margin-top: -1px;
+  overflow-x: scroll;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  margin-bottom: 14px;
+  padding: 14px;
+  text-align: center;
+}
+
+.c1 {
+  font-size: 20px;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin: 0 7px;
+  color: black;
+}
+
+.c2 {
+  font-size: 20px;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin: 0 7px;
+  color: #979797;
+}
+
+<TabController
+  initialTab={0}
+>
+  <TabContainerView>
+    <TabNavigator
+      activeTab={0}
+      setActiveTab={[Function]}
+      tabs={
+        Array [
+          Object {
+            "index": 0,
+            "title": "One",
+          },
+          Object {
+            "index": 1,
+            "title": "Two",
+          },
+          Object {
+            "index": 2,
+            "title": "Three",
+          },
+        ]
+      }
+    >
+      <TabNavigatorweb__Slider>
+        <div
+          className="c0"
+        >
+          <button
+            data-test="button-One"
+            key="One"
+            onClick={[Function]}
+          >
+            <TabNavigatorweb__Label
+              active={true}
+            >
+              <h2
+                className="c1"
+              >
+                One
+              </h2>
+            </TabNavigatorweb__Label>
+          </button>
+          <button
+            data-test="button-Two"
+            key="Two"
+            onClick={[Function]}
+          >
+            <TabNavigatorweb__Label
+              active={false}
+            >
+              <h2
+                className="c2"
+              >
+                Two
+              </h2>
+            </TabNavigatorweb__Label>
+          </button>
+          <button
+            data-test="button-Three"
+            key="Three"
+            onClick={[Function]}
+          >
+            <TabNavigatorweb__Label
+              active={false}
+            >
+              <h2
+                className="c2"
+              >
+                Three
+              </h2>
+            </TabNavigatorweb__Label>
+          </button>
+        </div>
+      </TabNavigatorweb__Slider>
+    </TabNavigator>
+    <TabsContainerView>
+      <TabsContainerViewweb__TabsContainer>
+        <div
+          className=""
+        >
+          <TabView
+            activeTab={0}
+            index={0}
+            key=".0"
+            title="One"
+          >
+            <TabViewweb__TabViewWrapper
+              active={true}
+            >
+              <section
+                className="c3"
+              >
+                First
+              </section>
+            </TabViewweb__TabViewWrapper>
+          </TabView>
+          <TabView
+            activeTab={0}
+            index={1}
+            key=".1"
+            title="Two"
+          >
+            <TabViewweb__TabViewWrapper
+              active={false}
+            >
+              <section
+                className="c4"
+              >
+                Second
+              </section>
+            </TabViewweb__TabViewWrapper>
+          </TabView>
+          <TabView
+            activeTab={0}
+            index={2}
+            key=".2"
+            title="Three"
+          >
+            <TabViewweb__TabViewWrapper
+              active={false}
+            >
+              <section
+                className="c4"
+              >
+                Third
+              </section>
+            </TabViewweb__TabViewWrapper>
+          </TabView>
+        </div>
+      </TabsContainerViewweb__TabsContainer>
+    </TabsContainerView>
+  </TabContainerView>
+</TabController>
+`;

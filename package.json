@@ -13,6 +13,7 @@
 		"dev:db:stop": "docker stop mappslab_dgraph-zero mappslab_dgraph-server mappslab_dgraph-ratel",
 		"dev:db:seed": "cross-env TEST_DB=true cross-env DEBUG=api:testDatabase babel-node ./api/database/scripts/testDatabase/seedTestDatabase.js",
 		"build:api": "cross-env NODE_PATH=./ cross-env DIR=api backpack build",
+		"test:app": "cross-env ENV=development cross-env DEBUG=test cross-env TEST_DB=true jest --projects ./app",
 		"test:api": "cross-env ENV=development cross-env DEBUG=test cross-env TEST_DB=true jest --projects ./api",
 		"build": "babel ./src --out-dir ./dist"
 	},
