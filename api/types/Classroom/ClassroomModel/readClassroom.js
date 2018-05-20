@@ -33,7 +33,7 @@ export const getClassrooms = async (args: PaginationArgs): Promise<{ edges: Arra
 	const result = await query(q)
 	const edges = nodesToEdges(result.getJson().classrooms) || []
 	// console.log(edges)
-	const lastCursor = last(edges) ? prop('cursor', last(edges)) : ''
+	const lastCursor = prop('cursor', last(edges))
 
 	return {
 		edges,
@@ -42,15 +42,33 @@ export const getClassrooms = async (args: PaginationArgs): Promise<{ edges: Arra
 			hasNextPage: true,
 		},
 	}
-	// console.log(result.getJson())
-	// const edges = getEdgesOfFirst(result, 'classroom', relationshipField)
-	// return {
-	// 	edges,
-	// 	pageInfo: {
-	// 		lastCursor,
-	// 		hasNextPage: true
-	// 	}
-	// }
+}
+
+export const getClassroomsByUser = async (
+	user: UserType,
+	args: PaginationArgs,
+): Promise<{ edges: Array<Edge>, pageInfo: PageInfo } | Error> => {
+	console.log('!')
+	const q = /* GraphQL */ `
+		query getClassroomsByUser {
+			userClassrooms(func: uid(${user.uid})) {
+				learns_in {
+					uid
+					title
+				}
+			}
+		}
+	`
+	const result = await query(q)
+	const edges = nodesToEdges(head(result.getJson().userClassrooms).learns_in) || []
+	const lastCursor = prop('cursor', last(edges))
+	return {
+		edges,
+		pageInfo: {
+			lastCursor,
+			hasNextPage: true,
+		},
+	}
 }
 
 export const getClassroomUsers = (userType: string): Function => async (

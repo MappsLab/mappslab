@@ -7,6 +7,7 @@ import Classroom from './Login/Classroom'
 import type { ViewerType } from '../types'
 import Dashboard from './Dashboard'
 import { Loading } from 'App/components/Loading'
+
 /**
  * MappsLab
  */

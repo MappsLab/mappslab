@@ -7,7 +7,7 @@ export type UserType = {
 }
 
 export type ViewerType = UserType & {
-	email: string,
+	email?: string,
 }
 
 export type ClassroomType = {

@@ -1,15 +1,19 @@
 // @flow
 
-import { user, pins, currentViewer } from './getUsers'
+import { user, currentViewer } from './getUsers'
+import { pins, classrooms } from './getUserConnections'
 
 export default {
 	Query: {
 		user,
 		viewer: currentViewer,
-		showHeader: (_, { headerName }, ctx) => ctx.request.get(headerName),
+	},
+	Viewer: {
+		pins,
+		classrooms,
 	},
 	User: {
 		pins,
-		// relation
+		classrooms,
 	},
 }
