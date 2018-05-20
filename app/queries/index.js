@@ -1,5 +1,5 @@
 import * as classroom from './classroom'
 
-export default {
+module.exports = {
 	...classroom,
 }

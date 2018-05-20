@@ -1,42 +1,42 @@
 // @flow
 import gql from 'graphql-tag'
 import * as R from 'ramda'
-import makeQuery from '../makeQuery'
+import { makeQuery, unwindEdges } from '../utils'
 
-export const query = gql`
+export const query = gql/* GraphQL */ `
 	{
-		user(username: $username, uid: $userId) {
-			uid
-			username
-			isFollowedByViewer
+		classrooms {
+			edges {
+				node {
+					uid
+					title
+					teachers {
+						edges {
+							node {
+								name
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 `
 
 const config = {
-	options: ({ user: { uid, username } }) => {
-		if (uid) {
-			return { variables: { userId: uid } }
-		}
+	props: ({ data }) => {
+		const { loading, user, ...rest } = data
+		const classrooms = unwindEdges('classrooms', data)
 		return {
-			variables: {
-				username: username ? username.replace(/^@/, '') : null,
+			loading,
+			classrooms,
+			request: {
+				...rest,
 			},
 		}
 	},
-	// props: ({ data }) => {
-	// 	const { loading, user, ...rest } = data
-	// 	console.log(data)
-	// 	return {
-	// 		loading,
-	// 		loadedUser: user,
-	// 		request: {
-	// 			...rest,
-	// 		},
-	// 	}
-	// },
 }
 
-const withFollowButtonQuery = makeQuery(query, config)
+const withClassroomsQuery = makeQuery(query, config)
 
-export default withFollowButtonQuery
+export default withClassroomsQuery
