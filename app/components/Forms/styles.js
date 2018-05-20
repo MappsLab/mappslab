@@ -1,9 +1,9 @@
 // @flow
 import { css } from 'styled-components'
 
-import { lightGray, middleGray, red } from 'Styles/colors'
-import { spacing } from 'Styles/layout'
-import { semi, p, h4 } from 'Styles/type'
+import { lightGray, middleGray, red } from 'App/styles/colors'
+import { spacing } from 'App/styles/layout'
+import { semi, p, h4 } from 'App/styles/type'
 
 /* Forms */
 

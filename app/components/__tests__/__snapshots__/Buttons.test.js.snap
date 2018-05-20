@@ -1,9 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Button Component Mounts Correctly 1`] = `
-<Buttonsweb__ButtonWrapper
+<Buttons__ButtonWrapper
   type="button"
 >
   Click Me!
-</Buttonsweb__ButtonWrapper>
+</Buttons__ButtonWrapper>
 `;

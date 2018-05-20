@@ -1,10 +1,9 @@
 // @flow
 import { css } from 'styled-components'
 
-import { buttonBorder } from 'Styles/ui'
-import { flexCenter, spacing } from 'Styles/layout'
-import { middleGray, lightGray } from 'Styles/colors'
-import { semi, h5 } from 'Styles/type'
+import { flexCenter, spacing } from 'App/styles/layout'
+import { middleGray, lightGray } from 'App/styles/colors'
+import { semi, h5 } from 'App/styles/type'
 
 export const buttonStyles = css`
 	${flexCenter};
@@ -18,7 +17,7 @@ export const buttonStyles = css`
 	text-transform: uppercase;
 	text-align: center;
 	border-radius: 0;
-	border-width: ${buttonBorder};
+	border-width: 2px;
 	border-style: solid;
 	border-color: ${(props) => (props.secondary ? 'transparent' : 'currentColor')};
 	color: ${(props) => (props.secondary ? middleGray : 'currentColor')};

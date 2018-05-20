@@ -2,6 +2,7 @@
 import React, { Fragment } from 'react'
 import { Link } from 'react-router-dom'
 import { withViewerLoginMutation } from 'App/queries'
+import { Column } from 'App/components/Layout'
 import type { UserType } from 'App/types'
 
 /**
@@ -10,34 +11,33 @@ import type { UserType } from 'App/types'
 
 type Props = {
 	user: UserType,
-	selectUser: Function,
+	selectUser: (string) => void,
+	mutate: ({ variables: Credentials }) => Promise<any>,
 }
 
-const Classrooms = (props: Props) => {
-	const { loading, classrooms } = props
-	return (
-		<Column>
-			{loading ? (
-				<Loading />
-			) : (
-				<Fragment>
-					<Header2>Select Your Classroom</Header2>
-					<div>
-						{classrooms &&
-							classrooms.map((c) => (
-								<Link to={`/login/classrooms/${c.slug}`} key={c.slug}>
-									<ListItem title={c.title} line1={c.teachers.map((t) => t.name).join(', ')} />
-								</Link>
-							))}
-					</div>
-				</Fragment>
-			)}
-		</Column>
-	)
+/**
+ * UserLogin
+ */
+
+class UserLogin extends React.Component<Props> {
+	constructor(props) {
+		super(props)
+	}
+
+	removeUser = () => {
+		this.props.selectUser(null)
+	}
+
+	render() {
+		return (
+			<Column>
+				<button onClick={this.removeUser}>←</button>
+				<form onSubmit={this.handleSubmit} />
+			</Column>
+		)
+	}
 }
 
-Classrooms.defaultProps = {
-	classrooms: [],
-}
+const UserLogin = (props: Props) => {}
 
-export default withViewerLoginMutation(Classrooms)
+export default withViewerLoginMutation(UserLogin)

@@ -1,8 +1,6 @@
 // @flow
 import * as R from 'ramda'
-import { getUser } from 'API/getData'
-import { arrayify } from 'Utils/data'
-import owasp from 'owasp-password-strength-test'
+import { arrayify } from 'App/utils/data'
 
 // Chains a series of validators.
 // Returns `undefined` if valid, or the message from the first failed validator.
@@ -32,20 +30,6 @@ export const maxLength = (max: number) => (value: string = '') =>
 
 export const minMaxLength = (min: number, max: number) => (value: string = '') =>
 	!value || (value.length <= max && value.length >= min) ? undefined : `Must be between ${min} and ${max} characters long`
-
-owasp.config({
-	allowPassphrases: true,
-	maxLength: 128,
-	minLength: 8,
-	minPhraseLength: 24,
-	minOptionalTestsToPass: 4,
-})
-
-export const mustBeStrongPassword = (password: string): mixed | void => {
-	if (!password) return undefined
-	const result = owasp.test(password)
-	return result.errors.length ? result.errors[0] : undefined
-}
 
 /**
  * Numeric validators
@@ -90,7 +74,7 @@ const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@
 export const email = (value: string): string | void =>
 	!value || emailRegex.test(value) ? undefined : 'Please enter a valid email address'
 
-const urlRegex = /^((https?):\/\/[-\w]+(\.\w[-\w]*)+|(?:[a-z0-9](?:[-a-z0-9]*[a-z0-9])?\.)+(?: com\b|edu\b|biz\b|gov\b|in(?:t|fo)\b|mil\b|net\b|org\b|[a-z][a-z]\b))(\:\d+)?(\/[^.!,?;"'<>\[\]{}\s\x7F-\xFF]*(?:[.!,?]+[^.!,?;"'<>()\[\]{}\s\x7F-\xFF]+)*)?/
+const urlRegex = /^((https?):\/\/[-\w]+(\.\w[-\w]*)+|(?:[a-z0-9](?:[-a-z0-9]*[a-z0-9])?\.)+(?: com\b|edu\b|biz\b|gov\b|in(?:t|fo)\b|mil\b|net\b|org\b|[a-z][a-z]\b))(:\d+)?(\/[^.!,?;"'<>[\]{}\s\x7F-\xFF]*(?:[.!,?]+[^.!,?;"'<>()[\]{}\s\x7F-\xFF]+)*)?/
 export const mustBeUrl = (value: string): string | void =>
 	!value || urlRegex.test(value) ? undefined : 'Must be a valid URL. Be sure to include "http://"'
 
@@ -115,36 +99,5 @@ export const passwordsMustMatch = (values: mixed) => {
  * Data validators (async)
  */
 
-const simpleMemoize = (fn) => {
-	let lastArg
-	let lastResult
-	return (arg: any) => {
-		if (!lastArg || arg !== lastArg) {
-			lastArg = arg
-			lastResult = fn(arg)
-		}
-		return lastResult
-	}
-}
-
-const userExists = (field: 'email' | 'username') =>
-	simpleMemoize(async (search: string) => {
-		if (!search) return undefined
-		try {
-			const data = await getUser(search.toLowerCase(), field)
-			if (!data) return undefined
-			const { user } = data
-			if (user && user.username !== null) {
-				return field === 'email' ? 'A user with this email address already exists' : 'This username is not available'
-			}
-			return undefined
-		} catch (err) {
-			return err
-		}
-	})
-
-export const emailIsAvailable = userExists('email')
-export const usernameIsAvailable = userExists('username')
-
-export const emailValidators = composeValidators(required, email, maxLength(128), emailIsAvailable)
-export const usernameValidators = composeValidators(required, maxLength(24), validUsername, usernameIsAvailable)
+export const emailValidators = composeValidators(required, email, maxLength(128))
+export const usernameValidators = composeValidators(required, maxLength(24), validUsername)
