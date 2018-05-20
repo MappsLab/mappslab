@@ -1,10 +1,11 @@
 // @flow
 
-import { user, pins } from './getUsers'
+import { user, pins, currentViewer } from './getUsers'
 
 export default {
 	Query: {
 		user,
+		viewer: currentViewer,
 	},
 	User: {
 		pins,

@@ -15,6 +15,7 @@ export const waverly = {
 }
 
 export const john = {
+	uid: '0x1003',
 	name: 'Mr. Schaefer',
 	role: 'teacher',
 	password: 'Password#1',

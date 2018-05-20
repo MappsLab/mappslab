@@ -3,7 +3,6 @@
 const userFields = /* GraphQL */ `
 	uid: ID!
 	name: String
-	email: String
 	classrooms: ClassroomConnection
 	maps: MapConnection
 	role: String
@@ -12,6 +11,11 @@ const userFields = /* GraphQL */ `
 
 const User = /* GraphQL */ `
 	type User implements Node {
+		${userFields}
+	}
+
+	type Viewer implements Node {
+		email: String
 		${userFields}
 	}
 
@@ -50,11 +54,12 @@ const User = /* GraphQL */ `
 
 	type LoginPayload {
 		jwt: Token!
-		viewer: User!
+		viewer: Viewer!
 	}
 
 	extend type Query {
 		user(uid: ID!): User!
+		viewer: Viewer!
 	}
 
 	extend type Mutation {

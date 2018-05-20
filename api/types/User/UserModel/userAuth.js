@@ -21,7 +21,6 @@ export const checkPassword = async (credentials: Credentials): Promise<UserType 
 	}`
 	const args = { email, uid }
 	const result = await query(q, args)
-	console.log(result.getJson())
 	const user = head(result.getJson().getUser)
 	if (!user) throw new ValidationError(errorMessage)
 

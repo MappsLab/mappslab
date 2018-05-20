@@ -42,7 +42,7 @@ export type GetNodeInput = {
 }
 
 export type GraphQLContext = {
-	user: UserType,
+	viewer: UserType,
 }
 
 export type Edge = {
