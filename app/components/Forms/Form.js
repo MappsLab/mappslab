@@ -49,6 +49,7 @@ const Form = (props: Props) => (
 			const { message } = props
 			const submitFailedAndNotDirty = submitFailed && submitErrors && !dirtySinceLastSubmit
 			const disabled = props.disabled || pristine || submitFailedAndNotDirty || submitting || false
+
 			return (
 				<Column>
 					<FormWrapper onSubmit={handleSubmit}>

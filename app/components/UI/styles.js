@@ -10,14 +10,16 @@ export const buttonStyles = css`
 	cursor: pointer;
 	position: relative;
 	margin: ${(props) => (props.secondary ? '0 auto' : `${spacing.single} auto`)};
-	width: ${(props) => (props.wide ? '120px' : '80px')};
+	width: auto;
 	height: 30px;
 	font-weight: ${semi};
 	font-size: ${h5};
 	text-transform: uppercase;
 	text-align: center;
 	border-radius: 0;
-	border-width: 2px;
+	border-width: 1px;
+	border-radius: 4px;
+	padding: 0 ${spacing.single};
 	border-style: solid;
 	border-color: ${(props) => (props.secondary ? 'transparent' : 'currentColor')};
 	color: ${(props) => (props.secondary ? middleGray : 'currentColor')};

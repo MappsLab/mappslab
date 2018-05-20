@@ -40,14 +40,16 @@ export const arrayifyFunctions = (...things: NestedArray<Function>): Array<Funct
 
 const Field = (props: Props) => {
 	const validators = props.validate
-		? props.required ? composeValidators(required, props.validate) : composeValidators(props.validate)
+		? props.required
+			? composeValidators(required, props.validate)
+			: composeValidators(props.validate)
 		: undefined
 	return (
 		<FinalFormField
 			name={props.name}
 			validate={validators}
 			render={({ input, meta }) => (
-				<Wrapper>
+				<Wrapper hidden={props.type === 'hidden'}>
 					<Label required={props.required}>{props.label}</Label>
 					<Input {...input} type={props.type} active={meta.active} />
 					<HelpText>{props.helpText}</HelpText>

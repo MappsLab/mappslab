@@ -28,6 +28,29 @@ describe('queries', () => {
 		expect(viewer.name).toBe(joseph.name)
 	})
 
+	it('[loginViewer] should work with uid', async () => {
+		const uidQuery = /* GraphQL */ `
+			mutation LoginViewer($password: String!, $uid: String!) {
+				loginViewer(credentials: { uid: $uid, password: $password }) {
+					jwt {
+						token
+						expires
+					}
+					viewer {
+						uid
+						name
+					}
+				}	
+			}
+		`
+		const variables = { uid: john.uid, password: john.password }
+		const result = await request(uidQuery, { variables })
+		const { jwt, viewer } = result.data.loginViewer
+		expect(/^Bearer/.test(jwt.token)).toBe(true)
+		expect(jwt.expires).toBeGreaterThan(1)
+		expect(viewer.name).toBe(joseph.name)
+	})
+
 	it('[loginViewer] should return a validation error with invalid credentials', async () => {
 		const uidQuery = /* GraphQL */ `
 				mutation LoginViewer($password: String!, $email: String!) {

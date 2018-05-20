@@ -1,14 +1,14 @@
 // @flow
 import gql from 'graphql-tag'
 import { VIEWER_COOKIE_TOKEN } from 'App/constants'
-import { setCookie } from 'Utils/storage'
+import { setCookie } from 'App/utils/storage'
 import { makeQuery } from '../utils'
 
-import { query as currentViewerQuery } from './currentViewerQuery'
+import { query as currentViewerQuery } from './withCurrentViewerQuery'
 
 const mutation = gql`
-	mutation LoginViewer($password: String!, $email: String!) {
-		loginViewer(credentials: { email: $email, password: $password }) {
+	mutation LoginViewer($password: String!, $uid: String, $email: String) {
+		loginViewer(credentials: { email: $email, uid: $uid, password: $password }) {
 			jwt {
 				token
 				expires
@@ -27,6 +27,7 @@ const config = {
 			const { loginViewer } = data
 			const { viewer, jwt, requiresReset } = loginViewer
 			const { token, expires } = jwt
+			console.log(data)
 			const cookieExpiration = expires / 24 / 60 / 60
 			if (token) setCookie(VIEWER_COOKIE_TOKEN, token, { expires: cookieExpiration })
 

@@ -1,7 +1,9 @@
 // @flow
-import React, { Fragment } from 'react'
-import { Link } from 'react-router-dom'
+import React from 'react'
 import { withViewerLoginMutation } from 'App/queries'
+import { Form, Field } from 'App/components/Forms'
+import { Header2, Header4 } from 'App/components/Text'
+import { Button } from 'App/components/UI'
 import { Column } from 'App/components/Layout'
 import type { UserType } from 'App/types'
 
@@ -15,29 +17,55 @@ type Props = {
 	mutate: ({ variables: Credentials }) => Promise<any>,
 }
 
+type State = {
+	loginState: 'start' | 'fetching' | 'success' | 'error',
+}
+
 /**
  * UserLogin
  */
 
-class UserLogin extends React.Component<Props> {
+class UserLogin extends React.Component<Props, State> {
 	constructor(props) {
 		super(props)
+		this.state = {
+			loginState: 'start',
+		}
 	}
 
 	removeUser = () => {
 		this.props.selectUser(null)
 	}
 
+	handleSubmit = async (credentials: Credentials): Promise<Viewer | mixed> => {
+		this.setState({
+			loginState: 'fetching',
+		})
+		const user = await this.props.mutate({ variables: { ...credentials } })
+		console.log(user)
+	}
+
 	render() {
+		const { loginState } = this.state
+		const disabled = loginState === 'fetching'
+		const { name, uid } = this.props.user
+		console.log(this.props.user)
 		return (
 			<Column>
-				<button onClick={this.removeUser}>←</button>
-				<form onSubmit={this.handleSubmit} />
+				<Form disabled={disabled} onSubmit={this.handleSubmit} initialValues={{ uid }} submitButtonText="login">
+					<Header2>Hi, {name}</Header2>
+					<Header4 color="middleGray" align="left">
+						Please enter your password to log in.
+					</Header4>
+					<Field label="uid" name="uid" type="hidden" value="UID" />
+					<Field label="password" name="password" type="password" />
+				</Form>
+				<Button secondary onClick={this.removeUser}>
+					← Back to Classroom
+				</Button>
 			</Column>
 		)
 	}
 }
-
-const UserLogin = (props: Props) => {}
 
 export default withViewerLoginMutation(UserLogin)

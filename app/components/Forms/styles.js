@@ -32,6 +32,7 @@ export const fieldWrapperStyles = css`
 	width: 100%;
 	// max-width: 375px;
 	margin-bottom: ${spacing.triple};
+	visibility: ${({ hidden }) => (hidden ? 'hidden' : 'visible')};
 `
 
 export const labelStyles = css`
