@@ -6,6 +6,10 @@ export type UserType = {
 	role: 'teacher' | 'student',
 }
 
+export type ViewerType = UserType & {
+	email: string,
+}
+
 export type ClassroomType = {
 	uid: string,
 	title: string,

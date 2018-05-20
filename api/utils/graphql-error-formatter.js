@@ -5,10 +5,9 @@
 import type { GraphQLError } from 'graphql'
 import { IsUserError } from '../errorTypes'
 
-const debug = require('debug')('api:utils:error-formatter')
+const debug = require('debug')('api')
 
 const createGraphQLErrorFormatter = (error: GraphQLError) => {
-	console.log(error)
 	debug('---GraphQL Error---')
 	debug(error)
 	debug('-------------------\n')
@@ -18,8 +17,9 @@ const createGraphQLErrorFormatter = (error: GraphQLError) => {
 			? // ? sentryId = Raven.captureException(error, req && Raven.parsers.parseRequest(req))
 			  'Error placeholder..'
 			: 'ID only generated in production'
+	const serverErrorMessage = `Internal server error: ${sentryId}`
 	return {
-		message: isUserError ? error.message : `Internal server error: ${sentryId}`,
+		message: isUserError ? error.message : serverErrorMessage,
 		// Hide the stack trace in production mode
 		stack: !process.env.NODE_ENV === 'production' ? error.stack.split('\n') : null,
 	}

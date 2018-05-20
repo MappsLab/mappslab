@@ -59,7 +59,9 @@ const User = /* GraphQL */ `
 
 	extend type Query {
 		user(uid: ID!): User!
-		viewer: Viewer!
+		viewer: Viewer
+		showHeader(headerName: String): String!
+
 	}
 
 	extend type Mutation {

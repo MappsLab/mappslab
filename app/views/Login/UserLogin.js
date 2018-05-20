@@ -1,5 +1,7 @@
 // @flow
 import React from 'react'
+import { Redirect } from 'react-router-dom'
+import { FORM_ERROR } from 'final-form'
 import { withViewerLoginMutation } from 'App/queries'
 import { Form, Field } from 'App/components/Forms'
 import { Header2, Header4 } from 'App/components/Text'
@@ -37,12 +39,15 @@ class UserLogin extends React.Component<Props, State> {
 		this.props.selectUser(null)
 	}
 
-	handleSubmit = async (credentials: Credentials): Promise<Viewer | mixed> => {
+	handleSubmit = async (credentials: Credentials): Promise<Object | void> => {
 		this.setState({
 			loginState: 'fetching',
 		})
-		const user = await this.props.mutate({ variables: { ...credentials } })
-		console.log(user)
+		const user = await this.props.mutate({ variables: { ...credentials } }).catch((error) => {
+			this.setState({ loginState: 'error' })
+			return { [FORM_ERROR]: error.message }
+		})
+		this.setState({ loginState: 'success' })
 	}
 
 	render() {
@@ -50,6 +55,7 @@ class UserLogin extends React.Component<Props, State> {
 		const disabled = loginState === 'fetching'
 		const { name, uid } = this.props.user
 		console.log(this.props.user)
+		if (loginState === 'success') return <Redirect to="/dashboard" />
 		return (
 			<Column>
 				<Form disabled={disabled} onSubmit={this.handleSubmit} initialValues={{ uid }} submitButtonText="login">

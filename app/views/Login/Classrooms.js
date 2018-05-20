@@ -28,8 +28,8 @@ const Classrooms = (props: Props) => {
 					<div>
 						{classrooms &&
 							classrooms.map((c) => (
-								<Link to={`/login/classrooms/${c.slug}`} key={c.slug}>
-									<ListItem title={c.title} line1={c.teachers.map((t) => t.name).join(', ')} />
+								<Link to={`/login/classrooms/${c.slug}`} key={c.uid}>
+									<ListItem title={c.title} line1={c.teachers && c.teachers.map((t) => t.name).join(', ')} />
 								</Link>
 							))}
 					</div>
