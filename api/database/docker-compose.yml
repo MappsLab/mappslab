@@ -10,8 +10,8 @@ services:
         volume:
           nocopy: true
     ports:
-      - 5080:5080
-      - 6080:6080
+      - 5088:5080
+      - 6088:6080
     restart: on-failure
     command: dgraph zero --my=zero:5080
   server:
@@ -24,10 +24,10 @@ services:
         volume:
           nocopy: true
     ports:
-      - 8667:8080
-      - 9080:9080
+      - 8668:8080
+      - 9088:9080
     restart: on-failure
-    command: dgraph server --my=server:7080 --lru_mb=2048 --zero=zero:5080
+    command: dgraph server --my=server:7080 --lru_mb=2048 --zero=zero:5088
   ratel:
     container_name: mappslab_dgraph-ratel
     image: dgraph/dgraph:latest
@@ -38,7 +38,7 @@ services:
         volume:
           nocopy: true
     ports:
-      - 8666:8000
+      - 8088:8000
     command: dgraph-ratel
 
 volumes:
