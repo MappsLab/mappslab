@@ -24,6 +24,7 @@ const setSchema = async () => {
 		role: string @index(hash) .
 		type: string @index(hash) .
 		slug: string @index(hash) .
+		email: string @index(hash) .
 		teaches_in: uid @reverse @count .
 		learns_in: uid @reverse @count .
 	`

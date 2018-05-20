@@ -13,7 +13,7 @@ import type { ClassroomType } from 'App/types'
 
 type Props = {
 	loading: boolean,
-	classroom?: ClassroomType,
+	classroom?: void | ClassroomType,
 }
 
 const Classroom = (props: Props) => {
@@ -38,6 +38,10 @@ const Classroom = (props: Props) => {
 			)}
 		</Column>
 	)
+}
+
+Classroom.defaultProps = {
+	classroom: null,
 }
 
 export default withClassroomQuery(Classroom)

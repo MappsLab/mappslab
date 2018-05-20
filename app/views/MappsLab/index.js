@@ -10,9 +10,9 @@ import Classroom from '../Classroom'
 
 const MappsLab = () => (
 	<Switch>
-		<Route path="/classrooms/:slug" render={({ match }) => <Classroom slug={match.params.slug} />} />
-		<Route path="/classrooms" component={Classrooms} />
-		<Route render={() => <Redirect to="/classrooms" />} />
+		<Route path="/login/classrooms/:slug" render={({ match }) => <Classroom slug={match.params.slug} />} />
+		<Route path="/login/classrooms" component={Classrooms} />
+		<Route render={() => <Redirect to="/login/classrooms" />} />
 	</Switch>
 )
 

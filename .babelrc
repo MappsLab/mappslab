@@ -13,6 +13,8 @@
 				"root": ["./src"],
 				"alias": {
 					"App": "./app",
+					"Api": "./api",
+					"Styles": "./app/styles",
 					"mapp": "./packages/mapp/src"
 				},
 				"cwd": "babelrc"

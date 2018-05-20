@@ -20,6 +20,8 @@ const common = merge([
 		resolve: {
 			alias: {
 				App: path.resolve(projectRoot, 'app'),
+				Api: path.resolve(projectRoot, 'api'),
+				Styles: path.resolve(projectRoot, 'app', 'styles'),
 				mapp: path.resolve(projectRoot, 'packages/mapp/src'),
 			},
 			extensions: ['.js'],

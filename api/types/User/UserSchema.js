@@ -37,11 +37,29 @@ const User = /* GraphQL */ `
 
 	# Queries & Mutations
 
+	input CredentialsInput {
+		email: String
+		uid: String
+		password: String!
+	}
+
+	type Token {
+		token: String!
+		expires: Int!
+	}
+
+	type LoginPayload {
+		jwt: Token!
+		viewer: User!
+	}
+
 	extend type Query {
 		user(uid: ID!): User!
 	}
 
 	extend type Mutation {
+		loginViewer(credentials: CredentialsInput!): LoginPayload!
+		registerViewer(credentials: CredentialsInput!): LoginPayload!
 		addUser(input: UserInput!): User!
 		modifyUser(input: UserInput!): User!
 		removeUser(uid: ID!): Boolean!
