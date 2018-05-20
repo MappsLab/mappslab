@@ -28,8 +28,8 @@ const Classroom = /* GraphQL */ `
 	# Queries & Mutations
 
 	extend type Query {
-		classroom(uid: ID!): Classroom!
-		classrooms(input: PaginationInput!): ClassroomConnection! 
+		classroom(input: GetNodeInput): Classroom!
+		classrooms(input: PaginationInput): ClassroomConnection! 
 	}
 
 	extend type Mutation {

@@ -1,15 +1,17 @@
 // @flow
 import React from 'react'
-import Mapp from 'mapp'
+import { Switch, Route, Redirect } from 'react-router-dom'
+import Classrooms from '../Classrooms'
 
 /**
  * MappsLab
  */
 
 const MappsLab = () => (
-	<main>
-		<Mapp APIKey="AIzaSyCOqxjWmEzFlHKC9w-iUZ5zL2rIyBglAag" />
-	</main>
+	<Switch>
+		<Route path="/classrooms" component={Classrooms} />
+		<Route render={() => <Redirect to="/classrooms" />} />
+	</Switch>
 )
 
 export default MappsLab

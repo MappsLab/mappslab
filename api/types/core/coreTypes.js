@@ -34,7 +34,12 @@ export const coreTypes = /* GraphQL */ `
 		key: String!,
 		value: String!,
 		operator: QueryOperator
-	}	
+	}
+
+	input GetNodeInput {
+		uid: ID
+		slug: String
+	}
 
 	input PaginationInput {
 		first: Int,

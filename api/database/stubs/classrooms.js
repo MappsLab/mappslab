@@ -1,10 +1,8 @@
 // @flow
 
-export const aDays = {
-	uid: '0x5000',
-	title: "Mr. Thomas' Classroom",
+export const artClass = {
+	title: 'Art Class',
+	slug: 'art-class',
 }
 
-export const edges = {}
-
-export default []
+export default [artClass]

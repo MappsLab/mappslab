@@ -13,24 +13,13 @@ const common = merge([
 				{
 					test: /\.jsx?$/,
 					exclude: /node_modules/,
-					use: [
-						{
-							loader: 'babel-loader',
-							options: {
-								presets: babelConfig.presets.map((preset) => [preset, { modules: false }]),
-								plugins: babelConfig.plugins.map((plugin) => {
-									if (typeof plugin === 'string') return plugin
-									return [...plugin]
-								}),
-							},
-						},
-					],
+					use: ['babel-loader'],
 				},
 			],
 		},
 		resolve: {
 			alias: {
-				App: path.resolve(projectRoot, '/'),
+				App: path.resolve(projectRoot, 'app'),
 				mapp: path.resolve(projectRoot, 'packages/mapp/src'),
 			},
 			extensions: ['.js'],

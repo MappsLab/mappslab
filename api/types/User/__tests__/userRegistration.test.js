@@ -5,6 +5,9 @@ import { joseph } from '../../../database/stubs/users'
 // import { removeUser } from '../UserModel'
 
 describe('[createUser]', () => {
+	it('', () => {
+		expect(2).toBe(2)
+	})
 	// afterAll(() => {
 	//		removeUser(newUser)
 	// })

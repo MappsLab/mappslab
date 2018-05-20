@@ -23,8 +23,9 @@ const setSchema = async () => {
 	const schema = `
 		role: string @index(hash) .
 		type: string @index(hash) .
-		teaches_in: uid @reverse .
-		learns_in: uid @reverse .
+		slug: string @index(hash) .
+		teaches_in: uid @reverse @count .
+		learns_in: uid @reverse @count .
 	`
 	const op = new dgraph.Operation()
 	op.setSchema(schema)

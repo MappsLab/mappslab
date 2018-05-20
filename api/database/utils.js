@@ -6,7 +6,6 @@ import type { Filter } from '../types/shared/sharedTypes'
 export const createVariables = R.pipe(
 	R.toPairs,
 	R.reduce((acc, [key, value]) => {
-		console.log(key, value)
 		return R.assoc(`$${key}`, value.toString())(acc)
 	}, {}),
 )

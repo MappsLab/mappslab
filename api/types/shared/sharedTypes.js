@@ -25,11 +25,27 @@ export type PaginationArgs = {
 	after: string,
 }
 
+export type PaginationInput = {
+	input: PaginationArgs,
+}
+
+export type GetNodeArgs =
+	| {
+			uid: string,
+	  }
+	| {
+			slug: string,
+	  }
+
+export type GetNodeInput = {
+	input: GetNodeArgs,
+}
+
 export type GraphQLContext = {
 	user: UserType,
 }
 
-type Edge = {
+export type Edge = {
 	cursor: string,
 	node: Object,
 }
