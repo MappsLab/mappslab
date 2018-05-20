@@ -15,7 +15,8 @@ type Props = {
 	classrooms: Array<Object>,
 }
 
-const Classrooms = ({ loading, classrooms }: Props) => {
+const Classrooms = (props: Props) => {
+	const { loading, classrooms } = props
 	return (
 		<Column>
 			{loading ? (
@@ -25,7 +26,7 @@ const Classrooms = ({ loading, classrooms }: Props) => {
 					<Header2>Select Your Classroom</Header2>
 					<div>
 						{classrooms.map((c) => (
-							<Link to={`/${c.slug}`} key={c.slug}>
+							<Link to={`/classrooms/${c.slug}`} key={c.slug}>
 								<ListItem title={c.title} line1={c.teachers.map((t) => t.name).join(', ')} />
 							</Link>
 						))}

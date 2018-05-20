@@ -4,6 +4,7 @@ const Classroom = /* GraphQL */ `
 	type Classroom implements Node {
 		uid: ID!
 		title: String
+		slug: String
 		students: UserConnection
 		teachers: UserConnection
 		maps: MapConnection

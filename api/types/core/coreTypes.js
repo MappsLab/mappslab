@@ -37,7 +37,7 @@ export const coreTypes = /* GraphQL */ `
 	}
 
 	input GetNodeInput {
-		uid: ID
+		uid: String 
 		slug: String
 	}
 
