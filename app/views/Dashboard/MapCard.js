@@ -11,7 +11,7 @@ import { MapPreview } from 'App/components/Maps'
  */
 
 type Props = {
-	title?: void | String,
+	title?: void | string,
 	map?: Object | MapType,
 }
 

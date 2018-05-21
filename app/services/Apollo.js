@@ -41,6 +41,7 @@ const setAuthHeader = new ApolloLink((operation, forward) => {
 const logQueries = new ApolloLink((operation, forward) => {
 	const labelStyle = 'color: deepskyblue; font-weight: 800'
 	const messageStyle = 'color: gray'
+	console.log(process.env.DEBUG)
 	if (process.env.NODE_ENV === 'development') {
 		debug(`%c[GraphQL Logger] %c(link) Called ${operation.operationName}`, labelStyle, messageStyle)
 		if (operation.variables) debug(' variables ⤑ ', operation.variables)

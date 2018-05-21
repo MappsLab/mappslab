@@ -4,26 +4,17 @@ import { makeQuery, unwindEdges } from '../utils'
 
 // todo#16 : Make a Viewer fragment and reuse it in the viewer query
 export const query = gql`
-	query ViewerDashboardQuery {
+	query ViewerMapQuery {
 		viewer {
 			uid
 			name
 			role
-			classrooms {
+			pins {
 				edges {
 					node {
-						uid
 						title
-						slug
-						teachers {
-							edges {
-								node {
-									uid
-									name
-									role
-								}
-							}
-						}
+						lat
+						lang
 					}
 				}
 			}

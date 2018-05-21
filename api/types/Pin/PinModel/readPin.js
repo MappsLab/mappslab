@@ -8,8 +8,11 @@ export const getPin = () => {}
 
 export const getPins = () => {}
 
-export const getPinsByUser = async (user: UserType, args: PaginationArgs): Promise<PageType | Error> => {
-	const { first = 50, after = '0x0', filter } = args.input
+export const getPinsByUser = async (
+	user: UserType,
+	{ first = 50, after = '0x0', filter }: PaginationArgs,
+): Promise<PageType | Error> => {
+	console.log(user, first, after)
 	const { uid } = user
 	const q = /* GraphQL */ `
 		query getPins($uid: string, $first: int, $after: string) {

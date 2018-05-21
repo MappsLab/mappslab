@@ -24,8 +24,8 @@ class Mapp extends React.Component<Props> {
 
 		// $FlowFixMe
 		const options = {
-			center: { lat: -34.397, lng: 150.644 },
-			zoom: 8,
+			center: { lat: 40.65, lng: -111.85 },
+			zoom: 10,
 			...this.props.options,
 			disableDefaultUI: true,
 			zoomControlOptions: false,
@@ -38,7 +38,7 @@ class Mapp extends React.Component<Props> {
 	mapRef: { current: any }
 
 	render() {
-		return <div style={{ width: 500, height: 500 }} ref={this.mapRef} />
+		return <div style={{ width: '100%', height: '100%' }} ref={this.mapRef} />
 	}
 }
 

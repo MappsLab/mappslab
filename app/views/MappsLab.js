@@ -6,6 +6,7 @@ import Classrooms from './Login/Classrooms'
 import Classroom from './Login/Classroom'
 import type { ViewerType } from '../types'
 import Dashboard from './Dashboard'
+import Editor from './Editor'
 import { Loading } from 'App/components/Loading'
 
 /**
@@ -21,6 +22,7 @@ const MappsLab = ({ viewer, loading }: Props) => (
 	<Switch>
 		<Route path="/login/classrooms/:slug" render={({ match }) => <Classroom slug={match.params.slug} />} />
 		<Route path="/login/classrooms" component={Classrooms} />
+		<Route path="/maps/:slug" render={({ match }) => <Editor slug={match.params.slug} />} />
 		<Route
 			path="/dashboard"
 			render={() =>

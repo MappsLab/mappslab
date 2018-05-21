@@ -51,8 +51,7 @@ export const getClassroomsByUser = async (
 	const q = /* GraphQL */ `
 		query getClassroomsByUser {
 			classrooms(func: eq(type, "classroom")) @filter(uid_in(~learns_in, ${user.uid})) {
-				title
-				uid
+				${publicFields}
 			}
 		}
 	`

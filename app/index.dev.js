@@ -7,6 +7,10 @@ import ApolloWrapper from './services/Apollo'
 import MappsLab from './views/MappsLab'
 import './styles/global'
 
+if (window.localStorage) {
+	window.localStorage.debug = 'app'
+}
+
 const renderApp = (Component) => {
 	render(
 		<AppContainer>
