@@ -11,7 +11,9 @@ import { createUploadLink } from 'apollo-upload-client'
 import { getCookie } from '../utils/storage'
 import { VIEWER_COOKIE_TOKEN } from '../constants'
 
-const uploadLink = createUploadLink({ uri: '/api', credentials: 'same-origin' })
+import config from '../config'
+
+const uploadLink = createUploadLink({ uri: config.apiRoot, credentials: 'same-origin' })
 
 const debug = require('debug')('app')
 

@@ -32,7 +32,6 @@ export const getClassrooms = async (args: PaginationArgs): Promise<{ edges: Arra
 	`
 	const result = await query(q)
 	const edges = nodesToEdges(result.getJson().classrooms) || []
-	// console.log(edges)
 	const lastCursor = prop('cursor', last(edges))
 
 	return {

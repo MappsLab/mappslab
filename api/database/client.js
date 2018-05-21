@@ -6,9 +6,11 @@ const dotenv = require('dotenv')
 
 dotenv.config()
 
+const address = process.env.NODE_ENV === 'development' ? 'localhost:9088' : '//mappslab-db.now.sh'
+
 const clientStub = new dgraph.DgraphClientStub(
 	// addr: optional, default: "localhost:9080"
-	'localhost:9088',
+	address,
 	// credentials: optional, default: grpc.credentials.createInsecure()
 	grpc.credentials.createInsecure(),
 )
