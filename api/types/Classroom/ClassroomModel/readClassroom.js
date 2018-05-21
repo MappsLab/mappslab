@@ -3,7 +3,7 @@ import { prop, last, head, pipe } from 'ramda'
 import { query } from '../../../database'
 import { nodesToEdges } from '../../../utils/dbUtils'
 import type { ClassroomType } from '../ClassroomTypes'
-import type { TeacherType } from '../../User/UserTypes'
+import type { TeacherType, UserType } from '../../User/UserTypes'
 import type { PageInfo, PaginationArgs, GetNodeArgs, Edge } from '../../shared/sharedTypes'
 import { publicFields } from './classroomDBSchema'
 
@@ -48,19 +48,16 @@ export const getClassroomsByUser = async (
 	user: UserType,
 	args: PaginationArgs,
 ): Promise<{ edges: Array<Edge>, pageInfo: PageInfo } | Error> => {
-	console.log('!')
 	const q = /* GraphQL */ `
 		query getClassroomsByUser {
-			userClassrooms(func: uid(${user.uid})) {
-				learns_in {
-					uid
-					title
-				}
+			classrooms(func: eq(type, "classroom")) @filter(uid_in(~learns_in, ${user.uid})) {
+				title
+				uid
 			}
 		}
 	`
 	const result = await query(q)
-	const edges = nodesToEdges(head(result.getJson().userClassrooms).learns_in) || []
+	const edges = nodesToEdges(result.getJson().classrooms) || []
 	const lastCursor = prop('cursor', last(edges))
 	return {
 		edges,

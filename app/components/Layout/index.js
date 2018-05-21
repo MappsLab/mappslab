@@ -1,9 +1,10 @@
 // @flow
 import { Main, Column } from './wrappers'
-import { ListItem } from './lists'
+import { ListItem, HR } from './lists'
 
 module.exports = {
 	Main,
 	Column,
 	ListItem,
+	HR,
 }

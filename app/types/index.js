@@ -10,6 +10,11 @@ export type ViewerType = UserType & {
 	email?: string,
 }
 
+export type MapType = {
+	title: string,
+	uid: string,
+}
+
 export type ClassroomType = {
 	uid: string,
 	title: string,

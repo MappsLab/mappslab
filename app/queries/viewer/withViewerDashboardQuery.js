@@ -13,6 +13,15 @@ export const query = gql`
 				edges {
 					node {
 						uid
+						title
+						teachers {
+							edges {
+								node {
+									uid
+									name
+								}
+							}
+						}
 					}
 				}
 			}

@@ -5,6 +5,10 @@ import { spacing } from 'App/styles/layout'
 import { gray } from 'App/styles/colors'
 import { Header2, Header3 } from '../Text'
 
+export const HR = styled.hr`
+	border-bottom: 1px solid ${gray};
+`
+
 const ListItemWrapper = styled.div`
 	padding: ${spacing.single};
 	margin: 0 ${spacing.double};
