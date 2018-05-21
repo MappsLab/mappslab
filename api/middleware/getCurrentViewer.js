@@ -10,13 +10,13 @@ const getCurrentViewer = async (req: express$Request, res, next) => {
 		return
 	}
 	const token = req.headers.authorization.replace(/^Bearer /, '')
-	const viewer = await verifyJWT(token).catch((err) => {
+	try {
+		const viewer = await verifyJWT(token)
+		req.viewer = viewer
+	} catch (e) {
 		debug('JWT Validation Error:')
-		debug(err)
-		req.viewer = null
-		next()
-	})
-	req.viewer = viewer
+		debug(e)
+	}
 	next()
 }
 

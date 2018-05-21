@@ -1,9 +1,19 @@
 // @flow
 
+/* eslint-disable no-use-before-define */
+
+export type PinType = {
+	lat: number,
+	lang: number,
+	title: string,
+}
+
 export type UserType = {
 	uid: string,
 	name: string,
 	role: 'teacher' | 'student',
+	pins?: Array<PinType>,
+	classrooms?: Array<ClassroomType>,
 }
 
 export type ViewerType = UserType & {

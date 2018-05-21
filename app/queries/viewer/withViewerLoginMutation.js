@@ -27,7 +27,6 @@ const config = {
 			const { loginViewer } = data
 			const { viewer, jwt, requiresReset } = loginViewer
 			const { token, expires } = jwt
-			console.log(data)
 			const cookieExpiration = expires / 24 / 60 / 60
 			if (token) setCookie(VIEWER_COOKIE_TOKEN, token, { expires: cookieExpiration })
 

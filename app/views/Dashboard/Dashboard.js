@@ -1,7 +1,6 @@
 // @flow
 import React from 'react'
 import type { ViewerType } from 'App/types'
-import { Link } from 'react-router-dom'
 import { withViewerDashboardQuery } from 'App/queries'
 import { Main, HR } from 'App/components/Layout'
 import { Header1, Header3 } from 'App/components/Text'

@@ -38,6 +38,7 @@ const config = {
 			...ownProps.viewer,
 			...viewer,
 		}
+		console.log(viewer, ownProps.viewer, combinedViewer)
 		return {
 			loading,
 			viewer: combinedViewer,
