@@ -7,15 +7,15 @@ import { ApolloClient } from 'apollo-client'
 import { onError } from 'apollo-link-error'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { createUploadLink } from 'apollo-upload-client'
-
 import { getCookie } from '../utils/storage'
 import { VIEWER_COOKIE_TOKEN } from '../constants'
-
 import config from '../config'
 
-const uploadLink = createUploadLink({ uri: config.apiRoot, credentials: 'same-origin' })
-
 const debug = require('debug')('app')
+
+debug(`Using API endpoint: ${config.apiRoot}`)
+
+const uploadLink = createUploadLink({ uri: config.apiRoot, credentials: 'same-origin' })
 
 // TODO Return IDs from more objects for better caching
 const cache = new InMemoryCache({

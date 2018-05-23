@@ -5,20 +5,21 @@
 	"main": "index.js",
 	"scripts": {
 		"test": "jest",
-		"dev:app": "cross-env DEBUG=api webpack-dev-server --colors --env development --config ./config/webpack.config.js",
+		"dev:app": "cross-env ENV=development DEBUG=api webpack-dev-server --colors --env development --config ./config/webpack.config.js",
 		"dev:api": "cross-env ENV=development cross-env DEBUG=api nodemon --watch api api/server.js --exec babel-node",
 		"dev:db:stopall": "docker stop $(docker ps -q)",
 		"dev:db:init": "docker-compose -p mappslab -f ./api/database/docker-compose.yml up -d",
 		"dev:db:start": "docker start mappslab_dgraph-zero mappslab_dgraph-server mappslab_dgraph-ratel",
 		"dev:db:stop": "docker stop mappslab_dgraph-zero mappslab_dgraph-server mappslab_dgraph-ratel",
 		"dev:db:seed": "cross-env TEST_DB=true cross-env DEBUG=api:testDatabase babel-node ./api/database/scripts/testDatabase/seedTestDatabase.js",
+		"staging:db:seed": "cross-env ENV=staging npm run dev:db:seed",
+		"build:app": "webpack -p --env production --config ./config/webpack.config.js --progress --colors",
 		"build:api": "npm-run-all build:api:clear build:api:compile build:api:config",
 		"build:api:clear": "rimraf ./build/api",
 		"build:api:compile": "cross-env ENV=production babel ./api -d ./build/api",
 		"build:api:config": "cp api/package.json build/api/package.json && cp api/now.json build/api/now.json",
 		"test:app": "cross-env ENV=development cross-env DEBUG=test cross-env TEST_DB=true jest --projects ./app",
-		"test:api": "cross-env ENV=development cross-env DEBUG=test cross-env TEST_DB=true jest --projects ./api",
-		"build": "babel ./src --out-dir ./dist"
+		"test:api": "cross-env ENV=development cross-env DEBUG=test cross-env TEST_DB=true jest --projects ./api"
 	},
 	"repository": {
 		"type": "git",

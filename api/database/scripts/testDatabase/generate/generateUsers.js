@@ -18,6 +18,7 @@ const generateUser = (): Object => {
 		role: mostLikely('student', 'teacher'),
 		createdAt,
 		disabled: mostLikely(false, true),
+		password: 'Password#1',
 	}
 }
 

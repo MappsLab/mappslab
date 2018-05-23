@@ -6,7 +6,17 @@ const dotenv = require('dotenv')
 
 dotenv.config()
 
-const address = process.env.NODE_ENV === 'development' ? 'localhost:9088' : '//mappslab-db.now.sh'
+const address =
+	process.env.ENV === 'production'
+		? // Local Development
+		  'TBD'
+		: process.env.ENV === 'staging'
+			? // Staging Database
+			  '167.99.175.140:9080'
+			: // Local
+			  'localhost:9088'
+
+console.log(address)
 
 const clientStub = new dgraph.DgraphClientStub(
 	// addr: optional, default: "localhost:9080"
@@ -16,6 +26,4 @@ const clientStub = new dgraph.DgraphClientStub(
 )
 
 const dbClient = new dgraph.DgraphClient(clientStub)
-// if (process.env.NODE_ENV === 'development') db.setDebugMode(true)
-
 export default dbClient

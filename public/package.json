@@ -1,0 +1,14 @@
+{
+  "name": "public",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "serve . --single"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "serve": "^6.5.7"
+  }
+}

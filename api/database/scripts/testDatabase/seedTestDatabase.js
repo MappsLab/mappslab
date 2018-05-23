@@ -9,7 +9,7 @@ import { createPin, createPinConnection } from '../../../types/Pin/PinModel'
 const dgraph = require('dgraph-js')
 const debug = require('debug')('api:testDatabase')
 
-faker.seed()
+faker.seed(667)
 
 const dropAll = async () => {
 	const op = new dgraph.Operation()
@@ -34,16 +34,17 @@ const setSchema = async () => {
 }
 
 const seedDatabase = async () => {
+	debug('🌻 🌻 🌻 Seeding Test Database... 🌻 🌻 🌻 ')
 	await dropAll()
 	await setSchema()
-	debug('🌻 🌻 🌻 Seeding Test Database... 🌻 🌻 🌻 ')
+
 	debug('👶  Creating and inserting users...')
 	const users = await promiseSerial(generateUsers(100).map((u) => () => createUser(u)))
 	const students = users.filter((u) => u.role === 'student')
 	const teachers = users.filter((u) => u.role === 'teacher')
 	debug(`👶  Created ${students.length} students and ${teachers.length} teachers`)
 
-	debug('🏫  Adding some classrooms owned by teachers..')
+	debug('🏫  Adding some classrooms..')
 	const cCount = Math.floor(teachers.length * 2)
 	const classrooms = await promiseSerial(generateClassrooms(cCount).map((c) => () => createClassroom(c)))
 	debug(`🏫  Made ${classrooms.length} classrooms`)
@@ -57,7 +58,7 @@ const seedDatabase = async () => {
 	debug('📍  Creating some pins for students..')
 
 	const pins = await students.reduce(async (accP, student) => {
-		const pinCount = faker.random.number({ min: 0, max: 20 })
+		const pinCount = faker.random.number({ min: 5, max: 20 })
 		const newPins = await promiseSerial(generatePins(pinCount).map((pinData) => () => createPin(pinData)))
 		await promiseSerial(newPins.map((p) => () => createPinConnection({ fromUid: student.uid, pred: 'pinned', toUid: p.uid })))
 		const acc = await accP
