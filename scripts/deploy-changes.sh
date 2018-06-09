@@ -33,6 +33,7 @@ if git diff --name-only $TRAVIS_COMMIT_RANGE | grep "^placeholder/"
 fi
 
 if git diff --name-only $TRAVIS_COMMIT_RANGE | grep "^app/"
+	then
 	echo "*     * * *     *"
 	echo "🚀  Deploying App"
 	echo "*     * * *     *"
