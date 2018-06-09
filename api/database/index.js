@@ -1,20 +1,24 @@
 // @flow
+import createEdge from './createEdge'
+import createNode from './createNode'
+import dbClient from './client'
+import { createVariables } from './utils'
 
-const dgraph = require('dgraph-js')
-const grpc = require('grpc')
-const dotenv = require('dotenv')
+const debug = require('debug')('api')
 
-dotenv.config()
+/** Shortcuts **/
 
-const clientStub = new dgraph.DgraphClientStub(
-	// addr: optional, default: "localhost:9080"
-	'localhost:9080',
-	// credentials: optional, default: grpc.credentials.createInsecure()
-	grpc.credentials.createInsecure(),
-)
+const query = (query: string, vars?: Object): Function => {
+	return vars
+		? // if we have vars, parse them
+		  dbClient.newTxn().queryWithVars(query, createVariables(vars))
+		: // Otherwise, normal query
+		  dbClient.newTxn().query(query)
+}
 
-const db = new dgraph.DgraphClient(clientStub)
-
-// if (process.env.NODE_ENV === 'development') db.setDebugMode(true)
-
-export default db
+module.exports = {
+	createEdge,
+	createNode,
+	dbClient,
+	query,
+}

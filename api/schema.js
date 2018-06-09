@@ -1,6 +1,5 @@
 // @flow
 import { merge } from 'lodash'
-
 import { coreTypes, coreTypeResolvers, coreQueryResolvers } from './types/core'
 import { scalarTypes, scalarResolvers } from './types/Scalars'
 import { ClassroomSchema, ClassroomQueryResolvers, ClassroomMutationResolvers } from './types/Classroom'

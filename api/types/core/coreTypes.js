@@ -18,12 +18,11 @@ export const coreTypes = /* GraphQL */ `
 	}
 
 	interface Edge {
-		cursor: String!
+		cursor: ID!
 	}
 
 	interface Connection {
 		pageInfo: PageInfo!
-		edges: [Node]!
 	}
 
 	enum QueryOperator {
@@ -35,7 +34,12 @@ export const coreTypes = /* GraphQL */ `
 		key: String!,
 		value: String!,
 		operator: QueryOperator
-	}	
+	}
+
+	input GetNodeInput {
+		uid: String 
+		slug: String
+	}
 
 	input PaginationInput {
 		first: Int,

@@ -1,10 +1,19 @@
 // @flow
 
+import { user, currentViewer } from './getUsers'
+import { pins, classrooms } from './getUserConnections'
+
 export default {
 	Query: {
-		// user // user by ID
+		user,
+		viewer: currentViewer,
+	},
+	Viewer: {
+		pins,
+		classrooms,
 	},
 	User: {
-		// relation
+		pins,
+		classrooms,
 	},
 }

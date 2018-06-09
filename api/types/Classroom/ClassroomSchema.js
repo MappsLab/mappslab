@@ -4,6 +4,7 @@ const Classroom = /* GraphQL */ `
 	type Classroom implements Node {
 		uid: ID!
 		title: String
+		slug: String
 		students: UserConnection
 		teachers: UserConnection
 		maps: MapConnection
@@ -28,8 +29,8 @@ const Classroom = /* GraphQL */ `
 	# Queries & Mutations
 
 	extend type Query {
-		classroom(uid: ID!): Classroom!
-		classrooms(input: PaginationInput!): ClassroomConnection! 
+		classroom(input: GetNodeInput): Classroom!
+		classrooms(input: PaginationInput): ClassroomConnection! 
 	}
 
 	extend type Mutation {

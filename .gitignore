@@ -51,3 +51,7 @@ yarn-error.log
 # localhost HTTPS
 .*.key
 .*.cert
+
+.env
+.env.*
+secrets.tar

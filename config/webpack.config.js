@@ -1,9 +1,9 @@
 const webpack = require('webpack')
 const merge = require('webpack-merge')
 const path = require('path')
-const fs = require('fs')
+// const fs = require('fs')
 
-const babelConfig = JSON.parse(fs.readFileSync('.babelrc'))
+// const babelConfig = JSON.parse(fs.readFileSync('.babelrc'))
 const projectRoot = path.resolve(__dirname, '..')
 
 const common = merge([
@@ -13,24 +13,15 @@ const common = merge([
 				{
 					test: /\.jsx?$/,
 					exclude: /node_modules/,
-					use: [
-						{
-							loader: 'babel-loader',
-							options: {
-								presets: babelConfig.presets.map((preset) => [preset, { modules: false }]),
-								plugins: babelConfig.plugins.map((plugin) => {
-									if (typeof plugin === 'string') return plugin
-									return [...plugin]
-								}),
-							},
-						},
-					],
+					use: ['babel-loader'],
 				},
 			],
 		},
 		resolve: {
 			alias: {
-				App: path.resolve(projectRoot, '/'),
+				App: path.resolve(projectRoot, 'app'),
+				Api: path.resolve(projectRoot, 'api'),
+				Styles: path.resolve(projectRoot, 'app', 'styles'),
 				mapp: path.resolve(projectRoot, 'packages/mapp/src'),
 			},
 			extensions: ['.js'],
@@ -83,7 +74,7 @@ const development = merge([
 const production = merge([
 	{
 		mode: 'production',
-		entry: ['babel-polyfill', './index.js'],
+		entry: ['babel-polyfill', './app/index.js'],
 		output: {
 			path: path.resolve(projectRoot, 'public/js/'),
 			filename: 'app.js',
@@ -97,9 +88,6 @@ const production = merge([
 			new webpack.DefinePlugin({
 				'process.env.NODE_ENV': JSON.stringify('production'),
 			}),
-			// new LodashModuleReplacementPlugin({
-			// 	currying: true,
-			// }),
 		],
 	},
 ])

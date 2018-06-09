@@ -1,16 +1,27 @@
 // @flow
 import Joi from 'joi'
+import { when, prop } from 'ramda'
 import type { ClassroomInput } from '../ClassroomTypes'
-import { promisePipe, filterNullAndUndefined } from '../../../utils'
+import { promisePipe, filterNullAndUndefined, createSlugFrom } from '../../../utils'
 
 /**
  * Schema
  */
 
+const SLUG_LENGTH = 35
+
 export const classroomSchema = (isNew: boolean = true) =>
 	Joi.object().keys({
 		uid: process.env.TEST_DB === 'true' ? Joi.string() : Joi.any().forbidden(),
-		classroomName: isNew
+		slug: Joi.any().when('title', {
+			is: Joi.exist(),
+			then: Joi.string()
+				.regex(/^[a-z0-9-_]+$/)
+				.min(1)
+				.max(SLUG_LENGTH)
+				.required(),
+		}),
+		title: isNew
 			? Joi.string()
 					.min(3)
 					.max(35)
@@ -29,6 +40,8 @@ export const defaultValues = {
 	updatedAt: new Date(),
 }
 
+export const publicFields = ['uid', 'title', 'slug', 'disabled', 'createdAt', 'updatedAt'].join('\n')
+
 export const validateNew = (classroomData: ClassroomInput) => Joi.validate(classroomData, classroomSchema(true))
 export const validateUpdate = (classroomData: ClassroomInput) => Joi.validate(classroomData, classroomSchema(false))
 
@@ -37,4 +50,8 @@ export const validateUpdate = (classroomData: ClassroomInput) => Joi.validate(cl
  */
 
 export const clean = async (classroomData: ClassroomInput = {}): Promise<ClassroomInput> =>
-	promisePipe(filterNullAndUndefined)(classroomData)
+	promisePipe(
+		// When a title is supplied without a slug, make a slug from it
+		when((o) => prop('title')(o) && !prop('slug')(o), createSlugFrom('title')),
+		filterNullAndUndefined,
+	)(classroomData)

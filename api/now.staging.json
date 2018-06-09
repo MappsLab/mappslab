@@ -1,0 +1,8 @@
+{
+	"alias": "mappslab-api",
+	"env": {
+		"ENV": "staging",
+		"DEBUG": "api",
+		"JWT_KEY": "PGroGm8NZiG^p2*kwatz"
+	}
+}

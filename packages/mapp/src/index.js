@@ -6,15 +6,24 @@ import loadGoogleMaps from './services/googleMaps'
 type Props = {
 	APIKey: string,
 	options?: Object,
+	pins: Array<Object>,
 }
 
-class Mapp extends React.Component<Props> {
+type State = {
+	created: boolean,
+}
+
+class Mapp extends React.Component<Props, State> {
 	static defaultProps = {
 		options: {},
+		pins: [],
 	}
 
 	constructor(props: Props) {
 		super(props)
+		this.state = {
+			created: false,
+		}
 		this.mapRef = React.createRef()
 	}
 
@@ -24,8 +33,8 @@ class Mapp extends React.Component<Props> {
 
 		// $FlowFixMe
 		const options = {
-			center: { lat: -34.397, lng: 150.644 },
-			zoom: 8,
+			center: { lat: 40.65, lng: -111.85 },
+			zoom: 10,
 			...this.props.options,
 			disableDefaultUI: true,
 			zoomControlOptions: false,
@@ -33,12 +42,37 @@ class Mapp extends React.Component<Props> {
 		}
 		// $FlowFixMe
 		this.map = new google.maps.Map(this.mapRef.current, options) // eslint-disable-line no-undef
+		this.setState({
+			created: true,
+		})
 	}
+
+	map: Object
 
 	mapRef: { current: any }
 
+	loadPins() {
+		console.log(this.props.pins)
+		this.props.pins.map(
+			(p) =>
+				new google.maps.Marker({
+					// eslint-disable-line no-undef
+					position: {
+						lat: p.lat,
+						lng: p.lang,
+					},
+					map: this.map,
+					title: p.title,
+				}),
+		)
+	}
+
 	render() {
-		return <div style={{ width: 500, height: 500 }} ref={this.mapRef} />
+		return (
+			<div style={{ width: '100%', height: '100%' }} ref={this.mapRef}>
+				{this.state.created ? this.loadPins() : null}
+			</div>
+		)
 	}
 }
 

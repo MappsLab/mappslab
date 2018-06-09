@@ -18,8 +18,8 @@ export const pinSchema = (isNew: boolean = true) =>
 			: Joi.string()
 					.min(3)
 					.max(35),
-		lat: isNew ? Joi.number().isRequired() : Joi.number(),
-		lang: isNew ? Joi.number().isRequired() : Joi.number(),
+		lat: isNew ? Joi.number().required() : Joi.number(),
+		lang: isNew ? Joi.number().required() : Joi.number(),
 		createdAt: isNew ? Joi.date().required() : Joi.any().forbidden(),
 		updatedAt: Joi.date().required(),
 		type: Joi.any().only('pin'),
@@ -29,6 +29,8 @@ export const defaultValues = {
 	type: 'pin',
 	updatedAt: new Date(),
 }
+
+export const publicFields = ['uid', 'title', 'lat', 'lang', 'createdAt', 'updatedAt', 'type'].join('\n')
 
 export const validateNew = (pinData: PinInput) => Joi.validate(pinData, pinSchema(true))
 export const validateUpdate = (pinData: PinInput) => Joi.validate(pinData, pinSchema(false))

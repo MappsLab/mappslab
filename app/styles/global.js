@@ -6,11 +6,16 @@ import normalized from './normalized'
 
 injectGlobal`
 	${normalized}
-
+	@import url('https://fonts.googleapis.com/css?family=Work+Sans:400,600');
+	
 	html {
 		font-size: 10px;
-		font-family: 'Source Sans Pro', 'Helvetica Neue', helvetica, sans-serif;
+		font-family: 'Work Sans', 'Helvetica Neue', helvetica, sans-serif;
 		font-weight: 300;
+	}
+
+	body {
+		background-color: #e2e2e2;
 	}
 
 	form {
@@ -19,7 +24,7 @@ injectGlobal`
 
 	button, input, select, option, textarea {
 		background: white;
-		font-family: 'Source Sans Pro', 'Helvetica Neue', helvetica, sans-serif;
+		font-family: 'Work Sans', 'Helvetica Neue', helvetica, sans-serif;
 		font-weight: 300;
 		border: none;
 		outline: none;
