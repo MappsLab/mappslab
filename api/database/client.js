@@ -14,9 +14,7 @@ const address =
 			? // Staging Database
 			  '167.99.175.140:9080'
 			: // Local
-			  'localhost:9088'
-
-console.log(address)
+			  'localhost:9099'
 
 const clientStub = new dgraph.DgraphClientStub(
 	// addr: optional, default: "localhost:9080"

@@ -4,17 +4,14 @@
 		[
 			"babel-plugin-module-resolver",
 			{
-				"root": ["./src"],
+				"root": ["../"],
 				"alias": {
-					"App": "./app",
-					"Api": "./api",
-					"Styles": "./app/styles",
-					"mapp": "./packages/mapp/src"
+					"Api": "./api"
 				},
 				"cwd": "babelrc"
 			}
 		],
 		"@babel/plugin-proposal-class-properties",
-		"@babel/plugin-proposal-object-rest-spread",
+		"@babel/plugin-proposal-object-rest-spread"
 	]
 }

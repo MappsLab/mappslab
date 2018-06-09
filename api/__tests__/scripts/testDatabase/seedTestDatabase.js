@@ -1,6 +1,6 @@
 // @flow
 import faker from 'faker'
-import { dbClient } from '../../index'
+import { dbClient } from '../../../database'
 import { generateUsers, generateClassrooms, generateClassroomConnections, generatePins } from './generate'
 import { createUser } from '../../../types/User/UserModel'
 import { createClassroom, createClassroomConnection } from '../../../types/Classroom/ClassroomModel'

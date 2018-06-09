@@ -1,7 +1,7 @@
 // @flow
 /* eslint-disable no-undef */
+import { createJWT, verifyJWT } from '../../../utils/auth'
 import { request } from '../../../__tests__/utils'
-import { createJWT, verifyJWT } from 'Api/utils/auth'
 import { joseph, john } from '../../../database/stubs/users'
 
 describe('queries', () => {
@@ -48,7 +48,7 @@ describe('queries', () => {
 		const { jwt, viewer } = result.data.loginViewer
 		expect(/^Bearer/.test(jwt.token)).toBe(true)
 		expect(jwt.expires).toBeGreaterThan(1)
-		expect(viewer.name).toBe(joseph.name)
+		expect(viewer.name).toBe(john.name)
 	})
 
 	it('[loginViewer] should return a validation error with invalid credentials', async () => {

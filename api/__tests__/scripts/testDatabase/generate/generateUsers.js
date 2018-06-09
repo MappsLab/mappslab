@@ -2,7 +2,7 @@
 import * as R from 'ramda'
 import faker from 'faker'
 import { mostLikely } from './utils'
-import { users as defaultUsers } from '../../../stubs/'
+import { users as defaultUsers } from '../fixtures/'
 
 // TODO: Seed with disabled users
 
