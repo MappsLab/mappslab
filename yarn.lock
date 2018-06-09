@@ -6987,9 +6987,9 @@ jmespath@0.15.0:
   version "0.15.0"
   resolved "https://registry.yarnpkg.com/jmespath/-/jmespath-0.15.0.tgz#a3f222a9aae9f966f5d27c796510e28091764217"
 
-joi@^13.3.0:
-  version "13.3.0"
-  resolved "https://registry.yarnpkg.com/joi/-/joi-13.3.0.tgz#4defd4333b539c5d10e444ab44f5a5583480f17c"
+joi@^13.4.0:
+  version "13.4.0"
+  resolved "https://registry.yarnpkg.com/joi/-/joi-13.4.0.tgz#afc359ee3d8bc5f9b9ba6cdc31b46d44af14cecc"
   dependencies:
     hoek "5.x.x"
     isemail "3.x.x"
@@ -10338,9 +10338,9 @@ style-loader@^0.21.0:
     loader-utils "^1.1.0"
     schema-utils "^0.4.5"
 
-styled-components@^3.2.6:
-  version "3.2.6"
-  resolved "https://registry.yarnpkg.com/styled-components/-/styled-components-3.2.6.tgz#99e6e75a746bdedd295a17e03dd1493055a1cc3b"
+styled-components@^3.3.2:
+  version "3.3.2"
+  resolved "https://registry.yarnpkg.com/styled-components/-/styled-components-3.3.2.tgz#087b96830ee3d60d9a8b5ef17c132b4f29cc71df"
   dependencies:
     buffer "^5.0.3"
     css-to-react-native "^2.0.3"
