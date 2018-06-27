@@ -1,7 +1,6 @@
 // @flow
 import { prop, last, head, pipe } from 'ramda'
 import { query } from '../../../database'
-import { nodesToEdges } from '../../../utils/dbUtils'
 import type { ClassroomType } from '../ClassroomTypes'
 import type { TeacherType, UserType } from '../../User/UserTypes'
 import type { PageInfo, PaginationArgs, GetNodeArgs, Edge } from '../../shared/sharedTypes'
@@ -31,7 +30,7 @@ export const getClassrooms = async (args: PaginationArgs): Promise<{ edges: Arra
 		}
 	`
 	const result = await query(q)
-	const edges = nodesToEdges(result.getJson().classrooms) || []
+	const edges = result.classrooms || []
 	const lastCursor = prop('cursor', last(edges))
 
 	return {
@@ -55,7 +54,7 @@ export const getClassroomsByUser = async (
 		}
 	`
 	const result = await query(q)
-	const edges = nodesToEdges(result.getJson().classrooms) || []
+	const edges = result.classrooms || []
 	const lastCursor = prop('cursor', last(edges))
 	return {
 		edges,

@@ -1,22 +1,24 @@
 // @flow
-import { flatten } from 'flat'
 import dbClient from './client'
 import type { DBNode } from '../types/shared/sharedTypes'
 
 const dgraph = require('dgraph-js')
 const debug = require('debug')('api')
 
-const createNode = async (data: Object): Promise<DBNode | Error> => {
+const mutateNode = async (uid: string, data: DBNode): Promise<DBNode | Error> => {
 	const txn = dbClient.newTxn()
+	if (!uid && typeof uid !== 'string') throw new Error('You must supply a node UID for a mutation')
 	try {
 		const mu = new dgraph.Mutation()
-		mu.setSetJson(flatten(data))
-		const newClassroom = await txn.mutate(mu)
-		await txn.commit()
-		const uid = newClassroom.getUidsMap().get('blank-0')
-		debug(`Created new node with uid ${uid}`)
-		return {
+		mu.setSetJson({
 			uid,
+			...data,
+		})
+		await txn.mutate(mu)
+		await txn.commit()
+		debug(`Mutated node with uid ${uid}:`)
+		debug({ uid, ...data })
+		return {
 			...data,
 		}
 	} catch (e) {
@@ -27,4 +29,4 @@ const createNode = async (data: Object): Promise<DBNode | Error> => {
 	}
 }
 
-export default createNode
+export default mutateNode

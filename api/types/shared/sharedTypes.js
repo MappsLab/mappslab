@@ -26,7 +26,7 @@ export type PaginationArgs = {
 }
 
 export type PaginationInput = {
-	input: PaginationArgs,
+	input?: PaginationArgs,
 }
 
 export type GetNodeArgs =
@@ -41,8 +41,17 @@ export type GetNodeInput = {
 	input: GetNodeArgs,
 }
 
+type Models = {
+	User: Object,
+	Pin: Object,
+	Classroom: Object,
+	Map: Object,
+}
+
 export type GraphQLContext = {
 	viewer: UserType,
+	models: Models,
+	session: Object,
 }
 
 export type Edge = {

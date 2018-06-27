@@ -1,6 +1,4 @@
 // @flow
-import '@babel/polyfill'
-
 import { GraphQLServer } from 'graphql-yoga'
 import { typeDefs, resolvers } from './schema'
 import { PORT } from './config'

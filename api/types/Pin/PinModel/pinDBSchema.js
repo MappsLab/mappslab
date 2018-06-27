@@ -1,6 +1,7 @@
 // @flow
 import Joi from 'joi'
-import type { PinInput } from '../PinTypes'
+import { pipe, head } from 'ramda'
+import type { PinInput, PinType } from '../PinTypes'
 import { promisePipe, filterNullAndUndefined } from '../../../utils'
 
 /**
@@ -40,3 +41,9 @@ export const validateUpdate = (pinData: PinInput) => Joi.validate(pinData, pinSc
  */
 
 export const clean = async (pinData: PinInput = {}): Promise<PinInput> => promisePipe(filterNullAndUndefined)(pinData)
+
+/**
+ * Parse
+ */
+
+export const parsePinResult = (o: Array<Object>): PinType | null => (o.length ? pipe(head)(o) : null)

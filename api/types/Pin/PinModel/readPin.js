@@ -2,9 +2,22 @@
 import { head, prop, last } from 'ramda'
 import { query } from '../../../database'
 import type { UserType } from '../../User/UserTypes'
+import type { PinType, GetPinArgs } from '../PinTypes'
 import type { PaginationArgs, PageType } from '../../shared/sharedTypes'
-import { publicFields } from './pinDBSchema'
-export const getPin = () => {}
+import { publicFields, parsePinResult } from './pinDBSchema'
+
+export const getPin = async ({ uid }: GetPinArgs): Promise<PinType | null | Error> => {
+	const q = /* GraphQL */ `
+		query getPin {
+			getPin(func: uid(${uid})) {
+				${publicFields}
+			}
+		}
+	`
+	const result = await query(q)
+	const pin = parsePinResult(result.getPin)
+	return pin
+}
 
 export const getPins = () => {}
 

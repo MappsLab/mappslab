@@ -1,7 +1,7 @@
 // @flow
 
 import * as R from 'ramda'
-import type { Filter } from '../types/shared/sharedTypes'
+import type { Filter, PaginationArgs } from '../types/shared/sharedTypes'
 
 export const createVariables = R.pipe(
 	R.toPairs,
@@ -17,7 +17,19 @@ export const createVariables = R.pipe(
 	),
 )
 
-export const itemsToNodes = R.map((f) => ({ cursor: f.uid, node: f }))
+export const defaultPaginationArgs = {
+	first: 50,
+	after: '0x0',
+}
+
+export const makePaginationArgs = (args: PaginationArgs): PaginationArgs => {
+	// Adds +1 to the 'first' argument, we need this to see if there is a next page.
+	const { first, ...rest } = { ...defaultPaginationArgs, ...args }
+	return {
+		first: first + 1,
+		...rest,
+	}
+}
 
 export const createFilterString = (filter: Array<Filter>, connect: string = 'AND'): string => {
 	const funcs = filter.map(({ key, value, operator = 'eq' }) => `${operator}(${key}, "${value}")`)

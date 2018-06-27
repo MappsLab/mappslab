@@ -1,7 +1,9 @@
 // @flow
+import { pin } from './getPins'
 
 export default {
 	Query: {
+		pin,
 		// pin // pin by ID
 	},
 	Pin: {

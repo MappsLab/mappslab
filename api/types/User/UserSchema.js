@@ -2,6 +2,7 @@
 
 const userFields = /* GraphQL */ `
 	uid: ID!
+	username: String!
 	name: String
 	classrooms: ClassroomConnection
 	maps: MapConnection
@@ -27,6 +28,16 @@ const User = /* GraphQL */ `
 		title: String!
 	}
 
+	type Token {
+		token: String!
+		expires: Int!
+	}
+
+	type LoginPayload {
+		jwt: Token!
+		viewer: Viewer!
+	}
+
 	# Relationships
 
 	type UserEdge implements Edge {
@@ -39,7 +50,11 @@ const User = /* GraphQL */ `
 		edges: [UserEdge]!
 	}
 
-	# Queries & Mutations
+	# Inputs
+
+	input GetUserInput {
+		uid: String!
+	}
 
 	input CredentialsInput {
 		email: String
@@ -47,18 +62,10 @@ const User = /* GraphQL */ `
 		password: String!
 	}
 
-	type Token {
-		token: String!
-		expires: Int!
-	}
-
-	type LoginPayload {
-		jwt: Token!
-		viewer: Viewer!
-	}
+	# Queries & Mutations
 
 	extend type Query {
-		user(uid: ID!): User!
+		user(input: GetUserInput): User!
 		viewer: Viewer
 	}
 

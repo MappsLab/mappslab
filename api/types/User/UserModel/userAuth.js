@@ -23,7 +23,7 @@ export const checkPassword = async (credentials: Credentials): Promise<UserType 
 	}`
 	const args = email ? { email } : undefined
 	const result = await query(q, args)
-	const user = head(result.getJson().getUser)
+	const user = head(result.getUser)
 	if (!user) throw new ValidationError(errorMessage)
 
 	const valid = await bcrypt.compare(password, user.password).catch((err) => {

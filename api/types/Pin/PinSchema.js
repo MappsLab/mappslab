@@ -11,11 +11,6 @@ const Pin = /* GraphQL */ `
 		routes: RouteConnection
 	}
 
-	input PinInput {
-		title: String!
-		lat: Float!
-		lang: Float!
-	}
 
 	# Relationships
 
@@ -30,16 +25,29 @@ const Pin = /* GraphQL */ `
 	}
 
 
+
+	# Inputs
+
+	input PinInput {
+		title: String!
+		lat: Float!
+		lang: Float!
+	}
+
+	input GetPinInput {
+		uid: String!
+	}
+
 	# Queries & Mutations
 
 	extend type Query {
-		pin(uid: ID!): Pin!
+		pin(input: GetPinInput!): Pin!
 	}
 
 	extend type Mutation {
 		addPin(input: PinInput!): Pin!
 		modifyPin(input: PinInput!): Pin!
-		removePin(uid: ID!): Boolean!
+		removePin(input: GetPinInput!): Boolean!
 	}
 `
 
