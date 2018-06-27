@@ -1,27 +1,44 @@
 // @flow
 /* eslint-disable no-undef */
-import { request } from '../../../__tests__/utils'
-import { getUsers } from '../UserModel'
+import { request, getViewerForContext } from '../../../__tests__/utils'
 import { removeNode } from '../../../database'
 
-let firstUser
+const q = /* GraphQL */ `
+	mutation addPin($title: String!, $lat: Float!, $lang: Float!) {
+		addPin(input: { title: $title, lat: $lat, lang: $lang }) {
+			uid
+			title
+			lat
+			lang
+			owner {
+				uid
+				name
+			}
+		}
+	}
+`
+
+const variables = {
+	title: 'a new pin',
+	lat: 145.123,
+	lang: 111.222,
+}
+
+const context = {}
 
 beforeAll(async (done) => {
-	const users = await getUsers()
-	const [user0] = users
-	firstUser = user0
+	context.viewer = await getViewerForContext()
 	done()
 })
 
 describe('[addPin]', () => {
+	it('should return an error if there is no current viewer', async () => {
+		const result = await request(q, { variables })
+		expect(result.errors).toMatchSnapshot()
+	})
 	it('Should add a new pin', async () => {
-		const q = /* GraphQL */ `
-			{
-				user(input: { uid: ${firstUser.uid} }) {
-					name
-				}
-			}
-		`
-		const result = await request(q)
+		const result = await request(q, { variables, context })
+		expect(result.data.addPin.title).toBe(variables.title)
+		expect(result.data.addPin.owner.name).toBe(context.viewer.name)
 	})
 })

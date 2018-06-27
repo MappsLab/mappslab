@@ -14,23 +14,23 @@ const debug = require('debug')('api')
  *
  */
 
-type EdgeConfig = {
-	unique?: boolean,
-}
-
 type PartialEdge = {
 	relatedUid: string,
-	newNodeOwnsEdge: boolean,
+	reverse: boolean, //
 	pred: string,
+}
+
+type EdgeConfig = {
+	unique?: boolean,
 }
 
 const defaultConfig = {
 	unique: false,
 }
 
-const createNodeWithEdge = async (nodeData: Object, relationship: PartialEdge, opts: EdgeConfig): Promise<Object | Error> => {
+const createNodeWithEdge = async (nodeData: Object, relationship: PartialEdge, opts?: EdgeConfig): Promise<Object> => {
 	const config = { ...defaultConfig, ...opts }
-	const { relatedUid, pred, newNodeOwnsEdge } = relationship
+	const { relatedUid, pred, reverse } = relationship
 	if (!relatedUid) throw new Error('A related UID must be supplied')
 	const txn = dbClient.newTxn()
 	try {
@@ -42,27 +42,28 @@ const createNodeWithEdge = async (nodeData: Object, relationship: PartialEdge, o
 		// delete the existing edges
 		if (config.unique) {
 			const delMu = new dgraph.Mutation()
-			const delNquad = newNodeOwnsEdge
-				? // if the new node owns this edge
-				  `* <${pred}> <${relatedUid}> .`
-				: // otherwise the related
+			const delNquad = reverse
+				? // if the related node owns this edge
 				  `<${relatedUid}> <${pred}> * .`
+				: // otherwise the new node owns
+				  `* <${pred}> <${relatedUid}> .`
 			delMu.setDelNquads(delNquad)
 			await txn.mutate(delMu)
 		}
 		// create the edge
 		const newNodeUid = newNode.getUidsMap().get('blank-0')
 		const edgeMu = new dgraph.Mutation()
-		const edgeNQuad = newNodeOwnsEdge
-			? // if the new node owns this edge
-			  `<${newNodeUid}> <${pred}> <${relatedUid}> .`
-			: // otherwise the related
+		const edgeNQuad = reverse
+			? // if the related node owns this edge
 			  `<${relatedUid}> <${pred}> <${newNodeUid}> .`
+			: // otherwise the new node owns
+			  `<${newNodeUid}> <${pred}> <${relatedUid}> .`
 		edgeMu.setSetNquads(edgeNQuad)
 		await txn.mutate(edgeMu)
-		debug(`Created new node with edge ${edgeNQuad}>`)
+		debug(`Created new node with edge ${edgeNQuad}`)
 		await txn.commit()
-		return newNodeOwnsEdge ? assoc(pred, relatedUid)(newNode) : assoc(`~${pred}`, relatedUid)(newNode)
+		const assocPred = reverse ? `~${pred}` : pred
+		return assoc(assocPred, relatedUid)({ uid: newNodeUid, ...nodeData })
 	} catch (e) {
 		debug(e)
 		throw e

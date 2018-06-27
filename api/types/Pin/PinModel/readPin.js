@@ -5,6 +5,7 @@ import type { UserType } from '../../User/UserTypes'
 import type { PinType, GetPinArgs } from '../PinTypes'
 import type { PaginationArgs, PageType } from '../../shared/sharedTypes'
 import { publicFields, parsePinResult } from './pinDBSchema'
+import { publicFields as userFields } from '../../user/UserModel/userDBSchema'
 
 export const getPin = async ({ uid }: GetPinArgs): Promise<PinType | null | Error> => {
 	const q = /* GraphQL */ `

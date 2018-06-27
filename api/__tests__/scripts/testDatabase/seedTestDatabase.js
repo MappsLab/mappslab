@@ -4,10 +4,10 @@ import { dbClient } from '../../../database'
 import { generateUsers, generateClassrooms, generateClassroomConnections, generatePins } from './generate'
 import { createUser } from '../../../types/User/UserModel'
 import { createClassroom, createClassroomConnection } from '../../../types/Classroom/ClassroomModel'
-import { createPin, createPinConnection } from '../../../types/Pin/PinModel'
+import { createPin } from '../../../types/Pin/PinModel'
 
 const dgraph = require('dgraph-js')
-const debug = require('debug')('api:testDatabase')
+const debug = require('debug')('api')
 
 faker.seed(667)
 
@@ -27,6 +27,7 @@ const setSchema = async () => {
 		email: string @index(hash) .
 		teaches_in: uid @reverse @count .
 		learns_in: uid @reverse @count .
+		pinned: uid @reverse @count .
 	`
 	const op = new dgraph.Operation()
 	op.setSchema(schema)
@@ -59,8 +60,7 @@ const seedDatabase = async () => {
 
 	const pins = await students.reduce(async (accP, student) => {
 		const pinCount = faker.random.number({ min: 5, max: 20 })
-		const newPins = await promiseSerial(generatePins(pinCount).map((pinData) => () => createPin(pinData)))
-		await promiseSerial(newPins.map((p) => () => createPinConnection({ fromUid: student.uid, pred: 'pinned', toUid: p.uid })))
+		const newPins = await promiseSerial(generatePins(pinCount).map((pinData) => () => createPin(pinData, student.uid)))
 		const acc = await accP
 		return [...acc, ...newPins]
 	}, [])

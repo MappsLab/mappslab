@@ -1,6 +1,10 @@
 // @flow
 
 import type { UserType } from '../User/UserTypes'
+import User from '../User/UserModel'
+import Pin from '../Pin/PinModel'
+import Classroom from '../Classroom/ClassroomModel'
+import Map from '../Map/MapModel'
 
 type Operator = 'eq' | 'le' | 'lt' | 'ge' | 'gt' | 'uid' | 'allofterms' | 'anyofterms' | 'regexp' | 'alloftext' | 'uid_in' | 'has'
 
@@ -41,11 +45,17 @@ export type GetNodeInput = {
 	input: GetNodeArgs,
 }
 
+type GraphQLResolver = (_: {}, args: {}, ctx: GraphQLContext) => mixed
+
+type Model = {
+	[key: string]: GraphQLResolver,
+}
+
 type Models = {
-	User: Object,
-	Pin: Object,
-	Classroom: Object,
-	Map: Object,
+	User: Model,
+	Pin: Model,
+	Classroom: Model,
+	Map: Model,
 }
 
 export type GraphQLContext = {

@@ -6,7 +6,7 @@ import type { GetUserArgs, UserType } from '../UserTypes'
 import type { PaginationArgs } from '../../shared/sharedTypes'
 import { publicFields, viewerFields } from './userDBSchema'
 
-const debug = require('debug')('api')
+// const debug = require('debug')('api')
 
 export const getUser = async ({ uid }: GetUserArgs): Promise<UserType | null | Error> => {
 	const q = /* GraphQL */ `
@@ -18,7 +18,6 @@ export const getUser = async ({ uid }: GetUserArgs): Promise<UserType | null | E
 	`
 	const result = await query(q)
 	const user = head(result.getUser)
-	debug(user)
 	return user
 }
 

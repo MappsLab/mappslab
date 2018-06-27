@@ -1,5 +1,6 @@
 // @flow
 import { pin } from './getPins'
+import { owner } from './getPinRelationships'
 
 export default {
 	Query: {
@@ -8,6 +9,6 @@ export default {
 	},
 	Pin: {
 		// maps // get any maps it appears in
-		// user // get owner
+		owner, // get owner
 	},
 }

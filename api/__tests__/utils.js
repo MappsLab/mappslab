@@ -18,6 +18,12 @@ const models = {
 
 export const getUsers = User.getUsers()
 
+export const getViewerForContext = async (userName: string = 'joseph') => {
+	const users = await getUsers
+	const fixtureUsers = { joseph, john, waverly }
+	const user = users.find((u) => u.name === fixtureUsers[userName].name)
+	return user
+}
 /**
  * Request Helper
  */
