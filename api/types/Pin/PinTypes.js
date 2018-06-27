@@ -18,8 +18,12 @@ export type PinType = {
 	routes?: Array<RouteType>,
 }
 
-export type PinInput = {
+export type NewPinArgs = {
 	title?: string,
 	lat?: number,
 	lang?: number,
+}
+
+export type NewPinInput = {
+	input: NewPinArgs,
 }

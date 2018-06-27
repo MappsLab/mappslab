@@ -1,7 +1,7 @@
 // @flow
 import Joi from 'joi'
 import { pipe, head } from 'ramda'
-import type { PinInput, PinType } from '../PinTypes'
+import type { NewPinArgs, PinType } from '../PinTypes'
 import { promisePipe, filterNullAndUndefined } from '../../../utils'
 
 /**
@@ -33,14 +33,14 @@ export const defaultValues = {
 
 export const publicFields = ['uid', 'title', 'lat', 'lang', 'createdAt', 'updatedAt', 'type'].join('\n')
 
-export const validateNew = (pinData: PinInput) => Joi.validate(pinData, pinSchema(true))
-export const validateUpdate = (pinData: PinInput) => Joi.validate(pinData, pinSchema(false))
+export const validateNew = (pinData: NewPinArgs) => Joi.validate(pinData, pinSchema(true))
+export const validateUpdate = (pinData: NewPinArgs) => Joi.validate(pinData, pinSchema(false))
 
 /**
  * Clean
  */
 
-export const clean = async (pinData: PinInput = {}): Promise<PinInput> => promisePipe(filterNullAndUndefined)(pinData)
+export const clean = async (pinData: NewPinArgs = {}): Promise<NewPinArgs> => promisePipe(filterNullAndUndefined)(pinData)
 
 /**
  * Parse

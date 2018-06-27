@@ -4,13 +4,9 @@ import { typeDefs, resolvers } from './schema'
 import { PORT } from './config'
 import createErrorFormatter from './utils/graphql-error-formatter'
 import getCurrentViewer from './middleware/getCurrentViewer'
+import context from './serverContext'
 
 const debug = require('debug')('api')
-
-const context = async ({ request }) => {
-	const { viewer } = request
-	return { viewer }
-}
 
 const server = new GraphQLServer({ typeDefs, resolvers, context })
 

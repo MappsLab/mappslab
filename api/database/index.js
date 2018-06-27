@@ -3,6 +3,7 @@ import { mapObjIndexed } from 'ramda'
 import { unflatten } from 'flat'
 import createEdge from './createEdge'
 import createNode from './createNode'
+import removeNode from './removeNode'
 import createNodeWithEdge from './createNodeWithEdge'
 import mutateNode from './mutateNode'
 import dbClient from './client'
@@ -27,6 +28,7 @@ module.exports = {
 	createNode,
 	createNodeWithEdge,
 	mutateNode,
+	removeNode,
 	dbClient,
 	query,
 }
