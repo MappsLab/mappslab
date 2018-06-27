@@ -1,12 +1,12 @@
 // @flow
-import { head } from 'ramda'
+import { head, prop, pipe } from 'ramda'
 import { query } from '../../../database'
-import { makePaginationArgs } from '../../../database/utils'
-import type { GetUserArgs, UserType } from '../UserTypes'
+import type { UserType } from '../UserTypes'
+import type { ClassroomType } from '../../Classroom/ClassroomTypes'
 import type { PaginationArgs } from '../../shared/sharedTypes'
 import { publicFields, viewerFields } from './userDBSchema'
 
-const debug = require('debug')('api')
+// const debug = require('debug')('api')
 
 export const getPinOwner = async (pinUid: string): Promise<UserType | null | Error> => {
 	const q = /* GraphQL */ `
@@ -20,3 +20,31 @@ export const getPinOwner = async (pinUid: string): Promise<UserType | null | Err
 	const user = head(result.getUser)
 	return user
 }
+
+export const getClassroomUsers = (userType: string): Function => async (
+	classroom: ClassroomType,
+	args: PaginationArgs,
+): Promise<Array<UserType> | Error> => {
+	// TODO: build filter into `teaches` relationship
+	const relationship = userType === 'teachers' ? '~teaches_in' : '~learns_in'
+	const q = `query getTeachers($username: string) {
+		classroom(func: uid(${classroom.uid})) {
+			title
+			${relationship} {
+				${publicFields}
+			}
+		}
+	}`
+
+	const result = await query(q)
+	const users = pipe(
+		// Get the first result from the query (should always be 1)
+		prop('classroom'),
+		head,
+		prop(relationship),
+	)(result)
+	return users
+}
+
+export const getClassroomStudents = getClassroomUsers('students')
+export const getClassroomTeachers = getClassroomUsers('teachers')

@@ -17,6 +17,7 @@ const q = /* GraphQL */ `
 		}
 	}
 `
+const deleteUids = []
 
 const variables = {
 	title: 'a new pin',
@@ -31,6 +32,11 @@ beforeAll(async (done) => {
 	done()
 })
 
+afterEach(async (done) => {
+	if (deleteUids.length) deleteUids.map(removeNode)
+	done()
+})
+
 describe('[addPin]', () => {
 	it('should return an error if there is no current viewer', async () => {
 		const result = await request(q, { variables })
@@ -40,5 +46,6 @@ describe('[addPin]', () => {
 		const result = await request(q, { variables, context })
 		expect(result.data.addPin.title).toBe(variables.title)
 		expect(result.data.addPin.owner.name).toBe(context.viewer.name)
+		deleteUids.push(result.data.addPin.uid)
 	})
 })

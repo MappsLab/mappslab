@@ -1,6 +1,5 @@
 // @flow
 /* eslint-disable no-undef */
-import * as R from 'ramda'
 import { request } from '../../../__tests__/utils'
 import { artClass } from '../../../database/stubs/classrooms'
 

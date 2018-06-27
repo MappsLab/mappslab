@@ -3,20 +3,13 @@ import { graphql } from 'graphql'
 import { makeExecutableSchema } from 'graphql-tools'
 import { typeDefs, resolvers } from '../schema'
 import { joseph, john, waverly } from './scripts/testDatabase/fixtures/users'
+import { models } from '../serverContext'
 
-import Pin from '../types/Pin/PinModel'
-import User from '../types/User/UserModel'
-
-const models = {
-	Pin,
-	User,
-}
-
-/**
+/*
  * Get stubs from Test DB
  */
 
-export const getUsers = User.getUsers()
+export const getUsers = models.User.getUsers()
 
 export const getViewerForContext = async (userName: string = 'joseph') => {
 	const users = await getUsers

@@ -6,6 +6,7 @@ let firstPin
 
 beforeAll(async (done) => {
 	firstPin = await getFirstPin()
+	console.log(firstPin)
 	done()
 })
 

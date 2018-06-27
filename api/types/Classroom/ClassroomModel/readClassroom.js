@@ -51,33 +51,3 @@ export const getClassroomsByUser = async (user: UserType, args: PaginationArgs):
 	const result: Object = await query(q)
 	return result.classrooms || []
 }
-
-export const getClassroomUsers = (userType: string): Function => async (
-	classroom: ClassroomType,
-	args: PaginationArgs,
-): Promise<Array<UserType> | Error> => {
-	// TODO: build filter into `teaches` relationship
-	const relationship = userType === 'teachers' ? '~teaches_in' : '~learns_in'
-	const q = `query getTeachers($username: string) {
-		classroom(func: uid(${classroom.uid})) {
-			title
-			${relationship} {
-				name
-				uid
-				role
-			}
-		}
-	}`
-
-	const result = await query(q)
-	const users = pipe(
-		// Get the first result from the query (should always be 1)
-		prop('classroom'),
-		head,
-		prop(relationship),
-	)(result)
-	return users
-}
-
-export const getStudents = getClassroomUsers('students')
-export const getTeachers = getClassroomUsers('teachers')

@@ -8,7 +8,7 @@ export const studentsConnection = async (
 	{ input }: PaginationInput,
 	ctx: GraphQLContext,
 ): Promise<PageType | Error> => {
-	const fetchedUsers = await ctx.models.User.getStudents(fetchedClassroom, input)
+	const fetchedUsers = await ctx.models.User.getClassroomStudents(fetchedClassroom, input)
 	return assemblePage(fetchedUsers, input)
 }
 
@@ -17,6 +17,6 @@ export const teachersConnection = async (
 	{ input }: PaginationInput,
 	ctx: GraphQLContext,
 ): Promise<PageType | Error> => {
-	const fetchedUsers = await ctx.models.User.getTeachers(fetchedClassroom, input)
+	const fetchedUsers = await ctx.models.User.getClassroomTeachers(fetchedClassroom, input)
 	return assemblePage(fetchedUsers, input)
 }
