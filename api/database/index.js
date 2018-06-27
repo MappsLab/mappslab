@@ -19,7 +19,7 @@ const query = async (queryString: string, vars?: Object): Promise<Object | null>
 		: // Otherwise, normal query
 		  dbClient.newTxn().query(queryString)
 	const result = await q
-	return mapObjIndexed((value) => value.map(unflatten))(result.getJson())
+	return result ? mapObjIndexed((value) => value.map(unflatten))(result.getJson()) : null
 }
 
 module.exports = {

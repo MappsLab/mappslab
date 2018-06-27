@@ -11,7 +11,7 @@ services:
           nocopy: true
     ports:
       - 5086:5080
-      - 6088:6080
+      - 6089:6080
     restart: on-failure
     command: dgraph zero --port_offset 6 --my=zero:5086
   server:
@@ -24,7 +24,7 @@ services:
         volume:
           nocopy: true
     ports:
-      - 8668:8080
+      - 8669:8080
       - 9099:9080
     restart: on-failure
     command: dgraph server --my=server:7086 --lru_mb=2048 --zero=zero:5086

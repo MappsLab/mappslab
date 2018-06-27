@@ -7,7 +7,8 @@ let firstUser
 
 beforeAll(async (done) => {
 	const users = await getUsers()
-	firstUser = users[0]
+	const [user0] = users
+	firstUser = user0
 	done()
 })
 
@@ -20,8 +21,6 @@ describe('[user]', () => {
 				}
 			}
 		`
-		console.log(q)
 		const result = await request(q)
-		console.log(result)
 	})
 })

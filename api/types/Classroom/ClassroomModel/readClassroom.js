@@ -1,14 +1,16 @@
 // @flow
-import { prop, last, head, pipe } from 'ramda'
+import { prop, head, pipe } from 'ramda'
 import { query } from '../../../database'
 import type { ClassroomType } from '../ClassroomTypes'
-import type { TeacherType, UserType } from '../../User/UserTypes'
-import type { PageInfo, PaginationArgs, GetNodeArgs, Edge } from '../../shared/sharedTypes'
+import type { UserType } from '../../User/UserTypes'
+import type { PaginationArgs, GetNodeArgs } from '../../shared/sharedTypes'
 import { publicFields } from './classroomDBSchema'
+
+const debug = require('debug')('api')
 
 export const getClassroom = async (args: GetNodeArgs): Promise<ClassroomType | Error> => {
 	const key = head(Object.keys(args))
-	if (!key) return null
+	if (!key) throw new Error('getClassroom must be called with a `uid` or a `slug`')
 	const func = key === 'uid' && typeof args.uid === 'string' ? `uid(${args.uid})` : `eq(${key}, $${key})`
 	const q = /* GraphQL */ `
 		query getClassroom($${key}: string) {
@@ -17,11 +19,11 @@ export const getClassroom = async (args: GetNodeArgs): Promise<ClassroomType | E
 			}
 		}
 	`
-	const result = await query(q, args)
-	return head(result.getJson().getClassroom)
+	const result: Object = await query(q, args)
+	return head(result.getClassroom)
 }
 
-export const getClassrooms = async (args: PaginationArgs): Promise<{ edges: Array<Edge>, pageInfo: PageInfo } | Error> => {
+export const getClassrooms = async (args?: PaginationArgs): Promise<Array<ClassroomType>> => {
 	const q = /* GraphQL */ `
 		query getClassrooms {
 			classrooms(func: eq(type, "classroom")) {
@@ -29,23 +31,16 @@ export const getClassrooms = async (args: PaginationArgs): Promise<{ edges: Arra
 			}
 		}
 	`
-	const result = await query(q)
-	const edges = result.classrooms || []
-	const lastCursor = prop('cursor', last(edges))
+	const result: Object = await query(q).catch((err) => {
+		debug('Error in getClassrooms:')
+		debug(err)
+		throw err
+	})
 
-	return {
-		edges,
-		pageInfo: {
-			lastCursor,
-			hasNextPage: true,
-		},
-	}
+	return result.classrooms || []
 }
 
-export const getClassroomsByUser = async (
-	user: UserType,
-	args: PaginationArgs,
-): Promise<{ edges: Array<Edge>, pageInfo: PageInfo } | Error> => {
+export const getClassroomsByUser = async (user: UserType, args: PaginationArgs): Promise<Array<ClassroomType> | Error> => {
 	const q = /* GraphQL */ `
 		query getClassroomsByUser {
 			classrooms(func: eq(type, "classroom")) @filter(uid_in(~learns_in, ${user.uid})) {
@@ -53,22 +48,14 @@ export const getClassroomsByUser = async (
 			}
 		}
 	`
-	const result = await query(q)
-	const edges = result.classrooms || []
-	const lastCursor = prop('cursor', last(edges))
-	return {
-		edges,
-		pageInfo: {
-			lastCursor,
-			hasNextPage: true,
-		},
-	}
+	const result: Object = await query(q)
+	return result.classrooms || []
 }
 
 export const getClassroomUsers = (userType: string): Function => async (
 	classroom: ClassroomType,
 	args: PaginationArgs,
-): Promise<{ edges: Array<TeacherType>, pageInfo: PageInfo } | Error> => {
+): Promise<Array<UserType> | Error> => {
 	// TODO: build filter into `teaches` relationship
 	const relationship = userType === 'teachers' ? '~teaches_in' : '~learns_in'
 	const q = `query getTeachers($username: string) {
@@ -83,21 +70,13 @@ export const getClassroomUsers = (userType: string): Function => async (
 	}`
 
 	const result = await query(q)
-	const edges = pipe(
+	const users = pipe(
 		// Get the first result from the query (should always be 1)
 		prop('classroom'),
 		head,
 		prop(relationship),
-		nodesToEdges,
-	)(result.getJson())
-	const lastCursor = prop('cursor', last(edges))
-	return {
-		edges,
-		pageInfo: {
-			lastCursor,
-			hasNextPage: true, // TODO +1 the query, slice it when returned, and set this to true if there are more than requested
-		},
-	}
+	)(result)
+	return users
 }
 
 export const getStudents = getClassroomUsers('students')

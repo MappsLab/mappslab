@@ -1,10 +1,21 @@
 // @flow
 import { getTeachers, getStudents } from '../ClassroomModel'
-import type { PaginationArgs, PageType } from '../../shared/sharedTypes'
+import type { PaginationInput, PageType } from '../../shared/sharedTypes'
 import type { ClassroomType } from '../ClassroomTypes'
+import { assemblePage } from '../../../utils/graphql'
 
-export const studentsConnection = async (fetchedClassroom: ClassroomType, args: PaginationArgs): Promise<PageType | Error> =>
-	getStudents(fetchedClassroom, args)
+export const studentsConnection = async (
+	fetchedClassroom: ClassroomType,
+	{ input }: PaginationInput,
+): Promise<PageType | Error> => {
+	const fetchedUsers = await getStudents(fetchedClassroom, input)
+	return assemblePage(fetchedUsers, input)
+}
 
-export const teachersConnection = async (fetchedClassroom: ClassroomType, args: PaginationArgs): Promise<PageType | Error> =>
-	getTeachers(fetchedClassroom, args)
+export const teachersConnection = async (
+	fetchedClassroom: ClassroomType,
+	{ input }: PaginationInput,
+): Promise<PageType | Error> => {
+	const fetchedUsers = await getTeachers(fetchedClassroom, input)
+	return assemblePage(fetchedUsers, input)
+}
