@@ -6,14 +6,13 @@ let firstPin
 
 beforeAll(async (done) => {
 	firstPin = await getFirstPin()
-	console.log(firstPin)
 	done()
 })
 
 describe('[pin]', () => {
 	it('should fetch a pin by id', async () => {
 		const q = /* GraphQL */ `
-			query pin($uid: String!) 
+			query pin($uid: String!)
 			{
 			pin(input: { uid: $uid }) {
 				uid

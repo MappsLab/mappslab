@@ -16,7 +16,7 @@ export const getUser = async ({ uid }: GetUserArgs): Promise<UserType | null | E
 			}
 		}
 	`
-	const result = await query(q)
+	const result = await query(q, { uid })
 	const user = head(result.getUser)
 	return user
 }

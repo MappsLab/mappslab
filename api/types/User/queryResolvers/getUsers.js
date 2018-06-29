@@ -3,8 +3,8 @@ import { assemblePage } from '../../../utils/graphql'
 import type { GetUserArgs, UserType } from '../UserTypes'
 import type { GraphQLContext, PaginationInput, PageType } from '../../shared/sharedTypes'
 
-export const user = (_: Object, args: GetUserArgs, ctx: GraphQLContext): Promise<UserType | null | Error> =>
-	ctx.models.User.getUser(args)
+export const user = (_: Object, { input }: GetUserArgs, ctx: GraphQLContext): Promise<UserType | null | Error> =>
+	ctx.models.User.getUser(input)
 
 export const users = async (_: Object, { input }: PaginationInput, ctx: GraphQLContext): Promise<PageType | null | Error> => {
 	const fetchedUsers = await ctx.models.User.getUsers(input, ctx.viewer)

@@ -24,7 +24,6 @@
 		"babel-plugin-import": "^1.7.0",
 		"babel-plugin-module-resolver": "^3.1.1",
 		"bcrypt": "^2.0.1",
-		"bcrypt-as-promised": "^1.1.0",
 		"crypto-promise": "^2.0.0",
 		"debug": "^3.1.0",
 		"dgraph-js": "^1.2.1",
