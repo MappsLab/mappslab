@@ -1,7 +1,6 @@
-// @flow
 /* eslint-disable no-undef */
 import { request, getViewerForContext } from '../../../__tests__/utils'
-import { removeNode } from '../../../database'
+import { removeNode, removeEdge } from '../../../database'
 
 const q = /* GraphQL */ `
 	mutation addPin($title: String!, $lat: Float!, $lang: Float!) {
@@ -17,7 +16,7 @@ const q = /* GraphQL */ `
 		}
 	}
 `
-const deleteUids = []
+const pinsToRemove = []
 
 const variables = {
 	title: 'a new pin',
@@ -33,7 +32,12 @@ beforeAll(async (done) => {
 })
 
 afterEach(async (done) => {
-	if (deleteUids.length) deleteUids.map(removeNode)
+	console.log(pinsToRemove)
+	if (pinsToRemove.length)
+		pinsToRemove.map(async (pin) => {
+			await removeEdge({ fromUid: pin.owner.uid, pred: 'pinned', toUid: pin.uid })
+			await removeNode(pin.uid)
+		})
 	done()
 })
 
@@ -46,6 +50,6 @@ describe('[addPin]', () => {
 		const result = await request(q, { variables, context })
 		expect(result.data.addPin.title).toBe(variables.title)
 		expect(result.data.addPin.owner.name).toBe(context.viewer.name)
-		deleteUids.push(result.data.addPin.uid)
+		pinsToRemove.push(result.data.addPin)
 	})
 })

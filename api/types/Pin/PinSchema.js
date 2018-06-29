@@ -24,8 +24,6 @@ const Pin = /* GraphQL */ `
 		edges: [PinEdge]!
 	}
 
-
-
 	# Inputs
 
 	input NewPinArgs {
