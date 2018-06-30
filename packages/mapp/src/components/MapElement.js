@@ -1,24 +1,32 @@
 // @flow
 import React from 'react'
 
+import MarkerProps from './Marker'
+
 /**
  * MapElement
  */
 
 type Props = {
-	lat: number,
-	lang: number,
+	type: 'marker',
+	data: MarkerProps,
+}
+
+type State = {
+	// ...
 }
 
 class MapElement extends React.Component<Props, State> {
+	static defaultProps = {
+		// ...
+	}
+
 	constructor(props) {
 		super(props)
 	}
 
-	componentDidMount() {}
-
 	render() {
-		return null
+		return <div>MapElement Component</div>
 	}
 }
 

@@ -1,0 +1,43 @@
+---
+name: Mapp
+---
+
+import { Playground, PropsTable } from 'docz'
+import { MapWrapper } from './MapWrapper'
+import { pins } from './sampleData'
+import Mapp from '../index'
+
+# Mapp
+
+The Mapp component renders the map.
+
+<MapWrapper>
+	<Mapp
+		APIKey="AIzaSyCOqxjWmEzFlHKC9w-iUZ5zL2rIyBglAag"
+		options={{
+			zoom: 9
+		}}
+		render={({ map }) => (
+			pins.map(({lat, lang, ...rest}) => (
+				<Mapp.Marker
+					key={rest.uid}
+					position={{
+						lat: lat,
+						lng: lang
+					}}
+					onClick={() => {
+						alert(`Clicked pin ${rest.title}`)
+					}}
+					{...rest}
+					map={map}
+				/>
+			)
+		))}
+	/>
+</MapWrapper>
+
+---
+
+### Implementation
+
+<PropsTable of={Mapp} />
