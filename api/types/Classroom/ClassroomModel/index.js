@@ -3,6 +3,7 @@ import { getClassroom, getClassrooms, getClassroomsByUser } from './readClassroo
 import { updateClassroom } from './updateClassroom'
 import { createClassroom, createClassroomConnection } from './createClassroom'
 import { deleteClassroom } from './deleteClassroom'
+import { getClassroomMap } from './readClassroomRelationships'
 
 module.exports = {
 	getClassroom,
@@ -12,4 +13,6 @@ module.exports = {
 	createClassroom,
 	createClassroomConnection,
 	deleteClassroom,
+	// Relationships
+	getClassroomMap,
 }

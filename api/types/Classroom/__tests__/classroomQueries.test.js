@@ -22,7 +22,7 @@ describe('queries', () => {
 			}
 		`
 		const variables = { uid: classrooms[0].uid }
-		const result = await request(query, { variables })
+		const result = await request(query, { variables }).catch((e) => console.log(e))
 		expect(result.data.classroom.title).toBe(artClass.title)
 	})
 

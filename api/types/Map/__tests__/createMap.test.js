@@ -83,7 +83,7 @@ describe('[createMap]', () => {
 		}
 		const result = await request(q, { variables: vars, context })
 		expect(result.data.createMap.title).toBe(variables.title)
-		// expect(result.data.createMap.classroom.title).toBe(classrooms[0].title)
+		expect(result.data.createMap.classroom.title).toBe(classrooms[0].title)
 		mapsToRemove.push(result.data.createMap)
 	})
 })

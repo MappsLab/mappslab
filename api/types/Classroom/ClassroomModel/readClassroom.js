@@ -5,7 +5,7 @@ import type { ClassroomType } from '../ClassroomTypes'
 import type { UserType } from '../../User/UserTypes'
 import type { PaginationArgs, GetNodeArgs } from '../../shared/sharedTypes'
 import { publicFields } from './classroomDBSchema'
-import { createFilterString, makePaginationArgs, validateUid } from '../../../database/utils'
+import { validateUid } from '../../../database/utils'
 
 const debug = require('debug')('api')
 
