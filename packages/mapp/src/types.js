@@ -83,11 +83,17 @@ export type Map = MVCObject & {
 	overlayMapTypes: Array<any>,
 }
 
-type MapEntity = {
+type MapEntityBase = {
 	setMap: (map: null | Map) => void,
 	addListener: (eventName: string, handler: () => {}) => void,
 }
 
-export type Marker = MapEntity & {
+export type Marker = MapEntityBase & {
 	position: LatLng,
 }
+
+export type InfoWindow = MapEntityBase & {
+	position: LatLng,
+}
+
+export type MapEntity = Marker | InfoWindow

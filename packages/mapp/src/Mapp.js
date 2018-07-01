@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react'
 import Marker from './components/Marker'
+import InfoWindow from './components/InfoWindow'
 import loadGoogleMaps from './services/googleMaps'
 
 import type { Map } from './types'
@@ -20,6 +21,7 @@ const defaultStyle = { width: '100%', height: '100%', position: 'absolute' }
 
 class Mapp extends React.Component<Props, State> {
 	static Marker = Marker
+	static InfoWindow = InfoWindow
 
 	static defaultProps = {
 		options: {},

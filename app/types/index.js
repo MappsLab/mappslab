@@ -6,6 +6,8 @@ export type PinType = {
 	lat: number,
 	lang: number,
 	title: string,
+	description?: string,
+	owner: UserType,
 }
 
 export type UserType = {

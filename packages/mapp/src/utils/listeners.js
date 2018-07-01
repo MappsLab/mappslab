@@ -1,12 +1,10 @@
 // @flow
 
-import type { Marker } from '../types'
-
-type Entity = Marker
+import type { MapEntity } from '../types'
 
 type Listener = Object
 
-export const addListeners = (entity: Entity, events: Object, props: Object): Array<Listener> =>
+export const addListeners = (entity: MapEntity, events: Object, props: Object): Array<Listener> =>
 	Object.entries(props)
 		.map(([eventName, handler]) => {
 			const googleEvent = events[eventName]

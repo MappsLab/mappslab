@@ -48,8 +48,7 @@ class Marker extends React.Component<Props, State> {
 			position,
 			map,
 		})
-		console.log(this.props)
-		this.listeners = addListeners(this.entity, markerEvents, this.props)
+		if (this.entity) this.listeners = addListeners(this.entity, markerEvents, this.props)
 	}
 
 	componentWillUnmount() {
