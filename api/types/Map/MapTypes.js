@@ -15,6 +15,12 @@ export type MapType = {
 	routes?: Array<RouteType>,
 }
 
-export type MapInput = {
-	title?: string,
+export type NewMapArgs = {
+	title: string,
+	classroomUid: string,
+	description?: string,
+}
+
+export type NewMapInput = {
+	input: NewMapArgs,
 }

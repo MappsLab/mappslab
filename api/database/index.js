@@ -4,7 +4,7 @@ import { unflatten } from 'flat'
 import createEdge from './createEdge'
 import createNode from './createNode'
 import { removeNode, removeEdge } from './removeNode'
-import createNodeWithEdge from './createNodeWithEdge'
+import createNodeWithEdges from './createNodeWithEdges'
 import mutateNode from './mutateNode'
 import dbClient from './client'
 import { createVariables } from './utils'
@@ -33,7 +33,7 @@ const query = async (queryString: string, vars?: Object): Promise<Object | null>
 module.exports = {
 	createEdge,
 	createNode,
-	createNodeWithEdge,
+	createNodeWithEdges,
 	mutateNode,
 	removeNode,
 	removeEdge,

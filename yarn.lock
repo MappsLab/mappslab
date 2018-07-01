@@ -13946,7 +13946,7 @@ webpack-hot-client@^3.0.0:
     webpack-log "^1.1.1"
     ws "^4.0.0"
 
-webpack-hot-client@^4.0.3:
+webpack-hot-client@^4.0.3, webpack-hot-client@^4.0.4:
   version "4.0.4"
   resolved "https://registry.yarnpkg.com/webpack-hot-client/-/webpack-hot-client-4.0.4.tgz#e19aa9c4d503ba8132ebf45d3d38ce33f89ae315"
   dependencies:

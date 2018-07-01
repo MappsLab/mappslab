@@ -14,16 +14,6 @@ export type Filter = {
 	operator?: Operator,
 }
 
-export type DBEdge = {
-	fromUid: string,
-	pred: string,
-	toUid: string,
-}
-
-export type DBNode = Object & {
-	uid: string,
-}
-
 export type PaginationArgs = {
 	first: number,
 	after: string,

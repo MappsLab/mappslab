@@ -4,7 +4,7 @@ const Map = /* GraphQL */ `
 	type Map implements Node {
 		uid: ID!
 		title: String
-		owner: User
+		description: String
 		classroom: Classroom
 		pins: PinConnection 
 		routes: RouteConnection
@@ -12,6 +12,8 @@ const Map = /* GraphQL */ `
 
 	input MapInput {
 		title: String!
+		description: String
+		classroomUid: String!
 	}
 
 	# Relationships
@@ -33,7 +35,7 @@ const Map = /* GraphQL */ `
 	}
 
 	extend type Mutation {
-		addMap(input: MapInput!): Map!
+		createMap(input: MapInput!): Map!
 		modifyMap(input: MapInput!): Map!
 		removeMap(uid: ID!): Boolean!
 	}

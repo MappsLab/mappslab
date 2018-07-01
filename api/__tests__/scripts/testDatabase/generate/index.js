@@ -3,6 +3,7 @@
 import { generateUsers } from './generateUsers'
 import { generateClassrooms, generateClassroomConnections } from './generateClassrooms'
 import { generatePins } from './generatePins'
+import { generateMaps } from './generateMaps'
 // import { generateFollowerConnections } from './generateFollowerConnections'
 
 module.exports = {
@@ -10,4 +11,5 @@ module.exports = {
 	generateClassrooms,
 	generateClassroomConnections,
 	generatePins,
+	generateMaps,
 }

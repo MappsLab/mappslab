@@ -20,6 +20,7 @@ export const mapSchema = (isNew: boolean = true) =>
 					.max(35),
 		createdAt: isNew ? Joi.date().required() : Joi.any().forbidden(),
 		updatedAt: Joi.date().required(),
+		description: Joi.string(),
 		type: Joi.any().only('map'),
 	})
 

@@ -2,7 +2,7 @@
 import type { PinType } from '../PinTypes'
 import { clean, defaultValues, validateNew } from './pinDBSchema'
 import { ValidationError } from '../../../errorTypes'
-import { createNodeWithEdge } from '../../../database'
+import { createNodeWithEdges } from '../../../database'
 
 const debug = require('debug')('api:pin')
 
@@ -13,5 +13,5 @@ export const createPin = async (pinData: PinType, ownerUid: string): Promise<Pin
 		debug(err._object)
 		throw new ValidationError(err)
 	})
-	return createNodeWithEdge(validatedPinData, { relatedUid: ownerUid, reverse: true, pred: 'pinned' })
+	return createNodeWithEdges(validatedPinData, [{ fromUid: ownerUid, pred: 'pinned', toUid: validatedPinData.uid }])
 }

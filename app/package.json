@@ -28,6 +28,7 @@
   },
   "devDependencies": {
     "docz": "^0.4.0",
-    "react-hot-loader": "^4.1.2"
+    "react-hot-loader": "^4.1.2",
+    "webpack-hot-client": "^4.0.4"
   }
 }

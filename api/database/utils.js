@@ -35,3 +35,7 @@ export const createFilterString = (filter: Array<Filter>, connect: string = 'AND
 	const funcs = filter.map(({ key, value, operator = 'eq' }) => `${operator}(${key}, "${value}")`)
 	return `@filter(${funcs.join(connect)})`
 }
+
+export const validateUid = (uid: string): boolean => /^0x[\d\w]+$/.test(uid)
+
+export const validateUidOrWildcard = (uid: string): boolean => uid === '*' || validateUid(uid)
