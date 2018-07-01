@@ -2,9 +2,31 @@
 /* eslint-disable no-undef */
 import { request } from '../../../__tests__/utils'
 import { artClass } from '../../../database/stubs/classrooms'
+import { getFirstClassrooms } from './utils'
+
+let classrooms
+
+beforeAll(async (done) => {
+	classrooms = await getFirstClassrooms()
+	done()
+})
 
 describe('queries', () => {
-	it('[classroom] should fetch a classrom', async () => {
+	it('[classroom] should fetch a classrom by uid', async () => {
+		const query = /* GraphQL */ `
+			query Classroom($uid: String) {
+				classroom(input: { uid: $uid }) {
+					uid
+					title
+				}
+			}
+		`
+		const variables = { uid: classrooms[0].uid }
+		const result = await request(query, { variables })
+		expect(result.data.classroom.title).toBe(artClass.title)
+	})
+
+	it('[classroom] should fetch a classrom by slug', async () => {
 		const query = /* GraphQL */ `
 			query Classroom($slug: String) {
 				classroom(input: { slug: $slug }) {

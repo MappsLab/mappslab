@@ -32,7 +32,6 @@ beforeAll(async (done) => {
 })
 
 afterEach(async (done) => {
-	console.log(pinsToRemove)
 	if (pinsToRemove.length)
 		pinsToRemove.map(async (pin) => {
 			await removeEdge({ fromUid: pin.owner.uid, pred: 'pinned', toUid: pin.uid })

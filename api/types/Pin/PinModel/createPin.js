@@ -13,5 +13,5 @@ export const createPin = async (pinData: PinType, ownerUid: string): Promise<Pin
 		debug(err._object)
 		throw new ValidationError(err)
 	})
-	return createNodeWithEdges(validatedPinData, [{ fromUid: ownerUid, pred: 'pinned', toUid: validatedPinData.uid }])
+	return createNodeWithEdges(validatedPinData, [[{ fromUid: ownerUid, pred: 'pinned' }, {}]])
 }

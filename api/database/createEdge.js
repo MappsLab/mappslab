@@ -8,7 +8,12 @@ const debug = require('debug')('api')
 
 export type Relationship = [DBEdge, EdgeConfig]
 
-const createEdge = async ({ fromUid, pred, toUid }: DBEdge, config: EdgeConfig, existingTxn?: Txn): Promise<Object> => {
+const defaultConfig = {
+	unique: false,
+}
+
+const createEdge = async ({ fromUid, pred, toUid }: DBEdge, opts: EdgeConfig, existingTxn?: Txn): Promise<Object> => {
+	const config = { ...defaultConfig, ...opts }
 	let txn = existingTxn || dbClient.newTxn()
 	try {
 		const mu = new dgraph.Mutation()
@@ -26,6 +31,7 @@ const createEdge = async ({ fromUid, pred, toUid }: DBEdge, config: EdgeConfig, 
 		if (!existingTxn) await txn.commit()
 		return txn
 	} catch (e) {
+		console.log(e)
 		debug(e)
 		throw e
 	} finally {

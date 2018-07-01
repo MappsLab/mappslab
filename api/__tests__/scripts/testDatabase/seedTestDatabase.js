@@ -106,7 +106,9 @@ const seedDatabase = async () => {
 
 	const pins = await students.reduce(async (accP, student) => {
 		const pinCount = faker.random.number({ min: 5, max: 20 })
-		const newPins = await promiseSerial(generatePins(pinCount).map((pinData) => () => createPin(pinData, student.uid)))
+		const newPins = await promiseSerial(generatePins(pinCount).map((pinData) => () => createPin(pinData, student.uid))).catch(
+			(e) => console.log(e),
+		)
 		const acc = await accP
 		return [...acc, ...newPins]
 	}, [])

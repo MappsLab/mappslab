@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 import { request, getViewerForContext } from '../../../__tests__/utils'
 import { removeNode, removeEdge } from '../../../database'
-import { getFirstClassrooms } from './utils'
+import { getFirstClassrooms } from '../../Classroom/__tests__/utils'
 
 const q = /* GraphQL */ `
 	mutation createMap($title: String!, $description: String, $classroomUid: String!) {
@@ -34,9 +34,11 @@ beforeAll(async (done) => {
 afterEach(async (done) => {
 	if (mapsToRemove.length)
 		mapsToRemove.map(async (map) => {
-			await removeEdge({ fromUid: map.classroom.uid, pred: 'has_map', toUid: map.uid })
+			if (map.classroom)
+				await removeEdge({ fromUid: map.classroom.uid, pred: 'has_map', toUid: map.uid }).catch((e) => console.log(e))
 			await removeNode(map.uid)
 		})
+
 	done()
 })
 
@@ -80,9 +82,8 @@ describe('[createMap]', () => {
 			classroomUid: classrooms[0].uid,
 		}
 		const result = await request(q, { variables: vars, context })
-		console.log(result)
-		// expect(result.data.addPin.title).toBe(variables.title)
-		// expect(result.data.addPin.classroom.title).toBe(classrooms[0].title)
-		// mapsToRemove.push(result.data.addPin)
+		expect(result.data.createMap.title).toBe(variables.title)
+		// expect(result.data.createMap.classroom.title).toBe(classrooms[0].title)
+		mapsToRemove.push(result.data.createMap)
 	})
 })

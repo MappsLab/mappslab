@@ -2,11 +2,10 @@
 import { pick } from 'ramda'
 import dbClient from './client'
 import createEdge from './createEdge'
-import { arrayify } from '../utils'
 import type { PartialEdge, EdgeConfig, Txn } from '../flowTypes/database'
 
 const dgraph = require('dgraph-js')
-const debug = require('debug')('test')
+const debug = require('debug')('api')
 
 /**
  * CreateNodeWithEdge:
