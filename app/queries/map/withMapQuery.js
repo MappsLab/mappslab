@@ -4,8 +4,8 @@ import { unwindEdges } from '../utils'
 import withQuery from '../withQuery'
 
 export const query = gql/* GraphQL */ `
-	query MapQuery($uid: String, $slug: String) {
-		map(input: { uid: $uid, slug: $slug }) {
+	query MapQuery($uid: String!) {
+		map(input: { uid: $uid }) {
 			title
 			uid
 			slug
@@ -14,9 +14,10 @@ export const query = gql/* GraphQL */ `
 `
 
 const config = {
-	options: ({ slug, uid }) => (uid ? { variables: { uid } } : { variables: { slug } }),
+	options: ({ uid }) => ({ variables: { uid } }),
 	props: ({ data }) => {
 		const { loading, map, ...rest } = unwindEdges(data)
+		console.log('!')
 		return {
 			loading,
 			map,

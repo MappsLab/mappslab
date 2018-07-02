@@ -2,7 +2,7 @@
 
 const Pin = /* GraphQL */ `
 	type Pin implements Node {
-		uid: ID!
+		uid: String!
 		title: String!
 		lat: Float!
 		lang: Float!
@@ -15,7 +15,7 @@ const Pin = /* GraphQL */ `
 	# Relationships
 
 	type PinEdge implements Edge {
-		cursor: ID!
+		cursor: String!
 		node: Pin
 	}
 

@@ -36,13 +36,13 @@ const Editor = ({ viewer, loading }: Props) => {
  */
 
 type SwitchProps = {
-	slug: string,
+	uid: string,
 }
 
 const ViewerMap = withViewer(withUserMapQuery(Editor))
 // const UserMap = withUserMapQuery(Editor)
 const ClassroomMap = withMapQuery(Editor)
 
-const EditorSwitch = ({ slug }: SwitchProps) => (slug === 'my-map' ? <ViewerMap /> : <ClassroomMap slug={slug} />)
+const EditorSwitch = ({ uid }: SwitchProps) => (uid === 'my-map' ? <ViewerMap /> : <ClassroomMap uid={uid} />)
 
 export default EditorSwitch

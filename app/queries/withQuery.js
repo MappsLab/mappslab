@@ -28,7 +28,6 @@ const withQuery = (query: DocumentNode, opts?: Config = {}) => (
 				const { loading, error } = response
 				const responseProps = props(response)
 				if (loading) return <LoadingComponent />
-
 				if (error) return 'error!'
 				return <Component {...componentProps} {...responseProps} />
 			}}

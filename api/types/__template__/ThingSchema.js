@@ -2,7 +2,7 @@
 
 const Thing = /* GraphQL */ `
 	type Thing implements Node {
-		uid: ID!
+		uid: String!
 	}
 
 	input ThingInput {
@@ -10,13 +10,13 @@ const Thing = /* GraphQL */ `
 	}
 
 	extend type Query {
-		thing(uid: ID!): Thing!
+		thing(uid: String!): Thing!
 	}
 
 	extend type Mutation {
 		addThing(input: ThingInput!): Thing!
 		modifyThing(input: ThingInput!): Thing!
-		removeThing(uid: ID!): Boolean!
+		removeThing(uid: String!): Boolean!
 	}
 `
 

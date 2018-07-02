@@ -1,7 +1,7 @@
 // @flow
 
 const userFields = /* GraphQL */ `
-	uid: ID!
+	uid: String!
 	username: String!
 	name: String
 	classrooms: ClassroomConnection
@@ -41,7 +41,7 @@ const User = /* GraphQL */ `
 	# Relationships
 
 	type UserEdge implements Edge {
-		cursor: ID!
+		cursor: String!
 		node: User
 	}
 
@@ -74,7 +74,7 @@ const User = /* GraphQL */ `
 		registerViewer(credentials: CredentialsInput!): LoginPayload!
 		addUser(input: UserInput!): User!
 		modifyUser(input: UserInput!): User!
-		removeUser(uid: ID!): Boolean!
+		removeUser(uid: String!): Boolean!
 	}
 `
 

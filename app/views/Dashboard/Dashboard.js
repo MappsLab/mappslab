@@ -17,7 +17,7 @@ type Props = {
 const Dashboard = ({ viewer }: Props) => (
 	<Main>
 		<Header1 align="left">Hi, {viewer.name}</Header1>
-		<MapCard title="Your Map" viewerMap />
+		<MapCard title="Your Map" viewerMap userUid={viewer.uid} />
 		<HR />
 		<Header3>Your Classrooms</Header3>
 		<HR />
