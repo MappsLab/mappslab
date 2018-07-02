@@ -1,6 +1,7 @@
 // @flow
 import gql from 'graphql-tag'
-import { makeQuery, unwindEdges } from '../utils'
+import { unwindEdges } from '../utils'
+import withQuery from '../withQuery'
 
 export const query = gql/* GraphQL */ `
 	query MapQuery($uid: String, $slug: String) {
@@ -26,6 +27,6 @@ const config = {
 	},
 }
 
-const withClassroomsQuery = makeQuery(query, config)
+const withClassroomsQuery = withQuery(query, config)
 
 export default withClassroomsQuery

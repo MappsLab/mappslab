@@ -10,26 +10,17 @@ import { MapPreview } from 'App/components/Maps'
  * MapCard
  */
 
-type Props = {
-	title?: void | string,
-	map?: Object | MapType,
-}
+type Props = MapType
 
-const MapCard = ({ title, map }: Props) => {
-	const to = `maps/${(map && map.uid) || 'my-map'}`
+const MapCard = ({ title, uid }: Props) => {
 	return (
-		<Link to={to}>
+		<Link to={`/maps/${uid}`}>
 			<Column>
-				<Header2>{title || (map && map.title)}</Header2>
+				<Header2>{title}</Header2>
 				<MapPreview />
 			</Column>
 		</Link>
 	)
-}
-
-MapCard.defaultProps = {
-	title: undefined,
-	map: {},
 }
 
 export default MapCard

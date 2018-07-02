@@ -1,11 +1,5 @@
 // @flow
-import type { ComponentType } from 'react'
 import * as R from 'ramda'
-import { graphql } from 'react-apollo'
-
-const _makeQuery = (query, config: Object, Component: ComponentType<any>) => graphql(query, config)(Component)
-
-export const makeQuery = R.curry(_makeQuery)
 
 export const unwindEdges = R.pipe(
 	R.toPairs,

@@ -60,14 +60,22 @@ describe('queries', () => {
 						}
 					}
 				}
+				maps {
+					edges {
+						node {
+							title
+						}
+					}
+				}
 			}
 		}
 	`
 		const variables = { slug: artClass.slug }
 		const result = await request(query, { variables })
-		const { students, teachers } = result.data.classroom
-		expect(students.edges.length).toBeGreaterThan(3)
-		expect(teachers.edges.length).toBeGreaterThan(0)
+		const { students, teachers, maps } = result.data.classroom
+		expect(students.edges[0]).toMatchSnapshot()
+		expect(teachers.edges[0]).toMatchSnapshot()
+		expect(maps.edges[0]).toMatchSnapshot()
 	})
 
 	it('[classrooms] should fetch a list of classrooms', async () => {

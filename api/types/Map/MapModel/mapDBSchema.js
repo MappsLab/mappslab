@@ -32,6 +32,8 @@ export const defaultValues = {
 export const validateNew = (mapData: MapInput) => Joi.validate(mapData, mapSchema(true))
 export const validateUpdate = (mapData: MapInput) => Joi.validate(mapData, mapSchema(false))
 
+export const publicFields = ['uid', 'title', 'description', 'slug', 'createdAt', 'updatedAt', 'type'].join('\n')
+
 /**
  * Clean
  */

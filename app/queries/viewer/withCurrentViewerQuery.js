@@ -2,7 +2,7 @@
 import gql from 'graphql-tag'
 import { VIEWER_COOKIE_TOKEN } from 'App/constants'
 import { removeCookie } from 'App/utils/storage'
-import { makeQuery } from '../utils'
+import withQuery from '../withQuery'
 
 // todo#16 : Make a Viewer fragment and reuse it in the viewer query
 export const query = gql`
@@ -30,6 +30,6 @@ const config = {
 	},
 }
 
-const withCurrentViewerQuery = makeQuery(query, config)
+const withCurrentViewerQuery = withQuery(query, config)
 
 export default withCurrentViewerQuery

@@ -2,9 +2,8 @@
 import { head, prop, pipe } from 'ramda'
 import { query } from '../../../database'
 import type { UserType } from '../UserTypes'
-import type { ClassroomType } from '../../Classroom/ClassroomTypes'
 import type { PaginationArgs } from '../../shared/sharedTypes'
-import { publicFields, viewerFields } from './userDBSchema'
+import { publicFields } from './userDBSchema'
 
 // const debug = require('debug')('api')
 
@@ -22,13 +21,13 @@ export const getPinOwner = async (pinUid: string): Promise<UserType | null | Err
 }
 
 export const getClassroomUsers = (userType: string): Function => async (
-	classroom: ClassroomType,
+	classroomUid: string,
 	args: PaginationArgs,
 ): Promise<Array<UserType> | Error> => {
 	// TODO: build filter into `teaches` relationship
 	const relationship = userType === 'teachers' ? '~teaches_in' : '~learns_in'
 	const q = `query getTeachers($username: string) {
-		classroom(func: uid(${classroom.uid})) {
+		classroom(func: uid(${classroomUid})) {
 			title
 			${relationship} {
 				${publicFields}

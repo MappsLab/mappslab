@@ -8,7 +8,7 @@ export const studentsConnection = async (
 	{ input }: PaginationInput,
 	ctx: GraphQLContext,
 ): Promise<PageType | Error> => {
-	const fetchedUsers = await ctx.models.User.getClassroomStudents(fetchedClassroom, input)
+	const fetchedUsers = await ctx.models.User.getClassroomStudents(fetchedClassroom.uid, input)
 	return assemblePage(fetchedUsers, input)
 }
 
@@ -17,6 +17,15 @@ export const teachersConnection = async (
 	{ input }: PaginationInput,
 	ctx: GraphQLContext,
 ): Promise<PageType | Error> => {
-	const fetchedUsers = await ctx.models.User.getClassroomTeachers(fetchedClassroom, input)
+	const fetchedUsers = await ctx.models.User.getClassroomTeachers(fetchedClassroom.uid, input)
 	return assemblePage(fetchedUsers, input)
+}
+
+export const mapsConnection = async (
+	fetchedClassroom: ClassroomType,
+	{ input }: PaginationInput,
+	ctx: GraphQLContext,
+): Promise<PageType | Error> => {
+	const fetchedMaps = await ctx.models.Map.getMapsByClassroom(fetchedClassroom.uid, input).catch((e) => console.log(e))
+	return assemblePage(fetchedMaps, input)
 }
