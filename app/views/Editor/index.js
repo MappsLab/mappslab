@@ -2,9 +2,8 @@
 import React from 'react'
 import styled from 'styled-components'
 import Mapp from 'mapp'
-import { withMapQuery, withUserMapQuery } from 'App/queries'
-import type { ViewerType } from 'App/types'
-import { withViewer } from 'App/utils/apollo'
+import { withMapQuery, withCurrentViewerQuery } from 'App/queries'
+import type { ViewerType, MapType } from 'App/types'
 import PinsList from './PinsList'
 
 const EditorWrapper = styled.div`
@@ -17,12 +16,13 @@ const EditorWrapper = styled.div`
 
 type Props = {
 	viewer: ViewerType,
-	loading: boolean,
+	map: MapType,
 }
 
-const Editor = ({ viewer, loading }: Props) => {
-	if (loading) return null
-	const { pins } = viewer
+const Editor = (props: Props) => {
+	// const { pins } = viewer
+	console.log(props)
+	return null
 	return (
 		<EditorWrapper>
 			<PinsList pins={pins || []} />
@@ -39,10 +39,9 @@ type SwitchProps = {
 	uid: string,
 }
 
-const ViewerMap = withViewer(withUserMapQuery(Editor))
 // const UserMap = withUserMapQuery(Editor)
-const ClassroomMap = withMapQuery(Editor)
+const ClassroomMap = withCurrentViewerQuery(withMapQuery(Editor))
 
-const EditorSwitch = ({ uid }: SwitchProps) => (uid === 'my-map' ? <ViewerMap /> : <ClassroomMap uid={uid} />)
+const EditorSwitch = ({ uid }: SwitchProps) => <ClassroomMap uid={uid} />
 
 export default EditorSwitch

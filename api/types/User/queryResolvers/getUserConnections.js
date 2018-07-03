@@ -5,7 +5,7 @@ import type { GraphQLContext, PaginationInput, PageType } from '../../shared/sha
 import { assemblePage } from '../../../utils/graphql'
 
 export const pins = async (loadedUser: UserType, { input }: PaginationInput, ctx: GraphQLContext): Promise<PageType | Error> => {
-	const fetchedPins = await ctx.models.Pin.getPinsByUser(loadedUser, input)
+	const fetchedPins = await ctx.models.Pin.getUserPins(loadedUser.uid, input)
 	return assemblePage(fetchedPins, input)
 }
 
@@ -14,6 +14,6 @@ export const classrooms = async (
 	{ input }: PaginationInput = {},
 	ctx: GraphQLContext,
 ): Promise<PageType | Error> => {
-	const fetchedClassrooms = await ctx.models.Classroom.getClassroomsByUser(loadedUser, input)
+	const fetchedClassrooms = await ctx.models.Classroom.getUserClassrooms(loadedUser.uid, input)
 	return assemblePage(fetchedClassrooms, input)
 }

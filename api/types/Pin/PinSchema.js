@@ -6,6 +6,7 @@ const Pin = /* GraphQL */ `
 		title: String!
 		lat: Float!
 		lang: Float!
+		description: String
 		owner: User
 		maps: MapConnection
 		routes: RouteConnection

@@ -9,6 +9,20 @@ export const query = gql/* GraphQL */ `
 			title
 			uid
 			slug
+			pins {
+				pageInfo {
+					lastCursor
+					hasNextPage
+				}
+				edges {
+					node {
+						uid
+						title
+						lat
+						lang
+					}
+				}
+			}
 		}
 	}
 `
@@ -17,7 +31,6 @@ const config = {
 	options: ({ uid }) => ({ variables: { uid } }),
 	props: ({ data }) => {
 		const { loading, map, ...rest } = unwindEdges(data)
-		console.log('!')
 		return {
 			loading,
 			map,

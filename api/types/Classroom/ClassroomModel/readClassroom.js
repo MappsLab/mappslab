@@ -46,15 +46,3 @@ export const getClassrooms = async (args?: PaginationArgs): Promise<Array<Classr
 
 	return result.classrooms || []
 }
-
-export const getClassroomsByUser = async (user: UserType, args?: PaginationArgs): Promise<Array<ClassroomType> | Error> => {
-	const q = /* GraphQL */ `
-		query getClassroomsByUser {
-			classrooms(func: eq(type, "classroom")) @filter(uid_in(~learns_in, ${user.uid})) {
-				${publicFields}
-			}
-		}
-	`
-	const result: Object = await query(q)
-	return result.classrooms || []
-}

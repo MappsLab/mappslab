@@ -1,15 +1,17 @@
 // @flow
-import { getPin, getPins, getPinsByUser, getPinOwner } from './readPin'
+import { getPin, getPins } from './readPin'
 import { updatePin } from './updatePin'
 import { createPin } from './createPin'
 import { deletePin } from './deletePin'
+import { getUserPins, getMapPins } from './readPinRelationships'
 
 module.exports = {
 	getPin,
 	getPins,
-	getPinsByUser,
-	getPinOwner,
 	updatePin,
 	createPin,
 	deletePin,
+	// Relationships
+	getUserPins,
+	getMapPins,
 }
