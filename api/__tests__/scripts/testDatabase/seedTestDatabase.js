@@ -3,12 +3,12 @@ import faker from 'faker'
 import { dbClient } from '../../../database'
 import { generateUsers, generateClassrooms, generateClassroomConnections, generatePins, generateMaps } from './generate'
 import { createUser } from '../../../types/User/UserModel'
-import { createMap } from '../../../types/Map/MapModel'
-import { createClassroom, createClassroomConnection } from '../../../types/Classroom/ClassroomModel'
+import { createMap, getClassroomMaps } from '../../../types/Map/MapModel'
+import { createClassroom, createClassroomConnection, getUserClassrooms } from '../../../types/Classroom/ClassroomModel'
 import { createPin } from '../../../types/Pin/PinModel'
 
 const dgraph = require('dgraph-js')
-const debug = require('debug')('api')
+const debug = require('debug')('seed')
 
 faker.seed(667)
 
@@ -105,7 +105,7 @@ const seedDatabase = async () => {
 	debug('📍  Creating some free play pins for students..')
 
 	const pins = await students.reduce(async (accP, student) => {
-		const pinCount = faker.random.number({ min: 5, max: 20 })
+		const pinCount = faker.random.number({ min: 3, max: 8 })
 		const newPins = await promiseSerial(generatePins(pinCount).map((pinData) => () => createPin(pinData, student.uid))).catch(
 			(e) => console.log(e),
 		)
@@ -114,6 +114,38 @@ const seedDatabase = async () => {
 	}, [])
 
 	debug(`📍  Created ${pins.length} pins for ${students.length} students`)
+
+	debug('📍  Creating some classroom map pins for students..')
+
+	const newPins = []
+	await promiseSerial(
+		students.map((student) => async () => {
+			const userClassrooms = await getUserClassrooms(student.uid)
+			await promiseSerial(
+				userClassrooms.map((classroom) => async () => {
+					const classroomMaps = await getClassroomMaps(classroom.uid)
+					// For each map in a student's classroom, add some pins
+					await promiseSerial(
+						classroomMaps.map((m) => async () => {
+							const pinCount = faker.random.number({ min: 1, max: 4 })
+							const newClassroomMapPins = await promiseSerial(
+								generatePins(pinCount).map((pinData) => async () => {
+									const args = {
+										...pinData,
+										mapUids: [m.uid],
+									}
+									return createPin(args, student.uid)
+								}),
+							)
+							newPins.push(newClassroomMapPins)
+						}),
+					)
+				}),
+			)
+		}),
+	)
+
+	debug(`📍  Created ${newPins.length} pins in classroom maps`)
 
 	debug('🌻 🌻 🌻 Successfully seeded test database 🌻 🌻 🌻 ')
 }

@@ -19,7 +19,7 @@ export const getUserPins = async (userUid: string, args: PaginationArgs): Promis
 		}
 	`
 	const result = await query(q, { first, after })
-	return result.getPins[0].pinned
+	return result.getPins ? result.getPins[0].pinned : []
 }
 
 export const getMapPins = async (mapUid: string, args: PaginationArgs): Promise<Array<PinType> | Error> => {

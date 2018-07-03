@@ -31,7 +31,6 @@ const createEdge = async ({ fromUid, pred, toUid }: DBEdge, opts: EdgeConfig, ex
 		if (!existingTxn) await txn.commit()
 		return txn
 	} catch (e) {
-		console.log(e)
 		debug(e)
 		throw e
 	} finally {

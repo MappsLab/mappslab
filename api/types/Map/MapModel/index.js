@@ -3,7 +3,7 @@ import { getMap, getMaps } from './readMap'
 import { updateMap } from './updateMap'
 import { createMap } from './createMap'
 import { deleteMap } from './deleteMap'
-import { getMapsByClassroom } from './readMapRelationships'
+import { getClassroomMaps, getPinMaps } from './readMapRelationships'
 
 module.exports = {
 	getMap,
@@ -11,5 +11,7 @@ module.exports = {
 	updateMap,
 	createMap,
 	deleteMap,
-	getMapsByClassroom,
+	// Relationships
+	getClassroomMaps,
+	getPinMaps,
 }

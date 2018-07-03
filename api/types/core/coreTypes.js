@@ -49,6 +49,6 @@ export const coreTypes = /* GraphQL */ `
 
 	type PageInfo {
 		hasNextPage: Boolean!
-		lastCursor: String!
+		lastCursor: String
 	}
 `

@@ -13,8 +13,6 @@ export const classroom = (fetchedMap: MapType, _: GetMapInput, ctx: GraphQLConte
 	ctx.models.Classroom.getMapClassroom(fetchedMap.uid)
 
 export const pins = async (fetchedMap: MapType, { input }: PaginationInput, ctx: GraphQLContext): Promise<PageType> => {
-	const fetchedPins = await ctx.models.Pin.getMapPins(fetchedMap.uid, input).catch((e) => console.log(e))
-	console.log(fetchedPins)
-	console.log(assemblePage(fetchedPins))
+	const fetchedPins = await ctx.models.Pin.getMapPins(fetchedMap.uid, input)
 	return assemblePage(fetchedPins, input)
 }

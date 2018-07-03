@@ -15,7 +15,7 @@ const Map = /* GraphQL */ `
 
 	type MapEdge implements Edge {
 		cursor: String!
-		node: Classroom
+		node: Map 
 	}
 
 	type MapConnection implements Connection {

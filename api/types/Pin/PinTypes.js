@@ -19,9 +19,11 @@ export type PinType = {
 }
 
 export type NewPinArgs = {
-	title?: string,
-	lat?: number,
-	lang?: number,
+	title: string,
+	lat: number,
+	lang: number,
+	mapUids?: Array<string>,
+	lessonUids?: Array<string>,
 }
 
 export type NewPinInput = {

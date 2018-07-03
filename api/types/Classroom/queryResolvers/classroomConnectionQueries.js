@@ -26,6 +26,6 @@ export const mapsConnection = async (
 	{ input }: PaginationInput,
 	ctx: GraphQLContext,
 ): Promise<PageType | Error> => {
-	const fetchedMaps = await ctx.models.Map.getMapsByClassroom(fetchedClassroom.uid, input).catch((e) => console.log(e))
+	const fetchedMaps = await ctx.models.Map.getClassroomMaps(fetchedClassroom.uid, input).catch((e) => console.log(e))
 	return assemblePage(fetchedMaps, input)
 }

@@ -31,6 +31,8 @@ const Pin = /* GraphQL */ `
 		title: String!
 		lat: Float!
 		lang: Float!
+		mapUids: [String]
+		lessonUids: [String]
 	}
 
 	input GetPinInput {

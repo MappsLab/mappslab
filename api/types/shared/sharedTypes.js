@@ -61,10 +61,10 @@ export type Edge = {
 
 export type PageInfo = {
 	hasNextPage: boolean,
-	lastCursor: string,
+	lastCursor: null | string,
 }
 
 export type PageType = {
 	pageInfo: PageInfo,
-	edges: [Edge],
+	edges: Array<?Edge>,
 }

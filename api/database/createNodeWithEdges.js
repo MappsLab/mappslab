@@ -39,7 +39,7 @@ const createNodeWithEdges = async (nodeData: Object, relationships: NewRelations
 					  { toUid, pred, fromUid: newNodeUid }
 					: // Otherwise, set the new node as the 'to' uid
 					  { toUid: newNodeUid, pred, fromUid }
-				return createEdge(newRelationship, edgeConfig)
+				return createEdge(newRelationship, edgeConfig, txn)
 			}),
 		)
 		debug(`Created new node with uid ${newNodeUid} with ${newEdges.length} edges`)

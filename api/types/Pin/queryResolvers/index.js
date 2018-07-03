@@ -1,6 +1,6 @@
 // @flow
 import { pin } from './getPins'
-import { owner } from './getPinRelationships'
+import { owner, maps } from './getPinRelationships'
 
 export default {
 	Query: {
@@ -8,7 +8,8 @@ export default {
 		// pin // pin by ID
 	},
 	Pin: {
-		// maps // get any maps it appears in
+		maps, // get any maps it appears in
+
 		owner, // get owner
 	},
 }

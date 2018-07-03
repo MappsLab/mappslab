@@ -1,10 +1,18 @@
 /* eslint-disable no-undef */
 import { request, getViewerForContext } from '../../../__tests__/utils'
 import { removeNode, removeEdge } from '../../../database'
+import { getFirstMaps } from '../../Map/__tests__/utils'
+
+let dbMaps
+
+beforeAll(async (done) => {
+	dbMaps = await getFirstMaps()
+	done()
+})
 
 const q = /* GraphQL */ `
-	mutation addPin($title: String!, $lat: Float!, $lang: Float!) {
-		addPin(input: { title: $title, lat: $lat, lang: $lang }) {
+	mutation addPin($title: String!, $lat: Float!, $lang: Float!, $mapUids: [String], $lessonUids: [String]) {
+		addPin(input: { title: $title, lat: $lat, lang: $lang, mapUids: $mapUids, lessonUids: $lessonUids }) {
 			uid
 			title
 			lat
@@ -12,6 +20,19 @@ const q = /* GraphQL */ `
 			owner {
 				uid
 				name
+			}
+			maps {
+				pageInfo {
+					hasNextPage
+					lastCursor
+				}
+				edges {
+					cursor
+					node {
+						uid
+						title
+					}
+				}
 			}
 		}
 	}
@@ -45,10 +66,30 @@ describe('[addPin]', () => {
 		const result = await request(q, { variables })
 		expect(result.errors).toMatchSnapshot()
 	})
-	it('Should add a new pin', async () => {
+
+	it('Should add a new pin (with no map)', async () => {
 		const result = await request(q, { variables, context })
-		expect(result.data.addPin.title).toBe(variables.title)
-		expect(result.data.addPin.owner.name).toBe(context.viewer.name)
+		const { title, owner, maps } = result.data.addPin
+		expect(title).toBe(variables.title)
+		expect(owner.name).toBe(context.viewer.name)
+		expect(maps.edges.length).toBe(0)
+		expect(maps.pageInfo.hasNextPage).toBe(false)
+		expect(maps.pageInfo.lastCursor).toBe(null)
+		pinsToRemove.push(result.data.addPin)
+	})
+
+	it.only('Should add a new pin (with map)', async () => {
+		const vars = {
+			mapUids: [dbMaps[0].uid],
+			...variables,
+		}
+		const result = await request(q, { variables: vars, context })
+		const { title, owner, maps } = result.data.addPin
+		expect(title).toBe(variables.title)
+		expect(owner.name).toBe(context.viewer.name)
+		expect(maps.pageInfo.hasNextPage).toBe(false)
+		expect(maps.pageInfo.lastCursor).toBe(dbMaps[0].uid)
+		expect(maps.edges[0].node.title).toBe(dbMaps[0].title)
 		pinsToRemove.push(result.data.addPin)
 	})
 })

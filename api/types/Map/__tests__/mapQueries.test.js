@@ -52,7 +52,6 @@ describe('[map]', () => {
 		`
 		const variables = { uid: maps[0].uid }
 		const result = await request(query, { variables }).catch((e) => console.log(e))
-		console.log(result.data.pins)
 		expect(result.data.map.title).toBe(maps[0].title)
 	})
 })
