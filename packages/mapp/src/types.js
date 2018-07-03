@@ -77,10 +77,10 @@ export type Map = MVCObject & {
 	setStreetView(panorama: Object): void,
 	setTilt(tilt: number): void,
 	setZoom(zoom: number): void,
-	controls: Array<any>,
+	controls: Array<any | void>,
 	data: Object,
 	mapTypes: any,
-	overlayMapTypes: Array<any>,
+	overlayMapTypes: Object | Array<any>,
 }
 
 type MapEntityBase = {
@@ -97,3 +97,7 @@ export type InfoWindow = MapEntityBase & {
 }
 
 export type MapEntity = Marker | InfoWindow
+
+export type MapContext = {
+	$gMap: Map,
+}

@@ -1,7 +1,8 @@
 // @flow
-import React from 'react'
+import * as React from 'react'
+import { MapConsumer } from '../Mapp'
 
-import type { LatLng, Map, Marker as MarkerType } from '../types'
+import type { LatLng, Map, Marker as MarkerType, MapContext } from '../types'
 import { addListeners, removeListeners } from '../utils/listeners'
 
 const markerEvents = {
@@ -32,18 +33,18 @@ const markerEvents = {
  * Marker
  */
 
-type Props = {
+type BaseProps = {
 	position: LatLng,
-	map: Map,
 }
 
-type State = {
-	// ...
+type MarkerProps = {
+	position: LatLng,
+	$gMap: Map,
 }
 
-class Marker extends React.Component<Props, State> {
+class Marker extends React.Component<MarkerProps, State> {
 	componentDidMount() {
-		const { position, map } = this.props
+		const { position, $gMap: map } = this.props
 		this.entity = new window.google.maps.Marker({
 			position,
 			map,
@@ -65,4 +66,8 @@ class Marker extends React.Component<Props, State> {
 	}
 }
 
-export default Marker
+const MarkerWithContext = (props: BaseProps): React.Node => (
+	<MapConsumer>{(mapContext: MapContext) => <Marker {...props} {...mapContext} />}</MapConsumer>
+)
+
+export default MarkerWithContext

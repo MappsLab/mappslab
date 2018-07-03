@@ -4,6 +4,9 @@ import Marker from './components/Marker'
 import InfoWindow from './components/InfoWindow'
 import loadGoogleMaps from './services/googleMaps'
 
+const MapContext = React.createContext()
+export const MapConsumer = MapContext.Consumer
+
 import type { Map } from './types'
 
 type Props = {
@@ -65,11 +68,14 @@ class Mapp extends React.Component<Props, State> {
 
 	render() {
 		const { style, render } = this.props
+		const contextValue = {
+			$gMap: this.map,
+		}
 		return (
-			<div>
+			<MapContext.Provider value={contextValue}>
 				<div style={style} ref={this.mapRef} />
 				{this.state.ready ? render({ map: this.map }) : null}
-			</div>
+			</MapContext.Provider>
 		)
 	}
 }

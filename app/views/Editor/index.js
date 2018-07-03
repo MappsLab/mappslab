@@ -4,10 +4,12 @@ import styled from 'styled-components'
 import Mapp from 'mapp'
 import { withMapQuery, withCurrentViewerQuery } from 'App/queries'
 import type { ViewerType, MapType } from 'App/types'
-import PinsList from './PinsList'
+import Pin from './Elements/Pin'
 
 const EditorWrapper = styled.div`
 	position: relative;
+	width: 100%;
+	height: 100%;
 `
 
 /**
@@ -19,14 +21,15 @@ type Props = {
 	map: MapType,
 }
 
-const Editor = (props: Props) => {
+const Editor = ({ map, viewer }: Props) => {
 	// const { pins } = viewer
-	console.log(props)
-	return null
+	const { pins } = map
 	return (
 		<EditorWrapper>
-			<PinsList pins={pins || []} />
-			<Mapp APIKey="AIzaSyCOqxjWmEzFlHKC9w-iUZ5zL2rIyBglAag" pins={pins} />
+			<Mapp
+				APIKey="AIzaSyCOqxjWmEzFlHKC9w-iUZ5zL2rIyBglAag"
+				render={() => <React.Fragment>{pins.map((p) => <Pin key={p.uid} {...p} />)}</React.Fragment>}
+			/>
 		</EditorWrapper>
 	)
 }
