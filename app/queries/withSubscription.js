@@ -2,7 +2,7 @@
 import * as React from 'react'
 import { assoc } from 'ramda'
 import type { DocumentNode } from 'graphql'
-import { Mutation } from 'react-apollo'
+import { Subscription } from 'react-apollo'
 
 type Config = {
 	options?: (Object) => Object | Object, // Use the component's props to provide `variables`, ...
@@ -14,31 +14,30 @@ type Config = {
 const defaultConfig = {
 	options: { variables: null }, // eslint-disable-line no-unused-vars
 	props: (response) => response,
-	update: () => {},
-	name: 'mutate',
 }
 
-const withMutation = (mutation: DocumentNode, opts?: Config = {}) => (
+const withSubscription = (subscription: DocumentNode, opts?: Config = {}) => (
 	Component: React.ComponentType<any>, // The component we are wrapping
 ) => (componentProps: Object) => {
 	const config = { ...defaultConfig, ...opts }
-	const { options, props, name: mutationName } = config
+	const { options, props } = config
 	/**
-	 * MutationOptions:
+	 * Subscription Options:
 	 * 	variables
 	 * 	update
 	 * 	refetchQueries
 	 */
-	const mutationOptions = typeof options === 'function' ? options(componentProps) : options
+	const subscriptionOptions = typeof options === 'function' ? options(componentProps) : options
 	return (
-		<Mutation mutation={mutation} {...mutationOptions}>
-			{(mutate, response) => {
+		<Subscription subscription={subscription} {...subscriptionOptions}>
+			{(response) => {
 				const responseProps = props(response)
-				const mutationProps = assoc(mutationName, mutate)({})
-				return <Component {...mutationProps} {...componentProps} {...responseProps} />
+				console.log('Subscription response:')
+				console.log(response)
+				return <Component {...componentProps} {...responseProps} />
 			}}
-		</Mutation>
+		</Subscription>
 	)
 }
 
-export default withMutation
+export default withSubscription

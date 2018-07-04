@@ -14,8 +14,9 @@ export const models = {
 	Map,
 }
 
-const context = ({ request }: { request: $Request }) => {
-	const { session, viewer } = request
+const context = (ctx: { request: $Request }) => {
+	if (!ctx.request) return { ...ctx, models }
+	const { session, viewer } = ctx.request
 	return {
 		session,
 		viewer,

@@ -89,7 +89,6 @@ class NewPin extends React.Component<Props, State> {
 			.then((response) => {
 				const { pin } = response
 				this.props.onSuccess(pin)
-				console.log(response)
 			})
 			.catch((err) => {
 				console.log('err!')
@@ -98,7 +97,6 @@ class NewPin extends React.Component<Props, State> {
 	}
 
 	render() {
-		console.log(this.props)
 		const { newPin } = this.props
 		const { title } = this.state
 		return (

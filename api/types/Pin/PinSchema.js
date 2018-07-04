@@ -50,6 +50,14 @@ const Pin = /* GraphQL */ `
 		modifyPin(input: NewPinArgs!): Pin!
 		removePin(input: GetPinInput!): Boolean!
 	}
+
+	input PinAddedSubscriptionInput {
+		mapUid: String!
+	}
+
+	extend type Subscription {
+		pinAddedToMap(input: PinAddedSubscriptionInput!): Pin!
+	}
 `
 
 export default Pin

@@ -4,7 +4,7 @@ import { coreTypes, coreTypeResolvers, coreQueryResolvers } from './types/core'
 import { scalarTypes, scalarResolvers } from './types/Scalars'
 import { ClassroomSchema, ClassroomQueryResolvers, ClassroomMutationResolvers } from './types/Classroom'
 import { MapSchema, MapQueryResolvers, MapMutationResolvers } from './types/Map'
-import { PinSchema, PinQueryResolvers, PinMutationResolvers } from './types/Pin'
+import { PinSchema, PinQueryResolvers, PinMutationResolvers, PinSubscriptionResolvers } from './types/Pin'
 import { RouteSchema, RouteQueryResolvers, RouteMutationResolvers } from './types/Route'
 import { UserSchema, UserQueryResolvers, UserMutationResolvers } from './types/User'
 
@@ -53,6 +53,7 @@ const resolvers = merge(
 	/**
 	 * Subscriptions
 	 */
+	PinSubscriptionResolvers,
 )
 
 module.exports = {
