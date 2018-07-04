@@ -80,7 +80,7 @@ class Editor extends React.Component<Props, State> {
 
 	render() {
 		const { pins } = this.props.map
-		const { newPin } = this.props
+		const { newPin, uid } = this.props
 		const mode = this.props.machineState.value
 		const contextValue = {
 			mode,
@@ -97,8 +97,8 @@ class Editor extends React.Component<Props, State> {
 						{...options}
 						render={() => (
 							<React.Fragment>
-								{pins.slice(0, 1).map((p) => <Pin key={p.uid} {...p} />)}
-								{newPin ? <NewPin key="newPin" pin={newPin} /> : null}
+								{pins.map((p) => <Pin key={p.uid} {...p} />)}
+								{newPin ? <NewPin key="newPin" mapUid={uid} pin={newPin} /> : null}
 							</React.Fragment>
 						)}
 					/>

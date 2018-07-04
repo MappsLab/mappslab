@@ -2,6 +2,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import Pin from './Pin'
+import { withCreatePinMutation } from '../../../queries/pin'
 import type { PinType } from '../../../types/'
 
 const Label = styled.label`
@@ -12,6 +13,7 @@ const Label = styled.label`
 const Input = styled.input`
 	font-size: 16px;
 	border: 1px solid black;
+	padding: 3px 5px;
 	margin: 10px 0;
 `
 
@@ -46,6 +48,8 @@ const FormContainer = styled.div`
 
 type Props = {
 	pin: PinType,
+	mapUid: string,
+	mutate: (any) => any,
 }
 
 type State = {
@@ -62,13 +66,25 @@ class NewPin extends React.Component<Props, State> {
 	}
 
 	updateValue = (name: string) => (e) => {
-		const val = e.target.value
-		console.log(val)
-		// this.setState({ [name]: })
+		const { value } = e.target
+		this.setState({ [name]: value })
 	}
 
 	handleSubmit = (e) => {
 		e.preventDefault()
+		const { mapUid } = this.props
+		const { title } = this.state
+		const { lat, lang } = this.props.pin
+		const newPin = {
+			lat,
+			lang,
+			title,
+			mapUids: [mapUid],
+		}
+		console.log(newPin)
+		this.props.mutate({ variables: newPin }).then((response) => {
+			console.log(response)
+		})
 	}
 
 	render() {
@@ -79,7 +95,7 @@ class NewPin extends React.Component<Props, State> {
 				<FormContainer>
 					<form onSubmit={this.handleSubmit}>
 						<Label>What's this pin called?</Label>
-						<Input type="text" id="title" name="title" onChange={this.updateValue('title')} />
+						<Input type="text" id="title" name="title" value={title} onChange={this.updateValue('title')} />
 						<Button type="submit">submit</Button>
 					</form>
 				</FormContainer>
@@ -89,4 +105,4 @@ class NewPin extends React.Component<Props, State> {
 	}
 }
 
-export default NewPin
+export default withCreatePinMutation(NewPin)
