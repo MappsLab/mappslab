@@ -11368,6 +11368,16 @@ react-apollo@^2.1.4:
     lodash "4.17.5"
     prop-types "^15.6.0"
 
+react-automata@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/react-automata/-/react-automata-3.0.0.tgz#539c3e426ff1e553f360c8c2b3cd1453a6dcc0fa"
+  dependencies:
+    invariant "^2.2.4"
+    minimatch "^3.0.4"
+    prop-types "^15.6.1"
+    react-test-renderer "^16.3.2"
+    xstate "^3.2.1"
+
 react-breakpoints@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/react-breakpoints/-/react-breakpoints-3.0.0.tgz#b57d18dc7ad73a7c00c1949e689360af9cac6759"
@@ -14314,6 +14324,10 @@ xmlbuilder@^4.1.0:
   resolved "https://registry.yarnpkg.com/xmlbuilder/-/xmlbuilder-4.2.1.tgz#aa58a3041a066f90eaa16c2f5389ff19f3f461a5"
   dependencies:
     lodash "^4.0.0"
+
+xstate@^3.2.1:
+  version "3.3.2"
+  resolved "https://registry.yarnpkg.com/xstate/-/xstate-3.3.2.tgz#4be8003fef861c5e4dd4ceb1037d9cdd39635316"
 
 xtend@^4.0.0, xtend@^4.0.1, xtend@~4.0.0, xtend@~4.0.1:
   version "4.0.1"

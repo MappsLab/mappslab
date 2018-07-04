@@ -2,12 +2,16 @@
 import React from 'react'
 import styled from 'styled-components'
 import Mapp from 'mapp'
+import { withStatechart } from 'react-automata'
 import { withMapQuery, withCurrentViewerQuery } from 'App/queries'
 import type { ViewerType, MapType } from 'App/types'
 import Pin from './Elements/Pin'
 import Debugger from './Debugger'
 import Toolbar from './Tools/Toolbar'
 import NewPinButton from './Tools/NewPinButton'
+import NewPin from './Elements/NewPin'
+import { statechart, STARTED_ADD_PIN } from './modes/statechart'
+import { modes } from './modes/modes'
 
 const EditorContext = React.createContext('editor')
 
@@ -28,8 +32,6 @@ type Props = {
 	viewer: ViewerType,
 	map: MapType,
 }
-
-type Mode = ADD_PIN | NORMAL
 
 type State = {
 	mode: Mode,
@@ -53,32 +55,33 @@ class Editor extends React.Component<Props, State> {
 	}
 
 	getMapOptions = () => {
-		const { mode } = this.state
+		const mode = this.props.machineState.value
 		const draggableCursor = mode === ADD_PIN ? 'cell' : 'auto'
 		const draggable = mode === NORMAL
-		return { ...defaultOptions, ...this.state, draggableCursor, draggable }
+		return { ...defaultOptions, ...this.props, draggableCursor, draggable }
 	}
+
+	modes = Object.entries(modes).reduce(
+		(acc, [title, mode]) => ({
+			[title]: mode(this),
+			...acc,
+		}),
+		{},
+	)
 
 	toggleAddPinMode = () => {
-		this.setState(({ mode }) => (mode === ADD_PIN ? { mode: NORMAL } : { mode: ADD_PIN }))
+		this.props.transition(STARTED_ADD_PIN)
 	}
 
-	handleClick = (e) => {
-		const { lat, lng } = e.latLng
-		console.log(lat())
-		console.log(lng())
-		this.setState({
-			center: {
-				lat: lat(),
-				lng: lng(),
-			},
-			mode: NORMAL,
-		})
+	handleMapClick = (e) => {
+		const mode = this.props.machineState.value
+		if (this.modes[mode].handleClick) this.modes[mode].handleClick(e)
 	}
 
 	render() {
 		const { pins } = this.props.map
-		const { mode } = this.state
+		const { newPin } = this.props
+		const mode = this.props.machineState.value
 		const contextValue = {
 			mode,
 		}
@@ -87,12 +90,17 @@ class Editor extends React.Component<Props, State> {
 		return (
 			<EditorContext.Provider value={contextValue}>
 				<EditorWrapper>
-					<Debugger {...this.props} {...this.state} something={false} />
+					<Debugger mode={mode} />
 					<Mapp
 						APIKey="AIzaSyCOqxjWmEzFlHKC9w-iUZ5zL2rIyBglAag"
-						render={() => <React.Fragment>{pins.slice(0, 1).map((p) => <Pin key={p.uid} {...p} />)}</React.Fragment>}
-						onClick={this.handleClick}
+						onClick={this.handleMapClick}
 						{...options}
+						render={() => (
+							<React.Fragment>
+								{pins.slice(0, 1).map((p) => <Pin key={p.uid} {...p} />)}
+								{newPin ? <NewPin key="newPin" pin={newPin} /> : null}
+							</React.Fragment>
+						)}
 					/>
 					<Toolbar>
 						<NewPinButton onClick={this.toggleAddPinMode} active={mode === ADD_PIN} />
@@ -105,4 +113,4 @@ class Editor extends React.Component<Props, State> {
 
 export const EditorConsumer = EditorContext.Consumer
 
-export default withCurrentViewerQuery(withMapQuery(Editor))
+export default withCurrentViewerQuery(withMapQuery(withStatechart(statechart)(Editor)))
