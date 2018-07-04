@@ -10,7 +10,7 @@ import Debugger from './Debugger'
 import Toolbar from './Tools/Toolbar'
 import NewPinButton from './Tools/NewPinButton'
 import NewPin from './Elements/NewPin'
-import { statechart, STARTED_ADD_PIN } from './modes/statechart'
+import { statechart, STARTED_ADD_PIN, SUCCESS } from './modes/statechart'
 import { modes } from './modes/modes'
 
 const EditorContext = React.createContext('editor')
@@ -73,6 +73,10 @@ class Editor extends React.Component<Props, State> {
 		this.props.transition(STARTED_ADD_PIN)
 	}
 
+	onAddPinSuccess = (pin: PinType) => {
+		this.props.transition(SUCCESS, { newPin: null })
+	}
+
 	handleMapClick = (e) => {
 		const mode = this.props.machineState.value
 		if (this.modes[mode].handleClick) this.modes[mode].handleClick(e)
@@ -86,6 +90,7 @@ class Editor extends React.Component<Props, State> {
 			mode,
 		}
 		const options = this.getMapOptions()
+		console.log(newPin)
 
 		return (
 			<EditorContext.Provider value={contextValue}>
@@ -98,7 +103,7 @@ class Editor extends React.Component<Props, State> {
 						render={() => (
 							<React.Fragment>
 								{pins.map((p) => <Pin key={p.uid} {...p} />)}
-								{newPin ? <NewPin key="newPin" mapUid={uid} pin={newPin} /> : null}
+								{newPin ? <NewPin key="newPin" mapUid={uid} onSuccess={this.onAddPinSuccess} newPin={newPin} /> : null}
 							</React.Fragment>
 						)}
 					/>

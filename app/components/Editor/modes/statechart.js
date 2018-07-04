@@ -9,6 +9,7 @@ export const ADD_PIN_INFO = 'addPinInfo'
 export const NEXT = 'next'
 export const CANCEL = 'cancel'
 export const STARTED_ADD_PIN = 'startedAddPin'
+export const SUCCESS = 'success'
 // const DROPPED_PIN = 'droppedPin'
 
 export const statechart = {
@@ -28,10 +29,9 @@ export const statechart = {
 		},
 		[ADD_PIN_INFO]: {
 			on: {
-				[NEXT]: NORMAL,
+				[SUCCESS]: NORMAL,
 				[CANCEL]: NORMAL,
 			},
-			onEntry: 'addPinSuccess',
 		},
 	},
 }

@@ -1,6 +1,8 @@
 // @flow
 import gql from 'graphql-tag'
 import withMutation from '../withMutation'
+import { unwindEdges } from '../utils'
+import { query as mapQuery } from '../map/withMapQuery'
 
 const mutation = gql`
 	mutation createPin($title: String!, $lat: Float!, $lang: Float!, $mapUids: [String]) {
@@ -30,27 +32,31 @@ const mutation = gql`
 	}
 `
 
-// const config = {
-// 	options: {
-// 		update: (proxy, { data }) => {
-// 			const { loginViewer } = data
-// 			const { viewer, jwt, requiresReset } = loginViewer
-// 			const { token, expires } = jwt
-// 			const cookieExpiration = expires / 24 / 60 / 60
-// 			if (token) setCookie(VIEWER_COOKIE_TOKEN, token, { expires: cookieExpiration })
+const config = {
+	options: (props) => ({
+		refetchQueries: [
+			{
+				query: mapQuery,
+				variables: {
+					uid: props.mapUid,
+				},
+			},
+		],
+	}),
+	props: (response) => {
+		const { data, loading, networkStatus, ...rest } = response
+		const pin = response.addPin ? unwindEdges(response.addPin) : null
+		return {
+			loading,
+			networkStatus,
+			pin,
+			request: {
+				...rest,
+			},
+		}
+	},
+}
 
-// 			// Instead of making another call for the ViewerQuery, write the results of it here
-// 			proxy.writeQuery({
-// 				query: currentViewerQuery,
-// 				data: {
-// 					viewer,
-// 					requiresReset,
-// 				},
-// 			})
-// 		},
-// 	},
-// }
-
-const withViewerLoginMutation = withMutation(mutation)
+const withViewerLoginMutation = withMutation(mutation, config)
 
 export default withViewerLoginMutation

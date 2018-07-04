@@ -12,7 +12,7 @@ type Config = {
 }
 
 const defaultConfig = {
-	options: { variables: null, refetchQueries: null }, // eslint-disable-line no-unused-vars
+	options: { variables: null }, // eslint-disable-line no-unused-vars
 	props: (response) => response,
 	update: () => {},
 	name: 'mutate',
@@ -23,9 +23,16 @@ const withMutation = (mutation: DocumentNode, opts?: Config = {}) => (
 ) => (componentProps: Object) => {
 	const config = { ...defaultConfig, ...opts }
 	const { options, props, name: mutationName } = config
-	const { variables, refetchQueries, update } = typeof options === 'function' ? options(componentProps) : options
+	/**
+	 * MutationOptions:
+	 * 	variables
+	 * 	update
+	 * 	refetchQueries
+	 */
+	console.log(componentProps)
+	const mutationOptions = typeof options === 'function' ? options(componentProps) : options
 	return (
-		<Mutation mutation={mutation} variables={variables} refetchQueries={refetchQueries} update={update}>
+		<Mutation mutation={mutation} {...mutationOptions}>
 			{(mutate, response) => {
 				const responseProps = props(response)
 				const mutationProps = assoc(mutationName, mutate)({})

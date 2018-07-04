@@ -46,10 +46,13 @@ const FormContainer = styled.div`
  * NewPin
  */
 
+type PartialPinType = $Rest<PinType, {| title: string |}>
+
 type Props = {
-	pin: PinType,
+	newPin: PartialPinType,
 	mapUid: string,
-	mutate: (any) => any,
+	mutate: ({}) => Promise<any | Error>,
+	onSuccess: (PinType) => void,
 }
 
 type State = {
@@ -74,21 +77,29 @@ class NewPin extends React.Component<Props, State> {
 		e.preventDefault()
 		const { mapUid } = this.props
 		const { title } = this.state
-		const { lat, lang } = this.props.pin
+		const { lat, lang } = this.props.newPin
 		const newPin = {
 			lat,
 			lang,
 			title,
 			mapUids: [mapUid],
 		}
-		console.log(newPin)
-		this.props.mutate({ variables: newPin }).then((response) => {
-			console.log(response)
-		})
+		this.props
+			.mutate({ variables: newPin })
+			.then((response) => {
+				const { pin } = response
+				this.props.onSuccess(pin)
+				console.log(response)
+			})
+			.catch((err) => {
+				console.log('err!')
+				console.log(err)
+			})
 	}
 
 	render() {
-		const { pin } = this.props
+		console.log(this.props)
+		const { newPin } = this.props
 		const { title } = this.state
 		return (
 			<React.Fragment>
@@ -99,7 +110,7 @@ class NewPin extends React.Component<Props, State> {
 						<Button type="submit">submit</Button>
 					</form>
 				</FormContainer>
-				<Pin {...pin} title={title} />
+				<Pin {...newPin} title={title} />
 			</React.Fragment>
 		)
 	}
