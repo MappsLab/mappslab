@@ -5,7 +5,7 @@ import { ViewerRoute } from 'App/components/Auth'
 import Classrooms from './Login/Classrooms'
 import Classroom from './Login/Classroom'
 import Dashboard from './Dashboard'
-import Editor from './Editor'
+import Editor from '../components/Editor'
 
 /**
  * MappsLab

@@ -69,7 +69,7 @@ class Mapp extends React.Component<Props, State> {
 	render() {
 		const { style, render } = this.props
 		const contextValue = {
-			$gMap: this.map,
+			map: this.map,
 		}
 		return (
 			<MapContext.Provider value={contextValue}>

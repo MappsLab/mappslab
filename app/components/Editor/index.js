@@ -28,7 +28,7 @@ const Editor = ({ map, viewer }: Props) => {
 		<EditorWrapper>
 			<Mapp
 				APIKey="AIzaSyCOqxjWmEzFlHKC9w-iUZ5zL2rIyBglAag"
-				render={() => <React.Fragment>{pins.map((p) => <Pin key={p.uid} {...p} />)}</React.Fragment>}
+				render={() => <React.Fragment>{pins.slice(0, 1).map((p) => <Pin key={p.uid} {...p} />)}</React.Fragment>}
 			/>
 		</EditorWrapper>
 	)

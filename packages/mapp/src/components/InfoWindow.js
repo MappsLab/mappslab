@@ -2,12 +2,13 @@
 import * as React from 'react'
 import { addListeners, removeListeners } from '../utils/listeners'
 import type { LatLng, Map, InfoWindow as InfoWindowType } from '../types'
-
+import { getNewValues, separateOptionsAndEvents } from '../utils/data'
+import { MapConsumer } from '../Mapp'
 /**
  * InfoWindow
  */
 
-const infoWindowEvents = {
+const infoWindowEventNames = {
 	onCloseClick: 'closeclick',
 	onContentChanged: 'content_changed',
 	onDOMReady: 'domready',
@@ -16,9 +17,13 @@ const infoWindowEvents = {
 }
 
 type Props = {
-	position: LatLng,
+	position?: LatLng,
+	anchor?: Pin,
+	onCloseClick?: () => void,
+	onDomReady?: () => void,
+	onPositionChanged?: () => void,
+	onZindexChanged?: () => void,
 	map: Map,
-	children: React.Node,
 }
 
 type State = {
@@ -26,15 +31,38 @@ type State = {
 }
 
 class InfoWindow extends React.Component<Props, State> {
+	static defaultProps = {
+		position: null,
+		anchor: null,
+		onCloseClick: () => {},
+		onDomReady: () => {},
+		onPositionChanged: () => {},
+		onZindexChanged: () => {},
+	}
+
+	constructor(props: Props) {
+		super(props)
+		if (!props.position && !props.anchor) throw new Error('InfoWindow must have either a `anchor` or `position` prop')
+		if (props.position && props.anchor) throw new Error('InfoWindow must have either a `anchor` or `position` prop, not both')
+	}
+
 	componentDidMount() {
-		console.log('mounted', this.props)
-		const { position, map } = this.props
-		this.entity = new window.google.maps.InfoWindow({
-			position,
-			content: this.props.children,
-		})
-		this.entity.open(map)
-		if (this.entity) this.listeners = addListeners(this.entity, infoWindowEvents, this.props)
+		const { map, anchor, ...props } = this.props
+		const { options, events } = separateOptionsAndEvents(props, infoWindowEventNames)
+		this.entity = new window.google.maps.InfoWindow(options)
+		console.log(events)
+		this.entity.open(map, anchor)
+		if (this.entity) this.listeners = addListeners(this.entity, infoWindowEventNames, events)
+	}
+
+	componentWillReceiveProps(nextProps: Props) {
+		if (this.entity === null) return
+		const newProps = getNewValues(this.props, nextProps)
+		if (newProps) {
+			const { options, events } = separateOptionsAndEvents(newProps, infoWindowEventNames)
+			if (options) this.entity.setOptions(options)
+			if (events) addListeners(this.entity, infoWindowEventNames, events)
+		}
 	}
 
 	componentWillUnmount() {
@@ -50,5 +78,8 @@ class InfoWindow extends React.Component<Props, State> {
 		return null
 	}
 }
+const InfoWindowWithContext = (props: BaseProps): React.Node => (
+	<MapConsumer>{(mapContext: MapContext) => <InfoWindow {...mapContext} {...props} />}</MapConsumer>
+)
 
-export default InfoWindow
+export default InfoWindowWithContext

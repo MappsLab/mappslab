@@ -1,11 +1,11 @@
 // @flow
 import * as React from 'react'
 import { MapConsumer } from '../Mapp'
-
-import type { LatLng, Map, Marker as MarkerType, MapContext } from '../types'
 import { addListeners, removeListeners } from '../utils/listeners'
+import { getNewValues, separateOptionsAndEvents } from '../utils/data'
+import type { LatLng, Map, Marker as MarkerType, MapContext } from '../types'
 
-const markerEvents = {
+const markerEventNames = {
 	onAnimationChanged: 'animation_changed',
 	onClick: 'click',
 	onClickableChanged: 'clickable_changed',
@@ -39,17 +39,29 @@ type BaseProps = {
 
 type MarkerProps = {
 	position: LatLng,
-	$gMap: Map,
+	map: Map,
+	render: ({ anchor: any }) => null | React.Node,
 }
 
 class Marker extends React.Component<MarkerProps, State> {
+	static defaultProps = {
+		render: () => null,
+	}
+
 	componentDidMount() {
-		const { position, $gMap: map } = this.props
-		this.entity = new window.google.maps.Marker({
-			position,
-			map,
-		})
-		if (this.entity) this.listeners = addListeners(this.entity, markerEvents, this.props)
+		const { options, events } = separateOptionsAndEvents(this.props, markerEventNames)
+		this.entity = new window.google.maps.Marker(options)
+		if (this.entity) this.listeners = addListeners(this.entity, markerEventNames, events)
+	}
+
+	componentWillReceiveProps(nextProps) {
+		if (this.entity === null) return
+		const newProps = getNewValues(this.props, nextProps)
+		if (newProps) {
+			const { options, events } = separateOptionsAndEvents(newProps, markerEventNames)
+			if (options) this.entity.setOptions(options)
+			if (events) addListeners(this.entity, markerEventNames, events)
+		}
 	}
 
 	componentWillUnmount() {
@@ -62,12 +74,12 @@ class Marker extends React.Component<MarkerProps, State> {
 	listeners: Array<Object> = []
 
 	render() {
-		return null
+		return this.props.render({ anchor: this.entity }) || null
 	}
 }
 
 const MarkerWithContext = (props: BaseProps): React.Node => (
-	<MapConsumer>{(mapContext: MapContext) => <Marker {...props} {...mapContext} />}</MapConsumer>
+	<MapConsumer>{(mapContext: MapContext) => <Marker {...mapContext} {...props} />}</MapConsumer>
 )
 
 export default MarkerWithContext
