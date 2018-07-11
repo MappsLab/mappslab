@@ -1,9 +1,10 @@
 // @flow
 
-import { pinAddedToMap } from './pinAddedSubscription'
+import { pinAddedToMap, pinModified } from './pinSubscriptions'
 
 export default {
 	Subscription: {
 		pinAddedToMap,
+		pinModified,
 	},
 }

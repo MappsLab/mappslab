@@ -1,7 +1,9 @@
 // @flow
+import * as R from 'ramda'
 import gql from 'graphql-tag'
 import { unwindEdges } from '../utils'
 import withQuery from '../withQuery'
+import { query as newPinAddedQuery } from './withMapSubscriptions'
 
 export const query = gql/* GraphQL */ `
 	query MapQuery($uid: String!) {
@@ -28,7 +30,9 @@ export const query = gql/* GraphQL */ `
 `
 
 const config = {
-	options: ({ uid }) => ({ variables: { uid } }),
+	options: ({ uid }) => ({
+		variables: { uid },
+	}),
 	props: ({ data }) => {
 		const { loading, map, ...rest } = unwindEdges(data)
 		return {
@@ -36,6 +40,23 @@ const config = {
 			map,
 			request: {
 				...rest,
+			},
+		}
+	},
+	subscriptionOptions: ({ uid }) => {
+		return {
+			document: newPinAddedQuery,
+			variables: { mapUid: uid },
+			updateQuery: (previous, { subscriptionData }) => {
+				const newPin = subscriptionData.data.pinAddedToMap
+				// console.log(previous)
+				const map = R.assocPath(['pins', 'edges'], [...previous.map.pins.edges, { node: newPin, __typename: 'PinEdge' }])(
+					previous.map,
+				)
+				return {
+					...previous,
+					map,
+				}
 			},
 		}
 	},

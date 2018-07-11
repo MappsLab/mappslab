@@ -4,7 +4,7 @@ import { query } from '../../../database'
 import type { MapType } from '../MapTypes'
 import type { UserType } from '../../User/UserTypes'
 import type { PaginationArgs, GetNodeArgs } from '../../shared/sharedTypes'
-import { publicFields } from './MapDBSchema'
+import { publicFields } from './mapDBSchema'
 import { validateUid } from '../../../database/utils'
 
 const debug = require('debug')('api')

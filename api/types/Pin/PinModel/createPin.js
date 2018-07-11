@@ -4,7 +4,7 @@ import { clean, defaultValues, validateNew } from './pinDBSchema'
 import { ValidationError } from '../../../errorTypes'
 import { createNodeWithEdges } from '../../../database'
 
-const debug = require('debug')('api:pin')
+const debug = require('debug')('api')
 
 export const createPin = async (args: NewPinArgs, ownerUid: string): Promise<PinType | void> => {
 	const { mapUids, lessonUids, ...pinData } = args

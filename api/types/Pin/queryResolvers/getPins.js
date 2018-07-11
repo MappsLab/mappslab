@@ -8,4 +8,4 @@ type GetPinInput = {
 }
 
 export const pin = (_: Object, { input }: GetPinInput, ctx: GraphQLContext): Promise<PinType | null | Error> =>
-	ctx.models.Pin.getPin(input)
+	ctx.models.Pin.getPin(input.uid)

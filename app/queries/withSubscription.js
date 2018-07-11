@@ -28,12 +28,11 @@ const withSubscription = (subscription: DocumentNode, opts?: Config = {}) => (
 	 * 	refetchQueries
 	 */
 	const subscriptionOptions = typeof options === 'function' ? options(componentProps) : options
+	console.log(subscriptionOptions)
 	return (
 		<Subscription subscription={subscription} {...subscriptionOptions}>
 			{(response) => {
 				const responseProps = props(response)
-				console.log('Subscription response:')
-				console.log(response)
 				return <Component {...componentProps} {...responseProps} />
 			}}
 		</Subscription>

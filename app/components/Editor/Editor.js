@@ -3,7 +3,7 @@ import React from 'react'
 import styled from 'styled-components'
 import Mapp from 'mapp'
 import { withStatechart } from 'react-automata'
-import { withMapQuery, withCurrentViewerQuery, withPinAddedToMapSubscription } from 'App/queries'
+import { withMapQuery, withCurrentViewerQuery } from 'App/queries'
 import type { ViewerType, MapType } from 'App/types'
 import Pin from './Elements/Pin'
 import Debugger from './Debugger'
@@ -90,7 +90,7 @@ class Editor extends React.Component<Props, State> {
 			mode,
 		}
 		const options = this.getMapOptions()
-
+		console.log(pins.map((p) => p.uid))
 		return (
 			<EditorContext.Provider value={contextValue}>
 				<EditorWrapper>
@@ -117,4 +117,4 @@ class Editor extends React.Component<Props, State> {
 
 export const EditorConsumer = EditorContext.Consumer
 
-export default withCurrentViewerQuery(withMapQuery(withPinAddedToMapSubscription(withStatechart(statechart)(Editor))))
+export default withCurrentViewerQuery(withMapQuery(withStatechart(statechart)(Editor)))

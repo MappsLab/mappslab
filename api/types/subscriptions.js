@@ -2,6 +2,10 @@
 import { PubSub } from 'graphql-subscriptions'
 
 // Topics
-export const PIN_ADDED_TO_MAP = 'pinAddedToMap'
+export const MAP_RECEIVED_PIN = 'pinAddedToMap'
+export const PIN_MODIFIED = 'pinModified'
 
-export const pubsub = new PubSub()
+const pubsub = new PubSub()
+pubsub.ee.setMaxListeners(30) // raise max listeners in event emitter
+
+export default pubsub

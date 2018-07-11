@@ -31,7 +31,23 @@ export const defaultValues = {
 	updatedAt: new Date(),
 }
 
-export const publicFields = ['uid', 'title', 'lat', 'lang', 'createdAt', 'updatedAt', 'type'].join('\n')
+export const publicFields = [
+	'uid',
+	'title',
+	'lat',
+	'lang',
+	'createdAt',
+	'updatedAt',
+	'type',
+	`maps: ~has_pin {
+		uid
+		title
+	}`,
+	`owner: ~pinned {
+		uid
+		username
+	}`,
+].join('\n')
 
 export const validateNew = (pinData: NewPinArgs) => Joi.validate(pinData, pinSchema(true))
 export const validateUpdate = (pinData: NewPinArgs) => Joi.validate(pinData, pinSchema(false))

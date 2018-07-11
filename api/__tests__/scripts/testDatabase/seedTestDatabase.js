@@ -66,7 +66,7 @@ const setSchema = async () => {
 		'has_group: uid @reverse @count . ',
 	].join('\n')
 
-	console.log(schema)
+	debug(schema)
 	const op = new dgraph.Operation()
 	op.setSchema(schema)
 	await dbClient.alter(op)
@@ -127,7 +127,7 @@ const seedDatabase = async () => {
 					// For each map in a student's classroom, add some pins
 					await promiseSerial(
 						classroomMaps.map((m) => async () => {
-							const pinCount = faker.random.number({ min: 1, max: 4 })
+							const pinCount = faker.random.number({ min: 1, max: 3 })
 							const newClassroomMapPins = await promiseSerial(
 								generatePins(pinCount).map((pinData) => async () => {
 									const args = {

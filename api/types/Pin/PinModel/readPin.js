@@ -1,9 +1,9 @@
 // @flow
 import { query } from '../../../database'
-import type { PinType, GetPinArgs } from '../PinTypes'
+import type { PinType } from '../PinTypes'
 import { publicFields, parsePinResult } from './pinDBSchema'
 
-export const getPin = async ({ uid }: GetPinArgs): Promise<PinType | null | Error> => {
+export const getPin = async (uid: string): Promise<PinType | null | Error> => {
 	const q = /* GraphQL */ `
 		query getPin {
 			getPin(func: uid(${uid})) {

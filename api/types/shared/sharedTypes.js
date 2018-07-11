@@ -6,6 +6,13 @@ import Pin from '../Pin/PinModel'
 import Classroom from '../Classroom/ClassroomModel'
 import Map from '../Map/MapModel'
 
+const Models = {
+	User,
+	Pin,
+	Classroom,
+	Map,
+}
+
 type Operator = 'eq' | 'le' | 'lt' | 'ge' | 'gt' | 'uid' | 'allofterms' | 'anyofterms' | 'regexp' | 'alloftext' | 'uid_in' | 'has'
 
 export type Filter = {
@@ -35,22 +42,9 @@ export type GetNodeInput = {
 	input: GetNodeArgs,
 }
 
-type GraphQLResolver = (_: {}, args: {}, ctx: GraphQLContext) => mixed
-
-type Model = {
-	[key: string]: GraphQLResolver,
-}
-
-type Models = {
-	User: Model,
-	Pin: Model,
-	Classroom: Model,
-	Map: Model,
-}
-
 export type GraphQLContext = {
 	viewer: UserType,
-	models: Models,
+	models: typeof Models,
 	session: Object,
 }
 

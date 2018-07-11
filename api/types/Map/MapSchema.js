@@ -46,6 +46,7 @@ const Map = /* GraphQL */ `
 		modifyMap(input: MapInput!): Map!
 		removeMap(uid: String!): Boolean!
 	}
+
 `
 
 export default Map
