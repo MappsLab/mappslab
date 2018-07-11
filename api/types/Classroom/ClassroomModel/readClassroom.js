@@ -1,15 +1,18 @@
 // @flow
-import { prop, last, head, pipe } from 'ramda'
+import { head } from 'ramda'
 import { query } from '../../../database'
-import { nodesToEdges } from '../../../utils/dbUtils'
 import type { ClassroomType } from '../ClassroomTypes'
-import type { TeacherType, UserType } from '../../User/UserTypes'
-import type { PageInfo, PaginationArgs, GetNodeArgs, Edge } from '../../shared/sharedTypes'
+import type { UserType } from '../../User/UserTypes'
+import type { PaginationArgs, GetNodeArgs } from '../../shared/sharedTypes'
 import { publicFields } from './classroomDBSchema'
+import { validateUid } from '../../../database/utils'
 
-export const getClassroom = async (args: GetNodeArgs): Promise<ClassroomType | Error> => {
+const debug = require('debug')('api')
+
+export const getClassroom = async (args: GetNodeArgs): Promise<ClassroomType | null | Error> => {
 	const key = head(Object.keys(args))
-	if (!key) return null
+	if (!key || (key !== 'slug' && key !== 'uid')) throw new Error('getClassroom must be called with a `uid` or a `slug`')
+	if (typeof args.uid === 'string' && key === 'uid' && !validateUid(args.uid)) throw new Error(`Uid ${args.uid} is malformed`)
 	const func = key === 'uid' && typeof args.uid === 'string' ? `uid(${args.uid})` : `eq(${key}, $${key})`
 	const q = /* GraphQL */ `
 		query getClassroom($${key}: string) {
@@ -18,88 +21,28 @@ export const getClassroom = async (args: GetNodeArgs): Promise<ClassroomType | E
 			}
 		}
 	`
-	const result = await query(q, args)
-	return head(result.getJson().getClassroom)
+	const result: Object = await query(q, args)
+	const classroom = head(result.getClassroom)
+	if (classroom.type !== 'classroom') return null
+	return classroom
 }
 
-export const getClassrooms = async (args: PaginationArgs): Promise<{ edges: Array<Edge>, pageInfo: PageInfo } | Error> => {
+export const getClassrooms = async (args?: PaginationArgs): Promise<Array<ClassroomType>> => {
+	// const { first, after, filter } = makePaginationArgs(args)
+	// const filterString = filter ? createFilterString(filter) : ''
+	const filterString = ''
 	const q = /* GraphQL */ `
 		query getClassrooms {
-			classrooms(func: eq(type, "classroom")) {
+			classrooms(func: eq(type, "classroom")) ${filterString} {
 				${publicFields}
 			}
 		}
 	`
-	const result = await query(q)
-	const edges = nodesToEdges(result.getJson().classrooms) || []
-	const lastCursor = prop('cursor', last(edges))
+	const result: Object = await query(q).catch((err) => {
+		debug('Error in getClassrooms:')
+		debug(err)
+		throw err
+	})
 
-	return {
-		edges,
-		pageInfo: {
-			lastCursor,
-			hasNextPage: true,
-		},
-	}
+	return result.classrooms || []
 }
-
-export const getClassroomsByUser = async (
-	user: UserType,
-	args: PaginationArgs,
-): Promise<{ edges: Array<Edge>, pageInfo: PageInfo } | Error> => {
-	const q = /* GraphQL */ `
-		query getClassroomsByUser {
-			classrooms(func: eq(type, "classroom")) @filter(uid_in(~learns_in, ${user.uid})) {
-				${publicFields}
-			}
-		}
-	`
-	const result = await query(q)
-	const edges = nodesToEdges(result.getJson().classrooms) || []
-	const lastCursor = prop('cursor', last(edges))
-	return {
-		edges,
-		pageInfo: {
-			lastCursor,
-			hasNextPage: true,
-		},
-	}
-}
-
-export const getClassroomUsers = (userType: string): Function => async (
-	classroom: ClassroomType,
-	args: PaginationArgs,
-): Promise<{ edges: Array<TeacherType>, pageInfo: PageInfo } | Error> => {
-	// TODO: build filter into `teaches` relationship
-	const relationship = userType === 'teachers' ? '~teaches_in' : '~learns_in'
-	const q = `query getTeachers($username: string) {
-		classroom(func: uid(${classroom.uid})) {
-			title
-			${relationship} {
-				name
-				uid
-				role
-			}
-		}
-	}`
-
-	const result = await query(q)
-	const edges = pipe(
-		// Get the first result from the query (should always be 1)
-		prop('classroom'),
-		head,
-		prop(relationship),
-		nodesToEdges,
-	)(result.getJson())
-	const lastCursor = prop('cursor', last(edges))
-	return {
-		edges,
-		pageInfo: {
-			lastCursor,
-			hasNextPage: true, // TODO +1 the query, slice it when returned, and set this to true if there are more than requested
-		},
-	}
-}
-
-export const getStudents = getClassroomUsers('students')
-export const getTeachers = getClassroomUsers('teachers')

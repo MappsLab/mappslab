@@ -1,6 +1,7 @@
 // @flow
 import gql from 'graphql-tag'
-import { makeQuery, unwindEdges } from '../utils'
+import { unwindEdges } from '../utils'
+import withQuery from '../withQuery'
 
 // todo#16 : Make a Viewer fragment and reuse it in the viewer query
 export const query = gql`
@@ -39,6 +40,6 @@ const config = {
 	},
 }
 
-const withViewerDashboardQuery = makeQuery(query, config)
+const withViewerDashboardQuery = withQuery(query, config)
 
 export default withViewerDashboardQuery

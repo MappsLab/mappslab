@@ -2,11 +2,14 @@
 import React from 'react'
 import type { Node } from 'react'
 import { ApolloProvider } from 'react-apollo'
-import { ApolloLink } from 'apollo-link'
+import { ApolloLink, split } from 'apollo-link'
+import { WebSocketLink } from 'apollo-link-ws'
 import { ApolloClient } from 'apollo-client'
 import { onError } from 'apollo-link-error'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { createUploadLink } from 'apollo-upload-client'
+import { getMainDefinition } from 'apollo-utilities'
+
 import { getCookie } from '../utils/storage'
 import { VIEWER_COOKIE_TOKEN } from '../constants'
 import config from '../config'
@@ -16,6 +19,22 @@ const debug = require('debug')('app')
 debug(`Using API endpoint: ${config.apiRoot}`)
 
 const uploadLink = createUploadLink({ uri: config.apiRoot, credentials: 'same-origin' })
+
+const wsLink = new WebSocketLink({
+	uri: config.wsUri,
+	options: {
+		reconnect: true,
+	},
+})
+
+const apiLink = split(
+	({ query }) => {
+		const { kind, operation } = getMainDefinition(query)
+		return kind === 'OperationDefinition' && operation === 'subscription'
+	},
+	wsLink,
+	uploadLink,
+)
 
 // TODO Return IDs from more objects for better caching
 const cache = new InMemoryCache({
@@ -68,7 +87,7 @@ const logErrors = onError(({ graphQLErrors, networkError }) => {
 	if (networkError) debug(`[Network Error] ${networkError}`, networkError.response, networkError.response.body)
 })
 
-const link = ApolloLink.from([setAuthHeader, logQueries, logErrors, uploadLink])
+const link = ApolloLink.from([setAuthHeader, logQueries, logErrors, apiLink])
 
 const client = new ApolloClient({ link, cache })
 

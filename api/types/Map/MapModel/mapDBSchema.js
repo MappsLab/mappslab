@@ -20,6 +20,7 @@ export const mapSchema = (isNew: boolean = true) =>
 					.max(35),
 		createdAt: isNew ? Joi.date().required() : Joi.any().forbidden(),
 		updatedAt: Joi.date().required(),
+		description: Joi.string(),
 		type: Joi.any().only('map'),
 	})
 
@@ -30,6 +31,8 @@ export const defaultValues = {
 
 export const validateNew = (mapData: MapInput) => Joi.validate(mapData, mapSchema(true))
 export const validateUpdate = (mapData: MapInput) => Joi.validate(mapData, mapSchema(false))
+
+export const publicFields = ['uid', 'title', 'description', 'slug', 'createdAt', 'updatedAt', 'type'].join('\n')
 
 /**
  * Clean

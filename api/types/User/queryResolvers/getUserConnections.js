@@ -1,13 +1,19 @@
 // @flow
-// @flow
-
-import { getPinsByUser } from '../../Pin/PinModel'
-import { getClassroomsByUser } from '../../Classroom/ClassroomModel'
 
 import type { UserType } from '../UserTypes'
-import type { PaginationArgs, PageType } from '../../shared/sharedTypes'
+import type { GraphQLContext, PaginationInput, PageType } from '../../shared/sharedTypes'
+import { assemblePage } from '../../../utils/graphql'
 
-export const pins = (loadedUser: UserType, args: PaginationArgs): Promise<PageType | Error> => getPinsByUser(loadedUser, args)
+export const pins = async (loadedUser: UserType, { input }: PaginationInput, ctx: GraphQLContext): Promise<PageType | Error> => {
+	const fetchedPins = await ctx.models.Pin.getUserPins(loadedUser.uid, input)
+	return assemblePage(fetchedPins, input)
+}
 
-export const classrooms = (loadedUser: UserType, { input }: PaginationArgs): Promise<PageType | Error> =>
-	getClassroomsByUser(loadedUser, input)
+export const classrooms = async (
+	loadedUser: UserType,
+	{ input }: PaginationInput = {},
+	ctx: GraphQLContext,
+): Promise<PageType | Error> => {
+	const fetchedClassrooms = await ctx.models.Classroom.getUserClassrooms(loadedUser.uid, input)
+	return assemblePage(fetchedClassrooms, input)
+}

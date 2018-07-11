@@ -2,7 +2,7 @@
 import gql from 'graphql-tag'
 import { VIEWER_COOKIE_TOKEN } from 'App/constants'
 import { setCookie } from 'App/utils/storage'
-import { makeQuery } from '../utils'
+import withMutation from '../withMutation'
 
 import { query as currentViewerQuery } from './withCurrentViewerQuery'
 
@@ -16,6 +16,7 @@ const mutation = gql`
 			viewer {
 				uid
 				name
+				role
 			}
 		}
 	}
@@ -42,6 +43,6 @@ const config = {
 	},
 }
 
-const withViewerLoginMutation = makeQuery(mutation, config)
+const withViewerLoginMutation = withMutation(mutation, config)
 
 export default withViewerLoginMutation

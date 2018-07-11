@@ -1,7 +1,8 @@
 // @flow
 
 const userFields = /* GraphQL */ `
-	uid: ID!
+	uid: String!
+	username: String!
 	name: String
 	classrooms: ClassroomConnection
 	maps: MapConnection
@@ -27,26 +28,6 @@ const User = /* GraphQL */ `
 		title: String!
 	}
 
-	# Relationships
-
-	type UserEdge implements Edge {
-		cursor: ID!
-		node: User
-	}
-
-	type UserConnection implements Connection {
-		pageInfo: PageInfo!
-		edges: [UserEdge]!
-	}
-
-	# Queries & Mutations
-
-	input CredentialsInput {
-		email: String
-		uid: String
-		password: String!
-	}
-
 	type Token {
 		token: String!
 		expires: Int!
@@ -57,8 +38,34 @@ const User = /* GraphQL */ `
 		viewer: Viewer!
 	}
 
+	# Relationships
+
+	type UserEdge implements Edge {
+		cursor: String!
+		node: User
+	}
+
+	type UserConnection implements Connection {
+		pageInfo: PageInfo!
+		edges: [UserEdge]!
+	}
+
+	# Inputs
+
+	input GetUserInput {
+		uid: String!
+	}
+
+	input CredentialsInput {
+		email: String
+		uid: String
+		password: String!
+	}
+
+	# Queries & Mutations
+
 	extend type Query {
-		user(uid: ID!): User!
+		user(input: GetUserInput): User!
 		viewer: Viewer
 	}
 
@@ -67,7 +74,7 @@ const User = /* GraphQL */ `
 		registerViewer(credentials: CredentialsInput!): LoginPayload!
 		addUser(input: UserInput!): User!
 		modifyUser(input: UserInput!): User!
-		removeUser(uid: ID!): Boolean!
+		removeUser(uid: String!): Boolean!
 	}
 `
 

@@ -2,25 +2,21 @@
 
 const Pin = /* GraphQL */ `
 	type Pin implements Node {
-		uid: ID!
+		uid: String!
 		title: String!
 		lat: Float!
 		lang: Float!
+		description: String
 		owner: User
 		maps: MapConnection
 		routes: RouteConnection
 	}
 
-	input PinInput {
-		title: String!
-		lat: Float!
-		lang: Float!
-	}
 
 	# Relationships
 
 	type PinEdge implements Edge {
-		cursor: ID!
+		cursor: String!
 		node: Pin
 	}
 
@@ -29,18 +25,46 @@ const Pin = /* GraphQL */ `
 		edges: [PinEdge]!
 	}
 
+	# Inputs
+
+	input NewPinArgs {
+		title: String!
+		lat: Float!
+		lang: Float!
+		mapUids: [String]
+		lessonUids: [String]
+	}
+
+	input GetPinInput {
+		uid: String!
+	}
 
 	# Queries & Mutations
 
 	extend type Query {
-		pin(uid: ID!): Pin!
+		pin(input: GetPinInput!): Pin!
 	}
 
 	extend type Mutation {
-		addPin(input: PinInput!): Pin!
-		modifyPin(input: PinInput!): Pin!
-		removePin(uid: ID!): Boolean!
+		addPin(input: NewPinArgs!): Pin!
+		modifyPin(input: NewPinArgs!): Pin!
+		removePin(input: GetPinInput!): Boolean!
 	}
+
+	input PinAddedSubscriptionInput {
+		mapUid: String!
+	}
+
+	input PinModifiedSubscriptionInput {
+		pinUid: String!
+	}
+
+	extend type Subscription {
+		pinAddedToMap(input: PinAddedSubscriptionInput!): Pin!
+		pinModified(input: PinModifiedSubscriptionInput!): Pin!
+	}
+
+
 `
 
 export default Pin

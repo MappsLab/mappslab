@@ -1,4 +1,5 @@
 // @flow
+import { flatten } from 'flat'
 import dbClient from './client'
 import type { DBNode } from '../types/shared/sharedTypes'
 
@@ -9,12 +10,11 @@ const createNode = async (data: Object): Promise<DBNode | Error> => {
 	const txn = dbClient.newTxn()
 	try {
 		const mu = new dgraph.Mutation()
-		mu.setSetJson(data)
+		mu.setSetJson(flatten(data))
 		const newClassroom = await txn.mutate(mu)
-		if (process.env.NO_COMMIT !== 'true') await txn.commit()
+		await txn.commit()
 		const uid = newClassroom.getUidsMap().get('blank-0')
 		debug(`Created new node with uid ${uid}`)
-		if (process.env.NO_COMMIT === 'true') debug('   [transaction was not comitted]')
 		return {
 			uid,
 			...data,

@@ -2,23 +2,20 @@
 
 const Map = /* GraphQL */ `
 	type Map implements Node {
-		uid: ID!
+		uid: String!
 		title: String
-		owner: User
+		slug: String
+		description: String
 		classroom: Classroom
 		pins: PinConnection 
 		routes: RouteConnection
 	}
 
-	input MapInput {
-		title: String!
-	}
-
 	# Relationships
 
 	type MapEdge implements Edge {
-		cursor: ID!
-		node: Classroom
+		cursor: String!
+		node: Map 
 	}
 
 	type MapConnection implements Connection {
@@ -26,17 +23,30 @@ const Map = /* GraphQL */ `
 		edges: [MapEdge]!
 	}
 
+	# Input Types
+
+	input GetMapInput {
+		uid: String!
+	}
+
+	input MapInput {
+		title: String!
+		description: String
+		classroomUid: String!
+	}
+
 	# Queries & Mutations
 
 	extend type Query {
-		map(uid: ID!): Map!
+		map(input: GetMapInput!): Map!
 	}
 
 	extend type Mutation {
-		addMap(input: MapInput!): Map!
+		createMap(input: MapInput!): Map!
 		modifyMap(input: MapInput!): Map!
-		removeMap(uid: ID!): Boolean!
+		removeMap(uid: String!): Boolean!
 	}
+
 `
 
 export default Map

@@ -4,6 +4,7 @@ import { updateUser } from './updateUser'
 import { createUser } from './createUser'
 import { deleteUser } from './deleteUser'
 import { checkPassword } from './userAuth'
+import { getPinOwner, getClassroomStudents, getClassroomTeachers } from './readUserRelationships'
 
 module.exports = {
 	getUser,
@@ -13,4 +14,7 @@ module.exports = {
 	createUser,
 	deleteUser,
 	checkPassword,
+	getPinOwner,
+	getClassroomStudents,
+	getClassroomTeachers,
 }

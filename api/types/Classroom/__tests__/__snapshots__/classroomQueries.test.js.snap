@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`queries [classroom] should fetch its connections 1`] = `
+Object {
+  "node": Object {
+    "name": "Joseph Thomas",
+  },
+}
+`;
+
+exports[`queries [classroom] should fetch its connections 2`] = `
+Object {
+  "node": Object {
+    "name": "Mr. Schaefer",
+  },
+}
+`;
+
+exports[`queries [classroom] should fetch its connections 3`] = `
+Object {
+  "node": Object {
+    "title": "Refined Rubber Car",
+  },
+}
+`;

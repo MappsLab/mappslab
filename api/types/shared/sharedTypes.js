@@ -1,6 +1,17 @@
 // @flow
 
 import type { UserType } from '../User/UserTypes'
+import User from '../User/UserModel'
+import Pin from '../Pin/PinModel'
+import Classroom from '../Classroom/ClassroomModel'
+import Map from '../Map/MapModel'
+
+const Models = {
+	User,
+	Pin,
+	Classroom,
+	Map,
+}
 
 type Operator = 'eq' | 'le' | 'lt' | 'ge' | 'gt' | 'uid' | 'allofterms' | 'anyofterms' | 'regexp' | 'alloftext' | 'uid_in' | 'has'
 
@@ -10,23 +21,13 @@ export type Filter = {
 	operator?: Operator,
 }
 
-export type DBEdge = {
-	fromUid: string,
-	pred: string,
-	toUid: string,
-}
-
-export type DBNode = Object & {
-	uid: string,
-}
-
 export type PaginationArgs = {
 	first: number,
 	after: string,
 }
 
 export type PaginationInput = {
-	input: PaginationArgs,
+	input?: PaginationArgs,
 }
 
 export type GetNodeArgs =
@@ -43,6 +44,8 @@ export type GetNodeInput = {
 
 export type GraphQLContext = {
 	viewer: UserType,
+	models: typeof Models,
+	session: Object,
 }
 
 export type Edge = {
@@ -52,10 +55,10 @@ export type Edge = {
 
 export type PageInfo = {
 	hasNextPage: boolean,
-	lastCursor: string,
+	lastCursor: null | string,
 }
 
 export type PageType = {
 	pageInfo: PageInfo,
-	edges: [Edge],
+	edges: Array<?Edge>,
 }

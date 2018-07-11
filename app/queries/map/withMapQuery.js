@@ -1,19 +1,38 @@
 // @flow
+import * as R from 'ramda'
 import gql from 'graphql-tag'
-import { makeQuery, unwindEdges } from '../utils'
+import { unwindEdges } from '../utils'
+import withQuery from '../withQuery'
+import { query as newPinAddedQuery } from './withMapSubscriptions'
 
 export const query = gql/* GraphQL */ `
-	query MapQuery($uid: String, $slug: String) {
-		map(input: { uid: $uid, slug: $slug }) {
+	query MapQuery($uid: String!) {
+		map(input: { uid: $uid }) {
 			title
 			uid
 			slug
+			pins {
+				pageInfo {
+					lastCursor
+					hasNextPage
+				}
+				edges {
+					node {
+						uid
+						title
+						lat
+						lang
+					}
+				}
+			}
 		}
 	}
 `
 
 const config = {
-	options: ({ slug, uid }) => (uid ? { variables: { uid } } : { variables: { slug } }),
+	options: ({ uid }) => ({
+		variables: { uid },
+	}),
 	props: ({ data }) => {
 		const { loading, map, ...rest } = unwindEdges(data)
 		return {
@@ -24,8 +43,25 @@ const config = {
 			},
 		}
 	},
+	subscriptionOptions: ({ uid }) => {
+		return {
+			document: newPinAddedQuery,
+			variables: { mapUid: uid },
+			updateQuery: (previous, { subscriptionData }) => {
+				const newPin = subscriptionData.data.pinAddedToMap
+				// console.log(previous)
+				const map = R.assocPath(['pins', 'edges'], [...previous.map.pins.edges, { node: newPin, __typename: 'PinEdge' }])(
+					previous.map,
+				)
+				return {
+					...previous,
+					map,
+				}
+			},
+		}
+	},
 }
 
-const withClassroomsQuery = makeQuery(query, config)
+const withClassroomsQuery = withQuery(query, config)
 
 export default withClassroomsQuery

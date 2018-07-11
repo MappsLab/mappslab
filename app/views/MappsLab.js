@@ -5,7 +5,7 @@ import { ViewerRoute } from 'App/components/Auth'
 import Classrooms from './Login/Classrooms'
 import Classroom from './Login/Classroom'
 import Dashboard from './Dashboard'
-import Editor from './Editor'
+import Editor from '../components/Editor'
 
 /**
  * MappsLab
@@ -15,7 +15,7 @@ const MappsLab = () => (
 	<Switch>
 		<Route path="/login/classrooms/:slug" render={({ match }) => <Classroom slug={match.params.slug} />} />
 		<Route path="/login/classrooms" component={Classrooms} />
-		<Route path="/maps/:slug" render={({ match }) => <Editor slug={match.params.slug} />} />
+		<Route path="/maps/:uid" render={({ match }) => <Editor uid={match.params.uid} />} />
 		<ViewerRoute path="/dashboard" render={({ viewer }) => <Dashboard viewer={viewer} />} />
 		<Route render={() => <Redirect to="/login/classrooms" />} />
 	</Switch>

@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`[createMap] should return an error if no classroom uid is specified 1`] = `
+Array [
+  [GraphQLError: Variable "$classroomUid" of required type "String!" was not provided.],
+]
+`;
+
+exports[`[createMap] should return an error if the supplied uid is malformed 1`] = `
+Array [
+  [GraphQLError: Uid bad-arg is malformed],
+]
+`;
+
+exports[`[createMap] should return an error if the viewer is not logged in 1`] = `
+Array [
+  [GraphQLError: You must be logged in to create new maps. Please log in and try again.],
+]
+`;

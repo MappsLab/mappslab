@@ -1,24 +1,29 @@
 // @flow
-import type { PinType } from '../PinTypes'
+import type { PinType, NewPinArgs } from '../PinTypes'
 import { clean, defaultValues, validateNew } from './pinDBSchema'
 import { ValidationError } from '../../../errorTypes'
-import { createNode, createEdge } from '../../../database'
-import type { DBEdge } from '../../shared/sharedTypes'
+import { createNodeWithEdges } from '../../../database'
 
-const debug = require('debug')('api:pin')
+const debug = require('debug')('api')
 
-export const createPin = async (pinData: PinType): Promise<PinType | void> => {
+export const createPin = async (args: NewPinArgs, ownerUid: string): Promise<PinType | void> => {
+	const { mapUids, lessonUids, ...pinData } = args
 	const cleaned = await clean({ ...defaultValues, ...pinData, createdAt: new Date() })
 	const validatedPinData = await validateNew(cleaned).catch((err) => {
 		debug(err.details)
 		debug(err._object)
 		throw new ValidationError(err)
 	})
-	return createNode(validatedPinData)
-}
+	const edges = []
 
-type PinEdge = DBEdge & {
-	pred: 'pinned', // '<userId> <pinned> <pinId>'
-}
+	// Add the owner relationship (required)
+	edges.push([{ fromUid: ownerUid, pred: 'pinned' }, {}])
 
-export const createPinConnection = async (connection: PinEdge): Promise<boolean | Error> => createEdge(connection)
+	// Add the map relationship (optional)
+	if (mapUids) edges.push(...mapUids.map((fromUid) => [{ fromUid, pred: 'has_pin' }, {}]))
+
+	// Add the lesson relationships (optional)
+	if (lessonUids) edges.push(...lessonUids.map((fromUid) => [{ fromUid, pred: 'has_pin' }, {}]))
+
+	return createNodeWithEdges(validatedPinData, edges)
+}

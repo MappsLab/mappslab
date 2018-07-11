@@ -5,12 +5,13 @@
 	"main": "index.js",
 	"scripts": {
 		"test": "jest",
+		"docz:dev": "docz dev",
 		"dev:app": "cross-env ENV=development DEBUG=api webpack-dev-server --colors --env development --config ./config/webpack.config.js",
 		"dev:api": "cross-env ENV=development cross-env DEBUG=api nodemon --watch api api/server.js --exec babel-node",
 		"db:stopall": "docker stop $(docker ps -q)",
 		"db:test:init": "docker-compose -p mappslab-test -f ./api/__tests__/docker-compose.yml up -d",
 		"db:test:start": "docker start mappslab-test_dgraph-zero mappslab-test_dgraph-server mappslab-test_dgraph-ratel",
-		"db:test:seed": "cross-env TEST_DB=true cross-env DEBUG=api:testDatabase babel-node ./api/__tests__/scripts/testDatabase/seedTestDatabase.js",
+		"db:test:seed": "cross-env TEST_DB=true cross-env DEBUG=seed babel-node ./api/__tests__/scripts/testDatabase/seedTestDatabase.js",
 		"db:test:stop": "docker stop mappslab-test_dgraph-zero mappslab-test_dgraph-server mappslab-test_dgraph-ratel",
 		"db:staging:seed": "cross-env ENV=staging npm run dev:db:seed",
 		"build:app": "webpack -p --env production --config ./config/webpack.config.js --progress --colors",
@@ -96,5 +97,6 @@
 		"webpack-cli": "^2.1.3",
 		"webpack-dev-server": "^3.1.4",
 		"webpack-merge": "^4.1.2"
-	}
+	},
+	"dependencies": {}
 }

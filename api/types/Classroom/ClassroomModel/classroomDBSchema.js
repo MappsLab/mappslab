@@ -40,7 +40,7 @@ export const defaultValues = {
 	updatedAt: new Date(),
 }
 
-export const publicFields = ['uid', 'title', 'slug', 'disabled', 'createdAt', 'updatedAt'].join('\n')
+export const publicFields = ['uid', 'title', 'slug', 'disabled', 'createdAt', 'updatedAt', 'type'].join('\n')
 
 export const validateNew = (classroomData: ClassroomInput) => Joi.validate(classroomData, classroomSchema(true))
 export const validateUpdate = (classroomData: ClassroomInput) => Joi.validate(classroomData, classroomSchema(false))

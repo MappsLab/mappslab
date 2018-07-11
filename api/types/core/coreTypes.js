@@ -14,11 +14,11 @@ export const coreTypes = /* GraphQL */ `
 	scalar DateTime
 
 	interface Node {
-		uid: ID
+		uid: String! 
 	}
 
 	interface Edge {
-		cursor: ID!
+		cursor: String!
 	}
 
 	interface Connection {
@@ -43,12 +43,12 @@ export const coreTypes = /* GraphQL */ `
 
 	input PaginationInput {
 		first: Int,
-		after: ID,
+		after: String!,
 		filter: [QueryFilter],
 	}
 
 	type PageInfo {
 		hasNextPage: Boolean!
-		lastCursor: ID
+		lastCursor: String
 	}
 `

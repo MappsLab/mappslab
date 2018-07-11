@@ -1,9 +1,10 @@
 // @flow
+import { createMap } from './createMap'
 
 module.exports = {
 	Mutation: {
 		// modifyMap
-		// addMap
+		createMap,
 		// removeMap
 	},
 }

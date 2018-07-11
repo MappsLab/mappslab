@@ -1,6 +1,7 @@
 // @flow
 import Joi from 'joi'
-import type { PinInput } from '../PinTypes'
+import { pipe, head } from 'ramda'
+import type { NewPinArgs, PinType } from '../PinTypes'
 import { promisePipe, filterNullAndUndefined } from '../../../utils'
 
 /**
@@ -30,13 +31,35 @@ export const defaultValues = {
 	updatedAt: new Date(),
 }
 
-export const publicFields = ['uid', 'title', 'lat', 'lang', 'createdAt', 'updatedAt', 'type'].join('\n')
+export const publicFields = [
+	'uid',
+	'title',
+	'lat',
+	'lang',
+	'createdAt',
+	'updatedAt',
+	'type',
+	`maps: ~has_pin {
+		uid
+		title
+	}`,
+	`owner: ~pinned {
+		uid
+		username
+	}`,
+].join('\n')
 
-export const validateNew = (pinData: PinInput) => Joi.validate(pinData, pinSchema(true))
-export const validateUpdate = (pinData: PinInput) => Joi.validate(pinData, pinSchema(false))
+export const validateNew = (pinData: NewPinArgs) => Joi.validate(pinData, pinSchema(true))
+export const validateUpdate = (pinData: NewPinArgs) => Joi.validate(pinData, pinSchema(false))
 
 /**
  * Clean
  */
 
-export const clean = async (pinData: PinInput = {}): Promise<PinInput> => promisePipe(filterNullAndUndefined)(pinData)
+export const clean = async (pinData: NewPinArgs = {}): Promise<NewPinArgs> => promisePipe(filterNullAndUndefined)(pinData)
+
+/**
+ * Parse
+ */
+
+export const parsePinResult = (o: Array<Object>): PinType | null => (o.length ? pipe(head)(o) : null)

@@ -2,7 +2,7 @@
 
 const Classroom = /* GraphQL */ `
 	type Classroom implements Node {
-		uid: ID!
+		uid: String!
 		title: String
 		slug: String
 		students: UserConnection
@@ -17,7 +17,7 @@ const Classroom = /* GraphQL */ `
 	# Relationships
 
 	type ClassroomEdge implements Edge {
-		cursor: ID!
+		cursor: String!
 		node: Classroom
 	}
 
@@ -36,7 +36,7 @@ const Classroom = /* GraphQL */ `
 	extend type Mutation {
 		addClassroom(input: ClassroomInput!): Classroom!
 		modifyClassroom(input: ClassroomInput!): Classroom!
-		removeClassroom(uid: ID!): Boolean!
+		removeClassroom(uid: String!): Boolean!
 	}
 `
 

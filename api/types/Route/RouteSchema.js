@@ -2,7 +2,7 @@
 
 const Route = /* GraphQL */ `
 	type Route implements Node {
-		uid: ID!
+		uid: String!
 		title: String
 		owner: User
 		lines: [Line]
@@ -21,7 +21,7 @@ const Route = /* GraphQL */ `
 	# Relationships
 
 	type RouteEdge implements Edge {
-		cursor: ID!
+		cursor: String!
 		node: Route
 	}
 
@@ -33,13 +33,13 @@ const Route = /* GraphQL */ `
 	# Queries & Mutations
 
 	extend type Query {
-		route(uid: ID!): Route!
+		route(uid: String!): Route!
 	}
 
 	extend type Mutation {
 		addRoute(input: RouteInput!): Route!
 		modifyRoute(input: RouteInput!): Route!
-		removeRoute(uid: ID!): Boolean!
+		removeRoute(uid: String!): Boolean!
 	}
 `
 

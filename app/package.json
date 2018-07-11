@@ -10,7 +10,9 @@
     "apollo-client": "^2.3.1",
     "apollo-link": "^1.2.2",
     "apollo-link-error": "^1.0.9",
+    "apollo-link-ws": "^1.0.8",
     "apollo-upload-client": "^8.0.0",
+    "apollo-utilities": "^1.0.16",
     "avataaars": "^1.1.0",
     "axios": "^0.18.0",
     "debug": "^3.1.0",
@@ -27,6 +29,9 @@
     "styled-components": "^3.3.2"
   },
   "devDependencies": {
-    "react-hot-loader": "^4.1.2"
+    "docz": "^0.4.0",
+    "react-automata": "^3.0.0",
+    "react-hot-loader": "^4.1.2",
+    "webpack-hot-client": "^4.0.4"
   }
 }
