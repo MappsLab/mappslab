@@ -6,7 +6,8 @@
 	"author": "Joseph Thomas | Good Idea Studio",
 	"license": "ISC",
 	"scripts": {
-		"start": "node server.js"
+		"start": "node server.js",
+		"build": "cross-env ENV=production babel . -d ../build/api"
 	},
 	"dependencies": {
 		"@babel/cli": "7.0.0-beta.44",
@@ -15,7 +16,7 @@
 		"@babel/plugin-proposal-class-properties": "^7.0.0-beta.47",
 		"@babel/plugin-proposal-object-rest-spread": "7.0.0-beta.44",
 		"@babel/plugin-transform-runtime": "7.0.0-beta.44",
-		"@babel/polyfill": "7.0.0-beta.39",
+		"@babel/polyfill": "7.0.0-beta.44",
 		"@babel/preset-env": "7.0.0-beta.44",
 		"@babel/preset-flow": "7.0.0-beta.44",
 		"@babel/register": "7.0.0-beta.44",
@@ -43,6 +44,7 @@
 		"validator": "^10.2.0"
 	},
 	"devDependencies": {
+		"cross-env": "^5.2.0",
 		"faker": "^4.1.0"
 	}
 }

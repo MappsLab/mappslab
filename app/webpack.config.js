@@ -28,6 +28,7 @@ const common = merge([
 		},
 	},
 ])
+
 const development = merge([
 	{
 		mode: 'development',

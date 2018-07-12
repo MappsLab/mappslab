@@ -5,6 +5,9 @@
   "main": "index.js",
   "author": "Joseph Thomas | Good Idea Studio",
   "license": "ISC",
+  "scripts": {
+    "build": "webpack -p --env production --progress --colors"
+  },
   "dependencies": {
     "apollo-cache-inmemory": "^1.2.1",
     "apollo-client": "^2.3.1",
