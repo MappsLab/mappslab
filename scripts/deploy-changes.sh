@@ -20,23 +20,18 @@ if git diff --name-only $TRAVIS_COMMIT_RANGE | grep "^api/"
 	fi
 fi
 
-if git diff --name-only $TRAVIS_COMMIT_RANGE | grep "^placeholder/"
-	then
-	echo "*     * * *     *"
-	echo "🚀  Deploying Placeholder"
-	echo "*     * * *     *"
-	cd $TRAVIS_BUILD_DIR
-	cd ./placeholder
-	npm run build
-	now --token $NOW_TOKEN
-	now alias --token $NOW_TOKEN
-fi
+
 
 if git diff --name-only $TRAVIS_COMMIT_RANGE | grep "^app/"
 	then
 	echo "*     * * *     *"
 	echo "🚀  Deploying App"
 	echo "*     * * *     *"
+	cd $TRAVIS_BUILD_DIR
+
+	cd ./packages/mapp
+	npm run build
+
 	cd $TRAVIS_BUILD_DIR
 	
 	if [ "$TRAVIS" = true ]

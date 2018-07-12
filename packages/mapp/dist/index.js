@@ -29,7 +29,7 @@ exports.default = _default2;
     return;
   }
 
-  reactHotLoader.register(_default, "default", "src/index.js");
+  reactHotLoader.register(_default, "default", "/Users/joseph/Sites/mappslab/beta/packages/mapp/src/index.js");
   leaveModule(module);
 })();
 
