@@ -1,9 +1,9 @@
 // @flow
 import React, { Fragment } from 'react'
-import { withClassroomQuery } from 'App/queries'
-import { Column, ListItem } from 'App/components/Layout'
-import { Header2 } from 'App/components/Text'
-import type { ClassroomType } from 'App/types'
+import { withClassroomQuery } from 'Queries'
+import { Column, ListItem } from 'Components/Layout'
+import { Header2 } from 'Components/Text'
+import type { ClassroomType } from 'Types'
 import UserLogin from './UserLogin'
 
 /**

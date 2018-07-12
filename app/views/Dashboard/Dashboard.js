@@ -1,9 +1,9 @@
 // @flow
 import React from 'react'
-import type { ViewerType } from 'App/types'
-import { withViewerDashboardQuery } from 'App/queries'
-import { Main, HR } from 'App/components/Layout'
-import { Header1, Header2, Header3 } from 'App/components/Text'
+import type { ViewerType } from 'Types'
+import { withViewerDashboardQuery } from 'Queries'
+import { Main, HR } from 'Components/Layout'
+import { Header1, Header2, Header3 } from 'Components/Text'
 import MapCard from './MapCard'
 
 /**

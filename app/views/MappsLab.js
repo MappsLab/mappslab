@@ -1,7 +1,7 @@
 // @flow
 import React from 'react'
 import { Switch, Route, Redirect } from 'react-router-dom'
-import { ViewerRoute } from 'App/components/Auth'
+import { ViewerRoute } from 'Components/Auth'
 import Classrooms from './Login/Classrooms'
 import Classroom from './Login/Classroom'
 import Dashboard from './Dashboard'

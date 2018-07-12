@@ -1,8 +1,8 @@
 // @flow
 import styled, { css } from 'styled-components'
-import { h1, h2, h3, p, h4, h5, light, regular, semi, strong } from 'App/styles/type'
-import * as colors from 'App/styles/colors'
-import { spacing } from 'App/styles/layout'
+import { h1, h2, h3, p, h4, h5, light, regular, semi, strong } from 'Styles/type'
+import * as colors from 'Styles/colors'
+import { spacing } from 'Styles/layout'
 
 const commonTextStyles = css`
 	text-align: ${(props) => (props.align ? props.align : 'left')};

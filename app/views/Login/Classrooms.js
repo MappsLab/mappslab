@@ -1,10 +1,10 @@
 // @flow
 import React, { Fragment } from 'react'
 import { Link } from 'react-router-dom'
-import { withClassroomsQuery } from 'App/queries'
-import { Column, ListItem } from 'App/components/Layout'
-import { Header2 } from 'App/components/Text'
-import type { ClassroomType } from 'App/types'
+import { withClassroomsQuery } from 'Queries'
+import { Column, ListItem } from 'Components/Layout'
+import { Header2 } from 'Components/Text'
+import type { ClassroomType } from 'Types'
 
 /**
  * MyComponent

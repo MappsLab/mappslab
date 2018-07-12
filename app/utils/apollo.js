@@ -2,8 +2,8 @@
 
 import React from 'react'
 import { withApollo, compose } from 'react-apollo'
-import { withCurrentViewerQuery } from 'App/queries'
-import { Loading } from 'App/components/Loading'
+import { withCurrentViewerQuery } from 'Queries'
+import { Loading } from 'Components/Loading'
 const debug = require('debug')('app')
 
 // const loadViewer = (Component) => ({ client, ...rest }) => {
@@ -25,4 +25,7 @@ const loadViewer = (Component) => ({ loading, viewer, ...rest }) => {
 	return loading ? <Loading /> : <Component viewer={viewer} {...rest} />
 }
 
-export const withViewer = compose(withCurrentViewerQuery, loadViewer)
+export const withViewer = compose(
+	withCurrentViewerQuery,
+	loadViewer,
+)

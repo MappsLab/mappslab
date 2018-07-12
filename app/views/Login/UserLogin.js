@@ -2,12 +2,12 @@
 import React from 'react'
 import { Redirect } from 'react-router-dom'
 import { FORM_ERROR } from 'final-form'
-import { withViewerLoginMutation } from 'App/queries'
-import { Form, Field } from 'App/components/Forms'
-import { Header2, Header4 } from 'App/components/Text'
-import { Button } from 'App/components/UI'
-import { Column } from 'App/components/Layout'
-import type { UserType } from 'App/types'
+import { withViewerLoginMutation } from 'Queries'
+import { Form, Field } from 'Components/Forms'
+import { Header2, Header4 } from 'Components/Text'
+import { Button } from 'Components/UI'
+import { Column } from 'Components/Layout'
+import type { UserType } from 'Types'
 
 /**
  * UserLogin

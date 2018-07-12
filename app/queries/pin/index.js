@@ -1,7 +1,2 @@
 // @flow
-
-import withCreatePinMutation from './createPinMutation'
-
-module.exports = {
-	withCreatePinMutation,
-}
+export withCreatePinMutation from './createPinMutation'

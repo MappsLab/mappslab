@@ -1,9 +1,9 @@
 // @flow
 import { css } from 'styled-components'
 
-import { flexCenter, spacing } from 'App/styles/layout'
-import { middleGray, lightGray } from 'App/styles/colors'
-import { semi, h5 } from 'App/styles/type'
+import { flexCenter, spacing } from 'Styles/layout'
+import { middleGray, lightGray } from 'Styles/colors'
+import { semi, h5 } from 'Styles/type'
 
 export const buttonStyles = css`
 	${flexCenter};

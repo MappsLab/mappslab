@@ -1,8 +1,3 @@
 // @flow
-import withClassroomsQuery from './withClassroomsQuery'
-import withClassroomQuery from './withClassroomQuery'
-
-module.exports = {
-	withClassroomsQuery,
-	withClassroomQuery,
-}
+export withClassroomsQuery from './withClassroomsQuery'
+export withClassroomQuery from './withClassroomQuery'

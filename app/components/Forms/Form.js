@@ -4,7 +4,7 @@ import type { Node } from 'react'
 import { Form as FinalForm } from 'react-final-form'
 import styled from 'styled-components'
 
-import { Column } from 'App/components/Layout'
+import { Column } from 'Components/Layout'
 import { SubmitButton } from '../UI/Buttons'
 import { formWrapperStyles, formMessageStyles, formErrorStyles } from './styles'
 

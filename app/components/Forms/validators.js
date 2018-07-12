@@ -1,6 +1,6 @@
 // @flow
 import * as R from 'ramda'
-import { arrayify } from 'App/utils/data'
+import { arrayify } from 'Utils/data'
 
 // Chains a series of validators.
 // Returns `undefined` if valid, or the message from the first failed validator.
@@ -88,7 +88,11 @@ const arrayValuesMatch = (values: Array<string | number>): boolean => {
 }
 
 const valuesMustMatch = (fields: Array<string>) => (values: mixed): boolean =>
-	R.pipe(R.pickAll(fields), R.values, arrayValuesMatch)(values)
+	R.pipe(
+		R.pickAll(fields),
+		R.values,
+		arrayValuesMatch,
+	)(values)
 
 export const passwordsMustMatch = (values: mixed) => {
 	const match = valuesMustMatch(['password', 'password2'])(values)
