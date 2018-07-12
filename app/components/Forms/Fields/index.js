@@ -1,9 +1,4 @@
-import BasicField from './BasicField'
-import ImageField from './ImageField'
-import Textarea from './Textarea'
-
-module.exports = {
-	BasicField,
-	ImageField,
-	Textarea,
-}
+// @flow
+export BasicField from './BasicField'
+export ImageField from './ImageField'
+export Textarea from './Textarea'

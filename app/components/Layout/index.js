@@ -1,10 +1,3 @@
 // @flow
-import { Main, Column } from './wrappers'
-import { ListItem, HR } from './lists'
-
-module.exports = {
-	Main,
-	Column,
-	ListItem,
-	HR,
-}
+export { Main, Column } from './wrappers'
+export { ListItem, HR } from './lists'

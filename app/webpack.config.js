@@ -26,7 +26,7 @@ const common = merge([
 				Queries: path.resolve(__dirname, 'queries'),
 				Types: path.resolve(__dirname, 'types'),
 				Styles: path.resolve(__dirname, 'styles'),
-				mapp: path.resolve(__dirname, '../packages/mapp/src'),
+				mapp: path.resolve(__dirname, '../packages/mapp/dist'),
 			},
 			extensions: ['.js'],
 		},
@@ -61,7 +61,7 @@ const development = merge([
 			}),
 		],
 		devServer: {
-			// contentBase: path.resolve(projectRoot, 'public'),
+			contentBase: path.resolve(projectRoot, 'public'),
 			historyApiFallback: true,
 			hot: true,
 			host: '0.0.0.0',

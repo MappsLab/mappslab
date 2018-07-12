@@ -6,8 +6,8 @@
 	"scripts": {
 		"test": "jest",
 		"docz:dev": "docz dev",
-		"dev:app": "cross-env ENV=development DEBUG=api webpack-dev-server --colors --env development --config ./config/webpack.config.js",
-		"dev:api": "cross-env ENV=development cross-env DEBUG=api nodemon --watch api api/server.js --exec babel-node",
+		"dev:app": "cd app && npm run dev",
+		"dev:api": "cd api && npm run dev",
 		"db:stopall": "docker stop $(docker ps -q)",
 		"db:test:init": "docker-compose -p mappslab-test -f ./api/__tests__/docker-compose.yml up -d",
 		"db:test:start": "docker start mappslab-test_dgraph-zero mappslab-test_dgraph-server mappslab-test_dgraph-ratel",
@@ -17,10 +17,10 @@
 		"build:app": "cd app && npm run build",
 		"build:api": "cd api && npm run build",
 		"flow:install-types": "flow-typed install",
-		"test:app": "cross-env ENV=development cross-env DEBUG=test cross-env TEST_DB=true jest --projects ./app --coverage",
-		"test:app:watch": "cross-env ENV=development cross-env DEBUG=test cross-env TEST_DB=true jest --projects ./app --watch",
-		"test:api": "cross-env ENV=development cross-env DEBUG=test cross-env TEST_DB=true jest --projects ./api --coverage",
-		"test:api:watch": "cross-env ENV=development cross-env DEBUG=test cross-env TEST_DB=true jest --projects ./api --watch"
+		"test:app": "cd app && npm run test",
+		"test:app:watch": "cd app && npm run test:watch",
+		"test:api": "cd api && npm run test",
+		"test:api:watch": "cd api && npm run test:watch"
 	},
 	"repository": {
 		"type": "git",
@@ -41,5 +41,15 @@
 		"app",
 		"packages/*"
 	],
-	"private": true
+	"private": true,
+	"devDependencies": {
+		"eslint": "^4.19.1",
+		"eslint-config-airbnb": "^16.1.0",
+		"eslint-config-prettier": "^2.9.0",
+		"eslint-import-resolver-webpack": "^0.9.0",
+		"eslint-plugin-flowtype": "^2.46.3",
+		"eslint-plugin-import": "^2.11.0",
+		"eslint-plugin-jsx-a11y": "^6.0.3",
+		"eslint-plugin-react": "^7.7.0"
+	}
 }

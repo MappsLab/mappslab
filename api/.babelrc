@@ -14,9 +14,7 @@
 		[
 			"babel-plugin-module-resolver",
 			{
-				"root": [
-					"../"
-				],
+				"root": ["../"],
 				"alias": {
 					"Api": "./api"
 				},

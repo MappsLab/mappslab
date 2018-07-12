@@ -1,0 +1,40 @@
+{
+	"presets": [
+		"@babel/preset-flow",
+		[
+			"@babel/preset-env",
+			{
+				"modules": false,
+				"targets": {
+					"browsers": ["last 3 versions"]
+				}
+			}
+		],
+		"@babel/preset-react"
+	],
+	"plugins": [
+		[
+			"babel-plugin-module-resolver",
+			{
+				"root": ["./"],
+				"alias": {
+					"Constants": "./constants",
+					"Components": "./components",
+					"Views": "./views",
+					"Utils": "./utils",
+					"Queries": "./queries",
+					"Types": "./types",
+					"Styles": "./styles"
+				}
+			}
+		],
+		"babel-plugin-styled-components",
+		"@babel/plugin-proposal-class-properties",
+		"@babel/plugin-proposal-object-rest-spread",
+		"@babel/plugin-proposal-export-default-from",
+		"react-hot-loader/babel",
+		"graphql-tag",
+		"lodash",
+		"ramda"
+	]
+}

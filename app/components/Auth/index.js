@@ -1,6 +1,2 @@
 // @flow
-import { ViewerRoute } from './ViewerRoute'
-
-module.exports = {
-	ViewerRoute,
-}
+export { ViewerRoute } from './ViewerRoute'
