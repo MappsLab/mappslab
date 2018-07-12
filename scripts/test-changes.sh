@@ -53,8 +53,16 @@ if git diff --name-only $TRAVIS_COMMIT_RANGE | grep "^app/"
 	echo "*     * * *     *"
 	echo "⚗️  App tests passed. Compiling.."
 	echo "*     * * *     *"
-
 	echo "🛠  BUILD  - Environment: $DEPLOY_ENV"
+
+	echo "🛠  Building packages.."
+
+	cd ./packages/mapp
+	npm run build
+
+	cd $TRAVIS_BUILD_DIR
+
+
 	echo "🛠  Compiling App to ./build/web "
 
 	rm -rf ./build/web

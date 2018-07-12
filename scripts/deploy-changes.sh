@@ -29,10 +29,6 @@ if git diff --name-only $TRAVIS_COMMIT_RANGE | grep "^app/"
 	echo "*     * * *     *"
 	cd $TRAVIS_BUILD_DIR
 
-	cd ./packages/mapp
-	npm run build
-
-	cd $TRAVIS_BUILD_DIR
 	
 	if [ "$TRAVIS" = true ]
 		then
