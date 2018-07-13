@@ -6,8 +6,8 @@
 	"author": "Joseph Thomas | Good Idea Studio",
 	"license": "ISC",
 	"scripts": {
-		"start": "node server.js",
-		"compile": "cross-env ENV=production babel . -d ../build/api",
+		"start": "node ./build/server.js",
+		"build": "cross-env ENV=production babel . -d ./build",
 		"dev": "cross-env ENV=development cross-env DEBUG=api nodemon --watch . server.js --exec babel-node",
 		"test": "cross-env ENV=development cross-env DEBUG=test cross-env TEST_DB=true jest --coverage",
 		"test:watch": "cross-env ENV=development cross-env DEBUG=test cross-env TEST_DB=true jest --watch",
