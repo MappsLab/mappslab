@@ -15,7 +15,7 @@
 		"db:test:stop": "docker stop mappslab-test_dgraph-zero mappslab-test_dgraph-server mappslab-test_dgraph-ratel",
 		"db:staging:seed": "cross-env ENV=staging npm run dev:db:seed",
 		"build:app": "cd app && npm run build",
-		"build:api": "cd api && npm run build",
+		"build:api": "cd api && npm run compile",
 		"flow:install-types": "flow-typed install",
 		"test:app": "cd app && npm run test",
 		"test:app:watch": "cd app && npm run test:watch",
