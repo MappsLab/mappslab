@@ -1,8 +1,8 @@
 // @flow
 import React from 'react'
 import styled from 'styled-components'
-import { spacing } from 'App/styles/layout'
-import { gray } from 'App/styles/colors'
+import { spacing } from 'Styles/layout'
+import { gray } from 'Styles/colors'
 import { Header2, Header3 } from '../Text'
 
 export const HR = styled.hr`

@@ -1,11 +1,4 @@
 // @flow
-
-import withUserMapQuery from './withUserMapQuery'
-import withMapQuery from './withMapQuery'
-import { withPinAddedToMapSubscription } from './withMapSubscriptions'
-
-module.exports = {
-	withUserMapQuery,
-	withMapQuery,
-	withPinAddedToMapSubscription,
-}
+export withUserMapQuery from './withUserMapQuery'
+export withMapQuery from './withMapQuery'
+export { withPinAddedToMapSubscription } from './withMapSubscriptions'

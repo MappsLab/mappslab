@@ -2,9 +2,9 @@
 import React from 'react'
 import type { Node } from 'react'
 import { Redirect, Route } from 'react-router-dom'
-import { withCurrentViewerQuery } from 'App/queries'
-import type { ViewerType } from 'App/types'
-import { Loading } from 'App/components/Loading'
+import { withCurrentViewerQuery } from 'Queries'
+import type { ViewerType } from 'Types'
+import { Loading } from 'Components/Loading'
 
 /**
  * ViewerRoute

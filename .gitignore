@@ -56,5 +56,7 @@ yarn-error.log
 .env.*
 secrets.tar
 api/coverage
+app/coverage
+
 
 .docz

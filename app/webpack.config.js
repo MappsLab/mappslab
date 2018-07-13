@@ -19,24 +19,29 @@ const common = merge([
 		},
 		resolve: {
 			alias: {
-				App: path.resolve(projectRoot, 'app'),
-				Api: path.resolve(projectRoot, 'api'),
-				Styles: path.resolve(projectRoot, 'app', 'styles'),
-				mapp: path.resolve(projectRoot, 'packages/mapp/src'),
+				Constants: path.resolve(__dirname, 'constants'),
+				Components: path.resolve(__dirname, 'components'),
+				Views: path.resolve(__dirname, 'views'),
+				Utils: path.resolve(__dirname, 'utils'),
+				Queries: path.resolve(__dirname, 'queries'),
+				Types: path.resolve(__dirname, 'types'),
+				Styles: path.resolve(__dirname, 'styles'),
+				mapp: path.resolve(__dirname, '../packages/mapp/dist'),
 			},
 			extensions: ['.js'],
 		},
 	},
 ])
+
 const development = merge([
 	{
 		mode: 'development',
 		entry: [
-			'babel-polyfill',
+			'@babel/polyfill',
 			'react-hot-loader/patch',
 			'webpack-dev-server/client?http://localhost:8080',
 			'webpack/hot/only-dev-server',
-			'./app/index.dev.js',
+			'./index.dev.js',
 		],
 		output: {
 			path: path.resolve(__dirname, '/js'),
@@ -74,7 +79,7 @@ const development = merge([
 const production = merge([
 	{
 		mode: 'production',
-		entry: ['babel-polyfill', './app/index.js'],
+		entry: ['@babel/polyfill', './index.js'],
 		output: {
 			path: path.resolve(projectRoot, 'public/js/'),
 			filename: 'app.js',

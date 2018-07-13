@@ -1,7 +1,7 @@
 // @flow
 import styled from 'styled-components'
-import { boxStyles, spacing } from 'App/styles/layout'
-import { lightGray } from 'App/styles/colors'
+import { boxStyles, spacing } from 'Styles/layout'
+import { lightGray } from 'Styles/colors'
 
 export const Main = styled.main`
 	margin: ${spacing.triple} auto;

@@ -1,9 +1,9 @@
 // @flow
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Column } from 'App/components/Layout'
-import { Header2 } from 'App/components/Text'
-import { MapPreview } from 'App/components/Maps'
+import { Column } from 'Components/Layout'
+import { Header2 } from 'Components/Text'
+import { MapPreview } from 'Components/Maps'
 
 /**
  * MapCard

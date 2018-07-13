@@ -1,8 +1,3 @@
 // @flow
-import Field from './Field'
-import Form from './Form'
-
-module.exports = {
-	Field,
-	Form,
-}
+export Field from './Field'
+export Form from './Form'

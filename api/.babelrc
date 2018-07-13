@@ -1,5 +1,15 @@
 {
-	"presets": ["@babel/preset-flow", "@babel/preset-env"],
+	"presets": [
+		"@babel/preset-flow",
+		[
+			"@babel/preset-env",
+			{
+				"targets": {
+					"node": "8.10.0"
+				}
+			}
+		]
+	],
 	"plugins": [
 		[
 			"babel-plugin-module-resolver",

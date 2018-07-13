@@ -4,21 +4,24 @@
   "description": "The base Map component used in MappsLab",
   "main": "index.js",
   "scripts": {
-    "build": "babel ./src --out-dir ./dist --config-file ../../.babelrc",
+    "build": "babel ./src --out-dir ./dist",
     "test": "jest"
   },
   "author": "Joseph Thomas | Good Idea Studio",
   "license": "ISC",
   "devDependencies": {
-    "react": "^16.3.2"
+    "babel-core": "7.0.0-bridge.0",
+    "babel-jest": "^23.4.0",
+    "jest": "^23.4.0",
+    "react": "^16.4.1"
   },
   "dependencies": {
-    "@babel/cli": "^7.0.0-beta.46",
-    "@babel/core": "^7.0.0-beta.46",
-    "@babel/polyfill": "^7.0.0-beta.46",
-    "@babel/preset-env": "^7.0.0-beta.46",
-    "@babel/preset-flow": "^7.0.0-beta.46",
-    "@babel/preset-react": "^7.0.0-beta.46",
+    "@babel/cli": "^7.0.0-beta.53",
+    "@babel/core": "^7.0.0-beta.53",
+    "@babel/polyfill": "^7.0.0-beta.53",
+    "@babel/preset-env": "^7.0.0-beta.53",
+    "@babel/preset-flow": "^7.0.0-beta.53",
+    "@babel/preset-react": "^7.0.0-beta.53",
     "ramda": "^0.25.0",
     "recompose": "^0.27.1"
   }
