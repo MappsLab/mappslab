@@ -2,18 +2,6 @@
 # set -e to throw errors and stop travis
 set -e
 
-cd $TRAVIS_BUILD_DIR
-
-echo "🛠  BUILD  - Environment: $DEPLOY_ENV"
-
-# TODO: Test and build this 
-echo "🛠  Building packages.."
-
-cd ./packages/mapp
-npm run build
-
-cd $TRAVIS_BUILD_DIR
-
 if git diff --name-only $TRAVIS_COMMIT_RANGE | grep "^api/"
 	then 
 	echo "*     * * *     *"
@@ -23,20 +11,11 @@ if git diff --name-only $TRAVIS_COMMIT_RANGE | grep "^api/"
 
 	if [ "$TRAVIS" == true ]
 		then
-		cd ./api
+		cd ./build/api
 		echo "🛠  Deploying to now"
-
-		if [ "$DEPLOY_ENV" = "production" ]
-			then
-			now -e --token $NOW_TOKEN --local-config now.production.json
-			echo "🛠  Creating alias"
-			now alias --token $NOW_TOKEN --local-config now.production.json
-		else
-			now -e --token $NOW_TOKEN --local-config now.staging.json
-			echo "🛠  Creating alias"
-			now alias --token $NOW_TOKEN --local-config now.staging.json
-		fi
-
+		now -e --token $NOW_TOKEN
+		echo "🛠  Creating alias"
+		now alias --token $NOW_TOKEN
 		echo "🛠  Build complete! 🎉"
 	fi
 fi
@@ -53,20 +32,9 @@ if git diff --name-only $TRAVIS_COMMIT_RANGE | grep "^app/"
 	
 	if [ "$TRAVIS" = true ]
 		then
-		cd ./app
+		cd ./build/web
 		echo "🛠  Deploying to now"
-
-		if [ "$DEPLOY_ENV" = "production" ]
-			then
-			now -e --token $NOW_TOKEN --local-config now.production.json
-			echo "🛠  Creating alias"
-			now alias --token $NOW_TOKEN --local-config now.production.json
-		else
-			now -e --token $NOW_TOKEN --local-config now.staging.json
-			echo "🛠  Creating alias"
-			now alias --token $NOW_TOKEN --local-config now.staging.json
-		fi
-
+		now -e --token $NOW_TOKEN
 		echo "🛠  Creating alias"
 		now alias --token $NOW_TOKEN
 		echo "🛠  Build complete! 🎉"

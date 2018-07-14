@@ -4,6 +4,7 @@ const path = require('path')
 // const fs = require('fs')
 
 // const babelConfig = JSON.parse(fs.readFileSync('.babelrc'))
+const projectRoot = path.resolve(__dirname, '..')
 
 const common = merge([
 	{
@@ -60,7 +61,7 @@ const development = merge([
 			}),
 		],
 		devServer: {
-			contentBase: path.resolve(__dirname, 'public'),
+			contentBase: path.resolve(projectRoot, 'public'),
 			historyApiFallback: true,
 			hot: true,
 			host: '0.0.0.0',
@@ -80,7 +81,7 @@ const production = merge([
 		mode: 'production',
 		entry: ['@babel/polyfill', './index.js'],
 		output: {
-			path: path.resolve(__dirname, 'public/js/'),
+			path: path.resolve(projectRoot, 'public/js/'),
 			filename: 'app.js',
 			sourceMapFilename: 'app.js.map',
 		},

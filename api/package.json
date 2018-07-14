@@ -7,7 +7,7 @@
 	"license": "ISC",
 	"scripts": {
 		"start": "node ./build/server.js",
-		"build": "cross-env ENV=production babel . -d ./build",
+		"build:api": "cross-env ENV=production babel . -d ../build/api",
 		"dev": "cross-env ENV=development cross-env DEBUG=api nodemon --watch . server.js --exec babel-node",
 		"test": "cross-env ENV=development cross-env DEBUG=test cross-env TEST_DB=true jest --coverage",
 		"test:watch": "cross-env ENV=development cross-env DEBUG=test cross-env TEST_DB=true jest --watch",

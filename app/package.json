@@ -7,7 +7,7 @@
   "license": "ISC",
   "scripts": {
     "start": "serve . --single",
-    "build": "webpack -p --env production --progress --colors",
+    "build:app": "webpack -p --env production --progress --colors",
     "dev": "cross-env ENV=development DEBUG=api webpack-dev-server --colors --env development",
     "test": "cross-env ENV=development cross-env DEBUG=test cross-env TEST_DB=true jest ",
     "test:watch": "cross-env ENV=development cross-env DEBUG=test cross-env TEST_DB=true jest --watch"
@@ -30,7 +30,6 @@
     "react-apollo": "^2.1.4",
     "react-dom": "^16.4.1",
     "react-final-form": "^3.4.2",
-    "react-hot-loader": "^4.3.3",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
     "styled-components": "^3.3.2"
@@ -64,7 +63,7 @@
     "jest": "^23.4.0",
     "jest-styled-components": "^5.0.1",
     "react-automata": "^3.0.0",
-    "react-hot-loader": "^4.1.2",
+    "react-hot-loader": "^4.3.3",
     "webpack": "^4.16.0",
     "webpack-cli": "^3.0.8",
     "webpack-dev-server": "^3.1.4",
