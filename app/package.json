@@ -8,7 +8,7 @@
   "scripts": {
     "start": "serve . --single",
     "build:app": "webpack -p --env production --progress --colors",
-    "dev": "cross-env ENV=development DEBUG=api webpack-dev-server --colors --env development",
+    "dev": "cross-env ENV=development DEBUG=api webpack-dev-server --colors --env development --config webpack.config.js",
     "test": "cross-env ENV=development cross-env DEBUG=test cross-env TEST_DB=true jest ",
     "test:watch": "cross-env ENV=development cross-env DEBUG=test cross-env TEST_DB=true jest --watch"
   },

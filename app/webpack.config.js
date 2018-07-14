@@ -1,11 +1,11 @@
 const webpack = require('webpack')
 const merge = require('webpack-merge')
 const path = require('path')
+const babelConfig = require('./babel.config.js')
 // const fs = require('fs')
 
 // const babelConfig = JSON.parse(fs.readFileSync('.babelrc'))
 const projectRoot = path.resolve(__dirname, '..')
-
 const common = merge([
 	{
 		module: {
@@ -18,6 +18,7 @@ const common = merge([
 			],
 		},
 		resolve: {
+			symlinks: false,
 			alias: {
 				Constants: path.resolve(__dirname, 'constants'),
 				Components: path.resolve(__dirname, 'components'),
@@ -26,7 +27,6 @@ const common = merge([
 				Queries: path.resolve(__dirname, 'queries'),
 				Types: path.resolve(__dirname, 'types'),
 				Styles: path.resolve(__dirname, 'styles'),
-				mapp: path.resolve(__dirname, '../packages/mapp/dist'),
 			},
 			extensions: ['.js'],
 		},
@@ -43,6 +43,26 @@ const development = merge([
 			'webpack/hot/only-dev-server',
 			'./index.dev.js',
 		],
+		module: {
+			rules: [
+				{
+					test: /\.jsx?$/,
+					exclude: /node_modules/,
+					use: [
+						{
+							loader: 'babel-loader',
+							options: {
+								presets: babelConfig.presets.map((preset) => preset),
+								plugins: babelConfig.plugins.map((plugin) => {
+									if (typeof plugin === 'string') return plugin
+									return [...plugin]
+								}),
+							},
+						},
+					],
+				},
+			],
+		},
 		output: {
 			path: path.resolve(__dirname, '/js'),
 			publicPath: '/js',
@@ -60,6 +80,12 @@ const development = merge([
 				},
 			}),
 		],
+		resolve: {
+			alias: {
+				mapp: path.resolve(__dirname, '../packages/mapp/src'),
+			},
+			extensions: ['.js'],
+		},
 		devServer: {
 			contentBase: path.resolve(projectRoot, 'public'),
 			historyApiFallback: true,

@@ -1,6 +1,8 @@
 // @flow
 import * as React from 'react'
 import styled from 'styled-components'
+import { State } from 'react-automata'
+import { states } from './modes/statechart'
 
 const Wrapper = styled.div`
 	position: absolute;
@@ -10,21 +12,48 @@ const Wrapper = styled.div`
 	width: 200px;
 	z-index: 100;
 	padding: 5px;
+	cursor: crosshair;
+	cursor: url(/images/newPin.svg) 18 49, pointer;
 `
 
-const PropertyWrapper = styled.h4``
-
-const Title = styled.span`
-	font-weight: 800;
+const PropertyWrapper = styled.div`
+	& + & {
+		margin-top: 5px;
+	}
 `
 
-const Value = styled.span`
+const LogWrapper = styled.div`
+	margin-top: 10px;
+`
+
+const Value = styled.h4`
 	color: ${({ isBoolean }) => (isBoolean ? 'tomato' : 'auto')};
+	display: inline;
 `
 
-const Property = ({ title, value }: { title: string, value: string }): React.Node => (
+const Title = styled.h4`
+	font-weight: 800;
+	display: inline;
+
+	& ${Value} {
+		display: inline;
+	}
+`
+
+const Log = styled.div`
+	margin-top: 4px;
+	overflow: hidden;
+	background-color: rgba(245, 245, 245);
+	padding: 5px;
+`
+
+const LogLine = styled.h4`
+	word-wrap: none;
+`
+
+const Property = ({ title, value }: { title: string, value: boolean | string }): React.Node => (
 	<PropertyWrapper>
-		<Title>{title}</Title>: <Value isBoolean={typeof value === 'boolean'}>{value.toString()}</Value>
+		<Title>{title}:</Title> <Value isBoolean={typeof value === 'boolean'}>{value.toString()}</Value>
 	</PropertyWrapper>
 )
 
@@ -33,12 +62,21 @@ const Property = ({ title, value }: { title: string, value: string }): React.Nod
  */
 
 type Props = {
-	mode: string,
+	log: Array<string>,
 }
 
-const Debugger = ({ mode }: Props) => (
+const Debugger = ({ log }: Props) => (
 	<Wrapper>
-		<Property title="mode" value={mode} />
+		{states.map((state) => (
+			<State value={state} key={state}>
+				<Property title="mode" value={state} />
+			</State>
+		))}
+		<hr />
+		<LogWrapper>
+			<Title>Log</Title>
+			<Log>{log.map((l) => <LogLine key={l}>{l}</LogLine>)}</Log>
+		</LogWrapper>
 	</Wrapper>
 )
 
