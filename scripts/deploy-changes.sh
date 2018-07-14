@@ -30,11 +30,11 @@ if git diff --name-only $TRAVIS_COMMIT_RANGE | grep "^api/"
 			then
 			now -e --token $NOW_TOKEN --local-config now.production.json
 			echo "🛠  Creating alias"
-			now --token $NOW_TOKEN --local-conifg now.production.json alias 
+			now alias --token $NOW_TOKEN --local-config now.production.json
 		else
 			now -e --token $NOW_TOKEN --local-config now.staging.json
 			echo "🛠  Creating alias"
-			now --token $NOW_TOKEN --local-conifg now.staging.json alias
+			now alias --token $NOW_TOKEN --local-config now.staging.json
 		fi
 
 		echo "🛠  Build complete! 🎉"
@@ -60,11 +60,11 @@ if git diff --name-only $TRAVIS_COMMIT_RANGE | grep "^app/"
 			then
 			now -e --token $NOW_TOKEN --local-config now.production.json
 			echo "🛠  Creating alias"
-			now alias --token $NOW_TOKEN --local-conifg now.production.json
+			now alias --token $NOW_TOKEN --local-config now.production.json
 		else
 			now -e --token $NOW_TOKEN --local-config now.staging.json
 			echo "🛠  Creating alias"
-			now alias --token $NOW_TOKEN --local-conifg now.staging.json
+			now alias --token $NOW_TOKEN --local-config now.staging.json
 		fi
 
 		echo "🛠  Creating alias"
