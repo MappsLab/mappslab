@@ -36,10 +36,10 @@ if git diff --name-only $TRAVIS_COMMIT_RANGE | grep "^api/"
 	if [ "$DEPLOY_ENV" = "production" ]
 		then
 		cp ./api/now.production.json ./build/api/now.json
-		cp ./api/.env.production ./build/api/.env
+		cp ./api/.env.production ./build/api/
 	else
 		cp ./api/now.staging.json ./build/api/now.json
-		cp ./api/.env.staging ./build/api/.env
+		cp ./api/.env.staging ./build/api/
 	fi
 fi
 
