@@ -1,5 +1,5 @@
 {
-  "name": "public",
+  "name": "mappslab-static",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -9,6 +9,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "serve": "^6.5.7"
+    "serve": "^9.2.0"
   }
 }

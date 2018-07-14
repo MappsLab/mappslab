@@ -39,7 +39,8 @@
 	"workspaces": [
 		"api",
 		"app",
-		"packages/*"
+		"packages/*",
+		"public"
 	],
 	"private": true,
 	"devDependencies": {
