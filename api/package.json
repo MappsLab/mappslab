@@ -14,25 +14,12 @@
 		"db:test:seed": "cross-env TEST_DB=true cross-env DEBUG=seed babel-node ./__tests__/scripts/testDatabase/seedTestDatabase.js"
 	},
 	"dependencies": {
-		"@babel/cli": "7.0.0-beta.53",
-		"@babel/core": "7.0.0-beta.53",
-		"@babel/node": "7.0.0-beta.53",
-		"@babel/plugin-proposal-class-properties": "^7.0.0-beta.53",
-		"@babel/plugin-proposal-object-rest-spread": "7.0.0-beta.53",
-		"@babel/plugin-transform-runtime": "7.0.0-beta.53",
-		"@babel/polyfill": "7.0.0-beta.53",
-		"@babel/preset-env": "7.0.0-beta.53",
-		"@babel/preset-flow": "7.0.0-beta.53",
-		"@babel/register": "7.0.0-beta.53",
-		"@babel/runtime": "7.0.0-beta.53",
-		"babel-core": "7.0.0-bridge.0",
-		"babel-plugin-import": "^1.7.0",
-		"babel-plugin-module-resolver": "^3.1.1",
 		"bcrypt": "^3.0.0",
 		"crypto-promise": "^2.0.0",
 		"debug": "^3.1.0",
 		"dgraph-js": "^1.2.1",
 		"dotenv": "^5.0.1",
+		"faker": "^4.1.0",
 		"flat": "^4.0.0",
 		"graphql": "^0.13.2",
 		"graphql-subscriptions": "^0.5.8",
@@ -48,11 +35,24 @@
 		"validator": "^10.2.0"
 	},
 	"devDependencies": {
+		"@babel/cli": "7.0.0-beta.53",
+		"@babel/core": "7.0.0-beta.53",
+		"@babel/node": "7.0.0-beta.53",
+		"@babel/plugin-proposal-class-properties": "^7.0.0-beta.53",
+		"@babel/plugin-proposal-object-rest-spread": "7.0.0-beta.53",
+		"@babel/plugin-transform-runtime": "7.0.0-beta.53",
+		"@babel/polyfill": "7.0.0-beta.53",
+		"@babel/preset-env": "7.0.0-beta.53",
+		"@babel/preset-flow": "7.0.0-beta.53",
+		"@babel/register": "7.0.0-beta.53",
+		"@babel/runtime": "7.0.0-beta.53",
 		"babel-core": "7.0.0-bridge.0",
 		"babel-jest": "^23.4.0",
+		"babel-plugin-import": "^1.7.0",
+		"babel-plugin-module-resolver": "^3.1.1",
 		"cross-env": "^5.2.0",
-		"faker": "^4.1.0",
 		"flow-bin": "^0.76.0",
-		"jest": "^23.4.0"
+		"jest": "^23.4.0",
+		"rimraf": "^2.6.2"
 	}
 }
