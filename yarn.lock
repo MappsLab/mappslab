@@ -4861,7 +4861,7 @@ flat-cache@^1.2.1:
     graceful-fs "^4.1.2"
     write "^0.2.1"
 
-flat@^4.0.0:
+flat@^4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/flat/-/flat-4.1.0.tgz#090bec8b05e39cba309747f1d588f04dbaf98db2"
   dependencies:
@@ -8533,7 +8533,7 @@ react-docgen@^3.0.0-beta12:
     node-dir "^0.1.10"
     recast "^0.12.6"
 
-react-dom@^16.3.2, react-dom@^16.4.1:
+react-dom@^16.4.1:
   version "16.4.1"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.4.1.tgz#7f8b0223b3a5fbe205116c56deb85de32685dad6"
   dependencies:
