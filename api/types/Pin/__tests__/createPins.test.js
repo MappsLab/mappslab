@@ -52,12 +52,18 @@ beforeAll(async (done) => {
 	done()
 })
 
-afterEach(async (done) => {
+const removeNewPins = async () => {
 	if (pinsToRemove.length)
 		pinsToRemove.map(async (pin) => {
 			await removeEdge({ fromUid: pin.owner.uid, pred: 'pinned', toUid: pin.uid })
 			await removeNode(pin.uid)
 		})
+}
+
+const sleep = (ms = 100) => new Promise((resolve) => setTimeout(resolve, ms))
+
+afterEach(async (done) => {
+	await removeNewPins
 	done()
 })
 
@@ -67,7 +73,7 @@ describe('[addPin]', () => {
 		expect(result.errors).toMatchSnapshot()
 	})
 
-	it('Should add a new pin (with no map)', async () => {
+	it('Should add a new pin (with a map and without a map)', async () => {
 		const result = await request(q, { variables, context })
 		const { title, owner, maps } = result.data.addPin
 		expect(title).toBe(variables.title)
@@ -76,20 +82,23 @@ describe('[addPin]', () => {
 		expect(maps.pageInfo.hasNextPage).toBe(false)
 		expect(maps.pageInfo.lastCursor).toBe(null)
 		pinsToRemove.push(result.data.addPin)
-	})
 
-	it.only('Should add a new pin (with map)', async () => {
+		await removeNewPins()
+		await sleep()
+
 		const vars = {
 			mapUids: [dbMaps[0].uid],
 			...variables,
 		}
-		const result = await request(q, { variables: vars, context })
-		const { title, owner, maps } = result.data.addPin
-		expect(title).toBe(variables.title)
-		expect(owner.name).toBe(context.viewer.name)
-		expect(maps.pageInfo.hasNextPage).toBe(false)
-		expect(maps.pageInfo.lastCursor).toBe(dbMaps[0].uid)
-		expect(maps.edges[0].node.title).toBe(dbMaps[0].title)
+		const withMapResult = await request(q, { variables: vars, context })
+		const { title: withMapTitle, owner: withMapOwner, maps: withMapMaps } = withMapResult.data.addPin
+		expect(withMapTitle).toBe(variables.title)
+		expect(withMapOwner.name).toBe(context.viewer.name)
+		expect(withMapMaps.pageInfo.hasNextPage).toBe(false)
+		expect(withMapMaps.pageInfo.lastCursor).toBe(dbMaps[0].uid)
+		expect(withMapMaps.edges[0].node.title).toBe(dbMaps[0].title)
 		pinsToRemove.push(result.data.addPin)
 	})
+
+	it('Should add a new pin (with map)', async () => {})
 })

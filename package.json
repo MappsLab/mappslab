@@ -13,7 +13,7 @@
 		"db:test:start": "docker start mappslab-test_dgraph-zero mappslab-test_dgraph-server mappslab-test_dgraph-ratel",
 		"db:test:seed": "yarn workspace mappslab-api db:test:seed",
 		"db:test:stop": "docker stop mappslab-test_dgraph-zero mappslab-test_dgraph-server mappslab-test_dgraph-ratel",
-		"db:staging:seed": "cross-env ENV=staging npm run dev:db:seed",
+		"db:staging:seed": "yarn workspace mappslab-api db:staging:seed",
 		"build:app": "yarn workspace mappslab-client build:app",
 		"build:api": "yarn workspace mappslab-api build:api",
 		"flow:install-types": "flow-typed install",

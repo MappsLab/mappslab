@@ -12,7 +12,6 @@ const SLUG_LENGTH = 35
 
 export const classroomSchema = (isNew: boolean = true) =>
 	Joi.object().keys({
-		uid: process.env.TEST_DB === 'true' ? Joi.string() : Joi.any().forbidden(),
 		slug: Joi.any().when('title', {
 			is: Joi.exist(),
 			then: Joi.string()

@@ -11,7 +11,6 @@ import { promisePipe, filterNullAndUndefined } from '../../../utils'
 
 export const userSchema = (isNew: boolean = true) =>
 	Joi.object().keys({
-		uid: process.env.TEST_DB === 'true' ? Joi.string() : Joi.any().forbidden(),
 		name: isNew
 			? Joi.string()
 					.min(3)

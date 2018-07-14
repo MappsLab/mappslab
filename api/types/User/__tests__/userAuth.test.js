@@ -2,7 +2,19 @@
 /* eslint-disable no-undef */
 import { createJWT, verifyJWT } from '../../../utils/auth'
 import { request } from '../../../__tests__/utils'
-import { joseph, john } from '../../../database/stubs/users'
+// import { joseph, john } from '../../../database/stubs/users'
+import { getFirstUsers } from './utils'
+
+let users
+let john
+let joseph
+
+beforeAll(async (done) => {
+	users = await getFirstUsers()
+	joseph = users.find((u) => u.email === 'joseph@good-idea.studio')
+	john = users.find((u) => u.email === 'john@cmwworld.com')
+	done()
+})
 
 describe('queries', () => {
 	it('[loginViewer] should return a jwt and viewer', async () => {
@@ -17,7 +29,7 @@ describe('queries', () => {
 						uid
 						name
 					}
-				}	
+				}
 			}
 		`
 		const variables = { email: joseph.email, password: 'Password#1' }
@@ -40,10 +52,10 @@ describe('queries', () => {
 						uid
 						name
 					}
-				}	
+				}
 			}
 		`
-		const variables = { uid: john.uid, password: john.password }
+		const variables = { uid: john.uid, password: 'Password#1' }
 		const result = await request(uidQuery, { variables })
 		const { jwt, viewer } = result.data.loginViewer
 		expect(/^Bearer/.test(jwt.token)).toBe(true)
@@ -53,19 +65,19 @@ describe('queries', () => {
 
 	it('[loginViewer] should return a validation error with invalid credentials', async () => {
 		const uidQuery = /* GraphQL */ `
-				mutation LoginViewer($password: String!, $email: String!) {
-					loginViewer(credentials: { email: $email, password: $password }) {
-						jwt {
-							token
-							expires
-						}
-						viewer {
-							uid
-							name
-						}
+			mutation LoginViewer($password: String!, $email: String!) {
+				loginViewer(credentials: { email: $email, password: $password }) {
+					jwt {
+						token
+						expires
+					}
+					viewer {
+						uid
+						name
 					}
 				}
-			`
+			}
+		`
 		const variables = { email: joseph.email, password: 'wrongPassword' }
 		const result = await request(uidQuery, { variables })
 		expect(result.errors[0].message).toBe('Email and password do not match')
@@ -89,14 +101,14 @@ describe('queries', () => {
 
 	it('[viewer] should return full user data given a JWT-parsed user in the context', async () => {
 		const currentViewerQuery = /* GraphQL */ `
-				{
-					viewer {
-						uid
-						name
-						email
-					}
+			{
+				viewer {
+					uid
+					name
+					email
 				}
-			`
+			}
+		`
 		const originalViewer = createJWT(john)
 		const JWTviewer = await verifyJWT(originalViewer.token.replace(/^Bearer /, ''))
 		const context = { viewer: JWTviewer }

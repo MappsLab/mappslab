@@ -9,7 +9,6 @@ import { promisePipe, filterNullAndUndefined } from '../../../utils'
 
 export const mapSchema = (isNew: boolean = true) =>
 	Joi.object().keys({
-		uid: process.env.TEST_DB === 'true' ? Joi.string() : Joi.any().forbidden(),
 		title: isNew
 			? Joi.string()
 					.min(3)
