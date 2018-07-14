@@ -1,0 +1,5 @@
+# Now needs some ignores, they won't be picked up by the parent .gitignore
+
+.env
+.env.*
+build

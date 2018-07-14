@@ -14,6 +14,27 @@
 		"db:test:seed": "cross-env TEST_DB=true cross-env DEBUG=seed babel-node ./__tests__/scripts/testDatabase/seedTestDatabase.js"
 	},
 	"dependencies": {
+		"bcrypt": "^3.0.0",
+		"crypto-promise": "^2.0.0",
+		"debug": "^3.1.0",
+		"dgraph-js": "^1.2.1",
+		"dotenv": "^5.0.1",
+		"faker": "^4.1.0",
+		"flat": "^4.0.0",
+		"graphql": "^0.13.2",
+		"graphql-subscriptions": "^0.5.8",
+		"graphql-tools": "^3.0.1",
+		"graphql-yoga": "^1.13.1",
+		"grpc": "^1.13.0",
+		"joi": "^13.4.0",
+		"json5": "^1.0.1",
+		"jsonwebtoken": "^8.2.1",
+		"lodash": "^4.17.10",
+		"prop-types": "^15.6.1",
+		"ramda": "^0.25.0",
+		"validator": "^10.2.0"
+	},
+	"devDependencies": {
 		"@babel/cli": "7.0.0-beta.53",
 		"@babel/core": "7.0.0-beta.53",
 		"@babel/node": "7.0.0-beta.53",
@@ -26,33 +47,11 @@
 		"@babel/register": "7.0.0-beta.53",
 		"@babel/runtime": "7.0.0-beta.53",
 		"babel-core": "7.0.0-bridge.0",
+		"babel-jest": "^23.4.0",
 		"babel-plugin-import": "^1.7.0",
 		"babel-plugin-module-resolver": "^3.1.1",
-		"bcrypt": "^3.0.0",
-		"crypto-promise": "^2.0.0",
-		"debug": "^3.1.0",
-		"dgraph-js": "^1.2.1",
-		"dotenv": "^5.0.1",
-		"flat": "^4.0.0",
-		"graphql": "^0.13.2",
-		"graphql-subscriptions": "^0.5.8",
-		"graphql-tools": "^3.0.1",
-		"graphql-yoga": "^1.13.1",
-		"grpc": "^1.11.3",
-		"joi": "^13.4.0",
-		"json5": "^1.0.1",
-		"jsonwebtoken": "^8.2.1",
-		"lodash": "^4.17.10",
-		"prop-types": "^15.6.1",
-		"ramda": "^0.25.0",
-		"validator": "^10.2.0"
-	},
-	"devDependencies": {
-		"babel-core": "7.0.0-bridge.0",
-		"babel-jest": "^23.4.0",
 		"cross-env": "^5.2.0",
-		"faker": "^4.1.0",
 		"flow-bin": "^0.76.0",
-		"jest": "^23.4.0"
+		"rimraf": "^2.6.2"
 	}
 }
