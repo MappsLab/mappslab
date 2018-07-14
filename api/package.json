@@ -20,7 +20,7 @@
 		"dgraph-js": "^1.2.1",
 		"dotenv": "^5.0.1",
 		"faker": "^4.1.0",
-		"flat": "^4.0.0",
+		"flat": "^4.1.0",
 		"graphql": "^0.13.2",
 		"graphql-subscriptions": "^0.5.8",
 		"graphql-tools": "^3.0.1",
