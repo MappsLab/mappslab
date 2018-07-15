@@ -60,7 +60,9 @@ class Editor extends React.Component<Props, EditorState> {
 	}
 
 	componentDidMount() {
-		this.unsubscribe = this.props.subscribeToMorePins(this.logNewPins)
+		this.unsubscribe = this.props.subscribeToMorePins((newPin) => {
+			this.log(`${newPin.owner.name} added pin ${newPin.title}`)
+		})
 	}
 
 	componentWillUnmount() {
@@ -71,10 +73,6 @@ class Editor extends React.Component<Props, EditorState> {
 		this.props.transition(SUCCESS, {
 			inProgressPin: null,
 		})
-	}
-
-	logNewPins = (newPin) => {
-		this.log(`${newPin.owner.name} added pin ${newPin.title}`)
 	}
 
 	log = (message) => {

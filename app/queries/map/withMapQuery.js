@@ -50,7 +50,6 @@ const config = {
 		updateQuery: (previous, { subscriptionData }) => {
 			const newPin = subscriptionData.data.pinAddedToMap
 			// console.log(previous)
-			console.log(callback, newPin)
 			callback(newPin)
 			const map = R.assocPath(['pins', 'edges'], [...previous.map.pins.edges, { node: newPin, __typename: 'PinEdge' }])(
 				previous.map,
