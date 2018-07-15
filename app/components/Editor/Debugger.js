@@ -62,7 +62,7 @@ const Property = ({ title, value }: { title: string, value: boolean | string }):
  */
 
 type Props = {
-	log: Array<string>,
+	log: Array<{ timestamp: date, message: string }>,
 }
 
 const Debugger = ({ log }: Props) => (
@@ -75,7 +75,7 @@ const Debugger = ({ log }: Props) => (
 		<hr />
 		<LogWrapper>
 			<Title>Log</Title>
-			<Log>{log.map((l) => <LogLine key={l}>{l}</LogLine>)}</Log>
+			<Log>{log.map((l) => <LogLine key={l.timestamp}>{l.message}</LogLine>)}</Log>
 		</LogWrapper>
 	</Wrapper>
 )

@@ -85,7 +85,6 @@ class Mapp extends React.Component<Props, State> {
 		if (newProps) {
 			const { options, events } = separateOptionsAndEvents(newProps, mapEventNames)
 			if (options) this.map.setOptions(options)
-			console.log('new options', options)
 			if (events) addListeners(this.map, mapEventNames, events)
 		}
 	}

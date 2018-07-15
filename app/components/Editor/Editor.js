@@ -29,10 +29,16 @@ type Props = {
 	viewer: ViewerType,
 	map: MapType,
 	inProgressPin: void | PinType,
+	subscribeToMorePins: () => () => void,
 	transition: (string, {}) => void,
 	machineState: {
 		value: string,
 	},
+}
+
+type EditorState = {
+	mapOptions: Object,
+	log: Array<{ timestamp: date, message: string }>,
 }
 
 const defaultOptions = {
@@ -43,7 +49,7 @@ const defaultOptions = {
 	streetViewControlOptions: false,
 }
 
-class Editor extends React.Component<Props> {
+class Editor extends React.Component<Props, EditorState> {
 	static defaultProps = {
 		inProgressPin: null,
 	}
@@ -53,12 +59,28 @@ class Editor extends React.Component<Props> {
 		mapOptions: defaultOptions,
 	}
 
-	componentDidMount() {}
+	componentDidMount() {
+		this.unsubscribe = this.props.subscribeToMorePins(this.logNewPins)
+	}
 
-	componentWillUnmount() {}
+	componentWillUnmount() {
+		this.unsubscribe()
+	}
 
 	onAddPinSuccess = () => {
-		this.props.transition(SUCCESS, { newPin: null })
+		this.props.transition(SUCCESS, {
+			inProgressPin: null,
+		})
+	}
+
+	logNewPins = (newPin) => {
+		this.log(`${newPin.owner.name} added pin ${newPin.title}`)
+	}
+
+	log = (message) => {
+		this.setState((prevState) => ({
+			log: [...prevState.log, { timestamp: new Date(), message }],
+		}))
 	}
 
 	enterNormal() {
@@ -68,6 +90,7 @@ class Editor extends React.Component<Props> {
 				...mapOptions,
 				draggable: true,
 				draggableCursor: 'initial',
+				clickableIcons: true,
 			},
 		}))
 	}
@@ -78,6 +101,7 @@ class Editor extends React.Component<Props> {
 				...mapOptions,
 				draggable: true,
 				draggableCursor: 'url("/images/newPin.svg") 18 49, crosshair',
+				clickableIcons: true,
 			},
 		}))
 	}
@@ -93,9 +117,7 @@ class Editor extends React.Component<Props> {
 	}
 
 	componentDidTransition(prevStateMachine, event) {
-		this.setState((prevState) => ({
-			log: [...prevState.log, `transition: ${event}`],
-		}))
+		this.log(`transition: ${event}`)
 	}
 
 	/**
@@ -123,7 +145,6 @@ class Editor extends React.Component<Props> {
 		const { mapOptions, log } = this.state
 		const { map, inProgressPin } = this.props
 		const { pins, uid } = map
-		console.log(this.state)
 		return (
 			<EditorContext.Provider>
 				<EditorWrapper>
