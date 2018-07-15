@@ -43,23 +43,23 @@ const config = {
 			},
 		}
 	},
-	subscriptionOptions: ({ uid }) => {
-		return {
-			document: newPinAddedQuery,
-			variables: { mapUid: uid },
-			updateQuery: (previous, { subscriptionData }) => {
-				const newPin = subscriptionData.data.pinAddedToMap
-				// console.log(previous)
-				const map = R.assocPath(['pins', 'edges'], [...previous.map.pins.edges, { node: newPin, __typename: 'PinEdge' }])(
-					previous.map,
-				)
-				return {
-					...previous,
-					map,
-				}
-			},
-		}
-	},
+	subscriptionName: 'subscribeToMorePins',
+	subscriptionOptions: ({ uid }, callback = () => {}) => ({
+		document: newPinAddedQuery,
+		variables: { mapUid: uid },
+		updateQuery: (previous, { subscriptionData }) => {
+			const newPin = subscriptionData.data.pinAddedToMap
+			// console.log(previous)
+			callback(newPin)
+			const map = R.assocPath(['pins', 'edges'], [...previous.map.pins.edges, { node: newPin, __typename: 'PinEdge' }])(
+				previous.map,
+			)
+			return {
+				...previous,
+				map,
+			}
+		},
+	}),
 }
 
 const withClassroomsQuery = withQuery(query, config)

@@ -1,6 +1,8 @@
 // @flow
 import React from 'react'
 import styled from 'styled-components'
+import { State } from 'react-automata'
+import { ADD_PIN, ADD_PIN_INFO } from '../modes/statechart'
 
 const Wrapper = styled.button`
 	border: 2px solid ${({ active }) => (active ? 'red' : 'green')};
@@ -20,19 +22,19 @@ const Wrapper = styled.button`
 
 type Props = {
 	onClick: () => void,
-	active?: boolean,
 }
 
-const NewPinButton = ({ onClick, active }: Props) => (
-	<Wrapper onClick={onClick} active={active}>
-		<span role="img" aria-label="Add a New Pin">
-			📍
-		</span>
-	</Wrapper>
+const NewPinButton = ({ onClick }: Props) => (
+	<State
+		value={[ADD_PIN, ADD_PIN_INFO]}
+		render={(isActive) => (
+			<Wrapper onClick={onClick} active={isActive}>
+				<span role="img" aria-label="Add a New Pin">
+					📍
+				</span>
+			</Wrapper>
+		)}
+	/>
 )
-
-NewPinButton.defaultProps = {
-	active: false,
-}
 
 export default NewPinButton

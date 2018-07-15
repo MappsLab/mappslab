@@ -1,7 +1,5 @@
 // @flow
 import gql from 'graphql-tag'
-import withSubscription from '../withSubscription'
-import { unwindEdges } from '../utils'
 
 export const query = gql`
 	subscription pinAddedToMap($mapUid: String!) {
@@ -17,22 +15,3 @@ export const query = gql`
 		}
 	}
 `
-
-const config = {
-	options: (props) => ({
-		variables: { mapUid: props.uid },
-	}),
-	props: (response) => {
-		const { loading, pinAddedToMap, ...rest } = response
-
-		return {
-			loading,
-			pinAddedToMap: pinAddedToMap ? unwindEdges(pinAddedToMap) : null,
-			request: {
-				...rest,
-			},
-		}
-	},
-}
-
-export const withPinAddedToMapSubscription = withSubscription(query, config)

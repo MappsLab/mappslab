@@ -86,9 +86,8 @@ class NewPin extends React.Component<Props, State> {
 		}
 		this.props
 			.mutate({ variables: newPin })
-			.then((response) => {
-				const { pin } = response
-				this.props.onSuccess(pin)
+			.then(() => {
+				this.props.onSuccess()
 			})
 			.catch((err) => {
 				console.log('err!')
