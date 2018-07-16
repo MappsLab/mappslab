@@ -5,7 +5,7 @@ import { createMap } from './createMap'
 import { deleteMap } from './deleteMap'
 import { getClassroomMaps, getPinMaps } from './readMapRelationships'
 
-module.exports = {
+export default  {
 	getMap,
 	getMaps,
 	updateMap,

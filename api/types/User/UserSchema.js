@@ -66,7 +66,7 @@ const User = /* GraphQL */ `
 
 	extend type Query {
 		user(input: GetUserInput): User!
-		viewer: Viewer
+		currentViewer: LoginPayload
 	}
 
 	extend type Mutation {

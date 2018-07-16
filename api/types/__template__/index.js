@@ -3,7 +3,7 @@ import ThingSchema from './ThingSchema'
 import ThingQueryResolvers from './queryResolvers'
 import ThingMutationResolvers from './mutationResolvers'
 
-module.exports = {
+export default  {
 	ThingSchema,
 	ThingQueryResolvers,
 	ThingMutationResolvers,

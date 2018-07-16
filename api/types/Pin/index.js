@@ -1,12 +1,5 @@
 // @flow
-import PinSchema from './PinSchema'
-import PinQueryResolvers from './queryResolvers'
-import PinMutationResolvers from './mutationResolvers'
-import PinSubscriptionResolvers from './subscriptionResolvers'
-
-module.exports = {
-	PinSchema,
-	PinQueryResolvers,
-	PinMutationResolvers,
-	PinSubscriptionResolvers,
-}
+export PinSchema from './PinSchema'
+export PinQueryResolvers from './queryResolvers'
+export PinMutationResolvers from './mutationResolvers'
+export PinSubscriptionResolvers from './subscriptionResolvers'

@@ -1,7 +1,7 @@
 // @flow
 import { createMap } from './createMap'
 
-module.exports = {
+export default  {
 	Mutation: {
 		// modifyMap
 		createMap,

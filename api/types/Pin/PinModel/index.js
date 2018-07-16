@@ -5,7 +5,7 @@ import { createPin } from './createPin'
 import { deletePin } from './deletePin'
 import { getUserPins, getMapPins } from './readPinRelationships'
 
-module.exports = {
+export default  {
 	getPin,
 	getPins,
 	updatePin,

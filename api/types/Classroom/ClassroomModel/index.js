@@ -5,7 +5,7 @@ import { createClassroom, createClassroomConnection } from './createClassroom'
 import { deleteClassroom } from './deleteClassroom'
 import { getMapClassroom, getUserClassrooms } from './readClassroomRelationships'
 
-module.exports = {
+export default  {
 	getClassroom,
 	getClassrooms,
 	getUserClassrooms,

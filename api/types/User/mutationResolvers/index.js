@@ -1,7 +1,7 @@
 // @flow
 import loginViewer from './loginViewer'
 
-module.exports = {
+export default  {
 	Mutation: {
 		loginViewer,
 		// modifyUser

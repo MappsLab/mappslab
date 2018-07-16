@@ -28,7 +28,7 @@ const Root = /* GraphQL */ `
 	}
 `
 
-const resolvers = merge(
+export const resolvers = merge(
 	{},
 	/**
 	 * Queries
@@ -56,7 +56,4 @@ const resolvers = merge(
 	PinSubscriptionResolvers,
 )
 
-module.exports = {
-	typeDefs: [Root, coreTypes, scalarTypes, ClassroomSchema, MapSchema, PinSchema, RouteSchema, UserSchema],
-	resolvers,
-}
+export const typeDefs = [Root, coreTypes, scalarTypes, ClassroomSchema, MapSchema, PinSchema, RouteSchema, UserSchema]

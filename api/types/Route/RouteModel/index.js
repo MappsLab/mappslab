@@ -4,7 +4,7 @@ import { updateRoute } from './updateRoute'
 import { createRoute } from './createRoute'
 import { deleteRoute } from './deleteRoute'
 
-module.exports = {
+export default  {
 	getRoute,
 	getRoutes,
 	updateRoute,

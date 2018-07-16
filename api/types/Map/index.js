@@ -1,10 +1,4 @@
 // @flow
-import MapSchema from './MapSchema'
-import MapQueryResolvers from './queryResolvers'
-import MapMutationResolvers from './mutationResolvers'
-
-module.exports = {
-	MapSchema,
-	MapQueryResolvers,
-	MapMutationResolvers,
-}
+export MapSchema from './MapSchema'
+export MapQueryResolvers from './queryResolvers'
+export MapMutationResolvers from './mutationResolvers'

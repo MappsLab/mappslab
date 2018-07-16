@@ -4,7 +4,7 @@ import { updateThing } from './updateThing'
 import { createThing } from './createThing'
 import { deleteThing } from './deleteThing'
 
-module.exports = {
+export default  {
 	getThing,
 	getThings,
 	updateThing,

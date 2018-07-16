@@ -32,6 +32,6 @@ const DateTime = new GraphQLScalarType({
 	parseLiteral: parseLiteralISO8601,
 })
 
-module.exports = {
+export default  {
 	DateTime,
 }

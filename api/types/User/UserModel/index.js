@@ -6,7 +6,7 @@ import { deleteUser } from './deleteUser'
 import { checkPassword } from './userAuth'
 import { getPinOwner, getClassroomStudents, getClassroomTeachers } from './readUserRelationships'
 
-module.exports = {
+export default  {
 	getUser,
 	getViewer,
 	getUsers,

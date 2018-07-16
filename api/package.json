@@ -15,6 +15,7 @@
 		"db:staging:seed": "cross-env ENV=staging cross-env DEBUG=seed babel-node ./__tests__/scripts/testDatabase/seedTestDatabase.js"
 	},
 	"dependencies": {
+		"@babel/plugin-proposal-export-default-from": "^7.0.0-beta.54",
 		"bcrypt": "^3.0.0",
 		"crypto-promise": "^2.0.0",
 		"debug": "^3.1.0",
@@ -24,7 +25,7 @@
 		"flat": "^4.1.0",
 		"graphql": "^0.13.2",
 		"graphql-subscriptions": "^0.5.8",
-		"graphql-tools": "^3.0.1",
+		"graphql-tools": "^3.0.5",
 		"graphql-yoga": "^1.14.12",
 		"grpc": "^1.13.0",
 		"joi": "^13.4.0",
@@ -48,11 +49,13 @@
 		"@babel/register": "7.0.0-beta.53",
 		"@babel/runtime": "7.0.0-beta.53",
 		"babel-core": "7.0.0-bridge.0",
+		"babel-eslint": "^8.2.6",
 		"babel-jest": "^23.4.0",
 		"babel-plugin-import": "^1.8.0",
 		"babel-plugin-module-resolver": "^3.1.1",
 		"cross-env": "^5.2.0",
 		"flow-bin": "^0.76.0",
+		"nodemon": "^1.18.2",
 		"rimraf": "^2.6.2"
 	}
 }

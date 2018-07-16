@@ -1,10 +1,4 @@
 // @flow
-import UserSchema from './UserSchema'
-import UserQueryResolvers from './queryResolvers'
-import UserMutationResolvers from './mutationResolvers'
-
-module.exports = {
-	UserSchema,
-	UserQueryResolvers,
-	UserMutationResolvers,
-}
+export UserSchema from './UserSchema'
+export UserQueryResolvers from './queryResolvers'
+export UserMutationResolvers from './mutationResolvers'
