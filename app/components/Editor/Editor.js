@@ -2,18 +2,16 @@
 import React from 'react'
 import styled from 'styled-components'
 import Mapp from 'mapp'
-import { withStatechart, State } from 'react-automata'
+import { withStatechart } from 'react-automata'
 import { withMapQuery, withCurrentViewerQuery } from 'Queries'
-import type { ViewerType, MapType } from 'Types'
+import type { ViewerType, MapType, PinType } from 'Types'
 import Pin from './Elements/Pin'
 import Debugger from './Debugger'
 import Toolbar from './Tools/Toolbar'
 import NewPinButton from './Tools/NewPinButton'
 import NewPin from './Elements/NewPin'
-import { statechart, STARTED_ADD_PIN, SUCCESS, NORMAL, ADD_PIN, ADD_PIN_INFO } from './modes/statechart'
+import { statechart, STARTED_ADD_PIN, SUCCESS } from './modes/statechart'
 import { modes } from './modes/modes'
-
-const EditorContext = React.createContext('editor')
 
 const EditorWrapper = styled.div`
 	position: relative;
@@ -29,8 +27,8 @@ type Props = {
 	viewer: ViewerType,
 	map: MapType,
 	inProgressPin: void | PinType,
-	subscribeToMorePins: () => () => void,
-	transition: (string, {}) => void,
+	subscribeToMorePins: (Function) => () => void,
+	transition: (string, ?{}) => void,
 	machineState: {
 		value: string,
 	},
@@ -38,7 +36,7 @@ type Props = {
 
 type EditorState = {
 	mapOptions: Object,
-	log: Array<{ timestamp: date, message: string }>,
+	log: Array<{ timestamp: number, message: string }>,
 }
 
 const defaultOptions = {
@@ -75,11 +73,11 @@ class Editor extends React.Component<Props, EditorState> {
 		})
 	}
 
+	unsubscribe: () => void
+
 	log = (message) => {
 		const now = new Date()
 		const newEntry = { timestamp: now.getTime(), message }
-		console.log('logging:')
-		console.log(newEntry)
 		this.setState((prevState) => ({
 			log: [...prevState.log, newEntry],
 		}))
@@ -87,7 +85,6 @@ class Editor extends React.Component<Props, EditorState> {
 
 	enterNormal() {
 		this.setState(({ mapOptions }) => ({
-			inProgressPin: null,
 			mapOptions: {
 				...mapOptions,
 				draggable: true,
@@ -126,8 +123,9 @@ class Editor extends React.Component<Props, EditorState> {
 	 * Add different methods depending on the mode
 	 * mode.addPin.handleClick(...) etc
 	 */
+	// $FlowFixMe
 	modes = Object.entries(modes).reduce(
-		(acc, [title, mode]) => ({
+		(acc, [title, mode]: [string, Function]) => ({
 			[title]: mode(this),
 			...acc,
 		}),
@@ -148,31 +146,27 @@ class Editor extends React.Component<Props, EditorState> {
 		const { map, inProgressPin } = this.props
 		const { pins, uid } = map
 		return (
-			<EditorContext.Provider>
-				<EditorWrapper>
-					<Debugger log={log} />
-					<Mapp
-						APIKey="AIzaSyCOqxjWmEzFlHKC9w-iUZ5zL2rIyBglAag"
-						onClick={this.handleMapClick}
-						{...mapOptions}
-						render={() => (
-							<React.Fragment>
-								{pins.map((p) => <Pin key={p.uid} {...p} />)}
-								{inProgressPin ? (
-									<NewPin key="newPin" mapUid={uid} onSuccess={this.onAddPinSuccess} newPin={inProgressPin} />
-								) : null}
-							</React.Fragment>
-						)}
-					/>
-					<Toolbar>
-						<NewPinButton onClick={this.toggleAddPinMode} />
-					</Toolbar>
-				</EditorWrapper>
-			</EditorContext.Provider>
+			<EditorWrapper>
+				<Debugger log={log} />
+				<Mapp
+					APIKey="AIzaSyCOqxjWmEzFlHKC9w-iUZ5zL2rIyBglAag"
+					onClick={this.handleMapClick}
+					{...mapOptions}
+					render={() => (
+						<React.Fragment>
+							{pins.map((p) => <Pin key={p.uid} {...p} />)}
+							{inProgressPin ? (
+								<NewPin key="newPin" mapUid={uid} onSuccess={this.onAddPinSuccess} newPin={inProgressPin} />
+							) : null}
+						</React.Fragment>
+					)}
+				/>
+				<Toolbar>
+					<NewPinButton onClick={this.toggleAddPinMode} />
+				</Toolbar>
+			</EditorWrapper>
 		)
 	}
 }
-
-export const EditorConsumer = EditorContext.Consumer
 
 export default withCurrentViewerQuery(withMapQuery(withStatechart(statechart)(Editor)))

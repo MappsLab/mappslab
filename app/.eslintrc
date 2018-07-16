@@ -21,6 +21,7 @@
 		"jsx-a11y/anchor-is-valid": 0,
 		"react/jsx-indent": [2, "tab"],
 		"react/jsx-indent-props": [2, "tab"],
+		"react/jsx-one-expression-per-line": 0,
 		"react/jsx-filename-extension": [
 			1,
 			{
