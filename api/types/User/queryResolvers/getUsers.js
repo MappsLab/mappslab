@@ -13,9 +13,7 @@ export const users = async (_: Object, { input }: PaginationInput, ctx: GraphQLC
 }
 
 export const currentViewer = async (_: Object, args: null, ctx: GraphQLContext): Promise<UserType | null | Error> => {
-	console.log('Current Viewer:')
-	console.log(ctx.viewer)
-	if (!ctx.viewer || !ctx.viewer.uid) return '123'
+	if (!ctx.viewer || !ctx.viewer.uid) return null
 	const { uid } = ctx.viewer
 	const viewer = await ctx.models.User.getViewer({ uid })
 	const jwt = viewer ? createJWT(viewer) : null

@@ -6,7 +6,7 @@ import { pins, classrooms } from './getUserConnections'
 export default {
 	Query: {
 		user,
-		// currentViewer,
+		currentViewer,
 	},
 	Viewer: {
 		pins,
