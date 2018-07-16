@@ -3,7 +3,7 @@ import React from 'react'
 import styled from 'styled-components'
 import Pin from './Pin'
 import { withCreatePinMutation } from '../../../queries/pin'
-import type { PinType } from '../../../types/'
+import type { PinType } from '../../../types'
 
 const Label = styled.label`
 	font-size: 18px;

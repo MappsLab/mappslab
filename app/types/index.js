@@ -3,6 +3,7 @@
 /* eslint-disable no-use-before-define */
 
 export type PinType = {
+	uid: string,
 	lat: number,
 	lang: number,
 	title: string,
@@ -25,6 +26,7 @@ export type ViewerType = UserType & {
 export type MapType = {
 	title: string,
 	uid: string,
+	pins: Array<PinType>,
 }
 
 export type ClassroomType = {

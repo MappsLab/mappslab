@@ -1,4 +1,4 @@
 // @flow
-export MapSchema from './MapSchema'
-export MapQueryResolvers from './queryResolvers'
-export MapMutationResolvers from './mutationResolvers'
+export { default as MapSchema } from './MapSchema'
+export { default as MapQueryResolvers } from './queryResolvers'
+export { default as MapMutationResolvers } from './mutationResolvers'

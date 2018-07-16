@@ -1,4 +1,4 @@
 // @flow
-export withViewerLoginMutation from './withViewerLoginMutation'
-export withCurrentViewerQuery from './withCurrentViewerQuery'
-export withViewerDashboardQuery from './withViewerDashboardQuery'
+export { default as withViewerLoginMutation } from './withViewerLoginMutation'
+export { default as withCurrentViewerQuery } from './withCurrentViewerQuery'
+export { default as withViewerDashboardQuery } from './withViewerDashboardQuery'

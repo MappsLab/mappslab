@@ -1,3 +1,3 @@
 // @flow
-export withUserMapQuery from './withUserMapQuery'
-export withMapQuery from './withMapQuery'
+export { default as withUserMapQuery } from './withUserMapQuery'
+export { default as withMapQuery } from './withMapQuery'
