@@ -25,7 +25,7 @@ export const removeEdge = async ({ fromUid, pred, toUid }: DBEdge, existingTxn?:
 		await txn.mutate(mu)
 		debug(`Removed edge(s): ${nQuads}`)
 		if (!existingTxn) await txn.commit()
-		return txn
+		return true
 	} catch (e) {
 		debug(e)
 		throw e

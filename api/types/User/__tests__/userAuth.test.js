@@ -102,10 +102,16 @@ describe('queries', () => {
 	it('[viewer] should return full user data given a JWT-parsed user in the context', async () => {
 		const currentViewerQuery = /* GraphQL */ `
 			{
-				viewer {
-					uid
-					name
-					email
+				currentViewer {
+					jwt {
+						token
+						expires
+					}
+					viewer {
+						uid
+						name
+						email
+					}
 				}
 			}
 		`
@@ -113,9 +119,11 @@ describe('queries', () => {
 		const JWTviewer = await verifyJWT(originalViewer.token.replace(/^Bearer /, ''))
 		const context = { viewer: JWTviewer }
 		const result = await request(currentViewerQuery, { context })
-		const { viewer } = result.data
+		const { viewer, jwt } = result.data.currentViewer
 		expect(viewer.uid).toBe(john.uid)
 		expect(viewer.email).toBe(john.email)
+		expect(jwt.token).toMatch(/^Bearer /)
+		expect(jwt.expires).toBe(86400)
 	})
 
 	describe('JWT creation & verification', async () => {

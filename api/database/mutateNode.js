@@ -19,11 +19,8 @@ const mutateNode = async (uid: string, data: DBNode, existingTxn?: Txn): Promise
 		debug(`Mutated node with uid ${uid}:`)
 		debug({ uid, ...data })
 		return {
-			txn,
-			data: {
-				uid,
-				...data,
-			},
+			uid,
+			...data,
 		}
 	} catch (e) {
 		debug(e)

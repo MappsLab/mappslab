@@ -22,13 +22,14 @@ type NewRelationship = [PartialEdge, EdgeConfig]
 type NewRelationships = Array<NewRelationship>
 
 const createNodeWithEdges = async (nodeData: Object, relationships: NewRelationships, existingTxn?: Txn): Promise<Object> => {
-	const txn = dbClient.newTxn()
+	const txn = existingTxn || dbClient.newTxn()
 	try {
 		// create the new node
 		const mu = new dgraph.Mutation()
 		mu.setSetJson(nodeData)
 		const newNode = await txn.mutate(mu)
 		const newNodeUid = newNode.getUidsMap().get('blank-0')
+		debug(newNodeUid)
 		const newEdges = await Promise.all(
 			relationships.map(async ([partialEdge, edgeConfig]) => {
 				const { toUid, fromUid, pred } = pick(['toUid', 'fromUid', 'pred'], partialEdge)
@@ -39,6 +40,7 @@ const createNodeWithEdges = async (nodeData: Object, relationships: NewRelations
 					  { toUid, pred, fromUid: newNodeUid }
 					: // Otherwise, set the new node as the 'to' uid
 					  { toUid: newNodeUid, pred, fromUid }
+				debug(newRelationship)
 				await createEdge(newRelationship, edgeConfig, txn)
 				return newRelationship
 			}),
@@ -46,12 +48,10 @@ const createNodeWithEdges = async (nodeData: Object, relationships: NewRelations
 		debug(`Created new node with uid ${newNodeUid} with ${newEdges.length} edges`)
 		if (!existingTxn) await txn.commit()
 		debug(newEdges)
-		return existingTxn
-			? txn
-			: {
-					uid: newNodeUid,
-					...nodeData,
-			  }
+		return {
+			uid: newNodeUid,
+			...nodeData,
+		}
 	} catch (e) {
 		debug(e)
 		throw e

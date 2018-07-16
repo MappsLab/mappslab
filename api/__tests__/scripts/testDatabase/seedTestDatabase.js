@@ -2,10 +2,10 @@
 import faker from 'faker'
 import { dbClient } from '../../../database'
 import { generateUsers, generateClassrooms, generateClassroomConnections, generatePins, generateMaps } from './generate'
-import { createUser } from '../../../types/User/UserModel'
-import { createMap, getClassroomMaps } from '../../../types/Map/MapModel'
-import { createClassroom, createClassroomConnection, getUserClassrooms } from '../../../types/Classroom/ClassroomModel'
-import { createPin } from '../../../types/Pin/PinModel'
+import User from '../../../types/User/UserModel'
+import Map from '../../../types/Map/MapModel'
+import Classroom from '../../../types/Classroom/ClassroomModel'
+import Pin from '../../../types/Pin/PinModel'
 
 const dgraph = require('dgraph-js')
 const debug = require('debug')('seed')
@@ -76,28 +76,27 @@ const seedDatabase = async () => {
 	debug('🌻 🌻 🌻 Seeding Test Database... 🌻 🌻 🌻 ')
 	await dropAll()
 	await setSchema()
-
 	debug('👶  Creating and inserting users...')
-	const users = await promiseSerial(generateUsers(100).map((u) => () => createUser(u)))
+	const users = await promiseSerial(generateUsers(100).map((u) => () => User.createUser(u)))
 	const students = users.filter((u) => u.role === 'student')
 	const teachers = users.filter((u) => u.role === 'teacher')
 	debug(`👶  Created ${students.length} students and ${teachers.length} teachers`)
 
 	debug('🏫  Adding some classrooms..')
 	const cCount = Math.floor(teachers.length * 2)
-	const classrooms = await promiseSerial(generateClassrooms(cCount).map((c) => () => createClassroom(c)))
+	const classrooms = await promiseSerial(generateClassrooms(cCount).map((c) => () => Classroom.createClassroom(c)))
 	debug(`🏫  Made ${classrooms.length} classrooms`)
 
 	debug('🏫  Assigning students and teachers to classrooms..')
 	await promiseSerial(
-		generateClassroomConnections(users, classrooms).map((connection) => () => createClassroomConnection(connection)),
+		generateClassroomConnections(users, classrooms).map((connection) => () => Classroom.createClassroomConnection(connection)),
 	)
 	debug(`🏫  Assigned students and teachers to classrooms`)
 
 	debug('🗺  Adding maps to classrooms')
 	const maps = await classrooms.map(async (classroom) => {
 		const mapCount = faker.random.number({ min: 1, max: 3 })
-		await promiseSerial(generateMaps(mapCount).map((m) => () => createMap(m, classroom.uid)))
+		await promiseSerial(generateMaps(mapCount).map((m) => () => Map.createMap(m, classroom.uid)))
 	})
 
 	debug(`🗺  Added ${maps.length} maps to ${classrooms.length} classrooms`)
@@ -106,8 +105,8 @@ const seedDatabase = async () => {
 
 	const pins = await students.reduce(async (accP, student) => {
 		const pinCount = faker.random.number({ min: 3, max: 8 })
-		const newPins = await promiseSerial(generatePins(pinCount).map((pinData) => () => createPin(pinData, student.uid))).catch(
-			(e) => console.log(e),
+		const newPins = await promiseSerial(generatePins(pinCount).map((pinData) => () => Pin.createPin(pinData, student.uid))).catch(
+			(e) => debug(e),
 		)
 		const acc = await accP
 		return [...acc, ...newPins]
@@ -120,10 +119,10 @@ const seedDatabase = async () => {
 	const newPins = []
 	await promiseSerial(
 		students.map((student) => async () => {
-			const userClassrooms = await getUserClassrooms(student.uid)
+			const userClassrooms = await Classroom.getUserClassrooms(student.uid)
 			await promiseSerial(
 				userClassrooms.map((classroom) => async () => {
-					const classroomMaps = await getClassroomMaps(classroom.uid)
+					const classroomMaps = await Map.getClassroomMaps(classroom.uid)
 					// For each map in a student's classroom, add some pins
 					await promiseSerial(
 						classroomMaps.map((m) => async () => {
@@ -134,7 +133,7 @@ const seedDatabase = async () => {
 										...pinData,
 										mapUids: [m.uid],
 									}
-									return createPin(args, student.uid)
+									return Pin.createPin(args, student.uid)
 								}),
 							)
 							newPins.push(newClassroomMapPins)

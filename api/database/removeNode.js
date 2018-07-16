@@ -1,6 +1,6 @@
 // @flow
 import dbClient from './client'
-import type { DBEdge, Txn } from '../types/shared/sharedTypes'
+import type { Txn } from '../types/shared/sharedTypes'
 
 const dgraph = require('dgraph-js')
 const debug = require('debug')('api')
@@ -9,7 +9,7 @@ const debug = require('debug')('api')
  * Removes a node and all outgoing edges
  */
 const removeNode = async (uid: string, existingTxn: Txn): Promise<boolean | Error> => {
-	const txn = existingTxn ||  dbClient.newTxn()
+	const txn = existingTxn || dbClient.newTxn()
 	try {
 		const mu = new dgraph.Mutation()
 		mu.setDelNquads(`<${uid}> * * .`)

@@ -12,7 +12,7 @@ const defaultConfig = {
 	unique: false,
 }
 
-const createEdge = async ({ fromUid, pred, toUid }: DBEdge, opts: EdgeConfig, existingTxn?: Txn): Promise<Object> => {
+const createEdge = async ({ fromUid, pred, toUid }: DBEdge, opts: EdgeConfig, existingTxn?: Txn): Promise<Boolean> => {
 	const config = { ...defaultConfig, ...opts }
 	let txn = existingTxn || dbClient.newTxn()
 	try {
@@ -29,7 +29,7 @@ const createEdge = async ({ fromUid, pred, toUid }: DBEdge, opts: EdgeConfig, ex
 		await txn.mutate(mu)
 		debug(`Created new edge: <${fromUid}> <${pred}> <${toUid}>`)
 		if (!existingTxn) await txn.commit()
-		return txn
+		return true
 	} catch (e) {
 		debug(e)
 		throw e
