@@ -23,6 +23,11 @@ export type EdgeConfig = {
 
 export type Txn = dbClient.newTxn
 
-export type DBNode = Object & {
+export type DBNode = {
 	uid: string,
+}
+
+export type TxnWithNode = {
+	txn: Txn,
+	data: DBNode,
 }

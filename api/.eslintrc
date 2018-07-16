@@ -4,16 +4,6 @@
 		"browser": true,
 		"node": true
 	},
-	// "settings": {
-	// 	"import/resolver": {
-	// 		"webpack": {
-	// 			"config": "./webpack.config.js"
-	// 		},
-	// 		"node": {
-	// 			"extensions": [".js"]
-	// 		}
-	// 	}
-	// },
 	"extends": ["airbnb", "prettier", "plugin:flowtype/recommended"],
 	"rules": {
 		"no-underscore-dangle": 0,

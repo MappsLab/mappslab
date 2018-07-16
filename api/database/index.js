@@ -3,7 +3,8 @@ import { mapObjIndexed } from 'ramda'
 import { unflatten } from 'flat'
 import createEdge from './createEdge'
 import createNode from './createNode'
-import { removeNode, removeEdge } from './removeNode'
+import removeNode from './removeNode'
+import removeEdge from './removeEdge'
 import createNodeWithEdges from './createNodeWithEdges'
 import mutateNode from './mutateNode'
 import dbClient from './client'
@@ -12,6 +13,29 @@ import { createVariables } from './utils'
 const debug = require('debug')('api')
 
 /* Shortcuts */
+
+/** ideal API: 
+
+const addUserWithAvatar = db.txn(
+	createNode({ input: { ...userData}, config }), // creates User
+	createNode(({ output }) => ({ input: { ...imageData }}, { userData: output.data }))
+	createEdge(({ output, prev, txns }) => ({ fromUid: newUid, pred: 'has_avatar', toUid: imageUid }, { unique: true }))
+)
+
+pipe the data through a series of transactions, finally commit it at the end.
+
+mabye: No config object? If you want an edge to be unique, just include a removeEdges txn.
+
+6 functions: createNode, createEdge, updateNode, updateEdge, removeNode, removeEdge
+
+all functions return an accumulator. User responsibility to append to it
+
+all functions accept input, or a function that:
+	- supplies the accumulator
+	- returns the output and accumulator ({ output: newOutput, prev })
+	- output takes the shape: { data: returned data, response: dgraph-js response,}
+
+*/
 
 const query = async (queryString: string, vars?: Object): Promise<Object | null> => {
 	try {
