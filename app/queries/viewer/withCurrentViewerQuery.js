@@ -21,15 +21,18 @@ export const query = gql`
 	}
 `
 const config = {
-	props: ({ data }) => {
-		const { loading, currentViewer, ...rest } = data
+	props: (response) => {
+		const { loading, data, ...rest } = response
+		const { currentViewer } = data
 		const { viewer, jwt } = currentViewer || {} // currentViewer may be undefined
-		if (viewer && jwt) {
-			const { token, expires } = jwt
-			const cookieExpiration = expires / 24 / 60 / 60
-			if (token) setCookie(VIEWER_COOKIE_TOKEN, token, { expires: cookieExpiration })
-		} else {
-			removeCookie(VIEWER_COOKIE_TOKEN)
+		if (!loading) {
+			if (viewer && jwt) {
+				const { token, expires } = jwt
+				const cookieExpiration = expires / 24 / 60 / 60
+				if (token) setCookie(VIEWER_COOKIE_TOKEN, token, { expires: cookieExpiration })
+			} else {
+				removeCookie(VIEWER_COOKIE_TOKEN)
+			}
 		}
 		return {
 			loading,

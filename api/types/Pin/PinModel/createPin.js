@@ -25,5 +25,7 @@ export const createPin = async (args: NewPinArgs, ownerUid: string): Promise<Pin
 	// Add the lesson relationships (optional)
 	if (lessonUids) edges.push(...lessonUids.map((fromUid) => [{ fromUid, pred: 'has_pin' }, {}]))
 
+	debug(validatedPinData, edges)
+
 	return createNodeWithEdges(validatedPinData, edges)
 }

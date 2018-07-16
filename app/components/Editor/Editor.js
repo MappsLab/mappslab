@@ -90,7 +90,6 @@ class Editor extends React.Component<Props, State> {
 			mode,
 		}
 		const options = this.getMapOptions()
-		console.log(pins.map((p) => p.uid))
 		return (
 			<EditorContext.Provider value={contextValue}>
 				<EditorWrapper>
