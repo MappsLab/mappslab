@@ -76,8 +76,12 @@ class Editor extends React.Component<Props, EditorState> {
 	}
 
 	log = (message) => {
+		const now = new Date()
+		const newEntry = { timestamp: now.getTime(), message }
+		console.log('logging:')
+		console.log(newEntry)
 		this.setState((prevState) => ({
-			log: [...prevState.log, { timestamp: new Date(), message }],
+			log: [...prevState.log, newEntry],
 		}))
 	}
 

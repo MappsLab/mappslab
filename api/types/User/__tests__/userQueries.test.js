@@ -1,12 +1,12 @@
 // @flow
 /* eslint-disable no-undef */
 import { request } from '../../../__tests__/utils'
-import { getUsers } from '../UserModel'
+import User from '../UserModel'
 
 let firstUser
 
 beforeAll(async (done) => {
-	const users = await getUsers()
+	const users = await User.getUsers()
 	const [user0] = users
 	firstUser = user0
 	done()

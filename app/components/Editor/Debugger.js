@@ -12,8 +12,6 @@ const Wrapper = styled.div`
 	width: 200px;
 	z-index: 100;
 	padding: 5px;
-	cursor: crosshair;
-	cursor: url(/images/newPin.svg) 18 49, pointer;
 `
 
 const PropertyWrapper = styled.div`
@@ -45,6 +43,8 @@ const Log = styled.div`
 	overflow: hidden;
 	background-color: rgba(245, 245, 245);
 	padding: 5px;
+	max-height: 130px;
+	overflow-y: scroll;
 `
 
 const LogLine = styled.h4`
@@ -75,7 +75,7 @@ const Debugger = ({ log }: Props) => (
 		<hr />
 		<LogWrapper>
 			<Title>Log</Title>
-			<Log>{log.map((l) => <LogLine key={l.timestamp}>{l.message}</LogLine>)}</Log>
+			<Log>{log.reverse().map((l) => <LogLine key={l.timestamp}>{l.message}</LogLine>)}</Log>
 		</LogWrapper>
 	</Wrapper>
 )
