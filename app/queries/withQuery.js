@@ -15,22 +15,27 @@ const defaultConfig = {
 	props: (response) => response,
 }
 
+const buildSubscriptionFn = (config, subscribeToMore) => (callback) => subscribeToMore(config, callback)
+
 const withQuery = (query: DocumentNode, opts?: Config = {}) => (
 	Component: React.ComponentType<any>, // The component we are wrapping
 	LoadingComponent?: React.ComponentType<any> = Loading, // An optional "Loading" component. Use a skeleton here
 ) => (componentProps: Object) => {
 	const config = { ...defaultConfig, ...opts }
-	const { props, options, subscriptionOptions } = config
+	const { props: transformProps, options, subscriptionOptions, subscriptionName } = config
 	const { variables } = typeof options === 'function' ? options(componentProps) : options
 
 	return (
 		<Query query={query} variables={variables}>
 			{(response) => {
 				const { loading, error, subscribeToMore } = response
-				const subscribeToMoreOptions = subscriptionOptions ? subscriptionOptions(componentProps) : null
-				const unSubscribe = subscribeToMoreOptions ? subscribeToMore(subscribeToMoreOptions) : () => {}
-				// const unSubscribe = config.subscriptionOptions ? subscribeToMore(config.subscriptionOptions(componentProps)) : () => {}
-				const responseProps = props(response)
+				// If there are subscriptionOptions in the config,
+				// prepare the 'subscribe' function
+
+				const subscribe = subscriptionOptions
+					? (callback) => subscribeToMore(subscriptionOptions(componentProps, callback))
+					: undefined
+				const responseProps = Object.assign({}, transformProps(response), { [subscriptionName || 'subscribe']: subscribe })
 				if (loading) return <LoadingComponent />
 				if (error) return 'error!'
 				return <Component {...componentProps} {...responseProps} />

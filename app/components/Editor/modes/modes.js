@@ -15,17 +15,18 @@ const addPinMode = (parent: React.Component) => ({
 			lat: e.latLng.lat(),
 			lng: e.latLng.lng(),
 		}
-		const newPin = {
+		const inProgressPin = {
 			lat: clickLatLng.lat,
 			lang: clickLatLng.lng,
 		}
-		parent.props.transition(NEXT, { center: clickLatLng, newPin })
+		console.log(inProgressPin)
+		parent.props.transition(NEXT, { center: clickLatLng, inProgressPin })
 	},
 })
 
 const addPinInfoMode = (parent: React.Component) => ({
 	handleClick: (e) => {
-		console.log('titlePinMode')
+		// todo, prompt cancel
 	},
 })
 

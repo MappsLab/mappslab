@@ -2,7 +2,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import Mapp from 'mapp'
-import { withStatechart } from 'react-automata'
+import { withStatechart, State } from 'react-automata'
 import { withMapQuery, withCurrentViewerQuery } from 'Queries'
 import type { ViewerType, MapType } from 'Types'
 import Pin from './Elements/Pin'
@@ -10,13 +10,10 @@ import Debugger from './Debugger'
 import Toolbar from './Tools/Toolbar'
 import NewPinButton from './Tools/NewPinButton'
 import NewPin from './Elements/NewPin'
-import { statechart, STARTED_ADD_PIN, SUCCESS } from './modes/statechart'
+import { statechart, STARTED_ADD_PIN, SUCCESS, NORMAL, ADD_PIN, ADD_PIN_INFO } from './modes/statechart'
 import { modes } from './modes/modes'
 
 const EditorContext = React.createContext('editor')
-
-const ADD_PIN = 'addPin'
-const NORMAL = 'normal'
 
 const EditorWrapper = styled.div`
 	position: relative;
@@ -31,10 +28,17 @@ const EditorWrapper = styled.div`
 type Props = {
 	viewer: ViewerType,
 	map: MapType,
+	inProgressPin: void | PinType,
+	subscribeToMorePins: () => () => void,
+	transition: (string, {}) => void,
+	machineState: {
+		value: string,
+	},
 }
 
-type State = {
-	mode: Mode,
+type EditorState = {
+	mapOptions: Object,
+	log: Array<{ timestamp: date, message: string }>,
 }
 
 const defaultOptions = {
@@ -45,22 +49,79 @@ const defaultOptions = {
 	streetViewControlOptions: false,
 }
 
-class Editor extends React.Component<Props, State> {
+class Editor extends React.Component<Props, EditorState> {
+	static defaultProps = {
+		inProgressPin: null,
+	}
+
 	state = {
-		mode: NORMAL,
+		log: [],
+		mapOptions: defaultOptions,
 	}
 
-	setMode = (mode: Mode) => () => {
-		this.setState({ mode })
+	componentDidMount() {
+		this.unsubscribe = this.props.subscribeToMorePins((newPin) => {
+			this.log(`${newPin.owner.name} added pin ${newPin.title}`)
+		})
 	}
 
-	getMapOptions = () => {
-		const mode = this.props.machineState.value
-		const draggableCursor = mode === ADD_PIN ? 'cell' : 'auto'
-		const draggable = mode === NORMAL
-		return { ...defaultOptions, ...this.props, draggableCursor, draggable }
+	componentWillUnmount() {
+		this.unsubscribe()
 	}
 
+	onAddPinSuccess = () => {
+		this.props.transition(SUCCESS, {
+			inProgressPin: null,
+		})
+	}
+
+	log = (message) => {
+		this.setState((prevState) => ({
+			log: [...prevState.log, { timestamp: new Date(), message }],
+		}))
+	}
+
+	enterNormal() {
+		this.setState(({ mapOptions }) => ({
+			inProgressPin: null,
+			mapOptions: {
+				...mapOptions,
+				draggable: true,
+				draggableCursor: 'initial',
+				clickableIcons: true,
+			},
+		}))
+	}
+
+	enterAddPin() {
+		this.setState(({ mapOptions }) => ({
+			mapOptions: {
+				...mapOptions,
+				draggable: true,
+				draggableCursor: 'url("/images/newPin.svg") 18 49, crosshair',
+				clickableIcons: true,
+			},
+		}))
+	}
+
+	enterAddPinInfo() {
+		this.setState(({ mapOptions }) => ({
+			mapOptions: {
+				...mapOptions,
+				draggable: false,
+				draggableCursor: 'cell',
+			},
+		}))
+	}
+
+	componentDidTransition(prevStateMachine, event) {
+		this.log(`transition: ${event}`)
+	}
+
+	/**
+	 * Add different methods depending on the mode
+	 * mode.addPin.handleClick(...) etc
+	 */
 	modes = Object.entries(modes).reduce(
 		(acc, [title, mode]) => ({
 			[title]: mode(this),
@@ -73,40 +134,34 @@ class Editor extends React.Component<Props, State> {
 		this.props.transition(STARTED_ADD_PIN)
 	}
 
-	onAddPinSuccess = (pin: PinType) => {
-		this.props.transition(SUCCESS, { newPin: null })
-	}
-
 	handleMapClick = (e) => {
 		const mode = this.props.machineState.value
 		if (this.modes[mode].handleClick) this.modes[mode].handleClick(e)
 	}
 
 	render() {
-		const { pins } = this.props.map
-		const { newPin, uid } = this.props
-		const mode = this.props.machineState.value
-		const contextValue = {
-			mode,
-		}
-		const options = this.getMapOptions()
+		const { mapOptions, log } = this.state
+		const { map, inProgressPin } = this.props
+		const { pins, uid } = map
 		return (
-			<EditorContext.Provider value={contextValue}>
+			<EditorContext.Provider>
 				<EditorWrapper>
-					<Debugger mode={mode} />
+					<Debugger log={log} />
 					<Mapp
 						APIKey="AIzaSyCOqxjWmEzFlHKC9w-iUZ5zL2rIyBglAag"
 						onClick={this.handleMapClick}
-						{...options}
+						{...mapOptions}
 						render={() => (
 							<React.Fragment>
 								{pins.map((p) => <Pin key={p.uid} {...p} />)}
-								{newPin ? <NewPin key="newPin" mapUid={uid} onSuccess={this.onAddPinSuccess} newPin={newPin} /> : null}
+								{inProgressPin ? (
+									<NewPin key="newPin" mapUid={uid} onSuccess={this.onAddPinSuccess} newPin={inProgressPin} />
+								) : null}
 							</React.Fragment>
 						)}
 					/>
 					<Toolbar>
-						<NewPinButton onClick={this.toggleAddPinMode} active={mode === ADD_PIN} />
+						<NewPinButton onClick={this.toggleAddPinMode} />
 					</Toolbar>
 				</EditorWrapper>
 			</EditorContext.Provider>
