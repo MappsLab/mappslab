@@ -6,8 +6,8 @@ export DEPLOY_ENV=$1
 
 echo "DEPLOY_ENV: $DEPLOY_ENV"
 
-if git diff --name-only $TRAVIS_COMMIT_RANGE | grep "^api/"
-	then 
+# if git diff --name-only $TRAVIS_COMMIT_RANGE | grep "^api/"
+	# then 
 	echo "*     * * *     *"
 	echo "⚗️  Testing API"
 	echo "*     * * *     *"
@@ -41,10 +41,10 @@ if git diff --name-only $TRAVIS_COMMIT_RANGE | grep "^api/"
 		cp ./api/now.staging.json ./build/api/now.json
 		cp ./api/.env.staging ./build/api/
 	fi
-fi
+# fi
 
-if git diff --name-only $TRAVIS_COMMIT_RANGE | grep "^app/"
-	then
+# if git diff --name-only $TRAVIS_COMMIT_RANGE | grep "^app/"
+	# then
 	echo "*     * * *     *"
 	echo "⚗️  Testing App"
 	echo "*     * * *     *"
@@ -81,7 +81,7 @@ if git diff --name-only $TRAVIS_COMMIT_RANGE | grep "^app/"
 		mv ./build/web/now.staging.json ./build/web/now.json
 	fi
 
-fi
+# fi
 
 echo "*     * * *     *"
 echo "⚗️   Done running tests"
