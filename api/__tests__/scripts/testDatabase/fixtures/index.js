@@ -1,6 +1,2 @@
 // @flow
-import users from './users'
-
-module.exports = {
-	users,
-}
+export { default as users } from './users'

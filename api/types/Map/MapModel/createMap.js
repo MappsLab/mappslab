@@ -13,6 +13,8 @@ export const createMap = async (pinData: MapType, classroomUid: string): Promise
 		debug(err._object)
 		throw new ValidationError(err)
 	})
+
 	const newMap = await createNodeWithEdges(validatedMapData, [[{ fromUid: classroomUid, pred: 'has_map' }, {}]])
+
 	return newMap
 }

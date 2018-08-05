@@ -1,7 +1,7 @@
 // @flow
 import dbClient from './client'
 import type { DBEdge, Txn, EdgeConfig } from '../flowTypes/database'
-import { removeEdge } from './removeEdge'
+import removeEdge from './removeEdge'
 
 const dgraph = require('dgraph-js')
 const debug = require('debug')('api')
@@ -12,7 +12,7 @@ const defaultConfig = {
 	unique: false,
 }
 
-const createEdge = async ({ fromUid, pred, toUid }: DBEdge, opts: EdgeConfig, existingTxn?: Txn): Promise<Boolean> => {
+const createEdge = async ({ fromUid, pred, toUid }: DBEdge, opts: EdgeConfig, existingTxn?: Txn): Promise<true> => {
 	const config = { ...defaultConfig, ...opts }
 	let txn = existingTxn || dbClient.newTxn()
 	try {

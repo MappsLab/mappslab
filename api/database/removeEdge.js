@@ -12,7 +12,7 @@ type EdgeConfig = {
 
 export type Relationship = [DBEdge, EdgeConfig]
 
-export const removeEdge = async ({ fromUid, pred, toUid }: DBEdge, existingTxn?: Txn): Promise<Object> => {
+const removeEdge = async ({ fromUid, pred, toUid }: DBEdge, existingTxn?: Txn): Promise<Object> => {
 	const txn = existingTxn || dbClient.newTxn()
 	try {
 		if (!validateUid(fromUid)) throw new Error(`Uid ${fromUid} is not in a valid format`)

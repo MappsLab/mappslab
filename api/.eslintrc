@@ -9,6 +9,7 @@
 		"no-underscore-dangle": 0,
 		"no-nested-ternary": 0,
 		"jsx-a11y/anchor-is-valid": 0,
+		"import/no-cycle": 0,
 		"react/jsx-indent": [2, "tab"],
 		"react/jsx-indent-props": [2, "tab"],
 		"react/jsx-filename-extension": [

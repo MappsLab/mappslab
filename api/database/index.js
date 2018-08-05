@@ -1,14 +1,15 @@
 // @flow
 import { mapObjIndexed } from 'ramda'
 import { unflatten } from 'flat'
-import createEdge from './createEdge'
-import createNode from './createNode'
-import removeNode from './removeNode'
-import removeEdge from './removeEdge'
-import createNodeWithEdges from './createNodeWithEdges'
-import mutateNode from './mutateNode'
 import dbClient from './client'
 import { createVariables } from './utils'
+
+export { default as createEdge } from './createEdge'
+export { default as createNode } from './createNode'
+export { default as removeNode } from './removeNode'
+export { default as removeEdge } from './removeEdge'
+export { default as createNodeWithEdges } from './createNodeWithEdges'
+export { default as mutateNode } from './mutateNode'
 
 const debug = require('debug')('api')
 
@@ -37,7 +38,7 @@ all functions accept input, or a function that:
 
 */
 
-const query = async (queryString: string, vars?: Object): Promise<Object | null> => {
+export const query = async (queryString: string, vars?: Object): Promise<Object | null> => {
 	try {
 		const q = vars
 			? // if we have vars, parse them
@@ -52,15 +53,4 @@ const query = async (queryString: string, vars?: Object): Promise<Object | null>
 		debug('-----------------------------')
 		throw err
 	}
-}
-
-module.exports = {
-	createEdge,
-	createNode,
-	createNodeWithEdges,
-	mutateNode,
-	removeNode,
-	removeEdge,
-	dbClient,
-	query,
 }

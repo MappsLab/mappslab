@@ -30,6 +30,7 @@ const createNodeWithEdges = async (nodeData: Object, relationships: NewRelations
 		const newNode = await txn.mutate(mu)
 		const newNodeUid = newNode.getUidsMap().get('blank-0')
 		debug(newNodeUid)
+
 		const newEdges = await Promise.all(
 			relationships.map(async ([partialEdge, edgeConfig]) => {
 				const { toUid, fromUid, pred } = pick(['toUid', 'fromUid', 'pred'], partialEdge)
