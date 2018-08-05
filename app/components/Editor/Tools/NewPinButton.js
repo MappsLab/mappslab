@@ -15,7 +15,7 @@ type Props = {
 const NewPinButton = ({ onClick }: Props) => (
 	<State
 		value={[ADD_PIN, ADD_PIN_INFO]}
-		render={(isActive) => <RoundButton onClick={onClick} active={isActive} label="Add a new Pin" icon="" />}
+		render={(isActive) => <RoundButton onClick={onClick} active={isActive} label="Add a new Pin" icon="📍" size="large" />}
 	/>
 )
 

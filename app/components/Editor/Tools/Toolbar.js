@@ -6,10 +6,27 @@ const Wrapper = styled.div`
 	position: absolute;
 	z-index: 100;
 	bottom: 20px;
-	width: 400px;
-	left: calc(50% - 200px);
 	display: flex;
-	justify-content: center;
+	${({ align }) => {
+		switch (align) {
+			case 'left':
+				return `
+					left: 20px;
+					justify-content: flex-start;
+				`
+			case 'right':
+				return `
+					right: 20px;
+					justify-content: flex-end;
+				`
+			default:
+				return `
+					width: 400px;
+					left: calc(50% - 200px);
+					justify-content: center;
+				`
+		}
+	}};
 `
 
 /**
@@ -18,8 +35,13 @@ const Wrapper = styled.div`
 
 type Props = {
 	children: React.Node,
+	align?: 'left' | 'center' | 'right',
 }
 
-const Toolbar = ({ children }: Props) => <Wrapper>{children}</Wrapper>
+const Toolbar = ({ children, align }: Props) => <Wrapper align={align}>{children}</Wrapper>
+
+Toolbar.defaultProps = {
+	align: 'center',
+}
 
 export default Toolbar

@@ -1,6 +1,7 @@
 // @flow
 import * as R from 'ramda'
 import gql from 'graphql-tag'
+import type { PinType, MapType } from 'Types'
 import { unwindEdges } from '../utils'
 import withQuery from '../withQuery'
 import { query as newPinAddedQuery } from './withMapSubscriptions'
@@ -22,6 +23,9 @@ export const query = gql/* GraphQL */ `
 						title
 						lat
 						lang
+						owner {
+							uid
+						}
 					}
 				}
 			}
@@ -29,11 +33,20 @@ export const query = gql/* GraphQL */ `
 	}
 `
 
+type MapQueryResponse = {
+	data: {
+		loading: boolean,
+		map: MapType,
+		rest: {},
+	},
+}
+
 const config = {
 	options: ({ uid }) => ({
 		variables: { uid },
 	}),
-	props: ({ data }) => {
+	props: ({ data }: MapQueryResponse) => {
+		// $FlowFixMe
 		const { loading, map, ...rest } = unwindEdges(data)
 		return {
 			loading,
@@ -44,7 +57,7 @@ const config = {
 		}
 	},
 	subscriptionName: 'subscribeToMorePins',
-	subscriptionOptions: ({ uid }, callback = () => {}) => ({
+	subscriptionOptions: ({ uid }, callback: (p: PinType) => void = () => {}) => ({
 		document: newPinAddedQuery,
 		variables: { mapUid: uid },
 		updateQuery: (previous, { subscriptionData }) => {

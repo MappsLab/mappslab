@@ -88,6 +88,7 @@ const arrayValuesMatch = (values: Array<string | number>): boolean => {
 }
 
 const valuesMustMatch = (fields: Array<string>) => (values: mixed): boolean =>
+	// $FlowFixMe
 	R.pipe(
 		R.pickAll(fields),
 		R.values,

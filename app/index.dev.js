@@ -6,7 +6,7 @@ import { ThemeProvider } from 'styled-components'
 import ApolloWrapper from './services/Apollo'
 import theme from './theme'
 import MappsLab from './views/MappsLab'
-import './styles/global'
+import './theme/global'
 
 if (window.localStorage) {
 	window.localStorage.debug = 'app'

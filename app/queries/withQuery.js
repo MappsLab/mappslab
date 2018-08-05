@@ -4,18 +4,24 @@ import type { DocumentNode } from 'graphql'
 import { Query } from 'react-apollo'
 import { Loading } from '../components/Loading'
 
+type SubscriptionOptions = {
+	document?: DocumentNode,
+	onError?: (error: Error) => void,
+	updateQuery?: (any, any) => any,
+	variables?: {},
+}
+
 type Config = {
 	options?: (Object) => Object | Object, // Use the component's props to provide `variables`, ...
 	props?: (Object) => Object, // A function that takes the response and returns an object.
-	subscriptionOptions: ({}) => {},
+	subscriptionOptions?: ({ uid: string }, Function) => SubscriptionOptions,
+	subscriptionName?: string,
 }
 
 const defaultConfig = {
 	options: { variables: null }, // eslint-disable-line no-unused-vars
 	props: (response) => response,
 }
-
-const buildSubscriptionFn = (config, subscribeToMore) => (callback) => subscribeToMore(config, callback)
 
 const withQuery = (query: DocumentNode, opts?: Config = {}) => (
 	Component: React.ComponentType<any>, // The component we are wrapping
@@ -33,7 +39,8 @@ const withQuery = (query: DocumentNode, opts?: Config = {}) => (
 				// prepare the 'subscribe' function
 
 				const subscribe = subscriptionOptions
-					? (callback) => subscribeToMore(subscriptionOptions(componentProps, callback))
+					? // $FlowFixMse
+					  (callback) => subscribeToMore(subscriptionOptions(componentProps, callback))
 					: undefined
 				const responseProps = Object.assign({}, transformProps(response), { [subscriptionName || 'subscribe']: subscribe })
 				if (loading) return <LoadingComponent />

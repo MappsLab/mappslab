@@ -3,7 +3,7 @@ import { css } from 'styled-components'
 
 import { lightGray, middleGray, red } from 'Styles/colors'
 import { spacing } from 'Styles/layout'
-import { semi, p, h4 } from 'Styles/type'
+import { semi, p, h4 } from 'Styles/text'
 
 /* Forms */
 

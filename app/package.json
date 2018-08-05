@@ -1,7 +1,7 @@
 {
-  "name": "mappslab-client",
+  "name": "mappslab-app",
   "version": "0.0.1",
-  "description": "React.js front-end for MappsLab",
+  "description": "React.js front-end client for MappsLab",
   "main": "index.js",
   "author": "Joseph Thomas | Good Idea Studio",
   "license": "ISC",

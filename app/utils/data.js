@@ -13,3 +13,5 @@ export const findNextInArray = (array: Array<mixed>, item: mixed): any | void =>
 }
 
 export const arrayify = (...things: NestedArray<mixed>): Array<mixed> => R.flatten(things)
+
+export const minMax = (min: number, max: number) => (num: number): number => Math.min(Math.max(num, min), max)

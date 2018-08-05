@@ -5,10 +5,10 @@ import Mapp from 'mapp'
 import { withStatechart } from 'react-automata'
 import { withMapQuery, withCurrentViewerQuery } from 'Queries'
 import type { ViewerType, MapType, PinType } from 'Types'
+import { minMax } from 'Utils/data'
 import Pin from './Elements/Pin'
 import Debugger from './Debugger'
-import Toolbar from './Tools/Toolbar'
-import NewPinButton from './Tools/NewPinButton'
+import { NewPinButton, ZoomButton, Toolbar } from './Tools'
 import NewPin from './Elements/NewPin'
 import { statechart, STARTED_ADD_PIN, SUCCESS } from './modes/statechart'
 import { modes } from './modes/modes'
@@ -26,7 +26,7 @@ const EditorWrapper = styled.div`
 type Props = {
 	viewer: ViewerType,
 	map: MapType,
-	inProgressPin: void | PinType,
+	inProgressPin?: void | PinType,
 	subscribeToMorePins: (Function) => () => void,
 	transition: (string, ?{}) => void,
 	machineState: {
@@ -48,6 +48,19 @@ const defaultOptions = {
 }
 
 class Editor extends React.Component<Props, EditorState> {
+	/**
+	 * Add different methods depending on the mode
+	 * mode.addPin.handleClick(...) etc
+	 */
+	// $FlowFixMe
+	modes = Object.entries(modes).reduce(
+		(acc, [title, mode]: [string, Function]) => ({
+			[title]: mode(this),
+			...acc,
+		}),
+		{},
+	)
+
 	static defaultProps = {
 		inProgressPin: null,
 	}
@@ -58,7 +71,8 @@ class Editor extends React.Component<Props, EditorState> {
 	}
 
 	componentDidMount() {
-		this.unsubscribe = this.props.subscribeToMorePins((newPin) => {
+		const { subscribeToMorePins } = this.props
+		this.unsubscribe = subscribeToMorePins((newPin) => {
 			this.log(`${newPin.owner.name} added pin ${newPin.title}`)
 		})
 	}
@@ -68,12 +82,11 @@ class Editor extends React.Component<Props, EditorState> {
 	}
 
 	onAddPinSuccess = () => {
-		this.props.transition(SUCCESS, {
+		const { transition } = this.props
+		transition(SUCCESS, {
 			inProgressPin: null,
 		})
 	}
-
-	unsubscribe: () => void
 
 	log = (message) => {
 		const now = new Date()
@@ -83,13 +96,29 @@ class Editor extends React.Component<Props, EditorState> {
 		}))
 	}
 
-	enterNormal() {
+	toggleAddPinMode = () => {
+		const { transition } = this.props
+		transition(STARTED_ADD_PIN)
+	}
+
+	handleMapClick = (e) => {
+		const {
+			machineState: { value },
+		} = this.props
+		const mode = value
+		if (this.modes[mode].handleClick) this.modes[mode].handleClick(e)
+	}
+
+	componentDidTransition(prevStateMachine, event) {
+		this.log(`transition: ${event}`)
+	}
+
+	enterAddPinInfo() {
 		this.setState(({ mapOptions }) => ({
 			mapOptions: {
 				...mapOptions,
-				draggable: true,
-				draggableCursor: 'initial',
-				clickableIcons: true,
+				draggable: false,
+				draggableCursor: 'cell',
 			},
 		}))
 	}
@@ -105,41 +134,37 @@ class Editor extends React.Component<Props, EditorState> {
 		}))
 	}
 
-	enterAddPinInfo() {
+	enterNormal() {
 		this.setState(({ mapOptions }) => ({
 			mapOptions: {
 				...mapOptions,
-				draggable: false,
-				draggableCursor: 'cell',
+				draggable: true,
+				draggableCursor: 'initial',
+				clickableIcons: true,
 			},
 		}))
 	}
 
-	componentDidTransition(prevStateMachine, event) {
-		this.log(`transition: ${event}`)
+	zoom = (level: 'in' | 'out' | number) => () => {
+		this.setState(({ mapOptions }) => {
+			const zoom = minMax(0, 21)(
+				typeof level === 'number'
+					? level
+					: level === 'in'
+						? mapOptions.zoom + 1
+						: level === 'out'
+							? mapOptions.zoom - 1
+							: defaultOptions.zoom,
+			)
+			return {
+				mapOptions: {
+					zoom,
+				},
+			}
+		})
 	}
 
-	/**
-	 * Add different methods depending on the mode
-	 * mode.addPin.handleClick(...) etc
-	 */
-	// $FlowFixMe
-	modes = Object.entries(modes).reduce(
-		(acc, [title, mode]: [string, Function]) => ({
-			[title]: mode(this),
-			...acc,
-		}),
-		{},
-	)
-
-	toggleAddPinMode = () => {
-		this.props.transition(STARTED_ADD_PIN)
-	}
-
-	handleMapClick = (e) => {
-		const mode = this.props.machineState.value
-		if (this.modes[mode].handleClick) this.modes[mode].handleClick(e)
-	}
+	unsubscribe: () => void
 
 	render() {
 		const { mapOptions, log } = this.state
@@ -163,6 +188,10 @@ class Editor extends React.Component<Props, EditorState> {
 				/>
 				<Toolbar>
 					<NewPinButton onClick={this.toggleAddPinMode} />
+				</Toolbar>
+				<Toolbar align="right">
+					<ZoomButton direction="in" onClick={this.zoom('in')} />
+					<ZoomButton direction="out" onClick={this.zoom('out')} />
 				</Toolbar>
 			</EditorWrapper>
 		)

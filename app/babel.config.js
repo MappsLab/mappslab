@@ -39,7 +39,7 @@ module.exports = {
 					Utils: './utils',
 					Queries: './queries',
 					Types: './types',
-					Styles: './styles',
+					Styles: './theme',
 				},
 			},
 		],

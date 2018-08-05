@@ -5,7 +5,7 @@ import { BrowserRouter } from 'react-router-dom'
 import ApolloWrapper from './services/Apollo'
 
 import MappsLab from './views/MappsLab'
-import './styles/global'
+import './theme/global'
 
 render(
 	<AppContainer>

@@ -3,7 +3,7 @@ import { css } from 'styled-components'
 
 import { flexCenter, spacing } from 'Styles/layout'
 import { middleGray, lightGray } from 'Styles/colors'
-import { semi, h5 } from 'Styles/type'
+import { semi, h5 } from 'Styles/text'
 
 export const buttonStyles = css`
 	${flexCenter};
