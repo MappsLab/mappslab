@@ -28,7 +28,6 @@ const EditorWrapper = styled.div`
 export type EditorProps = {
 	viewer: ViewerType,
 	map: MapType,
-	inProgressPin?: void | NewPinType,
 	subscribeToMorePins: (Function) => () => void,
 	transition: (string, ?{}) => void,
 	machineState: {
@@ -36,6 +35,7 @@ export type EditorProps = {
 	},
 	mapOptions: Object,
 	updateMapOptions: (Object) => void,
+	activePinUid?: string | null,
 }
 
 export type EditorState = {
@@ -55,7 +55,7 @@ type Event = $Keys<typeof _eventNames>
 
 class Editor extends React.Component<EditorProps, EditorState> {
 	static defaultProps = {
-		inProgressPin: null,
+		activePinUid: null,
 	}
 
 	state = {
@@ -69,15 +69,18 @@ class Editor extends React.Component<EditorProps, EditorState> {
 		})
 	}
 
-	componentWillUnmount() {
-		this.unsubscribe()
+	componentDidUpdate(prevProps) {
+		// If we transitioned from one state to another,
+		// trigger the onEntry event and log the transition
+		if (prevProps.machineState.value !== this.props.machineState.value) {
+			this.handleEvent('onEntry')()
+			this.log(`transition to: ${this.props.machineState.value}`)
+		}
 	}
 
-	onAddPinSuccess = () => {
-		const { transition } = this.props
-		transition(SUCCESS, {
-			inProgressPin: null,
-		})
+	componentWillUnmount() {
+		// Cancel the subscription for new map data
+		this.unsubscribe()
 	}
 
 	/**
@@ -93,8 +96,17 @@ class Editor extends React.Component<EditorProps, EditorState> {
 			{},
 		)
 
-	transition = (action: string) => (payload: {} = {}) => {
-		this.props.transition(action, payload)
+	/**
+	 * Factory function to make shortcuts for transitions called by child
+	 * components.
+	 *
+	 * TODO: this gets weird with events, which is why `withProps` is defined as a property.
+	 * Think about a
+	 */
+	transition = (action: string) => (payload: SyntheticEvent<> | void | {}) => {
+		// do some duck typing to prevent passing a syntheticEvent in as updated props.
+		const newValues = payload && payload.nativeEvent ? {} : payload
+		this.props.transition(action, newValues)
 	}
 
 	/**
@@ -106,7 +118,6 @@ class Editor extends React.Component<EditorProps, EditorState> {
 	 */
 	handleEvent = (eventName: Event) => (payload) => {
 		const mode = this.props.machineState.value
-		console.log(eventName, mode)
 		const handler = R.path(['props', 'modes', mode, eventName])(this)
 		if (handler) handler(payload)
 	}
@@ -119,49 +130,11 @@ class Editor extends React.Component<EditorProps, EditorState> {
 		}))
 	}
 
-	enterAddPinInfo() {
-		this.setState(({ mapOptions }) => ({
-			mapOptions: {
-				...mapOptions,
-				draggable: false,
-				draggableCursor: 'cell',
-			},
-		}))
-	}
-
-	enterAddPin() {
-		this.setState(({ mapOptions }) => ({
-			mapOptions: {
-				...mapOptions,
-				draggable: true,
-				draggableCursor: 'url("/images/newPin.svg") 18 49, crosshair',
-				clickableIcons: true,
-			},
-		}))
-	}
-
-	enterNormal() {
-		this.setState(({ mapOptions }) => ({
-			mapOptions: {
-				...mapOptions,
-				draggable: true,
-				draggableCursor: 'initial',
-				clickableIcons: true,
-			},
-		}))
-	}
-
-	componentDidTransition(prevStateMachine, event) {
-		this.handleEvent('onEntry')
-		this.log(`transition: ${event}`)
-	}
-
 	unsubscribe: () => void
 
 	render() {
 		const { log } = this.state
-		const { mapOptions, map, inProgressPin } = this.props
-		console.log(this.props.mapOptions.zoom)
+		const { mapOptions, map, activePinUid } = this.props
 		const { pins } = map
 		return (
 			<EditorWrapper>
@@ -173,16 +146,14 @@ class Editor extends React.Component<EditorProps, EditorState> {
 					render={() => (
 						<React.Fragment>
 							{pins.map((p) => (
-								<Pin key={p.uid} pin={p} updatePinSuccess={this.transition(SUCCESS)} updatePinCancel={this.transition(CANCEL)} />
-							))}
-							{inProgressPin ? (
 								<Pin
-									key="newPin"
-									pin={inProgressPin}
+									key={p.uid}
+									pin={p}
+									active={p.uid === activePinUid}
 									updatePinSuccess={this.transition(SUCCESS)}
 									updatePinCancel={this.transition(CANCEL)}
 								/>
-							) : null}
+							))}
 						</React.Fragment>
 					)}
 				/>
@@ -202,6 +173,6 @@ export default compose(
 	withCurrentViewerQuery,
 	withMapQuery,
 	withStatechart(statechart),
-	withModes,
 	withMapOptions,
+	withModes,
 )(Editor)

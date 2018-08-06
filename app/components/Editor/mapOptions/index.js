@@ -1,4 +1,5 @@
 // @flow
+import * as React from 'react'
 import { withState, withHandlers, compose } from 'recompose'
 import { minMax } from 'Utils/data'
 

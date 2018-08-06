@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react'
 import { addListeners, removeListeners } from '../utils/listeners'
-import type { LatLng, Map, InfoWindow as InfoWindowType } from '../types'
+import type { LatLng, Map, Marker, InfoWindow as InfoWindowType } from '../types'
 import { getNewValues, separateOptionsAndEvents } from '../utils/data'
 import { MapConsumer } from '../Mapp'
 /**
@@ -18,7 +18,7 @@ const infoWindowEventNames = {
 
 type Props = {
 	position?: LatLng,
-	anchor?: Pin,
+	anchor?: Marker,
 	onCloseClick?: () => void,
 	onDomReady?: () => void,
 	onPositionChanged?: () => void,

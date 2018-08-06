@@ -1,32 +1,38 @@
 // @flow
+import { pushPath } from 'Utils/data'
+import { NEXT } from './statechart'
+import type { EditorProps } from '../Editor'
 
-import { CANCEL } from './statechart'
-import type { EditorProps, EditorState } from '../Editor'
-
-const addPinMode = (initialProps) => ({
-	onEntry: (props) => () => {
+const addPinMode = () => ({
+	onEntry: (props: EditorProps) => () => {
+		props.updateMapOptions({
+			draggable: true,
+			draggableCursor: 'url("/images/newPin.svg") 18 49, crosshair',
+			clickableIcons: false,
+		})
 		// parent.setState(({ mapOptions }) => ({
 		// 	mapOptions: {
 		// 		...mapOptions,
-		// 		draggable: true,
-		// 		draggableCursor: 'url("/images/newPin.svg") 18 49, crosshair',
-		// 		clickableIcons: true,
 		// 	},
 		// }))
 	},
 
-	onClick: (props) => (e) => {
-		props.transition(CANCEL)
+	onClick: (props: EditorProps) => (e) => {
+		const tempUid = '__temp__uid__'
 		const clickLatLng = {
 			lat: e.latLng.lat(),
 			lng: e.latLng.lng(),
 		}
 		const inProgressPin = {
+			uid: tempUid,
+			title: '',
+			description: '',
 			lat: clickLatLng.lat,
 			lang: clickLatLng.lng,
-			// owner: parent.props.viewer,
+			owner: props.viewer,
 		}
-		// parent.props.transition(NEXT, { center: clickLatLng, inProgressPin })
+		const map = pushPath(['pins'], inProgressPin)(props.map)
+		props.transition(NEXT, { map, activePinUid: tempUid })
 	},
 })
 

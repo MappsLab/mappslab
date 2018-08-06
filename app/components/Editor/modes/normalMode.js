@@ -3,12 +3,19 @@
 import { DROPPED_PIN } from './statechart'
 import type { EditorProps, EditorState } from '../Editor'
 
-const addPinMode = (initialProps) => ({
-	onEntry: () => {},
-	onClick: (props) => () => {
-		props.transition(DROPPED_PIN, { hi: 'hello' })
+export const normalOptions = {
+	center: { lat: 40.65, lng: -111.85 },
+	zoom: 10,
+	disableDefaultUI: true,
+	zoomControlOptions: false,
+	streetViewControlOptions: false,
+}
+
+const normalMode = (initialProps) => ({
+	onEntry: (props) => () => {
+		props.updateMapOptions(normalOptions)
 	},
-	handleMapClick: (e) => {},
+	onClick: () => () => {},
 })
 
-export default addPinMode
+export default normalMode

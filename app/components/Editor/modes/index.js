@@ -2,12 +2,13 @@
 import { withHandlers, withProps, mapProps, compose } from 'recompose'
 import addPinMode from './addPinMode'
 import normalMode from './normalMode'
-import { ADD_PIN, NORMAL } from './statechart'
+import editPinMode from './editPinMode'
+import { NORMAL, EDIT_PIN, ADD_PIN } from './statechart'
 
 const modes = {
 	[NORMAL]: normalMode,
 	[ADD_PIN]: addPinMode,
-	// [ADD_PIN_INFO]: addPinInfoMode,
+	[EDIT_PIN]: editPinMode,
 }
 
 const propsToNamespace = (namespaceName, ...hocs) =>

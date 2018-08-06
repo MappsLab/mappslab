@@ -1,6 +1,7 @@
 // @flow
 import React from 'react'
 import Mapp from 'mapp'
+import { Action } from 'react-automata'
 import type { PinType, NewPinType } from '../../../types'
 import PinInfoWindow from './PinInfoWindow'
 
@@ -10,7 +11,6 @@ import PinInfoWindow from './PinInfoWindow'
 
 type Props = {
 	pin: PinType | NewPinType,
-	transition: (string) => void,
 }
 
 type State = {
@@ -35,6 +35,7 @@ class Pin extends React.Component<Props, State> {
 	render() {
 		const { showInfo, newTitle } = this.state
 		const { lat, lang, title } = this.props.pin
+		const { active } = this.props
 		const position = {
 			lat,
 			lng: lang,
@@ -44,7 +45,17 @@ class Pin extends React.Component<Props, State> {
 				position={position}
 				onClick={this.showInfo}
 				render={({ anchor }) =>
-					showInfo ? <PinInfoWindow anchor={anchor} onCloseClick={this.hideInfo} content={newTitle || title} /> : null
+					anchor && active ? (
+						<React.Fragment>
+						<Action show="editPin">
+						null
+						</Action>
+						<Action show="inspectPin">
+
+							<PinInfoWindow anchor={anchor} onCloseClick={this.hideInfo} content={newTitle || title} />
+						</Action>
+						</React.Fragment>
+					) : null
 				}
 			/>
 		)
