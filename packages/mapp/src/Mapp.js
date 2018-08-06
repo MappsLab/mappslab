@@ -1,7 +1,8 @@
 // @flow
 import * as React from 'react'
-import Marker from './components/Marker'
-import InfoWindow from './components/InfoWindow'
+// import Marker from './components/Marker'
+// import InfoWindow from './components/InfoWindow'
+// import CustomPopup from './components/CustomPopup'
 import loadGoogleMaps from './services/googleMaps'
 import { getNewValues, separateOptionsAndEvents } from './utils/data'
 import { addListeners, removeListeners } from './utils/listeners'
@@ -48,8 +49,9 @@ type State = {
 const defaultStyle = { width: '100%', height: '100%', position: 'absolute' }
 
 class Mapp extends React.Component<Props, State> {
-	static Marker = Marker
-	static InfoWindow = InfoWindow
+	// static Marker = Marker
+	// static InfoWindow = InfoWindow
+	// static CustomPopup = CustomPopup
 
 	static defaultProps = {
 		options: {},

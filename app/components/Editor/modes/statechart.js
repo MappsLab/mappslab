@@ -18,13 +18,19 @@ export const CLICKED_PIN = 'clickedPin'
 export const CLICKED_EDIT_PIN = 'clickedEditPin'
 
 export const statechart = {
-	initial: NORMAL,
+	initial: 'init',
 	states: {
+		init: {
+			on: {
+				[NEXT]: NORMAL,
+			},
+		},
 		[NORMAL]: {
 			on: {
 				[DROPPED_PIN]: ADD_PIN,
 				[CLICKED_PIN]: INSPECT_PIN,
 			},
+			onEntry: ['allowPinHover'],
 		},
 		// The user has opened a pin info window
 		[INSPECT_PIN]: {
@@ -40,6 +46,7 @@ export const statechart = {
 				[NEXT]: EDIT_PIN,
 				[CANCEL]: NORMAL,
 			},
+			onEntry: 'addPin',
 		},
 		// The user is entering / editing info for a new or existing pin
 		[EDIT_PIN]: {

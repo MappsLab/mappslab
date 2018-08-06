@@ -48,10 +48,16 @@ class Marker extends React.Component<MarkerProps, State> {
 		render: () => null,
 	}
 
+	state = {
+		ready: false,
+	}
+
 	componentDidMount() {
-		const { options, events } = separateOptionsAndEvents(this.props, markerEventNames)
+		const { events } = this.props
+		const { options } = separateOptionsAndEvents(this.props, markerEventNames)
 		this.entity = new window.google.maps.Marker(options)
 		if (this.entity) this.listeners = addListeners(this.entity, markerEventNames, events)
+		this.setState({ ready: true })
 	}
 
 	componentWillReceiveProps(nextProps) {

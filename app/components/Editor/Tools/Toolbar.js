@@ -7,6 +7,11 @@ const Wrapper = styled.div`
 	z-index: 100;
 	bottom: 20px;
 	display: flex;
+	pointer-events: none;
+
+	& button {
+		pointer-events: initial;
+	}
 	${({ align }) => {
 		switch (align) {
 			case 'left':

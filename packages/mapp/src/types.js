@@ -2,8 +2,8 @@
 // Copied from https://github.com/jonboiser/flowtype-google-maps/blob/master/flow-typed/google-maps.js
 
 export type LatLng = {
-	lat: number,
-	lng: number,
+	lat: number | (() => number),
+	lng: number | (() => number),
 }
 
 declare class MVCObject {

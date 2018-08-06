@@ -7,10 +7,10 @@ import Mapp from 'mapp'
 import { withStatechart } from 'react-automata'
 import { withMapQuery, withCurrentViewerQuery } from 'Queries'
 import type { ViewerType, MapType, NewPinType } from 'Types'
-import Pin from './Elements/Pin'
+import Pin from './Pin'
 import Debugger from './Debugger'
 import { NewPinButton, ZoomButton, Toolbar } from './Tools'
-import { statechart, SUCCESS, DROPPED_PIN, CANCEL } from './modes/statechart'
+import { statechart, SUCCESS, DROPPED_PIN, CANCEL, NEXT } from './modes/statechart'
 import withMapOptions from './mapOptions'
 import withModes from './modes'
 // import { modes } from './modes/index'
@@ -67,6 +67,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
 		this.unsubscribe = subscribeToMorePins((newPin) => {
 			this.log(`${newPin.owner.name} added pin ${newPin.title}`)
 		})
+		this.transition(NEXT)()
 	}
 
 	componentDidUpdate(prevProps) {

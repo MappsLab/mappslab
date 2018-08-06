@@ -24,7 +24,6 @@ const zoom = ({ updateMapOptions }) => (level: 'in' | 'out' | number) => () =>
 						? mapOptions.zoom - 1
 						: defaultOptions.zoom,
 		)
-		console.log(mapOptions, zoomLevel)
 		return {
 			...mapOptions,
 			zoom: zoomLevel,
