@@ -11,6 +11,14 @@ export type PinType = {
 	owner: UserType,
 }
 
+export type NewPinType = {
+	lat: number,
+	lang: number,
+	title?: string,
+	description?: string,
+	owner: UserType,
+}
+
 export type UserType = {
 	uid: string,
 	name: string,

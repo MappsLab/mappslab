@@ -35,9 +35,10 @@ import type { Map } from './types'
 
 type Props = {
 	APIKey: string,
-	options?: Object,
+	options: Object,
 	render: ({ map: Map }) => React.Node,
 	style?: Object,
+	eventHandlers?: Object,
 }
 
 type State = {
@@ -58,21 +59,21 @@ class Mapp extends React.Component<Props, State> {
 
 	constructor(props: Props) {
 		super(props)
+		this.mapRef = React.createRef()
 		this.state = {
 			ready: false,
 		}
-		this.mapRef = React.createRef()
 	}
 
 	async componentDidMount() {
-		const { APIKey, ...props } = this.props
+		const { APIKey, options, eventHandlers } = this.props
 		// TODO not sure if this will work with  multiple rapid calls.. figure it out
 		await loadGoogleMaps(APIKey)
-		const { options, events } = separateOptionsAndEvents(props, mapEventNames)
+		// const { options, events } = separateOptionsAndEvents(props, mapEventNames)
 
 		// $FlowFixMe
 		this.map = new google.maps.Map(this.mapRef.current, options) // eslint-disable-line no-undef
-		if (events) addListeners(this.map, mapEventNames, events)
+		if (eventHandlers) addListeners(this.map, mapEventNames, eventHandlers)
 		/* eslint-disable-next-line */
 		this.setState({
 			ready: true,
@@ -85,7 +86,8 @@ class Mapp extends React.Component<Props, State> {
 		if (newProps) {
 			const { options, events } = separateOptionsAndEvents(newProps, mapEventNames)
 			if (options) this.map.setOptions(options)
-			if (events) addListeners(this.map, mapEventNames, events)
+			/* TODO: Get this to update event listeners & prevent double-binding */
+			// if (events) addListeners(this.map, mapEventNames, events)
 		}
 	}
 

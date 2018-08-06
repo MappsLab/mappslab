@@ -1,17 +1,19 @@
 // @flow
 import React from 'react'
+import { compose } from 'recompose'
+import * as R from 'ramda'
 import styled from 'styled-components'
 import Mapp from 'mapp'
 import { withStatechart } from 'react-automata'
 import { withMapQuery, withCurrentViewerQuery } from 'Queries'
-import type { ViewerType, MapType, PinType } from 'Types'
-import { minMax } from 'Utils/data'
+import type { ViewerType, MapType, NewPinType } from 'Types'
 import Pin from './Elements/Pin'
 import Debugger from './Debugger'
 import { NewPinButton, ZoomButton, Toolbar } from './Tools'
-import NewPin from './Elements/NewPin'
-import { statechart, STARTED_ADD_PIN, SUCCESS } from './modes/statechart'
-import { modes } from './modes/modes'
+import { statechart, SUCCESS, DROPPED_PIN, CANCEL } from './modes/statechart'
+import withMapOptions from './mapOptions'
+import withModes from './modes'
+// import { modes } from './modes/index'
 
 const EditorWrapper = styled.div`
 	position: relative;
@@ -23,51 +25,41 @@ const EditorWrapper = styled.div`
  * Editor
  */
 
-type Props = {
+export type EditorProps = {
 	viewer: ViewerType,
 	map: MapType,
-	inProgressPin?: void | PinType,
+	inProgressPin?: void | NewPinType,
 	subscribeToMorePins: (Function) => () => void,
 	transition: (string, ?{}) => void,
 	machineState: {
 		value: string,
 	},
+	mapOptions: Object,
+	updateMapOptions: (Object) => void,
 }
 
-type EditorState = {
-	mapOptions: Object,
+export type EditorState = {
 	log: Array<{ timestamp: number, message: string }>,
 }
 
-const defaultOptions = {
-	center: { lat: 40.65, lng: -111.85 },
-	zoom: 10,
-	disableDefaultUI: true,
-	zoomControlOptions: false,
-	streetViewControlOptions: false,
+// Make an object for the sake of flow
+const _eventNames = {
+	onClick: '',
+	onDblClick: '',
+	onEntry: '',
 }
 
-class Editor extends React.Component<Props, EditorState> {
-	/**
-	 * Add different methods depending on the mode
-	 * mode.addPin.handleClick(...) etc
-	 */
-	// $FlowFixMe
-	modes = Object.entries(modes).reduce(
-		(acc, [title, mode]: [string, Function]) => ({
-			[title]: mode(this),
-			...acc,
-		}),
-		{},
-	)
+const eventNames = Object.keys(_eventNames)
 
+type Event = $Keys<typeof _eventNames>
+
+class Editor extends React.Component<EditorProps, EditorState> {
 	static defaultProps = {
 		inProgressPin: null,
 	}
 
 	state = {
 		log: [],
-		mapOptions: defaultOptions,
 	}
 
 	componentDidMount() {
@@ -88,29 +80,43 @@ class Editor extends React.Component<Props, EditorState> {
 		})
 	}
 
+	/**
+	 * Map all handlers ('onClick', 'onDblClick', etc)
+	 * to `this.handleEvent -> eventName`
+	 */
+	getMapEventHandlers = () =>
+		eventNames.reduce(
+			(acc, name) => ({
+				...acc,
+				[name]: this.handleEvent(name),
+			}),
+			{},
+		)
+
+	transition = (action: string) => (payload: {} = {}) => {
+		this.props.transition(action, payload)
+	}
+
+	/**
+	 * Factory function to create smart handlers for each type of event.
+	 * If the current mode has a handler for this event,
+	 * this will call it with the (optional) payload.
+	 *
+	 * See ./modes for the handlers for each mode.
+	 */
+	handleEvent = (eventName: Event) => (payload) => {
+		const mode = this.props.machineState.value
+		console.log(eventName, mode)
+		const handler = R.path(['props', 'modes', mode, eventName])(this)
+		if (handler) handler(payload)
+	}
+
 	log = (message) => {
 		const now = new Date()
 		const newEntry = { timestamp: now.getTime(), message }
 		this.setState((prevState) => ({
 			log: [...prevState.log, newEntry],
 		}))
-	}
-
-	toggleAddPinMode = () => {
-		const { transition } = this.props
-		transition(STARTED_ADD_PIN)
-	}
-
-	handleMapClick = (e) => {
-		const {
-			machineState: { value },
-		} = this.props
-		const mode = value
-		if (this.modes[mode].handleClick) this.modes[mode].handleClick(e)
-	}
-
-	componentDidTransition(prevStateMachine, event) {
-		this.log(`transition: ${event}`)
 	}
 
 	enterAddPinInfo() {
@@ -145,57 +151,57 @@ class Editor extends React.Component<Props, EditorState> {
 		}))
 	}
 
-	zoom = (level: 'in' | 'out' | number) => () => {
-		this.setState(({ mapOptions }) => {
-			const zoom = minMax(0, 21)(
-				typeof level === 'number'
-					? level
-					: level === 'in'
-						? mapOptions.zoom + 1
-						: level === 'out'
-							? mapOptions.zoom - 1
-							: defaultOptions.zoom,
-			)
-			return {
-				mapOptions: {
-					zoom,
-				},
-			}
-		})
+	componentDidTransition(prevStateMachine, event) {
+		this.handleEvent('onEntry')
+		this.log(`transition: ${event}`)
 	}
 
 	unsubscribe: () => void
 
 	render() {
-		const { mapOptions, log } = this.state
-		const { map, inProgressPin } = this.props
-		const { pins, uid } = map
+		const { log } = this.state
+		const { mapOptions, map, inProgressPin } = this.props
+		console.log(this.props.mapOptions.zoom)
+		const { pins } = map
 		return (
 			<EditorWrapper>
 				<Debugger log={log} />
 				<Mapp
 					APIKey="AIzaSyCOqxjWmEzFlHKC9w-iUZ5zL2rIyBglAag"
-					onClick={this.handleMapClick}
-					{...mapOptions}
+					eventHandlers={this.getMapEventHandlers()}
+					options={mapOptions}
 					render={() => (
 						<React.Fragment>
-							{pins.map((p) => <Pin key={p.uid} {...p} />)}
+							{pins.map((p) => (
+								<Pin key={p.uid} pin={p} updatePinSuccess={this.transition(SUCCESS)} updatePinCancel={this.transition(CANCEL)} />
+							))}
 							{inProgressPin ? (
-								<NewPin key="newPin" mapUid={uid} onSuccess={this.onAddPinSuccess} newPin={inProgressPin} />
+								<Pin
+									key="newPin"
+									pin={inProgressPin}
+									updatePinSuccess={this.transition(SUCCESS)}
+									updatePinCancel={this.transition(CANCEL)}
+								/>
 							) : null}
 						</React.Fragment>
 					)}
 				/>
 				<Toolbar>
-					<NewPinButton onClick={this.toggleAddPinMode} />
+					<NewPinButton onClick={this.transition(DROPPED_PIN)} />
 				</Toolbar>
 				<Toolbar align="right">
-					<ZoomButton direction="in" onClick={this.zoom('in')} />
-					<ZoomButton direction="out" onClick={this.zoom('out')} />
+					<ZoomButton direction="in" onClick={this.props.zoom('in')} />
+					<ZoomButton direction="out" onClick={this.props.zoom('out')} />
 				</Toolbar>
 			</EditorWrapper>
 		)
 	}
 }
 
-export default withCurrentViewerQuery(withMapQuery(withStatechart(statechart)(Editor)))
+export default compose(
+	withCurrentViewerQuery,
+	withMapQuery,
+	withStatechart(statechart),
+	withModes,
+	withMapOptions,
+)(Editor)

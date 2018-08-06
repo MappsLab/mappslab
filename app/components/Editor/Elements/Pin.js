@@ -1,18 +1,23 @@
 // @flow
 import React from 'react'
 import Mapp from 'mapp'
-import type { PinType } from '../../../types'
+import type { PinType, NewPinType } from '../../../types'
 import PinInfoWindow from './PinInfoWindow'
 
 /**
  * Pin
  */
 
+type Props = {
+	pin: PinType | NewPinType,
+	transition: (string) => void,
+}
+
 type State = {
 	showInfo: boolean,
 }
 
-class Pin extends React.Component<PinType, State> {
+class Pin extends React.Component<Props, State> {
 	state = {
 		showInfo: false,
 		newTitle: undefined,
@@ -29,7 +34,7 @@ class Pin extends React.Component<PinType, State> {
 
 	render() {
 		const { showInfo, newTitle } = this.state
-		const { lat, lang, title } = this.props
+		const { lat, lang, title } = this.props.pin
 		const position = {
 			lat,
 			lng: lang,

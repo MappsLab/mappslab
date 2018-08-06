@@ -12,7 +12,6 @@ const Pin = /* GraphQL */ `
 		routes: RouteConnection
 	}
 
-
 	# Relationships
 
 	type PinEdge implements Edge {
@@ -39,6 +38,13 @@ const Pin = /* GraphQL */ `
 		uid: String!
 	}
 
+	input UpdatePinInput {
+		uid: String
+		title: String
+		lat: Float
+		lang: Float
+	}
+
 	# Queries & Mutations
 
 	extend type Query {
@@ -47,7 +53,7 @@ const Pin = /* GraphQL */ `
 
 	extend type Mutation {
 		addPin(input: NewPinArgs!): Pin!
-		modifyPin(input: NewPinArgs!): Pin!
+		modifyPin(input: UpdatePinInput!): Pin!
 		removePin(input: GetPinInput!): Boolean!
 	}
 
@@ -63,8 +69,6 @@ const Pin = /* GraphQL */ `
 		pinAddedToMap(input: PinAddedSubscriptionInput!): Pin!
 		pinModified(input: PinModifiedSubscriptionInput!): Pin!
 	}
-
-
 `
 
 export default Pin
