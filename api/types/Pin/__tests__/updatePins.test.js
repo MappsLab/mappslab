@@ -2,14 +2,16 @@
 import { request, getViewerForContext } from '../../../__tests__/utils'
 import { removeNode, removeEdge } from '../../../database'
 import { getFirstPins } from './utils'
+import { getFirstMaps } from '../../Map/__tests__/utils'
 
 let firstPins
-
+let firstMaps
 let viewer
 
 beforeAll(async (done) => {
 	firstPins = await getFirstPins()
 	viewer = await getViewerForContext()
+	firstMaps = await getFirstMaps()
 
 	done()
 })
@@ -28,8 +30,8 @@ const query = /* GraphQL */ `
 `
 
 const mutation = /* GraphQL */ `
-	mutation UpdatePin($uid: String!, $title: String, $lat: Float, $lang: Float, $mapUids: [String], $lessonUids: [String]) {
-		updatePin(input: { uid: $uid, title: $title, lat: $lat, lang: $lang, mapUids: $mapUids, lessonUids: $lessonUids }) {
+	mutation UpdatePin($uid: String!, $title: String, $lat: Float, $lang: Float, $addToMaps: [String], $lessonUids: [String]) {
+		updatePin(input: { uid: $uid, title: $title, lat: $lat, lang: $lang, addToMaps: $addToMaps, lessonUids: $lessonUids }) {
 			uid
 			title
 			lat
@@ -45,6 +47,7 @@ const mutation = /* GraphQL */ `
 const getVariables = () => ({
 	uid: firstPins[0].uid,
 	title: 'great new title, thank you',
+	addToMaps: [firstMaps[0].uid],
 })
 
 describe('[updatePin]', () => {

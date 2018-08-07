@@ -1,10 +1,7 @@
 // @flow
 import * as React from 'react'
-// import Marker from './components/Marker'
-// import InfoWindow from './components/InfoWindow'
-// import CustomPopup from './components/CustomPopup'
 import loadGoogleMaps from './services/googleMaps'
-import { getNewValues, separateOptionsAndEvents } from './utils/data'
+// import { getNewValues, separateOptionsAndEvents } from './utils/data'
 import { addListeners, removeListeners } from './utils/listeners'
 
 const MapContext = React.createContext()
@@ -36,10 +33,9 @@ import type { Map } from './types'
 
 type Props = {
 	APIKey: string,
-	options: Object,
+	initialOptions?: Object,
 	render: ({ map: Map }) => React.Node,
 	style?: Object,
-	eventHandlers?: Object,
 }
 
 type State = {
@@ -54,7 +50,7 @@ class Mapp extends React.Component<Props, State> {
 	// static CustomPopup = CustomPopup
 
 	static defaultProps = {
-		options: {},
+		initialOptions: {},
 		pins: [],
 		style: defaultStyle,
 	}
@@ -68,29 +64,43 @@ class Mapp extends React.Component<Props, State> {
 	}
 
 	async componentDidMount() {
-		const { APIKey, options, eventHandlers } = this.props
+		const { APIKey, initialOptions } = this.props
 		// TODO not sure if this will work with  multiple rapid calls.. figure it out
 		await loadGoogleMaps(APIKey)
-		// const { options, events } = separateOptionsAndEvents(props, mapEventNames)
 
 		// $FlowFixMe
-		this.map = new google.maps.Map(this.mapRef.current, options) // eslint-disable-line no-undef
-		if (eventHandlers) addListeners(this.map, mapEventNames, eventHandlers)
-		/* eslint-disable-next-line */
-		this.setState({
-			ready: true,
+		this.map = new google.maps.Map(this.mapRef.current, initialOptions) // eslint-disable-line no-undef
+		google.maps.event.addListenerOnce(this.map, 'projection_changed', () => {
+			this.setState({
+				ready: true,
+			})
 		})
+		this.overlay = new google.maps.OverlayView()
+		this.overlay.setMap(this.map)
 	}
 
-	componentWillReceiveProps(nextProps) {
-		if (!this.map) return null
-		const newProps = getNewValues(this.props, nextProps)
-		if (newProps) {
-			const { options, events } = separateOptionsAndEvents(newProps, mapEventNames)
-			if (options) this.map.setOptions(options)
-			/* TODO: Get this to update event listeners & prevent double-binding */
-			// if (events) addListeners(this.map, mapEventNames, events)
+	getUtils() {
+		// console.log(this.overlay.projection.fromContainerPixelToLatLng)
+		// const projection = this.overlay.projection
+
+		const pixelToLatLng = (x, y) => this.overlay.projection.fromContainerPixelToLatLng(new google.maps.Point(x, y))
+
+		const latLngWithPixelOffset = (latLng, x, y) => {
+			const actual = this.overlay.projection.fromLatLngToContainerPixel(new google.maps.LatLng(latLng))
+			const newX = actual.x + x
+			const newY = actual.y + y
+			return this.overlay.projection.fromContainerPixelToLatLng(new google.maps.Point(newX, newY))
 		}
+
+		return { pixelToLatLng, latLngWithPixelOffset }
+	}
+
+	removeEventListeners = (eventHandlers) => {
+		removeListeners(eventHandlers)
+	}
+
+	addEventListeners = (eventHandlers) => {
+		addListeners(this.map, mapEventNames, eventHandlers)
 	}
 
 	map: Object
@@ -99,13 +109,21 @@ class Mapp extends React.Component<Props, State> {
 
 	render() {
 		const { style, render } = this.props
+		const { ready } = this.state
 		const contextValue = {
 			map: this.map,
 		}
 		return (
 			<MapContext.Provider value={contextValue}>
 				<div style={style} ref={this.mapRef} />
-				{this.state.ready ? render({ map: this.map }) : null}
+				{ready
+					? render({
+							googleMap: this.map,
+							utils: this.getUtils(),
+							addEventListeners: this.addEventListeners,
+							removeEventListeners: this.removeEventListeners,
+					  })
+					: null}
 			</MapContext.Provider>
 		)
 	}

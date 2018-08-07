@@ -7,7 +7,7 @@ import { createNodeWithEdges } from '../../../database'
 const debug = require('debug')('api')
 
 export const createPin = async (args: NewPinArgs, ownerUid: string): Promise<PinType | void> => {
-	const { mapUids, lessonUids, ...pinData } = args
+	const { addToMaps, lessonUids, ...pinData } = args
 	const cleaned = await clean({ ...defaultValues, ...pinData, createdAt: new Date() })
 	const validatedPinData = await validateNew(cleaned).catch((err) => {
 		debug(err.details)
@@ -20,7 +20,7 @@ export const createPin = async (args: NewPinArgs, ownerUid: string): Promise<Pin
 	edges.push([{ fromUid: ownerUid, pred: 'pinned' }, {}])
 
 	// Add the map relationship (optional)
-	if (mapUids) edges.push(...mapUids.map((fromUid) => [{ fromUid, pred: 'has_pin' }, {}]))
+	if (addToMaps) edges.push(...addToMaps.map((fromUid) => [{ fromUid, pred: 'has_pin' }, {}]))
 
 	// Add the lesson relationships (optional)
 	if (lessonUids) edges.push(...lessonUids.map((fromUid) => [{ fromUid, pred: 'has_pin' }, {}]))

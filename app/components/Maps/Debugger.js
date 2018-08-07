@@ -2,7 +2,7 @@
 import * as React from 'react'
 import styled from 'styled-components'
 import { State } from 'react-automata'
-import { states } from './modes/statechart'
+import { states } from './statechart'
 
 const Wrapper = styled.div`
 	position: absolute;

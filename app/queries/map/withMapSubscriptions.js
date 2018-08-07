@@ -8,6 +8,7 @@ export const query = gql`
 			title
 			lat
 			lang
+			description
 			owner {
 				uid
 				name

@@ -3,7 +3,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { Column } from 'Components/Layout'
 import { Header2 } from 'Components/Text'
-import { MapPreview } from 'Components/Maps'
+import { MapPreview } from 'Components/Dashboard'
 
 /**
  * MapCard

@@ -5,8 +5,8 @@ import { unwindEdges } from '../utils'
 import { query as mapQuery } from '../map/withMapQuery'
 
 const mutation = gql`
-	mutation createPin($title: String!, $description: String, $lat: Float!, $lang: Float!, $addToMaps: [String]) {
-		addPin(input: { title: $title, description: $description, lat: $lat, lang: $lang, addToMaps: $addToMaps }) {
+	mutation UpdatePin($uid: String!, $title: String, $description: String, $lat: Float, $lang: Float, $addToMaps: [String]) {
+		updatePin(input: { uid: $uid, description: $description, title: $title, lat: $lat, lang: $lang, addToMaps: $addToMaps }) {
 			uid
 			title
 			lat
@@ -15,25 +15,12 @@ const mutation = gql`
 				uid
 				name
 			}
-			maps {
-				pageInfo {
-					hasNextPage
-					lastCursor
-				}
-				edges {
-					cursor
-					node {
-						uid
-						title
-					}
-				}
-			}
 		}
 	}
 `
 
 const config = {
-	name: 'createPin',
+	name: 'updatePin',
 	options: (props) => ({
 		refetchQueries: [
 			{
@@ -58,6 +45,6 @@ const config = {
 	// },
 }
 
-const withCreatePinMutation = withMutation(mutation, config)
+const withUpdatePinMutation = withMutation(mutation, config)
 
-export default withCreatePinMutation
+export default withUpdatePinMutation

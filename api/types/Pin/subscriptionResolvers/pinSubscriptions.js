@@ -20,8 +20,8 @@ export const pinModified = {
 	subscribe: withFilter(
 		() => pubsub.asyncinterator(PIN_MODIFIED),
 		(payload, args) => {
-			// debug(`${PIN_MODIFIED} payload:`)
-			// debug(payload)
+			debug(`${PIN_MODIFIED} payload:`)
+			debug(payload)
 			// debug(args)
 			return true
 		},

@@ -30,7 +30,8 @@ const Pin = /* GraphQL */ `
 		title: String!
 		lat: Float!
 		lang: Float!
-		mapUids: [String]
+		description: String
+		addToMaps: [String]
 		lessonUids: [String]
 	}
 
@@ -43,7 +44,8 @@ const Pin = /* GraphQL */ `
 		title: String
 		lat: Float
 		lang: Float
-		mapUids: [String]
+		description: String
+		addToMaps: [String]
 		lessonUids: [String]
 	}
 

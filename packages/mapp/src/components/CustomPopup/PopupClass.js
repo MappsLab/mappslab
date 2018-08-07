@@ -51,7 +51,7 @@ const definePopup = () => {
 			position: absolute;
 		`
 		this.anchorDiv.appendChild(pixelOffset)
-		this.stopEventPropagation()
+		// this.stopEventPropagation()
 	}
 
 	// $FlowFixMe
@@ -64,9 +64,9 @@ const definePopup = () => {
 	}
 
 	Popup.prototype.onRemove = function() {
-		// if (this.anchorDiv.parentElement) {
-		// 	this.anchorDiv.parentElement.removeChild(this.anchorDiv)
-		// }
+		if (this.anchorDiv.parentElement) {
+			this.anchorDiv.parentElement.removeChild(this.anchorDiv)
+		}
 	}
 
 	Popup.prototype.draw = function() {
@@ -82,16 +82,16 @@ const definePopup = () => {
 		}
 	}
 
-	Popup.prototype.stopEventPropagation = function() {
-		const { anchorDiv } = this
-		anchorDiv.style.cursor = 'auto'
-		const events = ['click', 'dblclick', 'contextmenu', 'wheel', 'mousedown', 'touchstart', 'pointerdown']
-		events.forEach((event) => {
-			anchorDiv.addEventListener(event, (e) => {
-				e.stopPropagation()
-			})
-		})
-	}
+	// Popup.prototype.stopEventPropagation = function() {
+	// 	const { anchorDiv } = this
+	// 	anchorDiv.style.cursor = 'auto'
+	// 	const events = ['click', 'dblclick', 'contextmenu', 'wheel', 'mousedown', 'touchstart', 'pointerdown']
+	// 	events.forEach((event) => {
+	// 		anchorDiv.addEventListener(event, (e) => {
+	// 			e.stopPropagation()
+	// 		})
+	// 	})
+	// }
 
 	return Popup
 }

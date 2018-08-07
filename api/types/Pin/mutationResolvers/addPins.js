@@ -8,7 +8,7 @@ export const addPin = async (_: Object, { input }: NewPinInput, ctx: GraphQLCont
 	const newPin = await ctx.models.Pin.createPin(input, ctx.viewer.uid)
 	// Query the DB for the new pin so we can include relational data in the subscription filter
 	const pin = await ctx.models.Pin.getPin(newPin.uid)
-	if (input.mapUids) {
+	if (input.addToMaps) {
 		pubsub.publish(MAP_RECEIVED_PIN, { [MAP_RECEIVED_PIN]: pin })
 	}
 	return pin

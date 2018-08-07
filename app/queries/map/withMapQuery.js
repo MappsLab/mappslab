@@ -23,8 +23,10 @@ export const query = gql/* GraphQL */ `
 						title
 						lat
 						lang
+						description
 						owner {
 							uid
+							name
 						}
 					}
 				}
@@ -64,9 +66,10 @@ const config = {
 			const newPin = subscriptionData.data.pinAddedToMap
 			// console.log(previous)
 			callback(newPin)
-			const map = R.assocPath(['pins', 'edges'], [...previous.map.pins.edges, { node: newPin, __typename: 'PinEdge' }])(
-				previous.map,
-			)
+			const { edges } = previous.map.pins
+
+			const newEdges = R.uniqBy(R.path(['node', 'uid']))([...edges, { node: newPin, __typename: 'PinEdge' }])
+			const map = R.assocPath(['pins', 'edges'], newEdges)(previous.map)
 			return {
 				...previous,
 				map,

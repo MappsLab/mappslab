@@ -22,8 +22,8 @@ export type NewPinArgs = {
 	title: string,
 	lat: number,
 	lang: number,
-	mapUids?: Array<string>,
-	lessonUids?: Array<string>,
+	addToMaps?: Array<string>,
+	addToLessons?: Array<string>,
 }
 
 export type NewPinInput = {
@@ -35,8 +35,8 @@ export type UpdatePinArgs = {
 	title?: string,
 	lat?: string,
 	lang?: string,
-	// mapsUids?: Array<string>
-	// lessonUids?: Array<string>
+	addToMaps?: Array<string>,
+	// addToLessons?: Array<string>
 }
 
 export type UpdatePinInput = {

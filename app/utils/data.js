@@ -22,3 +22,5 @@ export const pushPath = (path: Array<string>, item: any) => (target: Object) => 
 	const arr = R.path(path)(target) || []
 	return R.assocPath(path, [...arr, item])(target)
 }
+
+export const compose = (...funcs: Array<Function>) => funcs.reduce((a, b) => (...args: any) => a(b(...args)), (arg) => arg)

@@ -131,7 +131,7 @@ const seedDatabase = async () => {
 								generatePins(pinCount).map((pinData) => async () => {
 									const args = {
 										...pinData,
-										mapUids: [m.uid],
+										addToMaps: [m.uid],
 									}
 									return Pin.createPin(args, student.uid)
 								}),

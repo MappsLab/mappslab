@@ -4,7 +4,7 @@ import type { DBEdge, Txn, EdgeConfig } from '../flowTypes/database'
 import removeEdge from './removeEdge'
 
 const dgraph = require('dgraph-js')
-const debug = require('debug')('api')
+const debug = require('debug')('test')
 
 export type Relationship = [DBEdge, EdgeConfig]
 
@@ -14,13 +14,13 @@ const defaultConfig = {
 
 const createEdge = async ({ fromUid, pred, toUid }: DBEdge, opts: EdgeConfig, existingTxn?: Txn): Promise<true> => {
 	const config = { ...defaultConfig, ...opts }
-	let txn = existingTxn || dbClient.newTxn()
+	const txn = existingTxn || dbClient.newTxn()
 	try {
 		const mu = new dgraph.Mutation()
 
 		// If this relationship is singular, delete the existing edges
 		if (config.unique) {
-			txn = await removeEdge({ fromUid, pred, toUid: '*' }, txn).catch((e) => {
+			await removeEdge({ fromUid, pred, toUid: '*' }, txn).catch((e) => {
 				throw e
 			})
 		}

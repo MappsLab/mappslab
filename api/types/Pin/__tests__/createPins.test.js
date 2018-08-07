@@ -14,8 +14,8 @@ beforeAll(async (done) => {
 })
 
 const q = /* GraphQL */ `
-	mutation addPin($title: String!, $lat: Float!, $lang: Float!, $mapUids: [String], $lessonUids: [String]) {
-		addPin(input: { title: $title, lat: $lat, lang: $lang, mapUids: $mapUids, lessonUids: $lessonUids }) {
+	mutation addPin($title: String!, $lat: Float!, $lang: Float!, $addToMaps: [String], $lessonUids: [String]) {
+		addPin(input: { title: $title, lat: $lat, lang: $lang, addToMaps: $addToMaps, lessonUids: $lessonUids }) {
 			uid
 			title
 			lat
@@ -83,7 +83,7 @@ describe('[addPin]', () => {
 		await sleep()
 
 		const vars = {
-			mapUids: [dbMaps[0].uid],
+			addToMaps: [dbMaps[0].uid],
 			...variables,
 		}
 		const withMapResult = await request(q, { variables: vars, context })

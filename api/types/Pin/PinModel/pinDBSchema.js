@@ -1,8 +1,9 @@
 // @flow
 import Joi from 'joi'
-import { pipe, head, assoc } from 'ramda'
+import { pipe, head, assoc, dissoc, when, propEq, map } from 'ramda'
 import type { NewPinArgs, UpdatePinArgs, PinType } from '../PinTypes'
 import { promisePipe, filterNullAndUndefined } from '../../../utils'
+import { parseSingularFields } from '../../../utils/parsing'
 
 /**
  * Schema
@@ -50,6 +51,8 @@ export const publicFields = [
 	}`,
 ].join('\n')
 
+const singleFields = ['owner']
+
 export const validateNew = (pinData: NewPinArgs) => Joi.validate(pinData, pinSchema(true))
 export const validateUpdate = (pinData: UpdatePinArgs) => Joi.validate(pinData, pinSchema(false))
 
@@ -58,10 +61,23 @@ export const validateUpdate = (pinData: UpdatePinArgs) => Joi.validate(pinData, 
  */
 
 export const clean = async (pinData: NewPinArgs | UpdatePinArgs): Promise<NewPinArgs | UpdatePinArgs> =>
-	promisePipe(filterNullAndUndefined, assoc('updatedAt', new Date()))(pinData)
+	promisePipe(filterNullAndUndefined, dissoc('addToMaps'), dissoc('addToLessons'), assoc('updatedAt', new Date()))(pinData)
 
 /**
  * Parse
  */
 
-export const parsePinResult = (o: Array<Object>): PinType | null => (o.length ? pipe(head)(o) : null)
+const parse = pipe(
+	parseSingularFields(singleFields),
+	when(propEq('description', undefined), assoc('description', '')),
+)
+
+export const parsePinResult = (o: Array<Object>): PinType | null =>
+	o.length
+		? pipe(
+				head,
+				parse,
+		  )(o)
+		: null
+
+export const parsePinResults = map(parse)

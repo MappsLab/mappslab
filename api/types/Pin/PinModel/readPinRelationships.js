@@ -2,7 +2,7 @@
 import { query } from '../../../database'
 import type { PinType } from '../PinTypes'
 import type { PaginationArgs } from '../../shared/sharedTypes'
-import { publicFields } from './pinDBSchema'
+import { publicFields, parsePinResults } from './pinDBSchema'
 import { createFilterString, makePaginationArgs } from '../../../database/utils'
 
 export const getUserPins = async (userUid: string, args: PaginationArgs): Promise<Array<PinType> | Error> => {
@@ -19,7 +19,7 @@ export const getUserPins = async (userUid: string, args: PaginationArgs): Promis
 		}
 	`
 	const result = await query(q, { first, after })
-	return result.getPins ? result.getPins[0].pinned : []
+	return result.getPins ? parsePinResults(result.getPins[0].pinned) : []
 }
 
 export const getMapPins = async (mapUid: string, args: PaginationArgs): Promise<Array<PinType> | Error> => {
@@ -34,5 +34,5 @@ export const getMapPins = async (mapUid: string, args: PaginationArgs): Promise<
 		}
 	`
 	const result = await query(q, { first, after })
-	return result.pins
+	return parsePinResults(result.pins)
 }

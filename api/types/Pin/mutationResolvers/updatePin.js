@@ -12,8 +12,7 @@ export const updatePin = async (_: Object, { input }: UpdatePinInput, ctx: Graph
 	const newPin = await ctx.models.Pin.updatePin(input, ctx.viewer.uid)
 	// // Query the DB for the new pin so we can include relational data in the subscription filter
 	const pin = await ctx.models.Pin.getPin(newPin.uid)
-	// if (input.mapUids) {
-	// 	pubsub.publish(MAP_RECEIVED_PIN, { [MAP_RECEIVED_PIN]: pin })
-	// }
+	if (pin.maps) pubsub.publish(MAP_RECEIVED_PIN, { [MAP_RECEIVED_PIN]: pin })
+
 	return pin
 }

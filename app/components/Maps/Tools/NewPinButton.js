@@ -2,7 +2,7 @@
 import React from 'react'
 import RoundButton from 'Components/UI/RoundButton'
 import { State } from 'react-automata'
-import { ADD_PIN, ADD_PIN_INFO } from '../modes/statechart'
+import { ADD_PIN, ADD_PIN_INFO } from '../statechart'
 
 /**
  * NewPinButton

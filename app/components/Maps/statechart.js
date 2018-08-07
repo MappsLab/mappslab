@@ -38,7 +38,7 @@ export const statechart = {
 				[CANCEL]: NORMAL,
 				[CLICKED_EDIT_PIN]: EDIT_PIN,
 			},
-			onEntry: 'enterInspectPin',
+			onEntry: ['inspectPin'],
 		},
 		// The user can drop a pin on the
 		[ADD_PIN]: {

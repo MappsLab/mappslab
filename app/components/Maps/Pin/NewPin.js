@@ -40,7 +40,7 @@ class NewPin extends React.Component<Props, State> {
 			lat,
 			lang,
 			title,
-			mapUids: [mapUid],
+			addToMap: [mapUid],
 		}
 		this.props
 			.mutate({ variables: newPin })

@@ -1,5 +1,6 @@
 // @flow
 import * as React from 'react'
+import ReactDOM from 'react-dom'
 import { addListeners, removeListeners } from '../../utils/listeners'
 import type { LatLng, Map, Marker, InfoWindow as InfoWindowType } from '../../types'
 import { MapConsumer } from '../../Mapp'
@@ -30,6 +31,8 @@ class CustomPopup extends React.Component<Props, State> {
 
 	listeners: Array<Object> = []
 
+	container: null | HTMLElement = null
+
 	static defaultProps = {
 		position: null,
 		anchor: null,
@@ -42,10 +45,14 @@ class CustomPopup extends React.Component<Props, State> {
 		if (props.position && props.anchor) throw new Error('CustomPopup must have either a `anchor` or `position` prop, not both')
 	}
 
+	componentWillMount() {
+		this.container = document.createElement('div')
+	}
+
 	componentDidMount() {
 		const { map, anchor, ...props } = this.props
 		const Popup = createPopup()
-		this.entity = new Popup(anchor.position, this.element.current)
+		this.entity = new Popup(anchor.position, this.container)
 
 		this.entity.setMap(map)
 	}
@@ -67,7 +74,8 @@ class CustomPopup extends React.Component<Props, State> {
 	}
 
 	render() {
-		return <div ref={this.element}>{this.props.children}</div>
+		return ReactDOM.createPortal(React.Children.only(this.props.children), this.container)
+		// <div ref={this.element}>{this.props.children}</div>
 	}
 }
 
