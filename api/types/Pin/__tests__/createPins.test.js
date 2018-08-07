@@ -4,9 +4,12 @@ import { removeNode, removeEdge } from '../../../database'
 import { getFirstMaps } from '../../Map/__tests__/utils'
 
 let dbMaps
+const context = {}
 
 beforeAll(async (done) => {
 	dbMaps = await getFirstMaps()
+	context.viewer = await getViewerForContext()
+
 	done()
 })
 
@@ -44,13 +47,6 @@ const variables = {
 	lat: 145.123,
 	lang: 111.222,
 }
-
-const context = {}
-
-beforeAll(async (done) => {
-	context.viewer = await getViewerForContext()
-	done()
-})
 
 const removeNewPins = async () => {
 	if (pinsToRemove.length)

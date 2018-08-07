@@ -1,26 +1,26 @@
 /* eslint-disable no-undef */
 import { request } from '../../../__tests__/utils'
-import { getFirstPin } from './utils'
+import { getFirstPins } from './utils'
 
-let firstPin
+let firstPins
 
 beforeAll(async (done) => {
-	firstPin = await getFirstPin()
+	firstPins = await getFirstPins()
 	done()
 })
 
 describe('[pin]', () => {
 	it('should fetch a pin by id', async () => {
 		const q = /* GraphQL */ `
-			query pin($uid: String!)
-			{
-			pin(input: { uid: $uid }) {
-				uid
-				title
+			query pin($uid: String!) {
+				pin(input: { uid: $uid }) {
+					uid
+					title
+				}
 			}
-		}`
-		const variables = { uid: firstPin.uid }
+		`
+		const variables = { uid: firstPins[0].uid }
 		const result = await request(q, { variables })
-		expect(result.data.pin.title).toBe(firstPin.title)
+		expect(result.data.pin.title).toBe(firstPins[0].title)
 	})
 })

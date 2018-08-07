@@ -5,7 +5,7 @@ import type { DBNode, Txn, TxnWithNode } from '../types/shared/sharedTypes'
 const dgraph = require('dgraph-js')
 const debug = require('debug')('api')
 
-const mutateNode = async (uid: string, data: DBNode, existingTxn?: Txn): Promise<DBNode | Error> => {
+const mutateNode = async (uid: string, data: DBNode, existingTxn?: Txn): Promise<DBNode> => {
 	const txn = existingTxn || dbClient.newTxn()
 	if (!uid && typeof uid !== 'string') throw new Error('You must supply a node UID for a mutation')
 	try {

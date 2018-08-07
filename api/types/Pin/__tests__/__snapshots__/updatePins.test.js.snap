@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`[updatePin] should return an error if the viewer is not the owner of the pin 1`] = `
+Array [
+  [GraphQLError: You can only update your own pins],
+]
+`;
+
+exports[`[updatePin] should return an error if there is no current viewer 1`] = `
+Array [
+  [GraphQLError: You must be logged in to create new pins. Please log in and try again.],
+]
+`;

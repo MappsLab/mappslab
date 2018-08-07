@@ -1,9 +1,11 @@
 // @flow
 import { addPin } from './addPins'
-export default  {
+import { updatePin } from './updatePin'
+
+export default {
 	Mutation: {
 		// All mutations require a valid user in the context
-		// modifyPin
+		updatePin,
 		addPin,
 		// removePin
 	},

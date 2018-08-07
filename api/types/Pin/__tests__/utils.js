@@ -1,12 +1,16 @@
 import { query } from '../../../database'
 
-export const getFirstPin = async () => {
+export const getFirstPins = async () => {
 	const q = `{
-		firstPin(func: eq(type, "pin"), first: 1) {
+		firstPins(func: eq(type, "pin"), first: 10) {
 			uid
 			title
+			owner: ~pinned {
+				uid
+				name
+			}
 		}
 	}`
 	const result = await query(q)
-	return result.firstPin[0]
+	return result.firstPins
 }

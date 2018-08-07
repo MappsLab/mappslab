@@ -1,7 +1,7 @@
 // @flow
 import Joi from 'joi'
-import { pipe, head } from 'ramda'
-import type { NewPinArgs, PinType } from '../PinTypes'
+import { pipe, head, assoc } from 'ramda'
+import type { NewPinArgs, UpdatePinArgs, PinType } from '../PinTypes'
 import { promisePipe, filterNullAndUndefined } from '../../../utils'
 
 /**
@@ -20,6 +20,7 @@ export const pinSchema = (isNew: boolean = true) =>
 					.max(35),
 		lat: isNew ? Joi.number().required() : Joi.number(),
 		lang: isNew ? Joi.number().required() : Joi.number(),
+		description: Joi.string().max(400),
 		createdAt: isNew ? Joi.date().required() : Joi.any().forbidden(),
 		updatedAt: Joi.date().required(),
 		type: Joi.any().only('pin'),
@@ -35,6 +36,7 @@ export const publicFields = [
 	'title',
 	'lat',
 	'lang',
+	'description',
 	'createdAt',
 	'updatedAt',
 	'type',
@@ -49,13 +51,14 @@ export const publicFields = [
 ].join('\n')
 
 export const validateNew = (pinData: NewPinArgs) => Joi.validate(pinData, pinSchema(true))
-export const validateUpdate = (pinData: NewPinArgs) => Joi.validate(pinData, pinSchema(false))
+export const validateUpdate = (pinData: UpdatePinArgs) => Joi.validate(pinData, pinSchema(false))
 
 /**
  * Clean
  */
 
-export const clean = async (pinData: NewPinArgs = {}): Promise<NewPinArgs> => promisePipe(filterNullAndUndefined)(pinData)
+export const clean = async (pinData: NewPinArgs | UpdatePinArgs): Promise<NewPinArgs | UpdatePinArgs> =>
+	promisePipe(filterNullAndUndefined, assoc('updatedAt', new Date()))(pinData)
 
 /**
  * Parse

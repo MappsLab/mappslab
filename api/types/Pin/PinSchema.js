@@ -43,6 +43,8 @@ const Pin = /* GraphQL */ `
 		title: String
 		lat: Float
 		lang: Float
+		mapUids: [String]
+		lessonUids: [String]
 	}
 
 	# Queries & Mutations
@@ -53,7 +55,7 @@ const Pin = /* GraphQL */ `
 
 	extend type Mutation {
 		addPin(input: NewPinArgs!): Pin!
-		modifyPin(input: UpdatePinInput!): Pin!
+		updatePin(input: UpdatePinInput!): Pin!
 		removePin(input: GetPinInput!): Boolean!
 	}
 

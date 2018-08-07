@@ -28,6 +28,7 @@ const createNodeWithEdges = async (nodeData: Object, relationships: NewRelations
 		const mu = new dgraph.Mutation()
 		mu.setSetJson(nodeData)
 		const newNode = await txn.mutate(mu)
+
 		const newNodeUid = newNode.getUidsMap().get('blank-0')
 		debug(newNodeUid)
 
