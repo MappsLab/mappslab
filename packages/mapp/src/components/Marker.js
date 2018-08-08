@@ -3,7 +3,8 @@ import * as React from 'react'
 import { MapConsumer } from '../Mapp'
 import { addListeners, removeListeners } from '../utils/listeners'
 import { getNewValues, separateOptionsAndEvents } from '../utils/data'
-import type { LatLng, Map, Marker as MarkerType, MapContext } from '../types'
+import type { Marker as MarkerType, MarkerOptions } from '../types'
+import type { MapContextType as MapContext } from '../Mapp'
 
 const markerEventNames = {
 	onAnimationChanged: 'animation_changed',
@@ -34,19 +35,24 @@ const markerEventNames = {
  */
 
 type BaseProps = {
-	position: LatLng,
+	// position: LatLng,
+	events: {},
+	render: ({ anchor: MarkerType }) => null | React.Node,
+	options: MarkerOptions,
 }
 
-type MarkerProps = {
-	position: LatLng,
-	map: Map,
-	render: ({ anchor: any }) => null | React.Node,
+type MarkerProps = BaseProps & {
+	// map: Map,
+}
+
+type State = {
+	ready: boolean,
 }
 
 class Marker extends React.Component<MarkerProps, State> {
-	static defaultProps = {
-		render: () => null,
-	}
+	entity: null | MarkerType = null
+
+	listeners: Array<{}> = []
 
 	state = {
 		ready: false,
@@ -61,12 +67,12 @@ class Marker extends React.Component<MarkerProps, State> {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		if (this.entity === null) return
 		const newProps = getNewValues(this.props, nextProps)
 		if (newProps) {
-			const { options, events } = separateOptionsAndEvents(newProps, markerEventNames)
+			const { options, events } = this.props
+			if (!this.entity) return
 			if (options) this.entity.setOptions(options)
-			if (events) addListeners(this.entity, markerEventNames, events)
+			if (events) this.listeners = addListeners(this.entity, markerEventNames, events)
 		}
 	}
 
@@ -76,16 +82,18 @@ class Marker extends React.Component<MarkerProps, State> {
 		this.entity = null
 	}
 
-	entity: null | MarkerType = null
-	listeners: Array<Object> = []
-
 	render() {
-		return this.props.render({ anchor: this.entity }) || null
+		const { render } = this.props
+		const { ready } = this.state
+		return !ready || this.entity === null ? null : render({ anchor: this.entity })
 	}
 }
 
 const MarkerWithContext = (props: BaseProps): React.Node => (
-	<MapConsumer>{(mapContext: MapContext) => <Marker {...mapContext} {...props} />}</MapConsumer>
+	<MapConsumer>
+		{// $FlowFixMe
+		(mapContext: MapContext) => <Marker map={mapContext.map} {...props} />}
+	</MapConsumer>
 )
 
 export default MarkerWithContext

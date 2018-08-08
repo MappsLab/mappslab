@@ -1,11 +1,31 @@
 // @flow
+/* eslint-disable-next-line no-unused-vars */
+/* global google */
+
 import * as React from 'react'
 import loadGoogleMaps from './services/googleMaps'
 // import { getNewValues, separateOptionsAndEvents } from './utils/data'
 import { addListeners, removeListeners } from './utils/listeners'
+import type { Map, OverlayView, LatLng } from './types'
+
+type EventHandlers = {}
+
+declare var google: any
+
+/**
+ * Context Setup
+ */
 
 const MapContext = React.createContext()
 export const MapConsumer = MapContext.Consumer
+
+export type MapContextType = {
+	map: Map,
+}
+
+/**
+ * Events
+ */
 
 const mapEventNames = {
 	onBoundsChanged: 'bounds_changed',
@@ -29,12 +49,26 @@ const mapEventNames = {
 	onZoomChanged: 'zoom_changed',
 }
 
-import type { Map } from './types'
+/**
+ * Types
+ */
+
+type MapUtils = {
+	pixelToLatLng: (x: number, y: number) => LatLng,
+	latLngWithPixelOffset: (LatLng, x: number, y: number) => LatLng,
+}
+
+type RenderPropTypes = {
+	googleMap: Map,
+	utils: MapUtils,
+	addEventListeners: (eventHandlers: EventHandlers) => void,
+	removeEventListeners: (eventHandlers: EventHandlers) => void,
+}
 
 type Props = {
 	APIKey: string,
 	initialOptions?: Object,
-	render: ({ map: Map }) => React.Node,
+	render: (RenderPropTypes) => React.Node,
 	style?: Object,
 }
 
@@ -48,6 +82,7 @@ class Mapp extends React.Component<Props, State> {
 	// static Marker = Marker
 	// static InfoWindow = InfoWindow
 	// static CustomPopup = CustomPopup
+	listeners: Array<{}> = []
 
 	static defaultProps = {
 		initialOptions: {},
@@ -83,25 +118,28 @@ class Mapp extends React.Component<Props, State> {
 		// console.log(this.overlay.projection.fromContainerPixelToLatLng)
 		// const projection = this.overlay.projection
 
-		const pixelToLatLng = (x, y) => this.overlay.projection.fromContainerPixelToLatLng(new google.maps.Point(x, y))
+		const pixelToLatLng = (x: number, y: number) =>
+			this.overlay.getProjection().fromContainerPixelToLatLng(new google.maps.Point(x, y))
 
-		const latLngWithPixelOffset = (latLng, x, y) => {
-			const actual = this.overlay.projection.fromLatLngToContainerPixel(new google.maps.LatLng(latLng))
+		const latLngWithPixelOffset = (latLng: LatLng, x: number, y: number) => {
+			const actual = this.overlay.getProjection().fromLatLngToContainerPixel(new google.maps.LatLng(latLng))
 			const newX = actual.x + x
 			const newY = actual.y + y
-			return this.overlay.projection.fromContainerPixelToLatLng(new google.maps.Point(newX, newY))
+			return this.overlay.getProjection().fromContainerPixelToLatLng(new google.maps.Point(newX, newY))
 		}
 
 		return { pixelToLatLng, latLngWithPixelOffset }
 	}
 
-	removeEventListeners = (eventHandlers) => {
-		removeListeners(eventHandlers)
+	removeEventListeners = () => {
+		removeListeners(this.listeners)
 	}
 
-	addEventListeners = (eventHandlers) => {
-		addListeners(this.map, mapEventNames, eventHandlers)
+	addEventListeners = (eventHandlers: EventHandlers) => {
+		this.listeners = addListeners(this.map, mapEventNames, eventHandlers)
 	}
+
+	overlay: OverlayView
 
 	map: Object
 

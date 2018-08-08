@@ -10,6 +10,7 @@
   "author": "Joseph Thomas | Good Idea Studio",
   "license": "ISC",
   "devDependencies": {
+    "@types/googlemaps": "^3.30.11",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^8.2.6",
     "babel-jest": "^23.4.0",
@@ -23,6 +24,7 @@
     "eslint-plugin-react": "^7.10.0",
     "flow-bin": "^0.76.0",
     "flow-typed": "^2.5.1",
+    "flowgen": "^1.2.2",
     "jest": "^23.4.0",
     "react": "^16.4.1"
   },
@@ -34,6 +36,7 @@
     "@babel/preset-flow": "^7.0.0-beta.53",
     "@babel/preset-react": "^7.0.0-beta.53",
     "ramda": "^0.25.0",
+    "react-dom": "^16.4.2",
     "recompose": "^0.27.1"
   }
 }

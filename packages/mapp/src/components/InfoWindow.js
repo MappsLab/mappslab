@@ -1,9 +1,10 @@
 // @flow
 import * as React from 'react'
 import { addListeners, removeListeners } from '../utils/listeners'
-import type { LatLng, Map, Marker, InfoWindow as InfoWindowType } from '../types'
-import { getNewValues, separateOptionsAndEvents } from '../utils/data'
+import type { LatLng, Map, Marker, InfoWindow as InfoWindowType, InfoWindowOptions } from '../types'
 import { MapConsumer } from '../Mapp'
+import type { MapContextType as MapContext } from '../Mapp'
+
 /**
  * InfoWindow
  */
@@ -16,13 +17,14 @@ const infoWindowEventNames = {
 	onZindexChanged: 'zindex_changed',
 }
 
-type Props = {
+type BaseProps = {
 	position?: LatLng,
 	anchor?: Marker,
-	onCloseClick?: () => void,
-	onDomReady?: () => void,
-	onPositionChanged?: () => void,
-	onZindexChanged?: () => void,
+	events: {},
+	options: InfoWindowOptions,
+}
+
+type Props = BaseProps & {
 	map: Map,
 }
 
@@ -30,15 +32,17 @@ type State = {
 	// ...
 }
 
+const defaultProps = {
+	position: null,
+	anchor: null,
+}
+
 class InfoWindow extends React.Component<Props, State> {
-	static defaultProps = {
-		position: null,
-		anchor: null,
-		onCloseClick: () => {},
-		onDomReady: () => {},
-		onPositionChanged: () => {},
-		onZindexChanged: () => {},
-	}
+	entity: null | InfoWindowType = null
+
+	listeners: Array<Object> = []
+
+	static defaultProps = defaultProps
 
 	constructor(props: Props) {
 		super(props)
@@ -47,39 +51,38 @@ class InfoWindow extends React.Component<Props, State> {
 	}
 
 	componentDidMount() {
-		const { map, anchor, ...props } = this.props
-		const { options, events } = separateOptionsAndEvents(props, infoWindowEventNames)
+		const { map, anchor, options, events } = this.props
 		this.entity = new window.google.maps.InfoWindow(options)
-		console.log(events)
 		this.entity.open(map, anchor)
-		if (this.entity) this.listeners = addListeners(this.entity, infoWindowEventNames, events)
+		if (this.entity !== null) this.listeners = addListeners(this.entity, infoWindowEventNames, events)
 	}
 
-	componentWillReceiveProps(nextProps: Props) {
-		if (this.entity === null) return
-		const newProps = getNewValues(this.props, nextProps)
-		if (newProps) {
-			const { options, events } = separateOptionsAndEvents(newProps, infoWindowEventNames)
-			if (options) this.entity.setOptions(options)
-			if (events) addListeners(this.entity, infoWindowEventNames, events)
-		}
-	}
+	// componentWillReceiveProps(nextProps: Props) {
+	// 	if (this.entity === null) return
+	// 	const newProps = getNewValues(this.props, nextProps)
+	// 	// if (newProps) {
+	// 	// 	const { options, events } = separateOptionsAndEvents(newProps, infoWindowEventNames)
+	// 	// 	if (options) this.entity.setOptions(options)
+	// 	// 	if (events) addListeners(this.entity, infoWindowEventNames, events)
+	// 	// }
+	// }
 
 	componentWillUnmount() {
-		if (this.entity) this.entity.setMap(null)
 		removeListeners(this.listeners)
 		this.entity = null
 	}
-
-	entity: null | InfoWindowType = null
-	listeners: Array<Object> = []
 
 	render() {
 		return null
 	}
 }
 const InfoWindowWithContext = (props: BaseProps): React.Node => (
-	<MapConsumer>{(mapContext: MapContext) => <InfoWindow {...mapContext} {...props} />}</MapConsumer>
+	<MapConsumer>
+		{// $FlowFixMe
+		(mapContext: MapContext) => <InfoWindow {...mapContext} {...props} />}
+	</MapConsumer>
 )
+
+InfoWindowWithContext.defaultProps = defaultProps
 
 export default InfoWindowWithContext

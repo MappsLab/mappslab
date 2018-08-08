@@ -1,11 +1,11 @@
 // @flow
 
-import type { MapEntity } from '../types'
+import type { MVCObject } from '../types'
 
 type Listener = Object
 
-export const addListeners = (entity: MapEntity, events: Object, props: Object): Array<Listener> =>
-	Object.entries(props)
+export const addListeners = (entity: MVCObject, events: Object, handlers: Object): Array<Listener> =>
+	Object.entries(handlers)
 		.map(([eventName, handler]) => {
 			const googleEvent = events[eventName]
 			if (googleEvent && typeof handler === 'function') {
@@ -16,8 +16,8 @@ export const addListeners = (entity: MapEntity, events: Object, props: Object): 
 		})
 		.filter(Boolean)
 
-export const removeListeners = (listeners: Array<Listener>): Array<Listener> =>
-	listeners
+export const removeListeners = (handlers: Array<Object>): Array<void> =>
+	handlers
 		.map((listener) => {
 			window.google.maps.event.removeListener(listener)
 			return null

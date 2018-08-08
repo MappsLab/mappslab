@@ -1,7 +1,7 @@
 // @flow
 /* eslint-disable func-names */
 /* eslint-disable no-undef */
-import type { LatLng } from '../../types'
+import type { LatLng, OverlayView } from '../../types'
 
 let Popup = null
 
@@ -21,7 +21,9 @@ const defaultOptions = {
 	maxWidth: '800px',
 }
 
-const definePopup = () => {
+type OverlayCreator = (position: LatLng, content: HTMLElement, opts: Options) => OverlayView
+
+const definePopup = (): OverlayView => {
 	Popup = function(position: LatLng, content: HTMLElement, opts: Options) {
 		const options = {
 			...defaultOptions,
@@ -92,10 +94,11 @@ const definePopup = () => {
 	// 		})
 	// 	})
 	// }
-
+	// $FlowFixMe
 	return Popup
 }
 
-const createPopup = () => Popup || definePopup()
+// $FlowFixMe
+const createPopup = (): OverlayCreator => Popup || definePopup()
 
 export default createPopup
