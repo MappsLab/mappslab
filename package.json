@@ -6,7 +6,7 @@
 	"scripts": {
 		"test": "jest",
 		"docz:dev": "docz dev",
-		"dev:app": "yarn workspace mappslab-client dev",
+		"dev:app": "yarn workspace mappslab-app dev",
 		"dev:api": "yarn workspace mappslab-api dev",
 		"db:stopall": "docker stop $(docker ps -q)",
 		"db:test:init": "docker-compose -p mappslab-test -f ./api/__tests__/docker-compose.yml up -d",
@@ -14,11 +14,11 @@
 		"db:test:seed": "yarn workspace mappslab-api db:test:seed",
 		"db:test:stop": "docker stop mappslab-test_dgraph-zero mappslab-test_dgraph-server mappslab-test_dgraph-ratel",
 		"db:staging:seed": "yarn workspace mappslab-api db:staging:seed",
-		"build:app": "yarn workspace mappslab-client build:app",
+		"build:app": "yarn workspace mappslab-app build:app",
 		"build:api": "yarn workspace mappslab-api build:api",
 		"flow:install-types": "flow-typed install",
-		"test:app": "yarn workspace mappslab-client test",
-		"test:app:watch": "yarn workspace mappslab-client test:watch",
+		"test:app": "yarn workspace mappslab-app test",
+		"test:app:watch": "yarn workspace mappslab-app test:watch",
 		"test:api": "yarn workspace mappslab-api test",
 		"test:api:watch": "yarn workspace mappslab-api test:watch"
 	},

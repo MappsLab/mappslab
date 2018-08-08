@@ -12,9 +12,9 @@ echo "DEPLOY_ENV: $DEPLOY_ENV"
 	echo "⚗️  Testing API"
 	echo "*     * * *     *"
 	npm run db:test:init
-	sleep 15
+	sleep 5 
 	npm run db:test:start
-	sleep 15
+	sleep 5
 	npm run db:test:seed
 	npm run test:api
 
@@ -57,8 +57,8 @@ echo "DEPLOY_ENV: $DEPLOY_ENV"
 
 	echo "🛠  Building packages.."
 
-	cd ./packages/mapp
-	npm run build
+	# cd ./packages/mapp
+	# npm run build
 
 	cd $TRAVIS_BUILD_DIR
 

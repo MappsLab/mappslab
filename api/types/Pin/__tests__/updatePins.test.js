@@ -72,7 +72,7 @@ describe('[updatePin]', () => {
 
 		// Attempt updating
 		const variables = getVariables()
-		const context = { viewer: firstPins[0].owner }
+		const context = { viewer: firstPins[0].owner[0] }
 		const result = await request(mutation, { variables, context })
 		expect(result.data.updatePin.title).toBe(variables.title)
 
