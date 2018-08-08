@@ -16,6 +16,7 @@
 		"db:staging:seed": "yarn workspace mappslab-api db:staging:seed",
 		"build:app": "yarn workspace mappslab-app build:app",
 		"build:api": "yarn workspace mappslab-api build:api",
+		"build:mapp": "yarn workspace mappslab-api build:api",
 		"flow:install-types": "flow-typed install",
 		"test:app": "yarn workspace mappslab-app test",
 		"test:app:watch": "yarn workspace mappslab-app test:watch",

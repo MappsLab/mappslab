@@ -63,6 +63,7 @@ class Pin extends React.Component<Props, State> {
 	 */
 
 	handleEvent = (eventName: Event) => (payload) => {
+		console.log(eventName)
 		const { mode } = this.props
 		const handler = R.path(['props', 'modes', mode, eventName])(this)
 		if (handler) {

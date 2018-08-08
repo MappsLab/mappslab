@@ -65,15 +65,15 @@ class Marker extends React.Component<MarkerProps, State> {
 		this.setState({ ready: true })
 	}
 
-	componentWillReceiveProps(nextProps) {
-		const newProps = getNewValues(this.props, nextProps)
-		if (newProps) {
-			const { options, events } = this.props
-			if (!this.entity) return
-			if (options) this.entity.setOptions(options)
-			if (events) this.listeners = addListeners(this.entity, markerEventNames, events)
-		}
-	}
+	// componentWillReceiveProps(nextProps) {
+	// 	const newProps = getNewValues(this.props, nextProps)
+	// 	if (newProps) {
+	// 		const { options, events } = this.props
+	// 		if (!this.entity) return
+	// 		if (options) this.entity.setOptions(options)
+	// 		if (events) this.listeners = addListeners(this.entity, markerEventNames, events)
+	// 	}
+	// }
 
 	componentWillUnmount() {
 		if (this.entity) this.entity.setMap(null)
