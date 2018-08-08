@@ -14,7 +14,7 @@ import type { Size, StreetViewPanorama, Attribution, Place } from './viewTypes'
  * *** Overlays ****
  */
 export type Marker = MVCObject & {
-	MAX_ZINDEX: number,
+	// MAX_ZINDEX: number,
 	constructor(opts?: MarkerOptions): void,
 	getAnimation(): Animation,
 	getAttribution(): Attribution,

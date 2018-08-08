@@ -2,6 +2,7 @@
 import React from 'react'
 import * as R from 'ramda'
 import styled from 'styled-components'
+// import type { Map as GoogleMap } from 'mapp/types'
 import { withMapQuery, withCurrentViewerQuery } from 'Queries'
 import type { MapType, PinType, ViewerType } from 'Types'
 import { withStatechart } from 'react-automata'
@@ -28,7 +29,7 @@ const EditorWrapper = styled.div`
 `
 
 type Props = {
-	googleMap: Object,
+	// googleMap: GoogleMap,
 	map: MapType,
 	machineState: {
 		value: string,
@@ -132,7 +133,9 @@ class MapEditor extends React.Component<Props, State> {
 		this.props.transition(action, newValues)
 	}
 
-	updatePinSuccess = () => {}
+	updatePinSuccess = () => {
+		this.transition(SUCCESS)({ activePinUid: null, inProgressPin: null })
+	}
 
 	updatePinCancel = () => {}
 

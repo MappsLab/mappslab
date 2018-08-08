@@ -59,16 +59,6 @@ class CustomPopup extends React.Component<Props, State> {
 		this.setState({ ready: true })
 	}
 
-	componentWillReceiveProps() {
-		// if (this.entity === null) return
-		// const newProps = getNewValues(this.props, nextProps)
-		// if (newProps) {
-		// 	const { options, events } = separateOptionsAndEvents(newProps, infoWindowEventNames)
-		// 	if (options) this.entity.setOptions(options)
-		// 	if (events) addListeners(this.entity, infoWindowEventNames, events)
-		// }
-	}
-
 	componentWillUnmount() {
 		if (this.entity) this.entity.setMap(null)
 		this.entity = null
@@ -78,7 +68,6 @@ class CustomPopup extends React.Component<Props, State> {
 		const { children } = this.props
 		const { ready } = this.state
 		return !ready ? null : ReactDOM.createPortal(React.Children.only(children), this.container)
-		// <div ref={this.element}>{this.props.children}</div>
 	}
 }
 

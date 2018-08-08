@@ -35,10 +35,9 @@ const markerEventNames = {
  */
 
 type BaseProps = {
-	// position: LatLng,
 	events: {},
 	render: ({ anchor: MarkerType }) => null | React.Node,
-	options: MarkerOptions,
+	options?: MarkerOptions,
 }
 
 type MarkerProps = BaseProps & {
@@ -95,5 +94,9 @@ const MarkerWithContext = (props: BaseProps): React.Node => (
 		(mapContext: MapContext) => <Marker map={mapContext.map} {...props} />}
 	</MapConsumer>
 )
+
+MarkerWithContext.defaultProps = {
+	options: {},
+}
 
 export default MarkerWithContext

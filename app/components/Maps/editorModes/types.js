@@ -1,6 +1,11 @@
 // @flow
 
 import type { ViewerType, MapType, PinType } from 'Types'
+import type { LatLng, LatLngLiteral } from 'mapp/types'
+
+type EditorUtils = {
+	latLngWithPixelOffset: (LatLng | LatLngLiteral, number, number) => LatLng,
+}
 
 export type HandlerProps = {
 	transition: (string, {}) => void,
@@ -9,4 +14,5 @@ export type HandlerProps = {
 	googleMap: Object,
 	inProgressPin: PinType,
 	activePinUid: string,
+	utils: EditorUtils,
 }

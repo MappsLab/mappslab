@@ -18,6 +18,7 @@
 
 [include]
 ;../node_modules/
+../packages/mapp/**/*
 
 [libs]
 node_modules/react-native/Libraries/react-native/react-native-interface.js
@@ -43,7 +44,7 @@ module.name_mapper='^Utils' -> '<PROJECT_ROOT>/utils'
 module.name_mapper='^Queries' -> '<PROJECT_ROOT>/queries'
 module.name_mapper='^Types' -> '<PROJECT_ROOT>/types'
 module.name_mapper='^Styles' -> '<PROJECT_ROOT>/theme'
-module.name_mapper='^mapp$' -> '<PROJECT_ROOT>/../packages/mapp/src'
+module.name_mapper='^mapp' -> '<PROJECT_ROOT>/../packages/mapp/src'
 
 
 suppress_type=$FlowIssue

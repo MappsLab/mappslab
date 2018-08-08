@@ -53,7 +53,7 @@ const definePopup = (): OverlayView => {
 			position: absolute;
 		`
 		this.anchorDiv.appendChild(pixelOffset)
-		// this.stopEventPropagation()
+		this.stopEventPropagation()
 	}
 
 	// $FlowFixMe
@@ -84,16 +84,16 @@ const definePopup = (): OverlayView => {
 		}
 	}
 
-	// Popup.prototype.stopEventPropagation = function() {
-	// 	const { anchorDiv } = this
-	// 	anchorDiv.style.cursor = 'auto'
-	// 	const events = ['click', 'dblclick', 'contextmenu', 'wheel', 'mousedown', 'touchstart', 'pointerdown']
-	// 	events.forEach((event) => {
-	// 		anchorDiv.addEventListener(event, (e) => {
-	// 			e.stopPropagation()
-	// 		})
-	// 	})
-	// }
+	Popup.prototype.stopEventPropagation = function() {
+		const { anchorDiv } = this
+		anchorDiv.style.cursor = 'auto'
+		const events = ['click', 'dblclick', 'contextmenu', 'wheel', 'mousedown', 'touchstart', 'pointerdown']
+		events.forEach((event) => {
+			anchorDiv.addEventListener(event, (e) => {
+				e.stopPropagation()
+			})
+		})
+	}
 	// $FlowFixMe
 	return Popup
 }

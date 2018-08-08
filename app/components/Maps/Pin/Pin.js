@@ -80,13 +80,15 @@ class Pin extends React.Component<Props, State> {
 		const { active, pin, mapUid, updatePinSuccess, viewer } = this.props
 		const { lat, lang, title, description, owner } = pin
 		const { mouseOver } = this.state
-		const position = {
-			lat,
-			lng: lang,
+		const options = {
+			position: {
+				lat,
+				lng: lang,
+			},
 		}
 		return (
 			<Marker
-				position={position}
+				options={options}
 				events={this.getPinEventHandlers()}
 				render={({ anchor }) =>
 					anchor ? (
