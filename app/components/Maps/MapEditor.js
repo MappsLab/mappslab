@@ -34,6 +34,7 @@ type Props = {
 	machineState: {
 		value: string,
 	},
+	subscribeToMorePins: (Function) => () => void,
 	transition: (string, ?{}) => void,
 	viewer: ViewerType,
 	activePinUid?: string | null,
@@ -72,7 +73,7 @@ class MapEditor extends React.Component<Props, State> {
 	}
 
 	componentDidMount = async () => {
-		const { addEventListeners } = this.props
+		const { addEventListeners, subscribeToMorePins } = this.props
 		this.listeners = eventNames.reduce(
 			(acc, name) => ({
 				...acc,
@@ -80,6 +81,9 @@ class MapEditor extends React.Component<Props, State> {
 			}),
 			{},
 		)
+		this.unsubscribe = subscribeToMorePins((newPin) => {
+			this.log(`${newPin.owner.name} added pin ${newPin.title}`)
+		})
 		addEventListeners(this.listeners)
 		this.transition(NEXT)()
 	}
