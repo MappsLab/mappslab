@@ -1,3 +1,10 @@
 {
-	"alias": "mappslab-beta"
+	"alias": "mappslab-beta.now.sh",
+	"name": "mappslab-beta",
+	"scale": {
+		"sfo1": {
+			"min": 1,
+			"max": "auto"
+		}
+	}
 }

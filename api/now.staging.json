@@ -7,5 +7,11 @@
 	"dotenv": ".env.staging",
 	"engines": {
 		"node": "10.x.x"
+	},
+	"scale": {
+		"sfo1": {
+			"min": 1,
+			"max": "auto"
+		}
 	}
 }
