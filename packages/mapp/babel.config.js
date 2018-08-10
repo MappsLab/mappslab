@@ -1,15 +1,9 @@
 const path = require('path')
 
-console.log('PACKAGE PACKAGE ')
-
 module.exports = {
 	presets: ['@babel/preset-flow', '@babel/preset-env', '@babel/preset-react'],
-	env: {
-		development: {
-			plugins: ['flow-react-proptypes'],
-		},
-	},
 	plugins: [
+		'flow-react-proptypes',
 		'@babel/plugin-proposal-class-properties',
 		'@babel/plugin-proposal-object-rest-spread',
 		'react-hot-loader/babel',

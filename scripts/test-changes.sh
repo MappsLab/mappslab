@@ -2,9 +2,17 @@
 # set -e to throw errors and stop travis
 set -e
 
+if [ -z ${TRAVIS_BUILD_DIR+x} ]
+	then
+	TRAVIS_BUILD_DIR=$(pwd)
+fi
+
+
 export DEPLOY_ENV=$1
 
 echo "DEPLOY_ENV: $DEPLOY_ENV"
+
+
 
 # if git diff --name-only $TRAVIS_COMMIT_RANGE | grep "^api/"
 	# then 
@@ -57,8 +65,7 @@ echo "DEPLOY_ENV: $DEPLOY_ENV"
 
 	echo "🛠  Building packages.."
 
-	# cd ./packages/mapp
-	# npm run build
+	npm run build:mapp
 
 	cd $TRAVIS_BUILD_DIR
 

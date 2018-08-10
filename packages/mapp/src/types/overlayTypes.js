@@ -224,7 +224,7 @@ export interface MarkerShape {
 	type?: string;
 }
 
-export interface Symbol {
+interface Symbol {
 	/**
 	 * The position of the symbol relative to the marker or polyline.
 	 * The coordinates of the symbol's path are translated left and up by the anchor's x and y coordinates respectively.
