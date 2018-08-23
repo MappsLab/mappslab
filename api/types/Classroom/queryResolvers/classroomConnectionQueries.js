@@ -1,7 +1,7 @@
 // @flow
 import type { PaginationInput, PageType, GraphQLContext } from '../../shared/sharedTypes'
 import type { ClassroomType } from '../ClassroomTypes'
-import { assemblePage } from '../../../utils/graphql'
+import { assemblePage } from 'Utils/graphql'
 
 export const studentsConnection = async (
 	fetchedClassroom: ClassroomType,

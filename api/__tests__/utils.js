@@ -1,9 +1,9 @@
 // @flow
 import { graphql } from 'graphql'
 import { makeExecutableSchema } from 'graphql-tools'
+import models from 'Models'
 import { typeDefs, resolvers } from '../schema'
 import { joseph, john, waverly } from './scripts/testDatabase/fixtures/users'
-import { models } from '../serverContext'
 
 /*
  * Get stubs from Test DB
@@ -31,5 +31,5 @@ type Options = {
 }
 
 // Nice little helper function for tests
-export const request = (query: mixed, { context, variables }: Options = {}): Promise<Object | Error> =>
+export const request = (query: mixed, { context, variables }: Options = {}): Promise<Object> =>
 	graphql(schema, query, undefined, { ...context, models }, variables)

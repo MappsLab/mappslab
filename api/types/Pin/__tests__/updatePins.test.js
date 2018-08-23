@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 import { request, getViewerForContext } from '../../../__tests__/utils'
-import { removeNode, removeEdge } from '../../../database'
+import { removeNode, removeEdge } from 'Database'
 import { getFirstPins } from './utils'
 import { getFirstMaps } from '../../Map/__tests__/utils'
 

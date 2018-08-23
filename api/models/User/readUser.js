@@ -1,7 +1,7 @@
 // @flow
 import { head } from 'ramda'
-import { query } from '../../../database'
-import { makePaginationArgs } from '../../../database/utils'
+import { query } from 'Database'
+import { makePaginationArgs } from 'Database/utils'
 import type { GetUserArgs, UserType } from '../UserTypes'
 import type { PaginationArgs } from '../../shared/sharedTypes'
 import { publicFields, viewerFields } from './userDBSchema'

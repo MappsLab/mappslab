@@ -1,7 +1,7 @@
 // @flow
 import { map, prop, last } from 'ramda'
 import type { PaginationArgs, DBNode, Edge, PageType } from '../types/shared/sharedTypes'
-import { defaultPaginationArgs } from '../database/utils'
+import { defaultPaginationArgs } from 'Database/utils'
 
 export const itemsToNodes = map((node) => ({ cursor: node.uid, node }))
 

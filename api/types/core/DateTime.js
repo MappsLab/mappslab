@@ -18,6 +18,7 @@ const serializeISO8601 = (value) => {
 }
 
 const parseLiteralISO8601 = (ast) => {
+	// $FlowFixMe
 	if (isISO8601(ast.value)) {
 		return ast.value
 	}
@@ -32,6 +33,6 @@ const DateTime = new GraphQLScalarType({
 	parseLiteral: parseLiteralISO8601,
 })
 
-export default  {
+export default {
 	DateTime,
 }

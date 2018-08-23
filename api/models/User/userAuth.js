@@ -1,10 +1,10 @@
 // @flow
 import bcrypt from 'bcrypt'
 import { dissoc, head } from 'ramda'
-import { query } from '../../../database'
+import { query } from 'Database'
 import type { UserType, Credentials } from '../UserTypes'
 import { publicFields } from './userDBSchema'
-import { ValidationError } from '../../../errorTypes'
+import { ValidationError } from 'Errors'
 
 // const debug = require('debug')('api')
 

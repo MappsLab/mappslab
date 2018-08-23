@@ -1,5 +1,5 @@
 // @flow
-import { query } from '../../../database'
+import { query } from 'Database'
 import type { MapType } from '../MapTypes'
 import { publicFields } from './mapDBSchema'
 

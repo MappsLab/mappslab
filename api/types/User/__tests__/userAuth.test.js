@@ -1,6 +1,6 @@
 // @flow
 /* eslint-disable no-undef */
-import { createJWT, verifyJWT } from '../../../utils/auth'
+import { createJWT, verifyJWT } from 'Utils/auth'
 import { request } from '../../../__tests__/utils'
 // import { joseph, john } from '../../../database/stubs/users'
 import { getFirstUsers } from './utils'

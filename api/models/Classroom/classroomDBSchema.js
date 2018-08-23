@@ -2,7 +2,7 @@
 import Joi from 'joi'
 import { when, prop } from 'ramda'
 import type { ClassroomInput } from '../ClassroomTypes'
-import { promisePipe, filterNullAndUndefined, createSlugFrom } from '../../../utils'
+import { promisePipe, filterNullAndUndefined, createSlugFrom } from 'Utils'
 
 /**
  * Schema

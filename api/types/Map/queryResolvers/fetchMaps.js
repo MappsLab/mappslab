@@ -2,7 +2,7 @@
 
 import type { MapType } from '../MapTypes'
 import type { PageType, GetNodeInput, PaginationInput, GraphQLContext } from '../../shared/sharedTypes'
-import { assemblePage } from '../../../utils/graphql'
+import { assemblePage } from 'Utils/graphql'
 
 export const map = (_: Object, { input }: GetNodeInput, ctx: GraphQLContext): Promise<MapType | null | Error> =>
 	ctx.models.Map.getMap(input)

@@ -1,8 +1,8 @@
 // @flow
 import type { GraphQLContext } from '../../shared/sharedTypes'
 import type { Credentials, ViewerType } from '../UserTypes'
-import type { JWT } from '../../../utils/auth'
-import { createJWT } from '../../../utils/auth'
+import type { JWT } from 'Utils/auth'
+import { createJWT } from 'Utils/auth'
 
 const loginViewerMutation = async (
 	_: mixed,

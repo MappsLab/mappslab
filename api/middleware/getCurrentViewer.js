@@ -1,5 +1,5 @@
 // @flow
-import { verifyJWT } from '../utils/auth'
+import { verifyJWT } from 'Utils/auth'
 
 const debug = require('debug')('api')
 

@@ -1,5 +1,5 @@
 // @flow
-import { query } from '../../../database'
+import { query } from 'Database'
 import type { PinType } from '../PinTypes'
 import { publicFields, parsePinResult } from './pinDBSchema'
 

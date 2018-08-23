@@ -1,4 +1,4 @@
-import { query } from '../../../database'
+import { query } from 'Database'
 
 export const getFirstPins = async () => {
 	const q = `{

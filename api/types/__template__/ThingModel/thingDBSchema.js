@@ -1,7 +1,7 @@
 // @flow
 import Joi from 'joi'
 import type { ThingInput } from '../ThingTypes'
-import { promisePipe, filterNullAndUndefined } from '../../../utils'
+import { promisePipe, filterNullAndUndefined } from 'Utils'
 
 /**
  * Schema

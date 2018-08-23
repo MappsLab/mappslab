@@ -1,7 +1,7 @@
 // @flow
 /* eslint-disable no-undef */
+import { artClass } from 'Database/stubs/classrooms'
 import { request } from '../../../__tests__/utils'
-import { artClass } from '../../../database/stubs/classrooms'
 import { getFirstClassrooms } from './utils'
 
 let classrooms
@@ -42,34 +42,34 @@ describe('queries', () => {
 
 	it('[classroom] should fetch its connections', async () => {
 		const query = /* GraphQL */ `
-		query Classroom($slug: String) {
-			classroom(input: { slug: $slug }) {
-				uid
-				title
-				students {
-					edges {
-						node {
-							name
+			query Classroom($slug: String) {
+				classroom(input: { slug: $slug }) {
+					uid
+					title
+					students {
+						edges {
+							node {
+								name
+							}
 						}
 					}
-				}
-				teachers {
-					edges {
-						node {
-							name
+					teachers {
+						edges {
+							node {
+								name
+							}
 						}
 					}
-				}
-				maps {
-					edges {
-						node {
-							title
+					maps {
+						edges {
+							node {
+								title
+							}
 						}
 					}
 				}
 			}
-		}
-	`
+		`
 		const variables = { slug: artClass.slug }
 		const result = await request(query, { variables })
 		const { students, teachers, maps } = result.data.classroom

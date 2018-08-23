@@ -2,8 +2,8 @@
 import Joi from 'joi'
 import { pipe, head, assoc, dissoc, when, propEq, map } from 'ramda'
 import type { NewPinArgs, UpdatePinArgs, PinType } from '../PinTypes'
-import { promisePipe, filterNullAndUndefined } from '../../../utils'
-import { parseSingularFields } from '../../../utils/parsing'
+import { promisePipe, filterNullAndUndefined } from 'Utils'
+import { parseSingularFields } from 'Utils/parsing'
 
 /**
  * Schema

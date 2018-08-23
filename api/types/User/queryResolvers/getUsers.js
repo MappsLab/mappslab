@@ -1,8 +1,8 @@
 // @flow
-import { assemblePage } from '../../../utils/graphql'
+import { assemblePage } from 'Utils/graphql'
 import type { GetUserArgs, UserType } from '../UserTypes'
 import type { GraphQLContext, PaginationInput, PageType } from '../../shared/sharedTypes'
-import { createJWT } from '../../../utils/auth'
+import { createJWT } from 'Utils/auth'
 
 export const user = (_: Object, { input }: GetUserArgs, ctx: GraphQLContext): Promise<UserType | null | Error> =>
 	ctx.models.User.getUser(input)

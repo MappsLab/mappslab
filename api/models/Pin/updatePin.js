@@ -1,8 +1,8 @@
 // @flow
 import type { PinType, UpdatePinArgs } from '../PinTypes'
 import { clean, validateUpdate } from './pinDBSchema'
-import { ValidationError } from '../../../errorTypes'
-import { mutateNode, createEdge } from '../../../database'
+import { ValidationError } from 'Errors'
+import { mutateNode, createEdge } from 'Database'
 
 export const updatePin = async (args: UpdatePinArgs): Promise<PinType> => {
 	const { uid, addToMaps, ...pinData } = args

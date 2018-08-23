@@ -1,7 +1,7 @@
 // @flow
 /* eslint-disable no-undef */
+import User from 'Models/User'
 import { request } from '../../../__tests__/utils'
-import User from '../UserModel'
 
 let firstUser
 
@@ -15,12 +15,16 @@ beforeAll(async (done) => {
 describe('[user]', () => {
 	it('by uid: should return a user', async () => {
 		const q = /* GraphQL */ `
-			{
-				user(input: { uid: ${firstUser.uid} }) {
+			query getUser($uid: String!) {
+				user(input: { uid: $uid }) {
 					name
 				}
 			}
 		`
-		const result = await request(q)
+		const variables = {
+			uid: firstUser.uid,
+		}
+		const result = await request(q, { variables })
+		expect(result.data.user.name).toBe(firstUser.name)
 	})
 })

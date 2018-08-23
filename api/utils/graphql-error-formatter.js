@@ -3,7 +3,7 @@
 // Taken from https://github.com/withspectrum/spectrum
 // import Raven from 'shared/raven';
 import type { GraphQLError } from 'graphql'
-import { IsUserError } from '../errorTypes'
+import { IsUserError } from 'Errors'
 
 const debug = require('debug')('api')
 

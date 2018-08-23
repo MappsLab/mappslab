@@ -1,5 +1,5 @@
 // @flow
-import dbClient from '../database/client'
+import dbClient from 'Database/client'
 
 export type DBEdge = {
 	fromUid: string,

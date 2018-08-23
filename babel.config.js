@@ -18,4 +18,5 @@ module.exports = {
 		'react-hot-loader/babel',
 		'ramda',
 	],
+	babelrcRoots: true,
 }

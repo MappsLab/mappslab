@@ -13,6 +13,10 @@ const Models = {
 	Map,
 }
 
+export type DBNode = {
+	uid: string,
+}
+
 type Operator = 'eq' | 'le' | 'lt' | 'ge' | 'gt' | 'uid' | 'allofterms' | 'anyofterms' | 'regexp' | 'alloftext' | 'uid_in' | 'has'
 
 export type Filter = {

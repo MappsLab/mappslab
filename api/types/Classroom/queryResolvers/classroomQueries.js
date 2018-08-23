@@ -2,7 +2,7 @@
 
 import type { ClassroomType } from '../ClassroomTypes'
 import type { PageType, GetNodeInput, PaginationInput, GraphQLContext } from '../../shared/sharedTypes'
-import { assemblePage } from '../../../utils/graphql'
+import { assemblePage } from 'Utils/graphql'
 
 export const classroom = (_: Object, { input }: GetNodeInput, ctx: GraphQLContext): Promise<ClassroomType | null | Error> =>
 	ctx.models.Classroom.getClassroom(input)

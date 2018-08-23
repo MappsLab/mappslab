@@ -1,6 +1,6 @@
 // @flow
 import gql from 'graphql-tag'
-import { unwindEdges } from '../utils'
+import { unwindEdges } from 'Utils'
 import withQuery from '../withQuery'
 
 // todo#16 : Make a Viewer fragment and reuse it in the viewer query

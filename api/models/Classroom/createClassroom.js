@@ -1,8 +1,8 @@
 // @flow
 import type { ClassroomType } from '../ClassroomTypes'
 import { clean, defaultValues, validateNew } from './classroomDBSchema'
-import { ValidationError } from '../../../errorTypes'
-import { createNode, createEdge } from '../../../database'
+import { ValidationError } from 'Errors'
+import { createNode, createEdge } from 'Database'
 import type { DBEdge } from '../../shared/sharedTypes'
 
 const debug = require('debug')('api:user')

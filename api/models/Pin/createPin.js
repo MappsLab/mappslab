@@ -1,8 +1,8 @@
 // @flow
 import type { PinType, NewPinArgs } from '../PinTypes'
 import { clean, defaultValues, validateNew } from './pinDBSchema'
-import { ValidationError } from '../../../errorTypes'
-import { createNodeWithEdges } from '../../../database'
+import { ValidationError } from 'Errors'
+import { createNodeWithEdges } from 'Database'
 
 const debug = require('debug')('api')
 

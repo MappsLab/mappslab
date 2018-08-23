@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
-import { request } from '../../../__tests__/utils'
 import { getFirstUsers } from './utils'
+import { request } from '../../../__tests__/utils'
 
 let users
 

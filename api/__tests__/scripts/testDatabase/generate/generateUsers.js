@@ -1,7 +1,7 @@
 // @flow
 import * as R from 'ramda'
 import faker from 'faker'
-import { mostLikely } from './utils'
+import { mostLikely } from 'Utils'
 import { users as defaultUsers } from '../fixtures'
 
 // TODO: Seed with disabled users

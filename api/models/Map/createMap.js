@@ -1,8 +1,8 @@
 // @flow
 import type { MapType } from '../MapTypes'
 import { clean, defaultValues, validateNew } from './mapDBSchema'
-import { ValidationError } from '../../../errorTypes'
-import { createNodeWithEdges } from '../../../database'
+import { ValidationError } from 'Errors'
+import { createNodeWithEdges } from 'Database'
 
 const debug = require('debug')('api')
 

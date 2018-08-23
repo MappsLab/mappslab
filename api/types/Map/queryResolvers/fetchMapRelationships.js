@@ -3,7 +3,7 @@
 import type { MapType } from '../MapTypes'
 import type { ClassroomType } from '../../Classroom/ClassroomTypes'
 import type { GraphQLContext, PageType, PaginationInput, GetNodeArgs } from '../../shared/sharedTypes'
-import { assemblePage } from '../../../utils/graphql'
+import { assemblePage } from 'Utils/graphql'
 
 type GetMapInput = {
 	input: GetNodeArgs,

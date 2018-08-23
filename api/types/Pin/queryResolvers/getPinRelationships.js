@@ -2,7 +2,7 @@
 
 import type { PinType, GetPinArgs } from '../PinTypes'
 import type { GraphQLContext, PageType, PaginationInput } from '../../shared/sharedTypes'
-import { assemblePage } from '../../../utils/graphql'
+import { assemblePage } from 'Utils/graphql'
 
 type GetPinInput = {
 	input: GetPinArgs,

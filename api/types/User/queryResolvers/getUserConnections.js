@@ -2,7 +2,7 @@
 
 import type { UserType } from '../UserTypes'
 import type { GraphQLContext, PaginationInput, PageType } from '../../shared/sharedTypes'
-import { assemblePage } from '../../../utils/graphql'
+import { assemblePage } from 'Utils/graphql'
 
 export const pins = async (loadedUser: UserType, { input }: PaginationInput, ctx: GraphQLContext): Promise<PageType | Error> => {
 	const fetchedPins = await ctx.models.Pin.getUserPins(loadedUser.uid, input)

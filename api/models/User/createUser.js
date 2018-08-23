@@ -1,8 +1,8 @@
 // @flow
 import type { UserType } from '../UserTypes'
 import { clean, defaultValues, validateNew } from './userDBSchema'
-import { ValidationError } from '../../../errorTypes'
-import { createNode } from '../../../database'
+import { ValidationError } from 'Errors'
+import { createNode } from 'Database'
 
 const debug = require('debug')('api:user')
 

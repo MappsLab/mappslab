@@ -7,7 +7,7 @@ const Map = /* GraphQL */ `
 		slug: String
 		description: String
 		classroom: Classroom
-		pins: PinConnection 
+		pins: PinConnection
 		routes: RouteConnection
 	}
 
@@ -15,7 +15,7 @@ const Map = /* GraphQL */ `
 
 	type MapEdge implements Edge {
 		cursor: String!
-		node: Map 
+		node: Map
 	}
 
 	type MapConnection implements Connection {
@@ -44,9 +44,9 @@ const Map = /* GraphQL */ `
 	extend type Mutation {
 		createMap(input: MapInput!): Map!
 		modifyMap(input: MapInput!): Map!
-		removeMap(uid: String!): Boolean!
+		removeMap(input: GetMapInput!): Boolean!
+		moveMap(input: GetNodeInput!): Boolean!
 	}
-
 `
 
 export default Map

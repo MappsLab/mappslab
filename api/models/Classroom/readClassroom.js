@@ -1,11 +1,11 @@
 // @flow
 import { head } from 'ramda'
-import { query } from '../../../database'
+import { query } from 'Database'
 import type { ClassroomType } from '../ClassroomTypes'
 import type { UserType } from '../../User/UserTypes'
 import type { PaginationArgs, GetNodeArgs } from '../../shared/sharedTypes'
 import { publicFields } from './classroomDBSchema'
-import { validateUid } from '../../../database/utils'
+import { validateUid } from 'Database/utils'
 
 const debug = require('debug')('api')
 

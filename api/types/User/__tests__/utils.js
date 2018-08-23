@@ -1,4 +1,4 @@
-import { query } from '../../../database'
+import { query } from 'Database'
 
 export const getFirstUsers = async () => {
 	const q = `{

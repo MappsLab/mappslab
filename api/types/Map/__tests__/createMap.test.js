@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 import { request, getViewerForContext } from '../../../__tests__/utils'
-import { removeNode, removeEdge } from '../../../database'
+import { removeNode, removeEdge } from 'Database'
 import { getFirstClassrooms } from '../../Classroom/__tests__/utils'
 
 const q = /* GraphQL */ `

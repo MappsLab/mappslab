@@ -1,4 +1,4 @@
-import { query } from '../../../database'
+import { query } from 'Database'
 
 export const getFirstMaps = async (num = 3) => {
 	const q = `{

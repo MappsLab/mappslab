@@ -1,7 +1,7 @@
 // @flow
 import gql from 'graphql-tag'
 import withMutation from '../withMutation'
-import { unwindEdges } from '../utils'
+import { unwindEdges } from 'Utils'
 import { query as mapQuery } from '../map/withMapQuery'
 
 const mutation = gql`

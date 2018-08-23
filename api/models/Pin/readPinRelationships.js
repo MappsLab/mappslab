@@ -1,9 +1,9 @@
 // @flow
-import { query } from '../../../database'
+import { query } from 'Database'
 import type { PinType } from '../PinTypes'
 import type { PaginationArgs } from '../../shared/sharedTypes'
 import { publicFields, parsePinResults } from './pinDBSchema'
-import { createFilterString, makePaginationArgs } from '../../../database/utils'
+import { createFilterString, makePaginationArgs } from 'Database/utils'
 
 export const getUserPins = async (userUid: string, args: PaginationArgs): Promise<Array<PinType> | Error> => {
 	const { first, after, filter } = makePaginationArgs(args)

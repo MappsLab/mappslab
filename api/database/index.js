@@ -1,8 +1,8 @@
 // @flow
 import { mapObjIndexed } from 'ramda'
 import { unflatten } from 'flat'
+import { createVariables } from 'Database/utils'
 import dbClient from './client'
-import { createVariables } from './utils'
 
 export { default as createEdge } from './createEdge'
 export { default as createNode } from './createNode'

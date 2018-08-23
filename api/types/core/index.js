@@ -1,3 +1,3 @@
 // @flow
 export { coreTypes, coreTypeResolvers } from './coreTypes'
-export coreQueryResolvers from './coreQueryResolvers'
+export { default as coreQueryResolvers } from './coreQueryResolvers'

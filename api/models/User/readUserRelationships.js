@@ -1,6 +1,6 @@
 // @flow
 import { head, prop, pipe } from 'ramda'
-import { query } from '../../../database'
+import { query } from 'Database'
 import type { UserType } from '../UserTypes'
 import type { PaginationArgs } from '../../shared/sharedTypes'
 import { publicFields } from './userDBSchema'

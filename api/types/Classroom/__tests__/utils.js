@@ -1,4 +1,4 @@
-import { query } from '../../../database'
+import { query } from 'Database'
 
 export const getFirstClassrooms = async (num = 3) => {
 	const q = `{
