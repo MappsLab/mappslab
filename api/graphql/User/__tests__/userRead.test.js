@@ -56,6 +56,7 @@ describe('[pins]', () => {
 				}
 			}
 		`
+
 		const variables = { uid: users[1].uid }
 		const result = await request(q, { variables })
 		expect(result.data.user.classrooms).toHaveProperty('pageInfo')

@@ -1,11 +1,10 @@
 // @flow
 import faker from 'faker'
 import dbClient from 'Database/client'
+import models from 'Models'
 import { generateUsers, generateClassrooms, generateClassroomConnections, generatePins, generateMaps } from './generate'
-import User from '../../../types/User/UserModel'
-import Map from '../../../types/Map/MapModel'
-import Classroom from '../../../types/Classroom/ClassroomModel'
-import Pin from '../../../types/Pin/PinModel'
+
+const { User, Map, Classroom, Pin } = models
 
 const dgraph = require('dgraph-js')
 const debug = require('debug')('seed')
@@ -78,41 +77,48 @@ const seedDatabase = async () => {
 	await setSchema()
 	debug('👶  Creating and inserting users...')
 	const users = await promiseSerial(generateUsers(100).map((u) => () => User.createUser(u)))
-	const students = users.filter((u) => u.role === 'student')
-	const teachers = users.filter((u) => u.role === 'teacher')
+	const students = users.filter((u) => u.roles.map((r) => r.role).includes('student'))
+	const teachers = users.filter((u) => u.roles.map((r) => r.role).includes('teacher'))
 	debug(`👶  Created ${students.length} students and ${teachers.length} teachers`)
 
 	debug('🏫  Adding some classrooms..')
-	const cCount = Math.floor(teachers.length * 2)
-	const classrooms = await promiseSerial(generateClassrooms(cCount).map((c) => () => Classroom.createClassroom(c)))
-	debug(`🏫  Made ${classrooms.length} classrooms`)
 
-	debug('🏫  Assigning students and teachers to classrooms..')
+	const classrooms = await Promise.all(
+		teachers.map(async (teacher) => {
+			return promiseSerial(generateClassrooms(2).map((classroom) => () => Classroom.createClassroom(classroom, teacher.uid)))
+			// return [...acc, ...teacherClassrooms]
+		}),
+	).then((all) => all.reduce((acc, current) => [...acc, ...current], []))
+	debug(`🏫  Made ${classrooms.length} classrooms for ${teachers.length} teachers`)
+
+	debug('🏫  Assigning students to classrooms..')
 	await promiseSerial(
-		generateClassroomConnections(users, classrooms).map((connection) => () => Classroom.createClassroomConnection(connection)),
+		generateClassroomConnections(students, classrooms).map((connection) => () => Classroom.createClassroomConnection(connection)),
 	)
 	debug(`🏫  Assigned students and teachers to classrooms`)
 
 	debug('🗺  Adding maps to classrooms')
-	const maps = await classrooms.map(async (classroom) => {
-		const mapCount = faker.random.number({ min: 1, max: 3 })
-		await promiseSerial(generateMaps(mapCount).map((m) => () => Map.createMap(m, classroom.uid)))
-	})
+	const maps = await Promise.all(
+		classrooms.map(async (classroom) => {
+			// const mapCount = faker.random.number({ min: 1, max: 3 })
+			return promiseSerial(generateMaps(2).map((m) => () => Map.createMap(m, classroom.uid)))
+		}),
+	).then((all) => all.reduce((acc, current) => [...acc, ...current], []))
 
 	debug(`🗺  Added ${maps.length} maps to ${classrooms.length} classrooms`)
 
-	debug('📍  Creating some free play pins for students..')
+	// debug('📍  Creating some free play pins for students..')
 
-	const pins = await students.reduce(async (accP, student) => {
-		const pinCount = faker.random.number({ min: 3, max: 8 })
-		const newPins = await promiseSerial(generatePins(pinCount).map((pinData) => () => Pin.createPin(pinData, student.uid))).catch(
-			(e) => debug(e),
-		)
-		const acc = await accP
-		return [...acc, ...newPins]
-	}, [])
+	// const pins = await students.reduce(async (accP, student) => {
+	// 	const pinCount = faker.random.number({ min: 3, max: 8 })
+	// 	const newPins = await promiseSerial(generatePins(pinCount).map((pinData) => () => Pin.createPin(pinData, student.uid))).catch(
+	// 		(e) => debug(e),
+	// 	)
+	// 	const acc = await accP
+	// 	return [...acc, ...newPins]
+	// }, [])
 
-	debug(`📍  Created ${pins.length} pins for ${students.length} students`)
+	// debug(`📍  Created ${pins.length} pins for ${students.length} students`)
 
 	debug('📍  Creating some classroom map pins for students..')
 
@@ -126,7 +132,7 @@ const seedDatabase = async () => {
 					// For each map in a student's classroom, add some pins
 					await promiseSerial(
 						classroomMaps.map((m) => async () => {
-							const pinCount = faker.random.number({ min: 1, max: 3 })
+							const pinCount = faker.random.number({ min: 1, max: 4 })
 							const newClassroomMapPins = await promiseSerial(
 								generatePins(pinCount).map((pinData) => async () => {
 									const args = {

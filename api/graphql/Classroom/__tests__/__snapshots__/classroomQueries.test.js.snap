@@ -3,7 +3,7 @@
 exports[`queries [classroom] should fetch its connections 1`] = `
 Object {
   "node": Object {
-    "name": "Joseph Thomas",
+    "name": "Matilde Prosacco MD",
   },
 }
 `;
@@ -11,7 +11,7 @@ Object {
 exports[`queries [classroom] should fetch its connections 2`] = `
 Object {
   "node": Object {
-    "name": "Mr. Schaefer",
+    "name": "Claudia Mohr",
   },
 }
 `;
@@ -19,7 +19,7 @@ Object {
 exports[`queries [classroom] should fetch its connections 3`] = `
 Object {
   "node": Object {
-    "title": "Refined Rubber Car",
+    "title": "Tasty Plastic Pizza",
   },
 }
 `;

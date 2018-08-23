@@ -19,24 +19,28 @@ export const userSchema = (isNew: boolean = true) =>
 			: Joi.string()
 					.min(3)
 					.max(35),
-		email: Joi.any().when('role', {
-			is: 'student',
-			then: Joi.string().email(),
-			otherwise: Joi.string()
+		email: Joi.any().when('roles', {
+			is: Joi.array().items(Joi.valid({ role: 'teacher' }, { role: 'admin' })),
+			then: Joi.string()
 				.email()
 				.required(),
+			otherwise: Joi.string().email(),
 		}),
 		password: Joi.string(),
 		createdAt: isNew ? Joi.date().required() : Joi.any().forbidden(),
 		updatedAt: Joi.date().required(),
-		role: Joi.valid('student', 'teacher', 'admin'),
+		roles: Joi.array().items(
+			Joi.object().keys({
+				role: Joi.valid('student', 'teacher', 'admin'),
+			}),
+		),
 		type: Joi.any().only('user'),
 		disabled: Joi.boolean().required(),
 	})
 
 export const defaultValues = {
 	type: 'user',
-	role: 'student',
+	roles: ['student'],
 	disabled: false,
 	updatedAt: new Date(),
 }

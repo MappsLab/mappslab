@@ -1,7 +1,7 @@
 // @flow
 import * as R from 'ramda'
 import faker from 'faker'
-import { mostLikely } from 'Utils'
+import { mostLikely } from './utils'
 import { users as defaultUsers } from '../fixtures'
 
 // TODO: Seed with disabled users
@@ -15,7 +15,7 @@ const generateUser = (): Object => {
 			.email(name)
 			.toLowerCase()
 			.replace(/[.]+/, '.'),
-		role: mostLikely('student', 'teacher'),
+		roles: mostLikely([{ role: 'student' }], [{ role: 'teacher' }]),
 		createdAt,
 		disabled: mostLikely(false, true),
 		password: 'Password#1',

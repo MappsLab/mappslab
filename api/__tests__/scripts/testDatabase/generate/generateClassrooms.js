@@ -1,10 +1,10 @@
 // @flow
 import * as R from 'ramda'
 import faker from 'faker'
+import type { UserType } from 'Types/UserTypes'
+import type { ClassroomType } from 'Types/ClassroomTypes'
+import type { DBEdge } from 'Types/database'
 import defaultClassrooms from '../fixtures/classrooms'
-import type { UserType } from '../../../../types/User/UserTypes'
-import type { ClassroomType } from '../../../../types/Classroom/ClassroomTypes'
-import type { DBEdge } from '../../../../types/shared/sharedTypes'
 
 // TODO: Seed with disabled users
 
@@ -22,13 +22,8 @@ export const generateClassrooms = (count: number): Array<mixed> => [
 	...R.times(generateClassroom, count - defaultClassrooms.length),
 ]
 
-export const generateClassroomConnections = (users: Array<UserType>, classrooms: Array<ClassroomType>): Array<DBEdge> => {
-	const { student, teacher } = R.groupBy(R.prop('role'), users)
-	const teacherEdges = R.flatten(
-		teacher.map((t, i) => classrooms.slice(i * 2, i * 2 + 2).map((c) => ({ fromUid: t.uid, pred: 'teaches_in', toUid: c.uid }))),
-	)
-
-	const unAssignedStudents = [...student]
+export const generateClassroomConnections = (students: Array<UserType>, classrooms: Array<ClassroomType>): Array<DBEdge> => {
+	const unAssignedStudents = [...students]
 
 	const studentEdges = []
 	while (unAssignedStudents.length) {
@@ -41,5 +36,5 @@ export const generateClassroomConnections = (users: Array<UserType>, classrooms:
 			.filter((a) => a)
 	}
 
-	return [...teacherEdges, ...studentEdges]
+	return [...studentEdges]
 }

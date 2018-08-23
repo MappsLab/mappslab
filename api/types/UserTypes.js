@@ -9,12 +9,16 @@ export type UserType = {
 	name?: string,
 	classrooms?: Array<ClassroomType>,
 	maps?: Array<MapType>,
-	role: 'student',
+	roles: Array<string>,
+}
+
+export type StudentType = UserType & {
+	roles: ['student'],
 }
 
 export type TeacherType = UserType & {
 	email: string,
-	role: 'teacher',
+	roles: ['teacher'],
 }
 
 export type ViewerType =
@@ -24,7 +28,7 @@ export type ViewerType =
 	  })
 
 export type AdminType = TeacherType & {
-	role: 'admin',
+	roles: ['admin'],
 }
 
 export type UserInput = {
