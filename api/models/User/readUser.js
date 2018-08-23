@@ -8,7 +8,7 @@ import { publicFields, viewerFields } from './userDBSchema'
 
 // const debug = require('debug')('api')
 
-export const getUser = async ({ uid }: GetUserArgs): Promise<UserType | null | Error> => {
+export const getUser = async ({ uid }: GetUserArgs): Promise<UserType | null> => {
 	const q = /* GraphQL */ `
 		query getUser($uid: string) {
 			getUser(func: uid(${uid})) {
@@ -34,7 +34,7 @@ export const getUsers = async (args?: PaginationArgs): Promise<Array<UserType>> 
 	return result.getUsers
 }
 
-export const getViewer = async (args: { uid: string }): Promise<UserType | null | Error> => {
+export const getViewer = async (args: { uid: string }): Promise<UserType | null> => {
 	const { uid } = args
 	const q = `query getUser($uid: string) {
 		getUser(func: uid(${uid})) {

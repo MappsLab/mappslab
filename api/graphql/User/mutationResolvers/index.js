@@ -1,11 +1,12 @@
 // @flow
 import loginViewer from './loginViewer'
 
-export default  {
+export default {
 	Mutation: {
 		loginViewer,
-		// modifyUser
-		// addUser
+		// updateUser
+		// addStudent
+		// addTeacher
 		// removeUser
 	},
 }

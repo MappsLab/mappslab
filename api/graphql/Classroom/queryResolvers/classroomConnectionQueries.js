@@ -3,7 +3,7 @@ import type { PaginationInput, PageType, GraphQLContext } from 'Types/sharedType
 import type { ClassroomType } from 'Types/ClassroomTypes'
 import { assemblePage } from 'Utils/graphql'
 
-export const studentsConnection = async (
+export const classroomStudents = async (
 	fetchedClassroom: ClassroomType,
 	{ input }: PaginationInput,
 	ctx: GraphQLContext,
@@ -12,7 +12,7 @@ export const studentsConnection = async (
 	return assemblePage(fetchedUsers, input)
 }
 
-export const teachersConnection = async (
+export const classroomTeachers = async (
 	fetchedClassroom: ClassroomType,
 	{ input }: PaginationInput,
 	ctx: GraphQLContext,
@@ -21,7 +21,7 @@ export const teachersConnection = async (
 	return assemblePage(fetchedUsers, input)
 }
 
-export const mapsConnection = async (
+export const classroomMaps = async (
 	fetchedClassroom: ClassroomType,
 	{ input }: PaginationInput,
 	ctx: GraphQLContext,

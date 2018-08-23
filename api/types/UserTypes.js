@@ -38,6 +38,10 @@ export type GetUserArgs = {
 	uid: string,
 }
 
+export type GetUserInput = {
+	input: GetUserArgs,
+}
+
 export type Credentials = {
 	uid?: string,
 	email?: string,
