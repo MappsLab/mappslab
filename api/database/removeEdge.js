@@ -1,6 +1,6 @@
 // @flow
+import type { DBEdge, Txn } from 'Types/database'
 import dbClient from './client'
-import type { DBEdge, Txn } from '../flowTypes/database'
 import { validateUid, validateUidOrWildcard } from './utils'
 
 const dgraph = require('dgraph-js')

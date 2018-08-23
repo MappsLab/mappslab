@@ -1,9 +1,10 @@
 // @flow
+import type { express$Request, express$Response, express$Next } from 'express'
 import { verifyJWT } from 'Utils/auth'
 
 const debug = require('debug')('api')
 
-const getCurrentViewer = async (req: express$Request, res, next) => {
+const getCurrentViewer = async (req: express$Request, res: express$Response, next: express$Next) => {
 	if (!req.headers.authorization) {
 		req.viewer = null
 		next()

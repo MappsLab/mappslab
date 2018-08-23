@@ -1,8 +1,8 @@
 // @flow
-import type { UserType } from '../UserTypes'
-import { clean, defaultValues, validateNew } from './userDBSchema'
+import type { UserType } from 'Types/UserTypes'
 import { ValidationError } from 'Errors'
 import { createNode } from 'Database'
+import { clean, defaultValues, validateNew } from './userDBSchema'
 
 const debug = require('debug')('api:user')
 
@@ -13,5 +13,6 @@ export const createUser = async (userData: UserType): Promise<UserType | void> =
 		debug(err._object)
 		throw new ValidationError(err)
 	})
+	// $FlowFixMe TODO
 	return createNode(validatedUserData)
 }

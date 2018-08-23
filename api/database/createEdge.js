@@ -1,6 +1,6 @@
 // @flow
+import type { DBEdge, Txn, EdgeConfig } from 'Types/database'
 import dbClient from './client'
-import type { DBEdge, Txn, EdgeConfig } from '../flowTypes/database'
 import removeEdge from './removeEdge'
 
 const dgraph = require('dgraph-js')

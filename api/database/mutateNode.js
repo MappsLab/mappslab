@@ -1,6 +1,6 @@
 // @flow
+import type { DBNode, Txn } from 'Types/database'
 import dbClient from './client'
-import type { DBNode, Txn, TxnWithNode } from '../types/shared/sharedTypes'
 
 const dgraph = require('dgraph-js')
 const debug = require('debug')('api')
@@ -18,6 +18,7 @@ const mutateNode = async (uid: string, data: DBNode, existingTxn?: Txn): Promise
 		if (!existingTxn) await txn.commit()
 		debug(`Mutated node with uid ${uid}:`)
 		debug({ uid, ...data })
+		// $FlowFixMe --- TODO
 		return {
 			uid,
 			...data,

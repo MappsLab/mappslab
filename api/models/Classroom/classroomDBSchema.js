@@ -1,7 +1,7 @@
 // @flow
 import Joi from 'joi'
 import { when, prop } from 'ramda'
-import type { ClassroomInput } from '../ClassroomTypes'
+import type { ClassroomInput } from 'Types/ClassroomTypes'
 import { promisePipe, filterNullAndUndefined, createSlugFrom } from 'Utils'
 
 /**

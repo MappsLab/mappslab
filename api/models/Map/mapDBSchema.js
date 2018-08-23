@@ -1,6 +1,6 @@
 // @flow
 import Joi from 'joi'
-import type { MapInput } from '../MapTypes'
+import type { UpdateMapArgs, NewMapArgs } from 'Types/MapTypes'
 import { promisePipe, filterNullAndUndefined } from 'Utils'
 
 /**
@@ -28,8 +28,8 @@ export const defaultValues = {
 	updatedAt: new Date(),
 }
 
-export const validateNew = (mapData: MapInput) => Joi.validate(mapData, mapSchema(true))
-export const validateUpdate = (mapData: MapInput) => Joi.validate(mapData, mapSchema(false))
+export const validateNew = (mapData: NewMapArgs) => Joi.validate(mapData, mapSchema(true))
+export const validateUpdate = (mapData: UpdateMapArgs) => Joi.validate(mapData, mapSchema(false))
 
 export const publicFields = ['uid', 'title', 'description', 'slug', 'createdAt', 'updatedAt', 'type'].join('\n')
 
@@ -37,4 +37,4 @@ export const publicFields = ['uid', 'title', 'description', 'slug', 'createdAt',
  * Clean
  */
 
-export const clean = async (mapData: MapInput = {}): Promise<MapInput> => promisePipe(filterNullAndUndefined)(mapData)
+export const clean = async (mapData: UpdateMapArgs = {}): Promise<UpdateMapArgs> => promisePipe(filterNullAndUndefined)(mapData)

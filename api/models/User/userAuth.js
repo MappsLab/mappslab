@@ -2,9 +2,9 @@
 import bcrypt from 'bcrypt'
 import { dissoc, head } from 'ramda'
 import { query } from 'Database'
-import type { UserType, Credentials } from '../UserTypes'
-import { publicFields } from './userDBSchema'
+import type { UserType, Credentials } from 'Types/UserTypes'
 import { ValidationError } from 'Errors'
+import { publicFields } from './userDBSchema'
 
 // const debug = require('debug')('api')
 

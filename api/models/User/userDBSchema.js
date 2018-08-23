@@ -2,7 +2,7 @@
 import Joi from 'joi'
 import { when, prop } from 'ramda'
 import bcrypt from 'bcrypt'
-import type { UserInput } from '../UserTypes'
+import type { UserInput } from 'Types/UserTypes'
 import { promisePipe, filterNullAndUndefined } from 'Utils'
 
 /**

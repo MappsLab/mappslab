@@ -1,8 +1,8 @@
 // @flow
 import { pick } from 'ramda'
+import type { PartialEdge, EdgeConfig, Txn } from 'Types/database'
 import dbClient from './client'
 import createEdge from './createEdge'
-import type { PartialEdge, EdgeConfig, Txn } from '../flowTypes/database'
 
 const dgraph = require('dgraph-js')
 const debug = require('debug')('api')

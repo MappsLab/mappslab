@@ -1,6 +1,6 @@
 // @flow
+import type { Txn } from 'Types/database'
 import dbClient from './client'
-import type { Txn } from '../types/shared/sharedTypes'
 
 const dgraph = require('dgraph-js')
 const debug = require('debug')('api')

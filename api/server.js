@@ -1,8 +1,8 @@
 // @flow
 import { GraphQLServer } from 'graphql-yoga'
+import createErrorFormatter from 'Utils/graphql-error-formatter'
 import { typeDefs, resolvers } from './schema'
 import { PORT } from './config'
-import createErrorFormatter from 'Utils/graphql-error-formatter'
 import getCurrentViewer from './middleware/getCurrentViewer'
 import context from './serverContext'
 

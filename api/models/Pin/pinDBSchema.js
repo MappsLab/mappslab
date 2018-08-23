@@ -1,7 +1,7 @@
 // @flow
 import Joi from 'joi'
 import { pipe, head, assoc, dissoc, when, propEq, map } from 'ramda'
-import type { NewPinArgs, UpdatePinArgs, PinType } from '../PinTypes'
+import type { NewPinArgs, UpdatePinArgs, PinType } from 'Types/PinTypes'
 import { promisePipe, filterNullAndUndefined } from 'Utils'
 import { parseSingularFields } from 'Utils/parsing'
 
@@ -68,6 +68,7 @@ export const clean = async (pinData: NewPinArgs | UpdatePinArgs): Promise<NewPin
  */
 
 const parse = pipe(
+	// $FlowFixMe -- TODO
 	parseSingularFields(singleFields),
 	when(propEq('description', undefined), assoc('description', '')),
 )

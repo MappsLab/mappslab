@@ -1,11 +1,11 @@
 // @flow
 import { query } from 'Database'
-import type { PinType } from '../PinTypes'
-import type { PaginationArgs } from '../../shared/sharedTypes'
-import { publicFields, parsePinResults } from './pinDBSchema'
+import type { PinType } from 'Types/PinTypes'
+import type { PaginationArgs } from 'Types/sharedTypes'
 import { createFilterString, makePaginationArgs } from 'Database/utils'
+import { publicFields, parsePinResults } from './pinDBSchema'
 
-export const getUserPins = async (userUid: string, args: PaginationArgs): Promise<Array<PinType> | Error> => {
+export const getUserPins = async (userUid: string, args: PaginationArgs): Promise<Array<PinType> | null> => {
 	const { first, after, filter } = makePaginationArgs(args)
 	const filterString = filter ? createFilterString(filter) : ''
 
@@ -19,11 +19,11 @@ export const getUserPins = async (userUid: string, args: PaginationArgs): Promis
 		}
 	`
 	const result = await query(q, { first, after })
-	return result.getPins ? parsePinResults(result.getPins[0].pinned) : []
+	return result && result.getPins ? parsePinResults(result.getPins[0].pinned) : []
 }
 
-export const getMapPins = async (mapUid: string, args: PaginationArgs): Promise<Array<PinType> | Error> => {
-	const { first, after, filter } = makePaginationArgs(args)
+export const getMapPins = async (mapUid: string, args: PaginationArgs): Promise<Array<PinType> | null> => {
+	const { first, after } = makePaginationArgs(args)
 	// const filterString = filter ? createFilterString(filter) : ''
 
 	const q = /* GraphQL */ `
@@ -34,5 +34,5 @@ export const getMapPins = async (mapUid: string, args: PaginationArgs): Promise<
 		}
 	`
 	const result = await query(q, { first, after })
-	return parsePinResults(result.pins)
+	return result && result.pins ? parsePinResults(result.pins) : []
 }

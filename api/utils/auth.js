@@ -1,8 +1,7 @@
 // @flow
 import crypto from 'crypto-promise'
 import jwt from 'jsonwebtoken'
-import { pickAll } from 'ramda'
-import type { UserType } from '../types/User/UserTypes'
+import type { UserType } from 'Types/UserTypes'
 import { JWT_KEY } from '../config'
 
 export type JWT = {
@@ -25,8 +24,8 @@ export const createToken = (): Promise<String | Error> =>
 
 export const createJWT = (user: UserType): JWT => {
 	const expires = 1 * 24 * 60 * 60 // 1 day
-	const jwtFields = pickAll(['email', 'username', 'uid'])(user)
-	const token = jwt.sign(jwtFields, JWT_KEY, { expiresIn: 10800 })
+	const { username, uid } = user
+	const token = jwt.sign({ username, uid }, JWT_KEY || 'abc', { expiresIn: 10800 })
 	return {
 		token: `Bearer ${token}`,
 		expires,

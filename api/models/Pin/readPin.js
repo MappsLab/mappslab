@@ -1,6 +1,6 @@
 // @flow
 import { query } from 'Database'
-import type { PinType } from '../PinTypes'
+import type { PinType } from 'Types/PinTypes'
 import { publicFields, parsePinResult } from './pinDBSchema'
 
 export const getPin = async (uid: string): Promise<PinType | null> => {

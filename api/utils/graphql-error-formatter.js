@@ -11,6 +11,7 @@ const createGraphQLErrorFormatter = (error: GraphQLError) => {
 	debug('---GraphQL Error---')
 	debug(error)
 	debug('-------------------\n')
+	// $FlowFixMe
 	const isUserError = error.originalError ? error.originalError[IsUserError] === true : error[IsUserError] === true
 	const sentryId =
 		!isUserError && process.env.NODE_ENV === 'production'

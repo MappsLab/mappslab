@@ -16,6 +16,8 @@
 ; Ignore polyfills
 .*/Libraries/polyfills/.*
 
+__tests__
+
 [include]
 ../node_modules
 
@@ -43,6 +45,7 @@ module.name_mapper='^Utils' -> '<PROJECT_ROOT>/utils'
 module.name_mapper='^Database' -> '<PROJECT_ROOT>/database'
 module.name_mapper='^Errors' -> '<PROJECT_ROOT>/errorTypes'
 module.name_mapper='^Config' -> '<PROJECT_ROOT>/config'
+module.name_mapper='^Types' -> '<PROJECT_ROOT>/types'
 
 
 suppress_type=$FlowIssue

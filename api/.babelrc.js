@@ -24,6 +24,7 @@ module.exports = {
 					Database: path.resolve(__dirname, 'database'),
 					Config: path.resolve(__dirname, 'config'),
 					Errors: path.resolve(__dirname, 'errorTypes'),
+					Types: path.resolve(__dirname, 'types'),
 				},
 				// cwd: 'babelrc',
 			},

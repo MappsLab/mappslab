@@ -1,12 +1,12 @@
 // @flow
 import { flatten } from 'flat'
+import type { Txn, DBNode } from 'Types/database'
 import dbClient from './client'
-import type { Txn, DBNode } from '../flowTypes/database'
 
 const dgraph = require('dgraph-js')
 const debug = require('debug')('api')
 
-const createNode = async (data: Object, existingTxn?: Txn): Promise<DBNode | Error> => {
+const createNode = async (data: Object, existingTxn?: Txn): Promise<DBNode> => {
 	const txn = existingTxn || dbClient.newTxn()
 	try {
 		const mu = new dgraph.Mutation()

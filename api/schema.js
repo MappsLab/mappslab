@@ -1,12 +1,12 @@
 // @flow
 import { merge } from 'lodash'
-import { coreTypes, coreTypeResolvers, coreQueryResolvers } from './types/core'
-import { scalarTypes, scalarResolvers } from './types/Scalars'
-import { ClassroomSchema, ClassroomQueryResolvers, ClassroomMutationResolvers } from './types/Classroom'
-import { MapSchema, MapQueryResolvers, MapMutationResolvers } from './types/Map'
-import { PinSchema, PinQueryResolvers, PinMutationResolvers, PinSubscriptionResolvers } from './types/Pin'
-import { RouteSchema, RouteQueryResolvers, RouteMutationResolvers } from './types/Route'
-import { UserSchema, UserQueryResolvers, UserMutationResolvers } from './types/User'
+import { coreTypes, coreTypeResolvers, coreQueryResolvers } from './graphql/core'
+import { scalarTypes, scalarResolvers } from './graphql/Scalars'
+import { ClassroomSchema, ClassroomQueryResolvers, ClassroomMutationResolvers } from './graphql/Classroom'
+import { MapSchema, MapQueryResolvers, MapMutationResolvers } from './graphql/Map'
+import { PinSchema, PinQueryResolvers, PinMutationResolvers, PinSubscriptionResolvers } from './graphql/Pin'
+import { RouteSchema, RouteQueryResolvers, RouteMutationResolvers } from './graphql/Route'
+import { UserSchema, UserQueryResolvers, UserMutationResolvers } from './graphql/User'
 
 const Root = /* GraphQL */ `
 	type Query {

@@ -1,9 +1,9 @@
 // @flow
-import type { ClassroomType } from '../ClassroomTypes'
-import { clean, defaultValues, validateNew } from './classroomDBSchema'
+import type { ClassroomType } from 'Types/ClassroomTypes'
+import type { DBEdge } from 'Types/database'
 import { ValidationError } from 'Errors'
 import { createNode, createEdge } from 'Database'
-import type { DBEdge } from '../../shared/sharedTypes'
+import { clean, defaultValues, validateNew } from './classroomDBSchema'
 
 const debug = require('debug')('api:user')
 
@@ -14,6 +14,7 @@ export const createClassroom = async (classroomData: ClassroomType): Promise<Cla
 		debug(err._object)
 		throw new ValidationError(err)
 	})
+	// $FlowFixMe -- TODO: How to type a generic function to return a specific type?
 	return createNode(validatedClassroomData)
 }
 
@@ -21,4 +22,4 @@ type ClassroomEdge = DBEdge & {
 	pred: 'teaches_in' | 'learns_in',
 }
 
-export const createClassroomConnection = async (connection: ClassroomEdge): Promise<boolean | Error> => createEdge(connection)
+export const createClassroomConnection = async (connection: ClassroomEdge): Promise<boolean | Error> => createEdge(connection, {})

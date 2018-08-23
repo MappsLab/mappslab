@@ -2,8 +2,8 @@
 import { head } from 'ramda'
 import { query } from 'Database'
 import { makePaginationArgs } from 'Database/utils'
-import type { GetUserArgs, UserType } from '../UserTypes'
-import type { PaginationArgs } from '../../shared/sharedTypes'
+import type { GetUserArgs, UserType } from 'Types/UserTypes'
+import type { PaginationArgs } from 'Types/sharedTypes'
 import { publicFields, viewerFields } from './userDBSchema'
 
 // const debug = require('debug')('api')

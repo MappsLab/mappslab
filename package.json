@@ -17,7 +17,7 @@
 		"build:app": "yarn workspace mappslab-app build:app",
 		"build:api": "yarn workspace mappslab-api build:api",
 		"build:mapp": "yarn workspace @mappslab/map build",
-		"flow:install-types": "flow-typed install",
+		"flow:doctor": "flow-mono install-types && flow-mono create-symlinks ./api/.flowconfig && flow-mono create-symlinks ./app/.flowconfig",
 		"test:app": "yarn workspace mappslab-app test",
 		"test:app:watch": "yarn workspace mappslab-app test:watch",
 		"test:api": "yarn workspace mappslab-api test",
@@ -53,6 +53,7 @@
 		"eslint-plugin-import": "^2.11.0",
 		"eslint-plugin-jsx-a11y": "^6.0.3",
 		"eslint-plugin-react": "^7.7.0",
-		"flow-mono-cli": "^1.3.4"
+		"flow-mono-cli": "^1.3.4",
+		"flow-typed": "^2.5.1"
 	}
 }

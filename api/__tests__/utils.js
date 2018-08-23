@@ -32,4 +32,14 @@ type Options = {
 
 // Nice little helper function for tests
 export const request = (query: mixed, { context, variables }: Options = {}): Promise<Object> =>
-	graphql(schema, query, undefined, { ...context, models }, variables)
+	// $FlowFixMe
+	graphql(
+		schema,
+		query,
+		undefined,
+		{
+			...context,
+			models,
+		},
+		variables,
+	)

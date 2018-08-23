@@ -1,11 +1,10 @@
 // @flow
 import { head } from 'ramda'
 import { query } from 'Database'
-import type { ClassroomType } from '../ClassroomTypes'
-import type { UserType } from '../../User/UserTypes'
-import type { PaginationArgs, GetNodeArgs } from '../../shared/sharedTypes'
-import { publicFields } from './classroomDBSchema'
+import type { ClassroomType } from 'Types/ClassroomTypes'
+import type { PaginationArgs, GetNodeArgs } from 'Types/sharedTypes'
 import { validateUid } from 'Database/utils'
+import { publicFields } from './classroomDBSchema'
 
 const debug = require('debug')('api')
 
@@ -23,7 +22,7 @@ export const getClassroom = async (args: GetNodeArgs): Promise<ClassroomType | n
 	`
 	const result: Object = await query(q, args)
 	const classroom = head(result.getClassroom)
-	if (classroom.type !== 'classroom') return null
+	if (!classroom || classroom.type !== 'classroom') return null
 	return classroom
 }
 

@@ -1,8 +1,6 @@
 // @flow
-import { head, prop, pipe } from 'ramda'
 import { query } from 'Database'
-import type { UserType } from '../UserTypes'
-import type { ClassroomType } from '../../Classroom/ClassroomTypes'
+import type { ClassroomType } from 'Types/ClassroomTypes'
 import { publicFields } from './classroomDBSchema'
 
 // const debug = require('debug')('api')
@@ -16,12 +14,13 @@ export const getMapClassroom = async (classroomUid: string): Promise<ClassroomTy
 		}
 	`
 	const variables = { classroomUid }
-	const result = await query(q, variables).catch((e) => console.log(e))
-	const user = head(result.getClassroom)
+	const result = await query(q, variables)
+	if (!result) return result
+	const user = result.getClassroom[0]
 	return user
 }
 
-export const getUserClassrooms = async (userUid: UserType, args?: PaginationArgs): Promise<Array<ClassroomType> | Error> => {
+export const getUserClassrooms = async (userUid: string /* args?: PaginationArgs */): Promise<Array<ClassroomType> | Error> => {
 	const q = /* GraphQL */ `
 		query getUserClassrooms {
 			classrooms(func: eq(type, "classroom")) @filter(uid_in(~learns_in, ${userUid})) {

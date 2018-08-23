@@ -1,8 +1,7 @@
 // @flow
 import { head, prop, pipe } from 'ramda'
 import { query } from 'Database'
-import type { UserType } from '../UserTypes'
-import type { PaginationArgs } from '../../shared/sharedTypes'
+import type { UserType } from 'Types/UserTypes'
 import { publicFields } from './userDBSchema'
 
 // const debug = require('debug')('api')
@@ -16,13 +15,12 @@ export const getPinOwner = async (pinUid: string): Promise<UserType | null | Err
 		}
 	`
 	const result = await query(q)
-	const user = head(result.getUser)
-	return user
+	return result && result.getUser ? result.getUser[0] : null
 }
 
 export const getClassroomUsers = (userType: string): Function => async (
 	classroomUid: string,
-	args: PaginationArgs,
+	/* args: PaginationArgs, */
 ): Promise<Array<UserType> | Error> => {
 	// TODO: build filter into `teaches` relationship
 	const relationship = userType === 'teachers' ? '~teaches_in' : '~learns_in'
@@ -38,8 +36,10 @@ export const getClassroomUsers = (userType: string): Function => async (
 	const result = await query(q)
 	const users = pipe(
 		// Get the first result from the query (should always be 1)
+		// $FlowFixMe
 		prop('classroom'),
 		head,
+		// $FlowFixMe
 		prop(relationship),
 	)(result)
 	return users
