@@ -10,7 +10,7 @@ import { InMemoryCache } from 'apollo-cache-inmemory'
 import { createUploadLink } from 'apollo-upload-client'
 import { getMainDefinition } from 'apollo-utilities'
 
-import { getCookie } from 'Utils/storage'
+import { getCookie } from '../utils/storage'
 import { VIEWER_COOKIE_TOKEN } from '../constants'
 import config from '../config'
 

@@ -1,8 +1,8 @@
 // @flow
 import * as React from 'react'
 import { MapConsumer } from '../Mapp'
-import { addListeners, removeListeners } from 'Utils/listeners'
-import { getNewValues, separateOptionsAndEvents } from 'Utils/data'
+import { addListeners, removeListeners } from '../utils/listeners'
+import { getNewValues, separateOptionsAndEvents } from '../utils/data'
 import type { Marker as MarkerType, MarkerOptions } from '../types'
 import type { MapContextType as MapContext } from '../Mapp'
 

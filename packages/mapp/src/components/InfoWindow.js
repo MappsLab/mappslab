@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react'
-import { addListeners, removeListeners } from 'Utils/listeners'
+import { addListeners, removeListeners } from '../utils/listeners'
 import type { LatLng, Map, Marker, InfoWindow as InfoWindowType, InfoWindowOptions } from '../types'
 import { MapConsumer } from '../Mapp'
 import type { MapContextType as MapContext } from '../Mapp'

@@ -4,8 +4,8 @@
 
 import * as React from 'react'
 import loadGoogleMaps from './services/googleMaps'
-// import { getNewValues, separateOptionsAndEvents } from 'Utils/data'
-import { addListeners, removeListeners } from 'Utils/listeners'
+// import { getNewValues, separateOptionsAndEvents } from './utils/data'
+import { addListeners, removeListeners } from './utils/listeners'
 import type { Map, OverlayView, LatLng } from './types'
 
 type EventHandlers = {}

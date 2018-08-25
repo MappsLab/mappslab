@@ -36,7 +36,7 @@ module.exports = {
 					Constants: './constants',
 					Components: './components',
 					Views: './views',
-					Utils: 'Utils',
+					Utils: './utils',
 					Queries: './queries',
 					Types: './types',
 					Styles: './theme',

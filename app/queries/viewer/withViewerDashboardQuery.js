@@ -1,6 +1,6 @@
 // @flow
 import gql from 'graphql-tag'
-import { unwindEdges } from 'Utils'
+import { unwindEdges } from '../utils'
 import withQuery from '../withQuery'
 
 export const query = gql`

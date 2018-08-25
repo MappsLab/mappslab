@@ -2,7 +2,7 @@
 import * as R from 'ramda'
 import gql from 'graphql-tag'
 import type { PinType, MapType } from 'Types'
-import { unwindEdges } from 'Utils'
+import { unwindEdges } from '../utils'
 import withQuery from '../withQuery'
 import { query as newPinAddedQuery } from './withMapSubscriptions'
 
