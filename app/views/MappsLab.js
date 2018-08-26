@@ -2,10 +2,9 @@
 import React from 'react'
 import { Switch, Route, Redirect } from 'react-router-dom'
 import { ViewerRoute } from 'Components/Auth'
-import Classrooms from './Login/Classrooms'
-import Classroom from './Login/Classroom'
 import Dashboard from './Dashboard'
 import Editor from './Editor'
+import Login from './Login'
 
 /**
  * MappsLab
@@ -13,11 +12,10 @@ import Editor from './Editor'
 
 const MappsLab = () => (
 	<Switch>
-		<Route path="/login/classrooms/:slug" render={({ match }) => <Classroom slug={match.params.slug} />} />
-		<Route path="/login/classrooms" component={Classrooms} />
+		<Route path="/login" component={Login} />
 		<Route path="/maps/:uid" render={({ match }) => <Editor uid={match.params.uid} />} />
 		<ViewerRoute path="/dashboard" render={({ viewer }) => <Dashboard viewer={viewer} />} />
-		<Route render={() => <Redirect to="/login/classrooms" />} />
+		<Route render={() => <Redirect to="/login" />} />
 	</Switch>
 )
 

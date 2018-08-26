@@ -94,7 +94,7 @@ class Pin extends React.Component<Props, State> {
 				render={({ anchor }) =>
 					anchor ? (
 						<React.Fragment>
-							<Action show="allowPinHover">
+							<Action is="allowPinHover">
 								{mouseOver && (
 									<CustomPopup anchor={anchor}>
 										<PopupWrapper>
@@ -104,7 +104,7 @@ class Pin extends React.Component<Props, State> {
 									</CustomPopup>
 								)}
 							</Action>
-							<Action show="editPin">
+							<Action is="editPin">
 								{active && (
 									<CustomPopup anchor={anchor}>
 										<PopupWrapper>
@@ -113,7 +113,7 @@ class Pin extends React.Component<Props, State> {
 									</CustomPopup>
 								)}
 							</Action>
-							<Action show="inspectPin">
+							<Action is="inspectPin">
 								{active && (
 									<CustomPopup anchor={anchor}>
 										<PopupWrapper>

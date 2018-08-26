@@ -26,13 +26,11 @@ export const formErrorStyles = css`
 /* Fields */
 
 export const fieldWrapperStyles = css`
-	display: flex;
+	display: ${({ hidden }) => (hidden ? 'none' : 'flex')};
 	flex-direction: column;
 	align-items: flex-start;
 	width: 100%;
-	// max-width: 375px;
-	margin-bottom: ${spacing.triple};
-	visibility: ${({ hidden }) => (hidden ? 'hidden' : 'visible')};
+	margin: ${({ theme }) => `${theme.spacing.single} 0 ${theme.spacing.double}`};
 `
 
 export const labelStyles = css`

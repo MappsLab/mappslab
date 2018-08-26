@@ -1,3 +1,3 @@
 // @flow
-export { default as withClassroomsQuery } from './withClassroomsQuery'
-export { default as withClassroomQuery } from './withClassroomQuery'
+export { default as ClassroomsQuery } from './ClassroomsQuery'
+export { default as ClassroomQuery } from './ClassroomQuery'

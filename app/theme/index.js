@@ -6,9 +6,9 @@ import * as text from './text'
 
 const theme = {
 	colors,
-	mixins,
-	layout,
 	text,
+	...mixins,
+	...layout,
 }
 
 export default theme

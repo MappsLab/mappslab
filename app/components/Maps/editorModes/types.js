@@ -1,6 +1,8 @@
 // @flow
 
-import type { ViewerType, MapType, PinType } from 'Types'
+import type { MapType } from 'Types/Map'
+import type { PinType } from 'Types/Pin'
+import type { ViewerType } from 'Types/User'
 import type { LatLng, LatLngLiteral } from 'mapp/types'
 
 type EditorUtils = {

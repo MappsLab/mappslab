@@ -15,3 +15,9 @@ export const light = '200'
 export const regular = '400'
 export const semi = '600'
 export const strong = '800'
+
+export const display = `
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	font-size: ${h4};
+`

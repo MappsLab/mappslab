@@ -5,7 +5,7 @@ import styled from 'styled-components'
 // import type { Map as GoogleMap } from 'mapp/types'
 import { withMapQuery, withCurrentViewerQuery } from 'Queries'
 import type { MapType, PinType, ViewerType } from 'Types'
-import { withStatechart } from 'react-automata'
+import { withStateMachine } from 'react-automata'
 import { compose } from 'Utils/data'
 import Debugger from './Debugger'
 import Pin from './Pin'
@@ -193,6 +193,6 @@ class MapEditor extends React.Component<Props, State> {
 export default compose(
 	withCurrentViewerQuery,
 	withMapQuery,
-	withStatechart(statechart),
+	withStateMachine(statechart),
 	withEditorModes,
 )(MapEditor)

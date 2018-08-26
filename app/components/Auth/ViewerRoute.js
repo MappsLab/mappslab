@@ -3,7 +3,7 @@ import React from 'react'
 import type { Node } from 'react'
 import { Redirect, Route } from 'react-router-dom'
 import { withCurrentViewerQuery } from 'Queries'
-import type { ViewerType } from 'Types'
+import type { ViewerType } from 'Types/User'
 import { Loading } from 'Components/Loading'
 
 /**

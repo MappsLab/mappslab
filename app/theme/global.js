@@ -6,7 +6,7 @@ import normalized from './normalized'
 
 injectGlobal`
 	${normalized}
-	@import url('https://fonts.googleapis.com/css?family=Work+Sans:400,600');
+	@import url('https://fonts.googleapis.com/css?family=Work+Sans:400,500,600');
 	
 	html {
 		font-size: 10px;

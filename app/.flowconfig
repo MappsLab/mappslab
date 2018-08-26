@@ -23,7 +23,7 @@
 [libs]
 node_modules/react-native/Libraries/react-native/react-native-interface.js
 node_modules/react-native/flow/
-flow-typed
+./flow-typed
 
 [options]
 emoji=true
@@ -39,13 +39,13 @@ module.name_mapper='^[./a-zA-Z0-9$_-]+\.\(bmp\|gif\|jpg\|jpeg\|png\|psd\|svg\|we
 
 ; Mirror the babel & webpack aliases
 module.name_mapper='^Components' -> '<PROJECT_ROOT>/components'
+module.name_mapper='^Constants' -> '<PROJECT_ROOT>/constants'
 module.name_mapper='^Views' -> '<PROJECT_ROOT>/views'
 module.name_mapper='^Utils' -> '<PROJECT_ROOT>/utils'
 module.name_mapper='^Queries' -> '<PROJECT_ROOT>/queries'
 module.name_mapper='^Types' -> '<PROJECT_ROOT>/types'
 module.name_mapper='^Styles' -> '<PROJECT_ROOT>/theme'
 module.name_mapper='^mapp' -> '<PROJECT_ROOT>/../packages/mapp/src'
-
 
 suppress_type=$FlowIssue
 suppress_type=$FlowFixMe

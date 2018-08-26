@@ -28,7 +28,7 @@ export const ValidationError = styled.h4`
 `
 
 type Props = {
-	label: string,
+	label: false | string,
 	name: string,
 	validate?: Function | Array<Function>,
 	helpText?: string,
@@ -50,7 +50,7 @@ const Field = (props: Props) => {
 			validate={validators}
 			render={({ input, meta }) => (
 				<Wrapper hidden={props.type === 'hidden'}>
-					<Label required={props.required}>{props.label}</Label>
+					{props.label && <Label required={props.required}>{props.label}</Label>}
 					<Input {...input} type={props.type} active={meta.active} />
 					<HelpText>{props.helpText}</HelpText>
 					{meta.error && meta.touched ? <ValidationError>{meta.error}</ValidationError> : null}

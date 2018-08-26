@@ -22,14 +22,13 @@ export const spacing = {
 export const radius = css`
 	border-radius: 7px;
 `
-export const boxShadow = css`
-	box-shadow: 0px 3px 3px rgba(50, 50, 50, 0.5);
+
+export const heavyShadow = css`
+	box-shadow: 0px 2px 5px 1px rgba(50, 50, 50, 0.5);
 `
 
-export const boxStyles = css`
-	background-color: white;
-	${radius};
-	${boxShadow};
+export const lightShadow = css`
+	box-shadow: 0px 2px 3px 0px rgba(50, 50, 50, 0.5);
 `
 
 export const flexCenter = css`

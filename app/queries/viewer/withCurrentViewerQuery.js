@@ -15,7 +15,7 @@ export const query = gql`
 			viewer {
 				uid
 				name
-				role
+				roles
 			}
 		}
 	}

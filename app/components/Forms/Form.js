@@ -51,18 +51,16 @@ const Form = (props: Props) => (
 			const disabled = props.disabled || pristine || submitFailedAndNotDirty || submitting || false
 
 			return (
-				<Column>
-					<FormWrapper onSubmit={handleSubmit}>
-						{props.children || (props.render && props.render(formProps))}
-						{message ? <FormMessage>{message}</FormMessage> : null}
-						{error && !submitting && !dirtySinceLastSubmit ? <FormError>{error}</FormError> : null}
-						{props.showSubmitButton && (
-							<SubmitButton wide disabled={disabled}>
-								{props.submitButtonText}
-							</SubmitButton>
-						)}
-					</FormWrapper>
-				</Column>
+				<FormWrapper onSubmit={handleSubmit}>
+					{props.children || (props.render && props.render(formProps))}
+					{message ? <FormMessage>{message}</FormMessage> : null}
+					{error && !submitting && !dirtySinceLastSubmit ? <FormError>{error}</FormError> : null}
+					{props.showSubmitButton && (
+						<SubmitButton wide disabled={disabled}>
+							{props.submitButtonText}
+						</SubmitButton>
+					)}
+				</FormWrapper>
 			)
 		}}
 	/>
