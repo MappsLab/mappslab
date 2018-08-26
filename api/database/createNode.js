@@ -10,7 +10,7 @@ const createNode = async (data: Object, existingTxn?: Txn): Promise<DBNode> => {
 	const txn = existingTxn || dbClient.newTxn()
 	try {
 		const mu = new dgraph.Mutation()
-		mu.setSetJson(flatten(data))
+		mu.setSetJson(flatten(data, { safe: true }))
 		const newClassroom = await txn.mutate(mu)
 		const uid = newClassroom.getUidsMap().get('blank-0')
 		debug(`Created new node with uid ${uid}`)

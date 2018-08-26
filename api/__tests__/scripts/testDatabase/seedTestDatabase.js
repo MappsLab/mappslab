@@ -32,8 +32,8 @@ const setSchema = async () => {
 		/**
 		 * User Indices
 		 */
-		'role: string @index(hash) . ',
 		'email: string @index(hash) . ',
+		'roles: [string] @index(term) .',
 		/* <user> <teaches_in> <classroom> */
 		'teaches_in: uid @reverse @count . ',
 		/* <user> <learns_in> <classroom> */
@@ -77,8 +77,8 @@ const seedDatabase = async () => {
 	await setSchema()
 	debug('👶  Creating and inserting users...')
 	const users = await promiseSerial(generateUsers(100).map((u) => () => User.createUser(u)))
-	const students = users.filter((u) => u.roles.map((r) => r.role).includes('student'))
-	const teachers = users.filter((u) => u.roles.map((r) => r.role).includes('teacher'))
+	const students = users.filter((u) => u.roles.includes('student'))
+	const teachers = users.filter((u) => u.roles.includes('teacher'))
 	debug(`👶  Created ${students.length} students and ${teachers.length} teachers`)
 
 	debug('🏫  Adding some classrooms..')

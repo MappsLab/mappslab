@@ -6,11 +6,12 @@ const userFields = /* GraphQL */ `
 	name: String
 	classrooms: ClassroomConnection
 	maps: MapConnection
-	role: String
+	roles: [String]
 	pins(input: PaginationInput): PinConnection
 `
 
 const User = /* GraphQL */ `
+
 	type User implements Node {
 		${userFields}
 	}

@@ -20,7 +20,7 @@ export const userSchema = (isNew: boolean = true) =>
 					.min(3)
 					.max(35),
 		email: Joi.any().when('roles', {
-			is: Joi.array().items(Joi.valid({ role: 'teacher' }, { role: 'admin' })),
+			is: Joi.array().items(Joi.valid('teacher', 'admin')),
 			then: Joi.string()
 				.email()
 				.required(),
@@ -29,11 +29,7 @@ export const userSchema = (isNew: boolean = true) =>
 		password: Joi.string(),
 		createdAt: isNew ? Joi.date().required() : Joi.any().forbidden(),
 		updatedAt: Joi.date().required(),
-		roles: Joi.array().items(
-			Joi.object().keys({
-				role: Joi.valid('student', 'teacher', 'admin'),
-			}),
-		),
+		roles: Joi.array().items(Joi.valid('student', 'teacher', 'admin')),
 		type: Joi.any().only('user'),
 		disabled: Joi.boolean().required(),
 	})
@@ -48,7 +44,7 @@ export const defaultValues = {
 export const validateNew = (userData: UserInput) => Joi.validate(userData, userSchema(true))
 export const validateUpdate = (userData: UserInput) => Joi.validate(userData, userSchema(false))
 
-export const publicFields = ['name', 'role', 'type', 'uid'].join('\n')
+export const publicFields = ['name', 'roles', 'type', 'uid'].join('\n')
 export const viewerFields = ['email', 'disabled'].join('\n')
 
 /**

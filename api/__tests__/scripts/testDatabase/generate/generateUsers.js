@@ -15,7 +15,7 @@ const generateUser = (): Object => {
 			.email(name)
 			.toLowerCase()
 			.replace(/[.]+/, '.'),
-		roles: mostLikely([{ role: 'student' }], [{ role: 'teacher' }]),
+		roles: mostLikely(['student', 'admin'], ['teacher']),
 		createdAt,
 		disabled: mostLikely(false, true),
 		password: 'Password#1',
