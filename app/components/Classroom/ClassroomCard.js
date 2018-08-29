@@ -10,11 +10,10 @@ import type { ClassroomType } from 'Types/Classroom'
 type Props = {
 	display?: 'list' | 'full',
 	classroom: ClassroomType,
-	active: boolean,
 }
 
-const ClassroomCard = ({ active, display, classroom }: Props) => (
-	<Card active={active} display={display} header={classroom.title} subheader={classroom.teachers.map((t) => t.name).join(', ')} />
+const ClassroomCard = ({ display, classroom }: Props) => (
+	<Card display={display} header={classroom.title} subheader={classroom.teachers.map((t) => t.name).join(', ')} />
 )
 
 ClassroomCard.defaultProps = {

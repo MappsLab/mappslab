@@ -10,10 +10,9 @@ import type { UserType } from 'Types'
 type Props = {
 	display?: 'list' | 'full',
 	user: UserType,
-	active: boolean,
 }
 
-const ClassroomCard = ({ active, display, user }: Props) => <Card active={active} display={display} header={user.name} />
+const ClassroomCard = ({ display, user }: Props) => <Card display={display} header={user.name} />
 
 ClassroomCard.defaultProps = {
 	display: 'list',

@@ -1,86 +1,106 @@
 // @flow
 
-// States
-const WELCOME = 'welcome'
-const CLASSROOM_SELECT = 'studentLogin'
-const STUDENT_SELECT = 'studentSelect'
-const TEACHER_LOGIN = 'teacherLogin'
-const USER_LOGIN = 'userLogin'
-const SUBMITTING = 'submitting'
-const SUCCESS = 'success'
-const FAILURE = 'failure'
-const FINDING_TEACHER = 'findingTeacher'
+/**
+ * States
+ */
 
-// Transitions
-export const FIND_CLASSROOM = 'findClassroom'
-export const SELECTED_CLASS = 'selectedClass'
-export const SELECTED_TEACHER_LOGIN = 'selectedTeacherLogin'
-export const FOUND_USER = 'foundUser'
-export const SELECTED_CLASSROOM = 'foundClassroom'
-export const GO_BACK = 'goBack'
-export const SUBMIT = 'submit'
-export const LOGIN_SUCCESS = 'loginSuccess'
-export const LOGIN_FAILURE = 'loginFailure'
+/* State Prefixes */
+const teacherPrefix = 'teacher'
+const studentPrefix = 'student'
+const loginPrefix = 'login'
+export const TEACHER_FLOW = `${teacherPrefix}_*`
+export const STUDENT_FLOW = `${studentPrefix}_*`
+export const LOGIN_FLOW = `${loginPrefix}_*`
+
+export const WELCOME = 'welcome'
+export const SELECT_CLASSROOM = `${studentPrefix}_selectClassroom`
+export const SELECT_STUDENT = `${studentPrefix}_selectStudent`
+export const FIND_TEACHER = `${teacherPrefix}_findTeacher`
+export const FETCHING_TEACHER = `${teacherPrefix}_teacherPending`
+const ENTER_PASSWORD = `${loginPrefix}_enterPassword`
+const SET_NEW_PASSWORD = `${loginPrefix}_setNewPassword`
+
+/**
+ * Transitions
+ */
+
+const ERROR = 'error'
+const SUCCESS = 'success'
+export const SELECTED_STUDENT_FLOW = 'selectedStudentFlow'
+export const SELECTED_TEACHER_FLOW = 'selectedTeacherFlow'
+export const SELECTED_CLASSROOM = 'selectedClassroom'
+export const SELECTED_STUDENT = 'selectedStudent'
+const REQUIRE_RESET = 'requireReset'
+
+const SUBMIT = 'submit'
+const LOGIN_SUCCESS = 'loginSuccess'
 
 // Actions
 export const SHOW_ERROR = 'showLoginError'
-export const ENTER_WELCOME = 'enterLogin'
-export const ENTER_STUDENT_SELECT = 'enterStudentSelect'
-export const ENTER_CLASSROOM_SELECT = 'enterClassroomSelect'
-export const ENTER_TEACHER_LOGIN = 'enterTeacherLogin'
-export const ENTER_USER_LOGIN = 'enterUserLogin'
-export const ENTER_SUCCESS = 'enterSuccess'
+export const SHOW_NEWPW_SUCCESS = 'showNewPWSuccess'
+export const SHOW_TEACHER_BUTTON = 'showTeacherButton'
+export const SHOW_STUDENT_BUTTON = 'showStudentButton'
 
 export const statechart = {
-	initial: CLASSROOM_SELECT,
+	initial: WELCOME,
 	states: {
 		[WELCOME]: {
 			on: {
-				[SELECTED_CLASS]: CLASSROOM_SELECT,
-				[SELECTED_TEACHER_LOGIN]: TEACHER_LOGIN,
-				[SELECTED_CLASSROOM]: STUDENT_SELECT,
-			},
-			onEntry: ENTER_WELCOME,
-		},
-		[CLASSROOM_SELECT]: {
-			onEntry: ENTER_CLASSROOM_SELECT,
-			on: {
-				[SELECTED_CLASSROOM]: STUDENT_SELECT,
+				[SELECTED_STUDENT_FLOW]: SELECT_CLASSROOM,
+				[SELECTED_TEACHER_FLOW]: FIND_TEACHER,
 			},
 		},
-		[STUDENT_SELECT]: {
-			onEntry: ENTER_STUDENT_SELECT,
+		[SELECT_CLASSROOM]: {
 			on: {
-				[FOUND_USER]: USER_LOGIN,
-				[GO_BACK]: CLASSROOM_SELECT,
+				[SELECTED_TEACHER_FLOW]: FIND_TEACHER,
+				[SELECTED_CLASSROOM]: SELECT_STUDENT,
 			},
 		},
-		[TEACHER_LOGIN]: {
+		[SELECT_STUDENT]: {
 			on: {
-				[SUBMIT]: FINDING_TEACHER,
-				[GO_BACK]: WELCOME,
+				[SELECTED_STUDENT]: ENTER_PASSWORD,
 			},
-			onEntry: [ENTER_TEACHER_LOGIN],
 		},
-		[FINDING_TEACHER]: {
+		[FIND_TEACHER]: {
 			on: {
-				[SUCCESS]: [FOUND_USER],
-				[FAILURE]: {
-					[TEACHER_LOGIN]: {
+				[SUBMIT]: FETCHING_TEACHER,
+			},
+		},
+		[FETCHING_TEACHER]: {
+			on: {
+				[SUCCESS]: ENTER_PASSWORD,
+				[ERROR]: {
+					[FIND_TEACHER]: {
 						actions: [SHOW_ERROR],
 					},
 				},
 			},
 		},
-		[USER_LOGIN]: {
-			onEntry: ENTER_USER_LOGIN,
+		[ENTER_PASSWORD]: {
 			on: {
-				[GO_BACK]: CLASSROOM_SELECT,
-				[LOGIN_SUCCESS]: SUCCESS,
+				[SUCCESS]: LOGIN_SUCCESS,
+				[REQUIRE_RESET]: SET_NEW_PASSWORD,
+				[ERROR]: {
+					[ENTER_PASSWORD]: {
+						actions: [SHOW_ERROR],
+					},
+				},
 			},
 		},
-		[SUCCESS]: {
-			onEntry: ENTER_SUCCESS,
+		[SET_NEW_PASSWORD]: {
+			on: {
+				[SUCCESS]: {
+					[LOGIN_SUCCESS]: {
+						actions: [SHOW_NEWPW_SUCCESS],
+					},
+				},
+				[ERROR]: {
+					[SET_NEW_PASSWORD]: {
+						actions: [SHOW_ERROR],
+					},
+				},
+			},
 		},
+		[LOGIN_SUCCESS]: {},
 	},
 }
