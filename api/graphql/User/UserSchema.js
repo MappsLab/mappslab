@@ -35,8 +35,9 @@ const User = /* GraphQL */ `
 	}
 
 	type LoginPayload {
-		jwt: Token!
-		viewer: Viewer!
+		requiresReset: Boolean
+		jwt: Token
+		viewer: Viewer
 	}
 
 	# Relationships
@@ -63,6 +64,11 @@ const User = /* GraphQL */ `
 		password: String!
 	}
 
+	input UpdatePasswordInput {
+		uid: String!
+		password: String!
+	}
+
 	# Queries & Mutations
 
 	extend type Query {
@@ -73,6 +79,7 @@ const User = /* GraphQL */ `
 	extend type Mutation {
 		loginViewer(credentials: CredentialsInput!): LoginPayload!
 		registerViewer(credentials: CredentialsInput!): LoginPayload!
+		updatePassword(credentials: UpdatePasswordInput!): LoginPayload!
 		addUser(input: UserInput!): User!
 		modifyUser(input: UserInput!): User!
 		removeUser(uid: String!): Boolean!

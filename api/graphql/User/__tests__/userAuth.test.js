@@ -1,4 +1,3 @@
-// @flow
 /* eslint-disable no-undef */
 import { createJWT, verifyJWT } from 'Utils/auth'
 import { request } from '../../../__tests__/utils'
@@ -8,32 +7,36 @@ import { getFirstUsers } from './utils'
 let users
 let john
 let joseph
+let alex
 
 beforeAll(async (done) => {
 	users = await getFirstUsers()
 	joseph = users.find((u) => u.email === 'joseph@good-idea.studio')
 	john = users.find((u) => u.email === 'john@cmwworld.com')
+	alex = users.find((u) => u.name === 'Alex Johnstone')
 	done()
 })
 
+const uidLogin = /* GraphQL */ `
+	mutation LoginViewer($password: String!, $uid: String, $email: String) {
+		loginViewer(credentials: { uid: $uid, password: $password, email: $email }) {
+			requiresReset
+			jwt {
+				token
+				expires
+			}
+			viewer {
+				uid
+				name
+			}
+		}
+	}
+`
+
 describe('queries', () => {
 	it('[loginViewer] should return a jwt and viewer', async () => {
-		const uidQuery = /* GraphQL */ `
-			mutation LoginViewer($password: String!, $email: String!) {
-				loginViewer(credentials: { email: $email, password: $password }) {
-					jwt {
-						token
-						expires
-					}
-					viewer {
-						uid
-						name
-					}
-				}
-			}
-		`
 		const variables = { email: joseph.email, password: 'Password#1' }
-		const result = await request(uidQuery, { variables })
+		const result = await request(uidLogin, { variables })
 		const { jwt, viewer } = result.data.loginViewer
 		expect(/^Bearer/.test(jwt.token)).toBe(true)
 		expect(jwt.expires).toBeGreaterThan(1)
@@ -41,45 +44,23 @@ describe('queries', () => {
 	})
 
 	it('[loginViewer] should work with uid', async () => {
-		const uidQuery = /* GraphQL */ `
-			mutation LoginViewer($password: String!, $uid: String!) {
-				loginViewer(credentials: { uid: $uid, password: $password }) {
-					jwt {
-						token
-						expires
-					}
-					viewer {
-						uid
-						name
-					}
-				}
-			}
-		`
 		const variables = { uid: john.uid, password: 'Password#1' }
-		const result = await request(uidQuery, { variables })
+		const result = await request(uidLogin, { variables })
 		const { jwt, viewer } = result.data.loginViewer
 		expect(/^Bearer/.test(jwt.token)).toBe(true)
 		expect(jwt.expires).toBeGreaterThan(1)
 		expect(viewer.name).toBe(john.name)
 	})
 
+	it('[loginViewer] should return `requiresReset` if the supplied password fails but matches `user.temporaryPassword`', async () => {
+		const variables = { uid: alex.uid, password: 'temporary' }
+		const result = await request(uidLogin, { variables })
+		expect(result.data.loginViewer.requiresReset).toBe(true)
+	})
+
 	it('[loginViewer] should return a validation error with invalid credentials', async () => {
-		const uidQuery = /* GraphQL */ `
-			mutation LoginViewer($password: String!, $email: String!) {
-				loginViewer(credentials: { email: $email, password: $password }) {
-					jwt {
-						token
-						expires
-					}
-					viewer {
-						uid
-						name
-					}
-				}
-			}
-		`
 		const variables = { email: joseph.email, password: 'wrongPassword' }
-		const result = await request(uidQuery, { variables })
+		const result = await request(uidLogin, { variables })
 		expect(result.errors[0].message).toBe('Email and password do not match')
 	})
 

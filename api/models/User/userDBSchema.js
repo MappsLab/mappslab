@@ -27,6 +27,7 @@ export const userSchema = (isNew: boolean = true) =>
 			otherwise: Joi.string().email(),
 		}),
 		password: Joi.string(),
+		temporaryPassword: Joi.string(),
 		createdAt: isNew ? Joi.date().required() : Joi.any().forbidden(),
 		updatedAt: Joi.date().required(),
 		roles: Joi.array().items(Joi.valid('student', 'teacher', 'admin')),
@@ -52,17 +53,17 @@ export const viewerFields = ['email', 'disabled'].join('\n')
  */
 const SALT_FACTOR = 5
 
-const hashPassword = (obj) =>
+const hashPassword = (key: 'password' | 'temporaryPassword') => (obj) =>
 	new Promise(async (resolve) => {
-		const { password } = obj
-		if (!password) {
+		const value = obj[key]
+		if (!value) {
 			resolve(obj)
 			return
 		}
-		const hashedPassword = await bcrypt.hash(password, SALT_FACTOR)
+		const hashedPassword = await bcrypt.hash(value, SALT_FACTOR)
 		resolve({
 			...obj,
-			password: hashedPassword,
+			[key]: hashedPassword,
 		})
 	})
 
@@ -71,5 +72,6 @@ export const clean = async (userData: UserInput = {}): Promise<UserInput> =>
 		// Filter out 'undefined' values
 		filterNullAndUndefined,
 		// When a new password is supplied, hash it
-		when(prop('password'), hashPassword),
+		when(prop('password'), hashPassword('password')),
+		when(prop('temporaryPassword'), hashPassword('temporaryPassword')),
 	)(userData)

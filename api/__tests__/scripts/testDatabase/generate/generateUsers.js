@@ -9,16 +9,18 @@ import { users as defaultUsers } from '../fixtures'
 const generateUser = (): Object => {
 	const name = faker.name.findName()
 	const createdAt = faker.date.past(2)
+	const isStudent = mostLikely(true, false)
 	return {
 		name,
 		email: faker.internet
 			.email(name)
 			.toLowerCase()
 			.replace(/[.]+/, '.'),
-		roles: mostLikely(['student', 'admin'], ['teacher']),
+		roles: isStudent ? ['student'] : ['teacher'],
 		createdAt,
 		disabled: mostLikely(false, true),
-		password: 'Password#1',
+		password: null,
+		temporaryPassword: 'temporary',
 	}
 }
 

@@ -4,7 +4,7 @@ import dbClient from './client'
 import removeEdge from './removeEdge'
 
 const dgraph = require('dgraph-js')
-const debug = require('debug')('test')
+const debug = require('debug')('api')
 
 export type Relationship = [DBEdge, EdgeConfig]
 

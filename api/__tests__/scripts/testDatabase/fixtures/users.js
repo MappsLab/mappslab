@@ -7,10 +7,10 @@ export const joseph = {
 	disabled: false,
 }
 
-export const waverly = {
+export const alex = {
 	name: 'Alex Johnstone',
 	roles: ['student'],
-	password: 'Password#1',
+	temporaryPassword: 'temporary',
 	disabled: false,
 }
 
@@ -21,6 +21,6 @@ export const john = {
 	email: 'john@cmwworld.com',
 }
 
-const defaultUsers = [joseph, waverly, john]
+const defaultUsers = [joseph, alex, john]
 
 export default defaultUsers
