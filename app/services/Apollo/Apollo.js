@@ -9,10 +9,10 @@ import { onError } from 'apollo-link-error'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { createUploadLink } from 'apollo-upload-client'
 import { getMainDefinition } from 'apollo-utilities'
-
-import { getCookie } from '../utils/storage'
-import { VIEWER_COOKIE_TOKEN } from '../constants'
-import config from '../config'
+import { getCookie } from 'Utils/storage'
+import { VIEWER_COOKIE_TOKEN } from 'Constants'
+import config from '../../config'
+import fragmentMatcher from './fragmentMatcher'
 
 const debug = require('debug')('app')
 
@@ -39,6 +39,7 @@ const apiLink = split(
 // TODO Return IDs from more objects for better caching
 const cache = new InMemoryCache({
 	addTypename: true,
+	fragmentMatcher,
 	dataIdFromObject: (object) => {
 		switch (object.__typename) {
 			case 'image':

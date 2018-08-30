@@ -77,10 +77,10 @@ const Login = (props: Props) => {
 					<UserLogin {...childProps} />
 				</State>
 
-				<State is={STUDENT_FLOW}>
+				<State is={[WELCOME, STUDENT_FLOW]}>
 					<Button onClick={makeTransition(SELECTED_TEACHER_FLOW)}>Login as a teacher</Button>
 				</State>
-				<State is={[WELCOME, TEACHER_FLOW]}>
+				<State is={[TEACHER_FLOW]}>
 					<Button onClick={makeTransition(SELECTED_STUDENT_FLOW)}>Login as a student</Button>
 				</State>
 			</Pane>

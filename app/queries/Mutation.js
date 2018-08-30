@@ -32,10 +32,10 @@ const Mutation = ({ children, ...mutationProps }: MutationProps) => (
 
 Mutation.defaultProps = {
 	variables: {},
-	update: () => {},
+	update: undefined,
 	ignoreResults: false,
 	optimisticResponse: undefined,
-	refetchQueries: () => {},
+	refetchQueries: undefined,
 	awaitRefetchQueries: false,
 	onCompleted: undefined,
 	onError: undefined,

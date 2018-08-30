@@ -21,7 +21,7 @@ const mutation = gql`
 				}
 			}
 			... on RequiresReset {
-				token
+				resetToken
 			}
 		}
 	}

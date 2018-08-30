@@ -17,6 +17,7 @@ export const SELECT_CLASSROOM = `${studentPrefix}_selectClassroom`
 export const SELECT_STUDENT = `${studentPrefix}_selectStudent`
 export const FIND_TEACHER = `${teacherPrefix}_findTeacher`
 export const FETCHING_TEACHER = `${teacherPrefix}_teacherPending`
+export const LOGIN_SUCCESS = 'loginSuccess'
 const ENTER_PASSWORD = `${loginPrefix}_enterPassword`
 const SET_NEW_PASSWORD = `${loginPrefix}_setNewPassword`
 
@@ -25,15 +26,15 @@ const SET_NEW_PASSWORD = `${loginPrefix}_setNewPassword`
  */
 
 const ERROR = 'error'
-const SUCCESS = 'success'
 export const SELECTED_STUDENT_FLOW = 'selectedStudentFlow'
 export const SELECTED_TEACHER_FLOW = 'selectedTeacherFlow'
 export const SELECTED_CLASSROOM = 'selectedClassroom'
 export const SELECTED_STUDENT = 'selectedStudent'
-const REQUIRE_RESET = 'requireReset'
+export const FETCHED_TEACHER = 'fetchedTeacher'
+export const REQUIRE_RESET = 'requireReset'
+export const SUCCESS = 'success'
 
 const SUBMIT = 'submit'
-const LOGIN_SUCCESS = 'loginSuccess'
 
 // Actions
 export const SHOW_ERROR = 'showLoginError'
@@ -68,7 +69,7 @@ export const statechart = {
 		},
 		[FETCHING_TEACHER]: {
 			on: {
-				[SUCCESS]: ENTER_PASSWORD,
+				[FETCHED_TEACHER]: ENTER_PASSWORD,
 				[ERROR]: {
 					[FIND_TEACHER]: {
 						actions: [SHOW_ERROR],

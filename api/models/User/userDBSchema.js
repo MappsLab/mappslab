@@ -31,6 +31,8 @@ export const userSchema = (isNew: boolean = true) =>
 			  })
 			: Joi.string(),
 		password: Joi.string(),
+		temporaryPassword: Joi.string(),
+		temporaryPasswordExpires: Joi.date(),
 		passwordReset: Joi.object().keys({
 			token: Joi.string().required(),
 			expires: Joi.date().required(),
@@ -39,7 +41,11 @@ export const userSchema = (isNew: boolean = true) =>
 		createdAt: isNew ? Joi.date().required() : Joi.any().forbidden(),
 		updatedAt: Joi.date().required(),
 		roles: isNew ? roles.required() : roles,
-		type: isNew ? Joi.any().only('user').required : Joi.any().only('user'),
+		type: isNew
+			? Joi.any()
+					.only('user')
+					.required()
+			: Joi.any().only('user'),
 		disabled: isNew ? Joi.boolean().required() : Joi.boolean(),
 	})
 

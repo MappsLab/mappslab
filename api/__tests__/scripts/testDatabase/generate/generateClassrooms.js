@@ -4,7 +4,7 @@ import faker from 'faker'
 import type { UserType } from 'Types/UserTypes'
 import type { ClassroomType } from 'Types/ClassroomTypes'
 import type { DBEdge } from 'Types/database'
-import defaultClassrooms from '../fixtures/classrooms'
+// import defaultClassrooms from '../fixtures/classrooms'
 
 // TODO: Seed with disabled users
 
@@ -17,10 +17,7 @@ const generateClassroom = (): Object => {
 	}
 }
 
-export const generateClassrooms = (count: number): Array<mixed> => [
-	...defaultClassrooms,
-	...R.times(generateClassroom, count - defaultClassrooms.length),
-]
+export const generateClassrooms = (count: number): Array<mixed> => [...R.times(generateClassroom, count)]
 
 export const generateClassroomConnections = (students: Array<UserType>, classrooms: Array<ClassroomType>): Array<DBEdge> => {
 	const unAssignedStudents = [...students]
