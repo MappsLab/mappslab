@@ -20,8 +20,8 @@ type QueryProps = {
 	// pollInterval?: number
 	// fetchPolicy?: '..'
 	// errorPolicy?: ''
-	// delay?: boolean,
-	// skip?: boolean,
+	delay?: boolean,
+	skip?: boolean,
 	displayName?: void | string,
 	// An optional "Loading" component, with default. Use a skeleton here. Pass 'false' to disable
 	LoadingComponent?: false | React.ComponentType<LoadingProps>,
@@ -29,37 +29,73 @@ type QueryProps = {
 	ErrorComponent?: false | React.ComponentType<any>,
 }
 
-const Query = (props: QueryProps) => {
-	// A few more query props are available:
-	// https://www.apollographql.com/docs/react/essentials/queries.html#props
-	const { variables, children, query } = props
-	return (
-		<ApolloQuery query={query} variables={variables} notifyOnNetworkStatusChange>
-			{(response) => {
-				const { networkStatus, error } = response
-				const status = getNetworkStatus(networkStatus)
-				const { LoadingComponent, ErrorComponent } = props
-				const { data, ...responseProps } = response
-				if (LoadingComponent !== false && status === 'loading')
-					return LoadingComponent && <LoadingComponent status={status} {...response} />
-				if (error && ErrorComponent !== false) {
-					return ErrorComponent && <ErrorComponent status={status} {...responseProps} />
-				}
-				const renderProps = {
-					data: data ? unwindEdges(data) : data,
-					...responseProps,
-				}
-				return children(renderProps)
-			}}
-		</ApolloQuery>
-	)
+type State = {
+	newVariables: null | {},
+	delay: boolean,
 }
 
-Query.defaultProps = {
-	variables: {},
-	displayName: undefined,
-	LoadingComponent: Loading,
-	ErrorComponent: FetchError,
+class Query extends React.Component<QueryProps, State> {
+	static defaultProps = {
+		variables: {},
+		displayName: undefined,
+		LoadingComponent: Loading,
+		ErrorComponent: FetchError,
+		skip: false,
+		delay: false,
+	}
+
+	state = {
+		delay: this.props.delay || false,
+		newVariables: null,
+	}
+
+	load = (newVariables: {}, refetch: ({}) => Promise<{}>) =>
+		new Promise((resolve) => {
+			this.setState({ delay: false, newVariables }, async () => {
+				console.log('load method')
+				const r = await refetch({ variables: newVariables })
+				console.log('load method fetched')
+				console.log(r)
+				resolve(r)
+			})
+		})
+
+	render() {
+		const { children, skip, variables, ...queryProps } = this.props
+		const { delay, newVariables } = this.state
+		// allow a 'delay' prop
+		const shouldSkip = skip || delay
+		const vars = newVariables || variables
+		console.log(vars)
+
+		return (
+			<ApolloQuery {...queryProps} variables={vars} skip={skip || delay} notifyOnNetworkStatusChange>
+				{(response) => {
+					const { networkStatus, error, refetch } = response
+					const load = async (_newVariables: {}) => {
+						console.log('load func', _newVariables)
+						return this.load(_newVariables, refetch)
+						// return await refetch(newVariables)
+					}
+					console.log(response)
+					const status = getNetworkStatus(networkStatus)
+					const { LoadingComponent, ErrorComponent } = this.props
+					const { data, ...responseProps } = response
+					if (!shouldSkip && LoadingComponent !== false && status === 'loading')
+						return LoadingComponent && <LoadingComponent status={status} {...response} />
+					if (error && ErrorComponent !== false) {
+						return ErrorComponent && <ErrorComponent status={status} {...responseProps} />
+					}
+					const renderProps = {
+						data: data ? unwindEdges(data) : data,
+						load,
+						...responseProps,
+					}
+					return children(renderProps)
+				}}
+			</ApolloQuery>
+		)
+	}
 }
 
 export default Query
