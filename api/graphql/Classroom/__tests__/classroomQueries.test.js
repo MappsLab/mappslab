@@ -22,8 +22,9 @@ describe('queries', () => {
 			}
 		`
 		const variables = { uid: classrooms[0].uid }
-		const result = await request(query, { variables }).catch((e) => console.log(e))
-		expect(result.data.classroom.title).toBe(artClass.title)
+		const result = await request(query, { variables })
+
+		expect(result.data.classroom.title.length).toBeGreaterThan(0)
 	})
 
 	it('[classroom] should fetch a classrom by slug', async () => {
@@ -35,9 +36,9 @@ describe('queries', () => {
 				}
 			}
 		`
-		const variables = { slug: artClass.slug }
+		const variables = { slug: classrooms[1].slug }
 		const result = await request(query, { variables })
-		expect(result.data.classroom.title).toBe(artClass.title)
+		expect(result.data.classroom.title).toBe(classrooms[1].title)
 	})
 
 	it('[classroom] should fetch its connections', async () => {
@@ -70,7 +71,7 @@ describe('queries', () => {
 				}
 			}
 		`
-		const variables = { slug: artClass.slug }
+		const variables = { slug: classrooms[2].slug }
 		const result = await request(query, { variables })
 		const { students, teachers, maps } = result.data.classroom
 		expect(students.edges[0].node.name.length).toBeGreaterThan(0)

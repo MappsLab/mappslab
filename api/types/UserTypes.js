@@ -39,7 +39,8 @@ export type UserInput = {
 }
 
 export type GetUserArgs = {
-	uid: string,
+	uid?: string,
+	email?: string,
 }
 
 export type GetUserInput = {

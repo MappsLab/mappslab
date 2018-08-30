@@ -5,6 +5,7 @@ export const getFirstClassrooms = async (num = 3) => {
 		firstClassrooms(func: eq(type, "classroom"), first: ${num}) {
 			uid
 			title
+			slug
 		}
 	}`
 	const result = await query(q)

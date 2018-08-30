@@ -61,7 +61,8 @@ const User = /* GraphQL */ `
 	# Inputs
 
 	input GetUserInput {
-		uid: String!
+		uid: String
+		email: String
 	}
 
 	input CredentialsInput {

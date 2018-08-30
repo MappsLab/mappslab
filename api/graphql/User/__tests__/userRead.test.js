@@ -12,7 +12,7 @@ beforeAll(async (done) => {
 describe('[pins]', () => {
 	it('should fetch a user by uid', async () => {
 		const q = /* GraphQL */ `
-			query user($uid: String!) {
+			query user($uid: String) {
 				user(input: { uid: $uid }) {
 					uid
 					name
@@ -20,6 +20,20 @@ describe('[pins]', () => {
 			}
 		`
 		const variables = { uid: users[0].uid }
+		const result = await request(q, { variables })
+		expect(result.data.user.name).toBe(users[0].name)
+	})
+
+	it('should fetch a user by email', async () => {
+		const q = /* GraphQL */ `
+			query user($email: String) {
+				user(input: { email: $email }) {
+					uid
+					name
+				}
+			}
+		`
+		const variables = { email: users[0].email }
 		const result = await request(q, { variables })
 		expect(result.data.user.name).toBe(users[0].name)
 	})
