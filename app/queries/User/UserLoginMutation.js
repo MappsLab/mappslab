@@ -9,14 +9,19 @@ import { query as currentViewerQuery } from '../viewer/withCurrentViewerQuery'
 const mutation = gql`
 	mutation LoginViewer($password: String!, $uid: String, $email: String) {
 		loginViewer(credentials: { email: $email, uid: $uid, password: $password }) {
-			jwt {
-				token
-				expires
+			... on LoginSuccess {
+				jwt {
+					token
+					expires
+				}
+				viewer {
+					uid
+					name
+					roles
+				}
 			}
-			viewer {
-				uid
-				name
-				roles
+			... on RequiresReset {
+				token
 			}
 		}
 	}

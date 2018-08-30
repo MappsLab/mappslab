@@ -19,8 +19,8 @@ const generateUser = (): Object => {
 		roles: isStudent ? ['student'] : ['teacher'],
 		createdAt,
 		disabled: mostLikely(false, true),
-		password: null,
-		temporaryPassword: 'temporary',
+		password: 'temporary',
+		requiresReset: true,
 	}
 }
 

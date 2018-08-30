@@ -1,6 +1,6 @@
 // @flow
 import Joi from 'joi'
-import { when, prop } from 'ramda'
+import { when, prop, assoc } from 'ramda'
 import bcrypt from 'bcrypt'
 import type { UserInput } from 'Types/UserTypes'
 import { promisePipe, filterNullAndUndefined } from 'Utils'
@@ -8,6 +8,8 @@ import { promisePipe, filterNullAndUndefined } from 'Utils'
 /**
  * Schema
  */
+
+const roles = Joi.array().items(Joi.valid('student', 'teacher', 'admin'))
 
 export const userSchema = (isNew: boolean = true) =>
 	Joi.object().keys({
@@ -19,20 +21,26 @@ export const userSchema = (isNew: boolean = true) =>
 			: Joi.string()
 					.min(3)
 					.max(35),
-		email: Joi.any().when('roles', {
-			is: Joi.array().items(Joi.valid('teacher', 'admin')),
-			then: Joi.string()
-				.email()
-				.required(),
-			otherwise: Joi.string().email(),
-		}),
+		email: isNew
+			? Joi.any().when('roles', {
+					is: Joi.array().items(Joi.valid('teacher', 'admin')),
+					then: Joi.string()
+						.email()
+						.required(),
+					otherwise: Joi.string().email(),
+			  })
+			: Joi.string(),
 		password: Joi.string(),
-		temporaryPassword: Joi.string(),
+		passwordReset: Joi.object().keys({
+			token: Joi.string().required(),
+			expires: Joi.date().required(),
+		}),
+		requiresReset: Joi.boolean(),
 		createdAt: isNew ? Joi.date().required() : Joi.any().forbidden(),
 		updatedAt: Joi.date().required(),
-		roles: Joi.array().items(Joi.valid('student', 'teacher', 'admin')),
-		type: Joi.any().only('user'),
-		disabled: Joi.boolean().required(),
+		roles: isNew ? roles.required() : roles,
+		type: isNew ? Joi.any().only('user').required : Joi.any().only('user'),
+		disabled: isNew ? Joi.boolean().required() : Joi.boolean(),
 	})
 
 export const defaultValues = {
@@ -74,4 +82,5 @@ export const clean = async (userData: UserInput = {}): Promise<UserInput> =>
 		// When a new password is supplied, hash it
 		when(prop('password'), hashPassword('password')),
 		when(prop('temporaryPassword'), hashPassword('temporaryPassword')),
+		assoc('updatedAt', new Date()),
 	)(userData)

@@ -20,14 +20,18 @@ beforeAll(async (done) => {
 const uidLogin = /* GraphQL */ `
 	mutation LoginViewer($password: String!, $uid: String, $email: String) {
 		loginViewer(credentials: { uid: $uid, password: $password, email: $email }) {
-			requiresReset
-			jwt {
-				token
-				expires
+			... on LoginSuccess {
+				jwt {
+					token
+					expires
+				}
+				viewer {
+					uid
+					name
+				}
 			}
-			viewer {
-				uid
-				name
+			... on RequiresReset {
+				resetToken
 			}
 		}
 	}
@@ -55,7 +59,7 @@ describe('queries', () => {
 	it('[loginViewer] should return `requiresReset` if the supplied password fails but matches `user.temporaryPassword`', async () => {
 		const variables = { uid: alex.uid, password: 'temporary' }
 		const result = await request(uidLogin, { variables })
-		expect(result.data.loginViewer.requiresReset).toBe(true)
+		expect(result.data.loginViewer.resetToken.length).toBe(96)
 	})
 
 	it('[loginViewer] should return a validation error with invalid credentials', async () => {
@@ -68,9 +72,11 @@ describe('queries', () => {
 		const uidQuery = /* GraphQL */ `
 			mutation LoginViewer($password: String!, $email: String!) {
 				loginViewer(credentials: { email: $email, password: $password }) {
-					jwt {
-						token
-						expires
+					... on LoginSuccess {
+						jwt {
+							token
+							expires
+						}
 					}
 				}
 			}

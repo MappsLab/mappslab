@@ -3,7 +3,7 @@ import { getUser, getUsers, getViewer } from './readUser'
 import { updateUser } from './updateUser'
 import { createUser } from './createUser'
 import { deleteUser } from './deleteUser'
-import { checkPassword } from './userAuth'
+import { checkPassword, createResetToken } from './userAuth'
 import { getPinOwner, getClassroomStudents, getClassroomTeachers } from './readUserRelationships'
 
 export default {
@@ -14,6 +14,7 @@ export default {
 	createUser,
 	deleteUser,
 	checkPassword,
+	createResetToken,
 	getPinOwner,
 	getClassroomStudents,
 	getClassroomTeachers,

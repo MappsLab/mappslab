@@ -34,8 +34,14 @@ const User = /* GraphQL */ `
 		expires: Int!
 	}
 
-	type LoginPayload {
-		requiresReset: Boolean
+	union LoginResult = LoginSuccess | RequiresReset
+
+	type RequiresReset {
+		resetToken: String!
+		viewer: Viewer
+	}
+
+	type LoginSuccess {
 		jwt: Token
 		viewer: Viewer
 	}
@@ -73,13 +79,13 @@ const User = /* GraphQL */ `
 
 	extend type Query {
 		user(input: GetUserInput): User!
-		currentViewer: LoginPayload
+		currentViewer: LoginSuccess
 	}
 
 	extend type Mutation {
-		loginViewer(credentials: CredentialsInput!): LoginPayload!
-		registerViewer(credentials: CredentialsInput!): LoginPayload!
-		updatePassword(credentials: UpdatePasswordInput!): LoginPayload!
+		loginViewer(credentials: CredentialsInput!): LoginResult!
+		registerViewer(credentials: CredentialsInput!): LoginResult!
+		updatePassword(credentials: UpdatePasswordInput!): LoginResult!
 		addUser(input: UserInput!): User!
 		modifyUser(input: UserInput!): User!
 		removeUser(uid: String!): Boolean!

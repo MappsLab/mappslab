@@ -30,6 +30,13 @@ const coreQueryResolvers = {
 			return null
 		},
 	},
+
+	LoginResult: {
+		__resolveType(obj: any) {
+			if (obj.resetToken) return 'RequiresReset'
+			return 'LoginSuccess'
+		},
+	},
 }
 
 export default coreQueryResolvers

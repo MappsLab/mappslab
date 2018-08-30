@@ -9,7 +9,7 @@ export type JWT = {
 	expires: number,
 }
 
-export const createToken = (): Promise<String | Error> =>
+export const createToken = (): Promise<string> =>
 	new Promise((resolve, reject) => {
 		crypto
 			.randomBytes(48)

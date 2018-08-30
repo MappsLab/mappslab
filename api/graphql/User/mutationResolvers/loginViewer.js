@@ -9,7 +9,7 @@ const loginViewerMutation = async (
 	_: mixed,
 	args: { credentials: Credentials },
 	ctx: GraphQLContext,
-): Promise<{ viewer: ViewerType, jwt: JWT } | { requiresReset: true }> => {
+): Promise<{ viewer: ViewerType, jwt: JWT } | { resetToken: string }> => {
 	const { credentials } = args
 	const result = await ctx.models.User.checkPassword(credentials)
 	if (result && !result.requiresReset) {
@@ -19,7 +19,10 @@ const loginViewerMutation = async (
 			jwt,
 		}
 	}
-	if (result && result.requiresReset) return { requiresReset: true }
+	if (result && result.uid && result.requiresReset) {
+		const { token } = await ctx.models.User.createResetToken(result.uid)
+		return { resetToken: token }
+	}
 	throw new ValidationError('Email and password do not match')
 }
 
