@@ -3,8 +3,8 @@ import gql from 'graphql-tag'
 import { withDefaultQuery } from '../Query'
 
 export const query = gql/* GraphQL */ `
-	query UserQuery($uid: String!) {
-		user(input: { uid: $uid }) {
+	query UserQuery($uid: String, $email: String) {
+		user(input: { uid: $uid, email: $email }) {
 			uid
 			name
 			roles

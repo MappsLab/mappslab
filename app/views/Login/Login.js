@@ -52,7 +52,6 @@ const Login = (props: Props) => {
 	}
 
 	const childProps = { ...props, makeTransition }
-
 	return (
 		<Centered>
 			<Pane size="small">

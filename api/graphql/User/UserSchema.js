@@ -79,7 +79,7 @@ const User = /* GraphQL */ `
 	# Queries & Mutations
 
 	extend type Query {
-		user(input: GetUserInput): User!
+		user(input: GetUserInput): User
 		currentViewer: LoginSuccess
 	}
 

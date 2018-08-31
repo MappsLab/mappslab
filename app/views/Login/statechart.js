@@ -34,13 +34,14 @@ export const FETCHED_TEACHER = 'fetchedTeacher'
 export const REQUIRE_RESET = 'requireReset'
 export const SUCCESS = 'success'
 
-const SUBMIT = 'submit'
+export const SUBMIT = 'submit'
 
 // Actions
 export const SHOW_ERROR = 'showLoginError'
 export const SHOW_NEWPW_SUCCESS = 'showNewPWSuccess'
 export const SHOW_TEACHER_BUTTON = 'showTeacherButton'
 export const SHOW_STUDENT_BUTTON = 'showStudentButton'
+export const DISABLE_INPUT = 'disableInput'
 
 export const statechart = {
 	initial: WELCOME,
@@ -64,17 +65,17 @@ export const statechart = {
 		},
 		[FIND_TEACHER]: {
 			on: {
-				[SUBMIT]: FETCHING_TEACHER,
-			},
-		},
-		[FETCHING_TEACHER]: {
-			on: {
-				[FETCHED_TEACHER]: ENTER_PASSWORD,
+				[SUBMIT]: {
+					[FIND_TEACHER]: {
+						actions: [DISABLE_INPUT],
+					},
+				},
 				[ERROR]: {
 					[FIND_TEACHER]: {
 						actions: [SHOW_ERROR],
 					},
 				},
+				[FETCHED_TEACHER]: ENTER_PASSWORD,
 			},
 		},
 		[ENTER_PASSWORD]: {
