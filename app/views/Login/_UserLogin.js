@@ -39,11 +39,11 @@ class UserLogin extends React.Component<Props, State> {
 		this.props.selectUser(null)
 	}
 
-	handleSubmit = async (credentials: Credentials): Promise<Object | void> => {
+	handleSubmit = async (input: Credentials): Promise<Object | void> => {
 		this.setState({
 			loginState: 'fetching',
 		})
-		const user = await this.props.mutate({ variables: { ...credentials } }).catch((error) => {
+		const user = await this.props.mutate({ variables: { ...input } }).catch((error) => {
 			this.setState({ loginState: 'error' })
 			return { [FORM_ERROR]: error.message }
 		})

@@ -19,7 +19,7 @@ export const FIND_TEACHER = `${teacherPrefix}_findTeacher`
 export const FETCHING_TEACHER = `${teacherPrefix}_teacherPending`
 export const LOGIN_SUCCESS = 'loginSuccess'
 const ENTER_PASSWORD = `${loginPrefix}_enterPassword`
-const SET_NEW_PASSWORD = `${loginPrefix}_setNewPassword`
+export const SET_NEW_PASSWORD = `${loginPrefix}_setNewPassword`
 
 /**
  * Transitions

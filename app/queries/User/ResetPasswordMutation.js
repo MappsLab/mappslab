@@ -7,8 +7,8 @@ import { withDefaultMutation } from '../Mutation'
 import { query as currentViewerQuery } from '../viewer/withCurrentViewerQuery'
 
 const mutation = gql`
-	mutation LoginViewer($password: String!, $uid: String, $email: String) {
-		loginViewer(input: { email: $email, uid: $uid, password: $password }) {
+	mutation LoginViewer($resetToken: String!, $password: String) {
+		resetPassword(input: { resetToken: $resetToken, password: $password }) {
 			... on LoginSuccess {
 				jwt {
 					token

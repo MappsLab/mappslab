@@ -27,8 +27,11 @@ const UserLogin = ({ user, transition }: Props) =>
 					try {
 						const result = await loginUser({ variables })
 						const { resetToken } = result.data.loginViewer
-						if (resetToken) transition(REQUIRE_RESET, { resetToken })
-						transition(SUCCESS)
+						if (resetToken) {
+							transition(REQUIRE_RESET, { resetToken })
+						} else {
+							transition(SUCCESS)
+						}
 					} catch (e) {
 						return {
 							[FORM_ERROR]: e.message,
@@ -57,7 +60,4 @@ UserLogin.defaultProps = {
 	user: null,
 }
 
-// <Button secondary onClick={handleBack}>
-// 	← Back to Classrooms
-// </Button>
 export default UserLogin

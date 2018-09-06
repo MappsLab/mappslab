@@ -51,6 +51,7 @@ const Login = (props: Props) => {
 		transition(t, data)
 	}
 
+	console.log(props.machineState.value)
 	const childProps = { ...props, makeTransition }
 	return (
 		<Centered>
@@ -72,8 +73,12 @@ const Login = (props: Props) => {
 					<TeacherLogin {...childProps} />
 				</State>
 
-				<State is={LOGIN_FLOW}>
+				<State is={ENTER_PASSWORD}>
 					<UserLogin {...childProps} />
+				</State>
+
+				<State is={SET_NEW_PASSWORD}>
+					<SetNewPassword {...childProps} />
 				</State>
 
 				<State is={[WELCOME, STUDENT_FLOW]}>
