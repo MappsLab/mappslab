@@ -8,10 +8,6 @@ export default {
 		user,
 		currentViewer,
 	},
-	Viewer: {
-		pins,
-		classrooms,
-	},
 	User: {
 		pins,
 		classrooms,

@@ -1,28 +1,15 @@
 // @flow
 
-const userFields = /* GraphQL */ `
-	uid: String!
-	username: String!
-	name: String
-	classrooms: ClassroomConnection
-	maps: MapConnection
-	roles: [String]
-	pins(input: PaginationInput): PinConnection
-`
-
 const User = /* GraphQL */ `
-
 	type User implements Node {
-		${userFields}
-	}
-
-	type Viewer implements Node {
+		uid: String!
+		username: String!
+		name: String
+		classrooms: ClassroomConnection
+		maps: MapConnection
+		roles: [String]
+		pins(input: PaginationInput): PinConnection
 		email: String
-		${userFields}
-	}
-
-	type Teacher implements Node {
-		${userFields}
 	}
 
 	input UserInput {
@@ -38,12 +25,12 @@ const User = /* GraphQL */ `
 
 	type RequiresReset {
 		resetToken: String!
-		viewer: Viewer
+		viewer: User
 	}
 
 	type LoginSuccess {
 		jwt: Token
-		viewer: Viewer
+		viewer: User
 	}
 
 	# Relationships
@@ -76,6 +63,15 @@ const User = /* GraphQL */ `
 		password: String!
 	}
 
+	# User Creation
+
+	input NewUserData {
+		name: String!
+		email: String
+		temporaryPassword: String
+		roles: [String]!
+	}
+
 	# Queries & Mutations
 
 	extend type Query {
@@ -85,7 +81,8 @@ const User = /* GraphQL */ `
 
 	extend type Mutation {
 		loginViewer(input: CredentialsInput!): LoginResult!
-		registerViewer(input: CredentialsInput!): LoginResult!
+		createStudent(input: NewUserData!, assignToClassrooms: [String]): User!
+		createTeacher(input: NewUserData!): User!
 		updatePassword(input: UpdatePasswordInput!): LoginResult!
 		addUser(input: UserInput!): User!
 		modifyUser(input: UserInput!): User!

@@ -1,10 +1,7 @@
 // @flow
 /* eslint-disable no-undef */
-import { request } from '../../../__tests__/utils'
-import { joseph } from '../../../database/stubs/users'
+import { request } from './utils/request'
 // import { removeUser } from '../UserModel'
-
-export const createUser = async () => {}
 
 describe('[createUser]', () => {
 	it('', () => {

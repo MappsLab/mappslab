@@ -1,7 +1,7 @@
 // @flow
 /* eslint-disable no-undef */
 import User from 'Models/User'
-import { request } from '../../../__tests__/utils'
+import { request } from './utils/request'
 
 let firstUser
 

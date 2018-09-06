@@ -1,11 +1,8 @@
 /* eslint-disable no-undef */
 import { createJWT, verifyJWT } from 'Utils/auth'
-import { request } from '../../../__tests__/utils'
-import { mutateNode } from 'Database'
+import { request } from './utils/request'
+import { getFirstUsers } from './utils/user'
 // import { joseph, john } from '../../../database/stubs/users'
-import { createUser } from './userRegistration.test'
-import { getFirstUsers } from './utils'
-
 
 let users
 let john
@@ -19,8 +16,6 @@ beforeAll(async (done) => {
 	alex = users.find((u) => u.name === 'Alex Johnstone')
 	done()
 })
-
-const createNewUser
 
 const uidLogin = /* GraphQL */ `
 	mutation LoginViewer($password: String!, $uid: String, $email: String) {
@@ -132,8 +127,6 @@ describe('queries', () => {
 })
 
 describe('[updatePassword]', () => {
-
-
 	const getResetToken = async () => {
 		const variables = { uid: alex.uid, password: 'temporary' }
 		const result = await request(uidLogin, { variables })

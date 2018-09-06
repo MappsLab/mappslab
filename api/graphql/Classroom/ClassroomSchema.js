@@ -10,11 +10,20 @@ const Classroom = /* GraphQL */ `
 		maps: MapConnection
 	}
 
-	input ClassroomInput {
+	input NewClassroomData {
 		title: String!
 	}
 
+	input ModifyClassroomData {
+		title: String
+	}
+
 	# Relationships
+
+	input AssignUserInput {
+		classroomUid: String!
+		userUid: String!
+	}
 
 	type ClassroomEdge implements Edge {
 		cursor: String!
@@ -30,13 +39,14 @@ const Classroom = /* GraphQL */ `
 
 	extend type Query {
 		classroom(input: GetNodeInput): Classroom!
-		classrooms(input: PaginationInput): ClassroomConnection! 
+		classrooms(input: PaginationInput): ClassroomConnection!
 	}
 
 	extend type Mutation {
-		addClassroom(input: ClassroomInput!): Classroom!
-		modifyClassroom(input: ClassroomInput!): Classroom!
+		createClassroom(input: NewClassroomData!, assignTeachers: [String]): Classroom!
+		modifyClassroom(input: ModifyClassroomData!): Classroom!
 		removeClassroom(uid: String!): Boolean!
+		assignUserToClassroom(input: AssignUserInput!): User!
 	}
 `
 

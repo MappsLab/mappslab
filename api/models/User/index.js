@@ -4,18 +4,31 @@ import { updateUser } from './updateUser'
 import { createUser } from './createUser'
 import { deleteUser } from './deleteUser'
 import { checkPassword, createResetToken } from './userAuth'
-import { getPinOwner, getClassroomStudents, getClassroomTeachers } from './readUserRelationships'
+import {
+	userTeachesInClassroom,
+	userLearnsInClassroom,
+	getPinOwner,
+	getClassroomStudents,
+	getClassroomTeachers,
+} from './readUserRelationships'
 import { updatePassword } from './updatePassword'
 
 export default {
+	/* Create */
+	createUser,
+
+	/* Read */
 	getUser,
 	getViewer,
 	getUsers,
+	checkPassword,
+	userTeachesInClassroom,
+	userLearnsInClassroom,
+
+	/* Update */
 	updateUser,
 	updatePassword,
-	createUser,
 	deleteUser,
-	checkPassword,
 	createResetToken,
 	getPinOwner,
 	getClassroomStudents,

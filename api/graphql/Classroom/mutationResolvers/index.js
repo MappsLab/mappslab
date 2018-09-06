@@ -1,10 +1,11 @@
 // @flow
-import { addClassroom } from './addClassroom'
+import { createClassroom } from './createClassroom'
+import { assignUserToClassroom } from './assignUserToClassroom'
 
 export default {
 	Mutation: {
-		addClassroom,
-		// modifyClassroom
+		createClassroom,
+		assignUserToClassroom,
 		// addClassroom
 		// removeClassroom
 	},

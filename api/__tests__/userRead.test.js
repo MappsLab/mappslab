@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
-import { getFirstUsers } from './utils'
-import { request } from '../../../__tests__/utils'
+import { getFirstUsers } from './utils/user'
+import { request } from './utils/request'
 
 let users
 
@@ -9,7 +9,7 @@ beforeAll(async (done) => {
 	done()
 })
 
-describe('[pins]', () => {
+describe('[user]', () => {
 	it('should fetch a user by uid', async () => {
 		const q = /* GraphQL */ `
 			query user($uid: String) {
@@ -83,4 +83,24 @@ describe('[pins]', () => {
 	// it('should fetch a users classroom & pin count', async () => {
 	// 	//...
 	// })
+})
+
+describe('[userTeachesInClassroom]', () => {
+	it.skip('should return the correct value', async () => {
+		/* Arrange */
+		// const { container, getByTestId } = render( ... )
+		/* Act */
+		/* Assert */
+		// expect(...)
+	})
+})
+
+describe('[userLearnsInClassroom]', () => {
+	it.skip('should return the correct value', async () => {
+		/* Arrange */
+		// const { container, getByTestId } = render( ... )
+		/* Act */
+		/* Assert */
+		// expect(...)
+	})
 })

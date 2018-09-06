@@ -3,13 +3,15 @@
 import type { MapType } from 'Types/MapTypes'
 import type { ClassroomType } from 'Types/ClassroomTypes'
 
+export type Role = 'admin' | 'teacher' | 'student'
+
 export type UserType = {
 	uid: string,
 	username: string,
 	name?: string,
 	classrooms?: Array<ClassroomType>,
 	maps?: Array<MapType>,
-	roles: Array<string>,
+	roles: Array<Role>,
 }
 
 export type StudentType = UserType & {
@@ -36,10 +38,16 @@ export type UpdateUserInput = {
 	email?: string,
 }
 
-export type NewUserInput = {
+export type NewUserData = {
 	name: string,
 	email?: string,
-	temporaryPassword: string,
+	temporaryPassword?: string,
+	roles: Array<Role>,
+}
+
+export type NewUserInput = {
+	userData: NewUserData,
+	addToClassrooms?: Array<string>,
 }
 
 export type GetUserArgs = {

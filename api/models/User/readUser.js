@@ -17,8 +17,6 @@ export const getUser = async ({ uid, email }: GetUserArgs): Promise<UserType | n
 			}
 		}
 	`
-	const sleep = (ms: number = 500) => new Promise((r) => setTimeout(r, ms))
-	await sleep(2000)
 
 	const result = await query(q, { uid, email })
 	if (!result) return null

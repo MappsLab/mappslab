@@ -1,13 +1,14 @@
 // @flow
 import loginViewer from './loginViewer'
 import updatePassword from './updatePassword'
-import createUser from './createUser'
+import { createTeacher, createStudent } from './createUser'
 
 export default {
 	Mutation: {
 		loginViewer,
 		updatePassword,
-		createUser,
+		createTeacher,
+		createStudent,
 		// addStudent
 		// addTeacher
 		// removeUser

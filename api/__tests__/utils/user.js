@@ -1,0 +1,59 @@
+// @flow
+import type { NewUserData, UserType } from 'Types/UserTypes'
+import faker from 'faker'
+import { request } from './db'
+
+/**
+ * User Creation
+ */
+
+const generateUser = (role: 'student' | 'teacher'): NewUserData => {
+	const name = faker.name.findName()
+	return {
+		name,
+		email: faker.internet
+			.email(name)
+			.toLowerCase()
+			.replace(/[.]+/, '.'),
+		roles: [role],
+		temporaryPassword: 'temporary',
+	}
+}
+
+const createTeacherMutation = /* GraphQL */ `
+	mutation CreateTeacher($input: NewUserData!) {
+		createTeacher(input: $input) {
+			uid
+			name
+			roles
+		}
+	}
+`
+
+const createStudentMutation = /* GraphQL */ `
+	mutation CreateStudent($input: NewUserData!, $assignToClassrooms: [String]) {
+		createStudent(input: $input, assignToClassrooms: $assignToClassrooms) {
+			uid
+			name
+			roles
+		}
+	}
+`
+
+const createUser = (type: 'teacher' | 'student') => async (
+	args: { userData?: void | NewUserData, assignToClassrooms?: Array<string> },
+	{ viewer }: { viewer: UserType } = {},
+) => {
+	const { userData, assignToClassrooms } = args
+	const input = userData || generateUser(type)
+	const context = { viewer }
+	const variables = { input, assignToClassrooms }
+	const m = type === 'teacher' ? createTeacherMutation : createStudentMutation
+	const result = await request(m, { variables, context })
+	const mutationName = type === 'teacher' ? 'createTeacher' : 'createStudent'
+	const user = result.data[mutationName]
+	return user
+}
+
+export const createTeacher = createUser('teacher')
+export const createStudent = createUser('student')
