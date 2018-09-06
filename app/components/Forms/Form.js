@@ -3,18 +3,12 @@ import React from 'react'
 import type { Node } from 'react'
 import { Form as FinalForm } from 'react-final-form'
 import styled from 'styled-components'
-
-import { Column } from 'Components/Layout'
 import { SubmitButton } from '../UI/Buttons'
 import { formWrapperStyles, formMessageStyles, formErrorStyles } from './styles'
 
 const FormWrapper = styled.form`
 	${formWrapperStyles};
 `
-
-// export const SubmitButton = ButtonWrapper.extend`
-// 	${submitButtonStyles};
-// `
 
 export const FormMessage = styled.h4`
 	${formMessageStyles};
@@ -48,15 +42,14 @@ const Form = (props: Props) => (
 			const error = props.errorMessage || submitError
 			const { message } = props
 			const submitFailedAndNotDirty = submitFailed && submitErrors && !dirtySinceLastSubmit
-			const disabled = props.disabled || pristine || submitFailedAndNotDirty || submitting || false
-
+			const buttonDisabled = props.disabled || pristine || submitFailedAndNotDirty || submitting || false
 			return (
-				<FormWrapper onSubmit={handleSubmit}>
+				<FormWrapper disabled={props.disabled} onSubmit={handleSubmit}>
 					{props.children || (props.render && props.render(formProps))}
 					{message ? <FormMessage>{message}</FormMessage> : null}
 					{error && !submitting && !dirtySinceLastSubmit ? <FormError>{error}</FormError> : null}
 					{props.showSubmitButton && (
-						<SubmitButton wide disabled={disabled}>
+						<SubmitButton wide disabled={buttonDisabled}>
 							{props.submitButtonText}
 						</SubmitButton>
 					)}

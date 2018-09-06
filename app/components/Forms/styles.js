@@ -13,6 +13,12 @@ export const formWrapperStyles = css`
 	justify-content: center;
 	align-items: center;
 	text-align: center;
+	${({ disabled }) =>
+		disabled &&
+		`
+		opacity: 0.5;
+		pointer-events: none;
+	`};
 `
 
 export const formMessageStyles = css`

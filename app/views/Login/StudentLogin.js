@@ -42,7 +42,7 @@ const StudentLogin = ({ makeTransition, classroomUid }: Props) => {
 				<ClassroomQuery variables={{ uid: classroomUid }}>
 					{({ data }) =>
 						data.classroom.students.map((s) => (
-							<button key={s.uid} type="button" onClick={makeTransition(SELECTED_STUDENT, { userUid: s.uid })}>
+							<button key={s.uid} type="button" onClick={makeTransition(SELECTED_STUDENT, { user: s })}>
 								<UserCard user={s} />
 							</button>
 						))

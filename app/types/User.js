@@ -2,7 +2,7 @@
 import type { PinType } from './Pin'
 import type { ClassroomType } from './Classroom'
 
-type Role = 'teacher' | 'student'
+type Role = 'teacher' | 'student' | 'admin'
 
 export type UserType = {
 	uid: string,
