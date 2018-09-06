@@ -72,7 +72,7 @@ const User = /* GraphQL */ `
 	}
 
 	input UpdatePasswordInput {
-		uid: String!
+		resetToken: String!
 		password: String!
 	}
 
@@ -84,9 +84,9 @@ const User = /* GraphQL */ `
 	}
 
 	extend type Mutation {
-		loginViewer(credentials: CredentialsInput!): LoginResult!
-		registerViewer(credentials: CredentialsInput!): LoginResult!
-		updatePassword(credentials: UpdatePasswordInput!): LoginResult!
+		loginViewer(input: CredentialsInput!): LoginResult!
+		registerViewer(input: CredentialsInput!): LoginResult!
+		updatePassword(input: UpdatePasswordInput!): LoginResult!
 		addUser(input: UserInput!): User!
 		modifyUser(input: UserInput!): User!
 		removeUser(uid: String!): Boolean!

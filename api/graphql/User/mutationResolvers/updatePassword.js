@@ -1,17 +1,17 @@
 // @flow
 import type { GraphQLContext } from 'Types/sharedTypes'
-import type { Credentials, ViewerType } from 'Types/UserTypes'
+import type { PasswordResetInput, ViewerType } from 'Types/UserTypes'
 import type { JWT } from 'Utils/auth'
 import { createJWT } from 'Utils/auth'
 import { ValidationError } from 'Errors'
 
 const loginViewerMutation = async (
 	_: mixed,
-	args: { input: Credentials },
+	args: { input: PasswordResetInput },
 	ctx: GraphQLContext,
 ): Promise<{ viewer: ViewerType, jwt: JWT } | { resetToken: string }> => {
 	const { input } = args
-	const result = await ctx.models.User.checkPassword(input)
+	const result = await ctx.models.User.updatePassword(input)
 	if (result && !result.requiresReset) {
 		const jwt = createJWT(result)
 		return {

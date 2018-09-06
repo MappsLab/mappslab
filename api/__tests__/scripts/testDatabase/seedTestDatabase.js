@@ -34,6 +34,7 @@ const setSchema = async () => {
 		 */
 		'email: string @index(hash) . ',
 		'roles: [string] @index(term) .',
+		'passwordReset.token: string @index(hash) .',
 		/* <user> <teaches_in> <classroom> */
 		'teaches_in: uid @reverse @count . ',
 		/* <user> <learns_in> <classroom> */

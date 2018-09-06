@@ -4,6 +4,8 @@ import { request } from '../../../__tests__/utils'
 import { joseph } from '../../../database/stubs/users'
 // import { removeUser } from '../UserModel'
 
+export const createUser = async () => {}
+
 describe('[createUser]', () => {
 	it('', () => {
 		expect(2).toBe(2)

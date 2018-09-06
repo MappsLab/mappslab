@@ -1,8 +1,11 @@
 /* eslint-disable no-undef */
 import { createJWT, verifyJWT } from 'Utils/auth'
 import { request } from '../../../__tests__/utils'
+import { mutateNode } from 'Database'
 // import { joseph, john } from '../../../database/stubs/users'
+import { createUser } from './userRegistration.test'
 import { getFirstUsers } from './utils'
+
 
 let users
 let john
@@ -17,9 +20,11 @@ beforeAll(async (done) => {
 	done()
 })
 
+const createNewUser
+
 const uidLogin = /* GraphQL */ `
 	mutation LoginViewer($password: String!, $uid: String, $email: String) {
-		loginViewer(credentials: { uid: $uid, password: $password, email: $email }) {
+		loginViewer(input: { uid: $uid, password: $password, email: $email }) {
 			... on LoginSuccess {
 				jwt {
 					token
@@ -71,7 +76,7 @@ describe('queries', () => {
 	it('[loginViewer] should return a validation error if user does not exist', async () => {
 		const uidQuery = /* GraphQL */ `
 			mutation LoginViewer($password: String!, $email: String!) {
-				loginViewer(credentials: { email: $email, password: $password }) {
+				loginViewer(input: { email: $email, password: $password }) {
 					... on LoginSuccess {
 						jwt {
 							token
@@ -123,5 +128,62 @@ describe('queries', () => {
 			expect(result).not.toHaveProperty('name')
 			expect(result).not.toHaveProperty('disabled')
 		})
+	})
+})
+
+describe('[updatePassword]', () => {
+
+
+	const getResetToken = async () => {
+		const variables = { uid: alex.uid, password: 'temporary' }
+		const result = await request(uidLogin, { variables })
+		return result.data.loginViewer.resetToken
+	}
+
+	const updatePasswordWithToken = /* GraphQL */ `
+		mutation UpdatePassword($resetToken: String!, $password: String!) {
+			updatePassword(input: { resetToken: $resetToken, password: $password }) {
+				... on LoginSuccess {
+					jwt {
+						token
+						expires
+					}
+					viewer {
+						uid
+						name
+					}
+				}
+				... on RequiresReset {
+					resetToken
+				}
+			}
+		}
+	`
+
+	it.only('should throw an error for an invalid token', async () => {
+		const variables = { password: 'newPassword', resetToken: 'invalid' }
+		const result = await request(updatePasswordWithToken, { variables })
+		expect(result.errors[0].message).toBe('This reset token is invalid')
+	})
+
+	it.skip('should throw an error for an expired token', async () => {
+		/* Arrange */
+		// const { container, getByTestId } = render( ... )
+		/* Act */
+		/* Assert */
+		// expect(...)
+	})
+
+	it.skip('should reset a users password given a valid token', async () => {
+		const resetToken = await getRestToken()
+		const variables = { password: 'newPassword', resetToken }
+		const result = await request(updatePasswordWithToken, { variables })
+		expect(result.errors[0].message).toBe('This reset token is invalid')
+
+		/* Arrange */
+		// const { container, getByTestId } = render( ... )
+		/* Act */
+		/* Assert */
+		// expect(...)
 	})
 })

@@ -1,4 +1,5 @@
 // @flow
+import { flatten } from 'flat'
 import type { DBNode, Txn } from 'Types/database'
 import dbClient from './client'
 
@@ -10,10 +11,14 @@ const mutateNode = async (uid: string, data: DBNode, existingTxn?: Txn): Promise
 	if (!uid && typeof uid !== 'string') throw new Error('You must supply a node UID for a mutation')
 	try {
 		const mu = new dgraph.Mutation()
-		mu.setSetJson({
-			uid,
-			...data,
-		})
+		const flattened = flatten(
+			{
+				uid,
+				...data,
+			},
+			{ safe: true },
+		)
+		mu.setSetJson(flattened)
 		await txn.mutate(mu)
 		if (!existingTxn) await txn.commit()
 		debug(`Mutated node with uid ${uid}:`)

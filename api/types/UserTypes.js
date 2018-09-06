@@ -31,11 +31,15 @@ export type AdminType = TeacherType & {
 	roles: ['admin'],
 }
 
-export type UserInput = {
-	title?: string,
-	lat?: number,
-	lang?: number,
+export type UpdateUserInput = {
+	name?: string,
 	email?: string,
+}
+
+export type NewUserInput = {
+	name: string,
+	email?: string,
+	temporaryPassword: string,
 }
 
 export type GetUserArgs = {
@@ -50,6 +54,11 @@ export type GetUserInput = {
 export type Credentials = {
 	uid?: string,
 	email?: string,
+	password: string,
+}
+
+export type PasswordResetInput = {
+	resetToken: string,
 	password: string,
 }
 
