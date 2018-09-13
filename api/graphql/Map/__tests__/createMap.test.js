@@ -86,4 +86,20 @@ describe('[createMap]', () => {
 		expect(result.data.createMap.classroom.title).toBe(classrooms[0].title)
 		mapsToRemove.push(result.data.createMap)
 	})
+
+	it.skip('should deny permission to users without admin or teacher roles', async () => {
+		/* Arrange */
+		// const { container, getByTestId } = render( ... )
+		/* Act */
+		/* Assert */
+		// expect(...)
+	})
+
+	it.skip('should disallow teachers from create maps in classrooms they do not teach in', async () => {
+		/* Arrange */
+		// const { container, getByTestId } = render( ... )
+		/* Act */
+		/* Assert */
+		// expect(...)
+	})
 })

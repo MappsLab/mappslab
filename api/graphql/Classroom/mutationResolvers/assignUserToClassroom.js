@@ -4,7 +4,7 @@ import type { UserType } from 'Types/UserTypes'
 import type { GraphQLContext } from 'Types/sharedTypes'
 import { UserError } from 'Errors'
 
-const debug = require('debug')('seed')
+const debug = require('debug')('api')
 
 export const assignUserToClassroom = async (
 	_: mixed,

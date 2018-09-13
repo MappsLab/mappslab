@@ -1,13 +1,13 @@
 // @flow
-import type { MapType } from 'Types/MapTypes'
+import type { NewMapData, MapType } from 'Types/MapTypes'
 import { ValidationError } from 'Errors'
 import { createNodeWithEdges } from 'Database'
 import { clean, defaultValues, validateNew } from './mapDBSchema'
 
 const debug = require('debug')('api')
 
-export const createMap = async (pinData: MapType, classroomUid: string): Promise<MapType | void> => {
-	const cleaned = await clean({ ...defaultValues, ...pinData, createdAt: new Date() })
+export const createMap = async (mapData: NewMapData, classroomUid: string): Promise<MapType> => {
+	const cleaned = await clean({ ...defaultValues, ...mapData, createdAt: new Date() })
 	// $FlowFixMe
 	const validatedMapData = await validateNew(cleaned).catch((err) => {
 		debug(err.details)

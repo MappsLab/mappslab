@@ -3,7 +3,6 @@ import faker from 'faker'
 import type { UserType } from 'Types/UserTypes'
 import type { NewClassroomData, ClassroomType } from 'Types/ClassroomTypes'
 import { request } from './db'
-import { UserError } from 'Errors'
 
 /**
  * Classroom Creation

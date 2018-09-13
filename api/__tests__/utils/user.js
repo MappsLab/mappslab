@@ -4,6 +4,41 @@ import faker from 'faker'
 import { request } from './db'
 
 /**
+ * User Read
+ */
+
+export const getUser = async (uid: string): Promise<UserType> => {
+	const q = /* GraphQL */ `
+		query GetUser($uid: String!) {
+			user(input: { uid: $uid }) {
+				uid
+				name
+				roles
+				classrooms {
+					edges {
+						node {
+							uid
+							title
+							maps {
+								edges {
+									node {
+										uid
+										title
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	`
+	const variables = { uid }
+	const result = await request(q, { variables })
+	return result.data.user
+}
+
+/**
  * User Creation
  */
 

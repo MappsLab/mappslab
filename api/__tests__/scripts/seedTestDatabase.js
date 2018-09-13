@@ -3,8 +3,9 @@ import faker from 'faker'
 import * as R from 'ramda'
 import { setSchema } from 'Database/setSchema'
 import dbClient from 'Database/client'
-import { createTeacher, createStudent } from '../utils/user'
+import { getUser, createTeacher, createStudent } from '../utils/user'
 import { createClassroom, assignUser } from '../utils/classroom'
+import { createMap } from '../utils/map'
 import { createAdminUser } from '../utils/db'
 
 const dgraph = require('dgraph-js')
@@ -64,6 +65,29 @@ const seedDatabase = async () => {
 	debug(`🏫  Assigned ${students.length} students to ${classrooms.length} classrooms.`)
 
 	debug('🗺  Adding maps to classrooms')
+	const maps = await Promise.all(
+		classrooms.map(async (classroom) =>
+			promiseSerial(R.times(() => async () => createMap({ classroomUid: classroom.uid }, { viewer: classroom.teacher }), 2)),
+		),
+	)
+	debug(`🗺  Added ${maps.length} maps to ${classrooms.length} classrooms`)
+
+	debug('📍  Creating some classroom map pins for students..')
+	await promiseSerial(
+		students.map((student) => async () => {
+			const fullUserData = await getUser(student.uid)
+			console.log(fullUserData.name)
+			const classrooms = R.pipe(
+				R.path(['classrooms', 'edges']),
+				R.pluck('node'),
+			)(fullUserData)
+			console.log(classrooms)
+
+			// const userMaps = fullUserData.classrooms.reduce
+			// console.log(fullUserData)
+			// console.log(R.view(R.lensPath(['classrooms', 'edges']), fullUserData	))
+		}),
+	)
 }
 
 seedDatabase()
