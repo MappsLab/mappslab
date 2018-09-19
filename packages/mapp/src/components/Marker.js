@@ -35,8 +35,8 @@ const markerEventNames = {
  */
 
 type BaseProps = {
-	events: {},
-	render: ({ anchor: MarkerType }) => null | React.Node,
+	render?: ({ anchor: MarkerType }) => null | React.Node,
+	events?: {},
 	options?: MarkerOptions,
 }
 
@@ -49,6 +49,12 @@ type State = {
 }
 
 class Marker extends React.Component<MarkerProps, State> {
+	static defaultProps = {
+		options: {},
+		events: {},
+		render: ({ anchor: MarkerType }) => null,
+	}
+
 	entity: null | MarkerType = null
 
 	listeners: Array<{}> = []
@@ -94,9 +100,5 @@ const MarkerWithContext = (props: BaseProps): React.Node => (
 		(mapContext: MapContext) => <Marker map={mapContext.map} {...props} />}
 	</MapConsumer>
 )
-
-MarkerWithContext.defaultProps = {
-	options: {},
-}
 
 export default MarkerWithContext

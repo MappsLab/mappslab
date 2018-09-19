@@ -20,7 +20,7 @@
 .*/__docs__/.*
 
 [include]
-../../node_modules
+;../../node_modules
 ./src/types/*
 
 [libs]

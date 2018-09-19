@@ -110,6 +110,10 @@ class Mapp extends React.Component<Props, State> {
 				ready: true,
 			})
 		})
+		google.maps.event.addListener(this.map, 'click', (e) => {
+			console.log('Map', 'click', e.xa)
+		})
+
 		this.overlay = new google.maps.OverlayView()
 		this.overlay.setMap(this.map)
 	}
@@ -168,3 +172,5 @@ class Mapp extends React.Component<Props, State> {
 }
 
 export default Mapp
+
+

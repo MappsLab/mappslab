@@ -2,9 +2,10 @@
   "name": "@mappslab/map",
   "version": "0.0.1",
   "description": "The base Map component used in MappsLab",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "build": "babel ./src --out-dir ./dist",
+    "watch-build": "watch 'yarn build' ./src",
     "test": "jest"
   },
   "author": "Joseph Thomas | Good Idea Studio",
@@ -31,7 +32,8 @@
     "flow-bin": "^0.76.0",
     "flow-typed": "^2.5.1",
     "flowgen": "^1.2.2",
-    "jest": "^23.4.0"
+    "jest": "^23.4.0",
+    "watch": "^1.0.2"
   },
   "peerDependencies": {
     "react": "^16.0.0",
