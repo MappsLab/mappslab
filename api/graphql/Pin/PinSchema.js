@@ -5,7 +5,7 @@ const Pin = /* GraphQL */ `
 		uid: String!
 		title: String!
 		lat: Float!
-		lang: Float!
+		lng: Float!
 		description: String
 		owner: User
 		maps: MapConnection
@@ -29,7 +29,7 @@ const Pin = /* GraphQL */ `
 	input NewPinArgs {
 		title: String!
 		lat: Float!
-		lang: Float!
+		lng: Float!
 		description: String
 		addToMaps: [String]
 		lessonUids: [String]
@@ -43,7 +43,7 @@ const Pin = /* GraphQL */ `
 		uid: String
 		title: String
 		lat: Float
-		lang: Float
+		lng: Float
 		description: String
 		addToMaps: [String]
 		lessonUids: [String]

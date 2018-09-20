@@ -43,7 +43,7 @@ describe('[map]', () => {
 								title
 								description
 								lat
-								lang
+								lng
 							}
 						}
 					}

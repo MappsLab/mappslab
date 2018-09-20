@@ -20,7 +20,7 @@ export const pinSchema = (isNew: boolean = true) =>
 					.min(3)
 					.max(35),
 		lat: isNew ? Joi.number().required() : Joi.number(),
-		lang: isNew ? Joi.number().required() : Joi.number(),
+		lng: isNew ? Joi.number().required() : Joi.number(),
 		description: Joi.string().max(400),
 		createdAt: isNew ? Joi.date().required() : Joi.any().forbidden(),
 		updatedAt: Joi.date().required(),
@@ -36,7 +36,7 @@ export const publicFields = [
 	'uid',
 	'title',
 	'lat',
-	'lang',
+	'lng',
 	'description',
 	'createdAt',
 	'updatedAt',

@@ -79,12 +79,12 @@ class Pin extends React.Component<Props, State> {
 
 	render() {
 		const { active, pin, mapUid, updatePinSuccess, viewer } = this.props
-		const { lat, lang, title, description, owner } = pin
+		const { lat, lng, title, description, owner } = pin
 		const { mouseOver } = this.state
 		const options = {
 			position: {
 				lat,
-				lng: lang,
+				lng,
 			},
 		}
 		return (

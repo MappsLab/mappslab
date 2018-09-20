@@ -14,12 +14,12 @@ beforeAll(async (done) => {
 })
 
 const q = /* GraphQL */ `
-	mutation addPin($title: String!, $lat: Float!, $lang: Float!, $addToMaps: [String], $lessonUids: [String]) {
-		addPin(input: { title: $title, lat: $lat, lang: $lang, addToMaps: $addToMaps, lessonUids: $lessonUids }) {
+	mutation addPin($title: String!, $lat: Float!, $lng: Float!, $addToMaps: [String], $lessonUids: [String]) {
+		addPin(input: { title: $title, lat: $lat, lng: $lng, addToMaps: $addToMaps, lessonUids: $lessonUids }) {
 			uid
 			title
 			lat
-			lang
+			lng
 			owner {
 				uid
 				name
@@ -45,7 +45,7 @@ const pinsToRemove = []
 const variables = {
 	title: 'a new pin',
 	lat: 145.123,
-	lang: 111.222,
+	lng: 111.222,
 }
 
 const removeNewPins = async () => {

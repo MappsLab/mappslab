@@ -5,12 +5,12 @@ import { unwindEdges } from '../utils'
 import { query as mapQuery } from '../map/withMapQuery'
 
 const mutation = gql`
-	mutation UpdatePin($uid: String!, $title: String, $description: String, $lat: Float, $lang: Float, $addToMaps: [String]) {
-		updatePin(input: { uid: $uid, description: $description, title: $title, lat: $lat, lang: $lang, addToMaps: $addToMaps }) {
+	mutation UpdatePin($uid: String!, $title: String, $description: String, $lat: Float, $lng: Float, $addToMaps: [String]) {
+		updatePin(input: { uid: $uid, description: $description, title: $title, lat: $lat, lng: $lng, addToMaps: $addToMaps }) {
 			uid
 			title
 			lat
-			lang
+			lng
 			owner {
 				uid
 				name

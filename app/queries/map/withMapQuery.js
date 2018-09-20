@@ -22,7 +22,7 @@ export const query = gql/* GraphQL */ `
 						uid
 						title
 						lat
-						lang
+						lng
 						description
 						owner {
 							uid

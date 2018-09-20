@@ -35,10 +35,10 @@ class NewPin extends React.Component<Props, State> {
 		e.preventDefault()
 		const { mapUid } = this.props
 		const { title } = this.state
-		const { lat, lang } = this.props.newPin
+		const { lat, lng } = this.props.newPin
 		const newPin = {
 			lat,
-			lang,
+			lng,
 			title,
 			addToMap: [mapUid],
 		}

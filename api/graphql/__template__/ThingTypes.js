@@ -7,7 +7,7 @@ export type ThingType = {
 	uid: string,
 	title?: string,
 	lat: number,
-	lang: number,
+	lng: number,
 	owner?: UserType,
 	maps?: Array<MapType>,
 }
@@ -15,5 +15,5 @@ export type ThingType = {
 export type ThingInput = {
 	title?: string,
 	lat?: number,
-	lang?: number,
+	lng?: number,
 }

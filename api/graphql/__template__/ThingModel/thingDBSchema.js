@@ -18,7 +18,7 @@ export const thingSchema = (isNew: boolean = true) =>
 					.min(3)
 					.max(35),
 		lat: isNew ? Joi.number().isRequired() : Joi.number(),
-		lang: isNew ? Joi.number().isRequired() : Joi.number(),
+		lng: isNew ? Joi.number().isRequired() : Joi.number(),
 		createdAt: isNew ? Joi.date().required() : Joi.any().forbidden(),
 		updatedAt: Joi.date().required(),
 		type: Joi.any().only('thing'),

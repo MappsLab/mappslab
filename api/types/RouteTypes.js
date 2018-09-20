@@ -7,7 +7,7 @@ export type RouteType = {
 	uid: string,
 	title?: string,
 	lat: number,
-	lang: number,
+	lng: number,
 	owner?: UserType,
 	maps?: Array<MapType>,
 }
@@ -15,5 +15,5 @@ export type RouteType = {
 export type RouteInput = {
 	title?: string,
 	lat?: number,
-	lang?: number,
+	lng?: number,
 }

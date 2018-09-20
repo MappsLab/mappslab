@@ -12,7 +12,7 @@ export type PinType = {
 	uid: string,
 	title?: string,
 	lat: number,
-	lang: number,
+	lng: number,
 	owner: UserType,
 	maps?: Array<MapType>,
 	routes?: Array<RouteType>,
@@ -21,7 +21,7 @@ export type PinType = {
 export type NewPinData = {
 	title: string,
 	lat: number,
-	lang: number,
+	lng: number,
 	addToMaps?: Array<string>,
 	addToLessons?: Array<string>,
 }
@@ -30,7 +30,7 @@ export type UpdatePinData = {
 	uid: string,
 	title?: string,
 	lat?: number,
-	lang?: number,
+	lng?: number,
 	addToMaps?: Array<string>,
 	addToLessons?: Array<string>,
 }

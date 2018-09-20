@@ -15,7 +15,7 @@ export const query = gql`
 					node {
 						title
 						lat
-						lang
+						lng
 					}
 				}
 			}

@@ -29,12 +29,12 @@ const query = /* GraphQL */ `
 `
 
 const mutation = /* GraphQL */ `
-	mutation UpdatePin($uid: String!, $title: String, $lat: Float, $lang: Float, $addToMaps: [String], $lessonUids: [String]) {
-		updatePin(input: { uid: $uid, title: $title, lat: $lat, lang: $lang, addToMaps: $addToMaps, lessonUids: $lessonUids }) {
+	mutation UpdatePin($uid: String!, $title: String, $lat: Float, $lng: Float, $addToMaps: [String], $lessonUids: [String]) {
+		updatePin(input: { uid: $uid, title: $title, lat: $lat, lng: $lng, addToMaps: $addToMaps, lessonUids: $lessonUids }) {
 			uid
 			title
 			lat
-			lang
+			lng
 			owner {
 				uid
 				name

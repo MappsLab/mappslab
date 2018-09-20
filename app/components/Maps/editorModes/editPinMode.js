@@ -8,7 +8,7 @@ const editPinMode = {
 		const { inProgressPin, map, activePinUid } = props
 		const currentPin = inProgressPin || map.pins.find((p) => p.uid === activePinUid)
 		if (!currentPin) throw new Error('editPinMode->onEntry did not find the current pin')
-		const { lat, lang: lng } = currentPin
+		const { lat, lng: lng } = currentPin
 		const offsetY = -(window.innerHeight / 2) + 120
 		const newCenter = props.utils.latLngWithPixelOffset({ lat, lng }, 0, offsetY)
 		props.googleMap.panTo(newCenter)

@@ -20,10 +20,11 @@ type Props = {
 const AddEditPin = ({ pin, createPin, updatePin, mapUid, onSuccess }: Props) => {
 	const handleSubmit = async (values) => {
 		const mutate = pin.uid === '__temp__uid__' ? createPin : updatePin
+		const { lat, lng } = pin
 		const variables = {
 			...values,
-			lat: pin.lat,
-			lang: pin.lang,
+			lat,
+			lng,
 			addToMaps: [mapUid],
 		}
 		mutate({ variables }).then(() => {

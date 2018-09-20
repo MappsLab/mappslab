@@ -12,7 +12,7 @@ const editPinMode = {
 		// const inProgressPin = {
 		// 	uid: '__temp__uid__',
 		// 	lat: clickLatLng.lat,
-		// 	lang: clickLatLng.lng,
+		// 	lng: clickLatLng.lng,
 		// 	owner: props.viewer,
 		// }
 		// props.transition(NEXT, { inProgressPin })

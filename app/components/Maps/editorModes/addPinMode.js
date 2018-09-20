@@ -14,7 +14,7 @@ const addPinMode = {
 
 	onClick: (props: HandlerProps) => (e) => {
 		const tempUid = '__temp__uid__'
-		const clickLatLng = {
+		const { lat, lng } = {
 			lat: e.latLng.lat(),
 			lng: e.latLng.lng(),
 		}
@@ -22,8 +22,8 @@ const addPinMode = {
 			uid: tempUid,
 			title: '',
 			description: '',
-			lat: clickLatLng.lat,
-			lang: clickLatLng.lng,
+			lat,
+			lng,
 			owner: props.viewer,
 		}
 		props.transition(NEXT, { activePinUid: tempUid, inProgressPin })
