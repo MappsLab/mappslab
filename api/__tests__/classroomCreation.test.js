@@ -1,7 +1,7 @@
 // @flow
 /* eslint-disable no-undef */
-import { request } from '../../../__tests__/utils'
-import { getFirstClassrooms } from './utils'
+import { request } from './utils/db'
+import { getDBClassrooms } from './utils/classroom'
 
 describe('[createClassroom]', () => {
 	it.skip('should create a new classroom and assign the teacher', async () => {

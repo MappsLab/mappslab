@@ -1,12 +1,12 @@
 // @flow
 /* eslint-disable no-undef */
-import { request } from '../../../__tests__/utils'
-import { getFirstMaps } from './utils'
+import { request } from './utils/db'
+import { getDBMaps } from './utils/map'
 
 let maps
 
 beforeAll(async (done) => {
-	maps = await getFirstMaps()
+	maps = await getDBMaps()
 	done()
 })
 

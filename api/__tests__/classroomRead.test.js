@@ -1,13 +1,12 @@
 // @flow
 /* eslint-disable no-undef */
-import { artClass } from 'Database/stubs/classrooms'
-import { request } from '../../../__tests__/utils'
-import { getFirstClassrooms } from './utils'
+import { request } from './utils/db'
+import { getDBClassrooms } from './utils/classroom'
 
 let classrooms
 
 beforeAll(async (done) => {
-	classrooms = await getFirstClassrooms()
+	classrooms = await getDBClassrooms()
 	done()
 })
 

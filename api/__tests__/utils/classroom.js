@@ -2,7 +2,14 @@
 import faker from 'faker'
 import type { UserType } from 'Types/UserTypes'
 import type { NewClassroomData, ClassroomType } from 'Types/ClassroomTypes'
+import Classroom from 'Models/Classroom'
 import { request } from './db'
+
+/**
+ * Read Classroom
+ */
+
+export const getDBClassrooms = Classroom.getClassrooms
 
 /**
  * Classroom Creation

@@ -1,7 +1,8 @@
 /* eslint-disable no-undef */
-import { request, getViewerForContext } from '../../../__tests__/utils'
 import { removeNode, removeEdge } from 'Database'
-import { getFirstClassrooms } from '../../Classroom/__tests__/utils'
+import { request } from './utils/db'
+import { getDBUsers } from './utils/user'
+import { getDBClassrooms } from './utils/classroom'
 
 const q = /* GraphQL */ `
 	mutation createMap($title: String!, $description: String, $classroomUid: String!) {
@@ -26,8 +27,9 @@ const variables = {
 }
 
 beforeAll(async (done) => {
-	context.viewer = await getViewerForContext()
-	classrooms = await getFirstClassrooms()
+	const users = await getDBUsers()
+	context.viewer = users[0]
+	classrooms = await getDBClassrooms()
 	done()
 })
 
