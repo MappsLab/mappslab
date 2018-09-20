@@ -30,6 +30,7 @@ export const getUsers = async (args?: PaginationArgs): Promise<Array<UserType>> 
 		query getUsers($first: string, $after: string) {
 			getUsers(func: eq(type, "user"), first: $first, after: $after) {
 				${publicFields}
+				email
 			}
 		}
 	`

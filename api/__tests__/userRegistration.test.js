@@ -1,10 +1,10 @@
 // @flow
 /* eslint-disable no-undef */
-import { request } from './utils/request'
+import { request } from './utils/db'
 // import { removeUser } from '../UserModel'
 
 describe('[createUser]', () => {
-	it('', () => {
+	it.skip('', () => {
 		expect(2).toBe(2)
 	})
 	// afterAll(() => {

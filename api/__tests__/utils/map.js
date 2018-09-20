@@ -2,7 +2,14 @@
 import faker from 'faker'
 import type { MapType, NewMapData } from 'Types/MapTypes'
 import type { UserType } from 'Types/UserTypes'
+import Map from 'Models/Map'
 import { request } from './db'
+
+/**
+ * Map Read
+ */
+
+export const getDBMaps = Map.getMaps
 
 /**
  * Map Creation

@@ -1,11 +1,14 @@
 // @flow
 import type { NewUserData, UserType } from 'Types/UserTypes'
 import faker from 'faker'
+import User from 'Models/User'
 import { request } from './db'
 
 /**
  * User Read
  */
+
+export const getDBUsers = User.getUsers
 
 export const getUser = async (uid: string): Promise<UserType> => {
 	const q = /* GraphQL */ `

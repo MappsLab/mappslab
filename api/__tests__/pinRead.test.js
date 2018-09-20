@@ -1,11 +1,11 @@
 /* eslint-disable no-undef */
-import { request } from '../../../__tests__/utils'
-import { getFirstPins } from './utils'
+import { request } from './utils/db'
+import { getDBPins } from './utils/pin'
 
 let firstPins
 
 beforeAll(async (done) => {
-	firstPins = await getFirstPins()
+	firstPins = await getDBPins()
 	done()
 })
 

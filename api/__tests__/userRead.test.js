@@ -1,11 +1,13 @@
 /* eslint-disable no-undef */
-import { getFirstUsers } from './utils/user'
-import { request } from './utils/request'
+import { getDBUsers } from './utils/user'
+import { request } from './utils/db'
 
 let users
+let student
 
 beforeAll(async (done) => {
-	users = await getFirstUsers()
+	users = await getDBUsers()
+	student = users.find((u) => u.roles.includes('student'))
 	done()
 })
 
@@ -70,8 +72,7 @@ describe('[user]', () => {
 				}
 			}
 		`
-
-		const variables = { uid: users[1].uid }
+		const variables = { uid: student.uid }
 		const result = await request(q, { variables })
 		expect(result.data.user.classrooms).toHaveProperty('pageInfo')
 		expect(result.data.user.classrooms).toHaveProperty('edges')
@@ -80,9 +81,9 @@ describe('[user]', () => {
 		expect(result.data.user.pins.edges.length).toBeGreaterThan(1)
 	})
 
-	// it('should fetch a users classroom & pin count', async () => {
-	// 	//...
-	// })
+	it.skip('should fetch a users classroom & pin count', async () => {
+		// ...
+	})
 })
 
 describe('[userTeachesInClassroom]', () => {

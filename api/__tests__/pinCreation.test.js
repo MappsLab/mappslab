@@ -1,21 +1,23 @@
 /* eslint-disable no-undef */
 import { removeNode, removeEdge } from 'Database'
-import { request, getViewerForContext } from '../../../__tests__/utils'
-import { getFirstMaps } from '../../Map/__tests__/utils'
+import { request } from './utils/db'
+import { getDBUsers } from './utils/user'
+import { getDBMaps } from './utils/map'
 
 let dbMaps
+let dbUsers
 const context = {}
 
 beforeAll(async (done) => {
-	dbMaps = await getFirstMaps()
-	context.viewer = await getViewerForContext()
-
+	dbMaps = await getDBMaps()
+	dbUsers = await getDBUsers()
+	context.viewer = dbUsers[0]
 	done()
 })
 
 const q = /* GraphQL */ `
-	mutation addPin($title: String!, $lat: Float!, $lng: Float!, $addToMaps: [String], $lessonUids: [String]) {
-		addPin(input: { title: $title, lat: $lat, lng: $lng, addToMaps: $addToMaps, lessonUids: $lessonUids }) {
+	mutation createPin($title: String!, $lat: Float!, $lng: Float!, $addToMaps: [String], $lessonUids: [String]) {
+		createPin(input: { title: $title, lat: $lat, lng: $lng, addToMaps: $addToMaps, lessonUids: $lessonUids }) {
 			uid
 			title
 			lat
@@ -63,7 +65,7 @@ afterEach(async (done) => {
 	done()
 })
 
-describe('[addPin]', () => {
+describe('[createPin]', () => {
 	it('should return an error if there is no current viewer', async () => {
 		const result = await request(q, { variables })
 		expect(result.errors).toMatchSnapshot()
@@ -71,13 +73,13 @@ describe('[addPin]', () => {
 
 	it('Should add a new pin (with a map and without a map)', async () => {
 		const result = await request(q, { variables, context })
-		const { title, owner, maps } = result.data.addPin
+		const { title, owner, maps } = result.data.createPin
 		expect(title).toBe(variables.title)
 		expect(owner.name).toBe(context.viewer.name)
 		expect(maps.edges.length).toBe(0)
 		expect(maps.pageInfo.hasNextPage).toBe(false)
 		expect(maps.pageInfo.lastCursor).toBe(null)
-		pinsToRemove.push(result.data.addPin)
+		pinsToRemove.push(result.data.createPin)
 
 		await removeNewPins()
 		await sleep()
@@ -87,13 +89,13 @@ describe('[addPin]', () => {
 			...variables,
 		}
 		const withMapResult = await request(q, { variables: vars, context })
-		const { title: withMapTitle, owner: withMapOwner, maps: withMapMaps } = withMapResult.data.addPin
+		const { title: withMapTitle, owner: withMapOwner, maps: withMapMaps } = withMapResult.data.createPin
 		expect(withMapTitle).toBe(variables.title)
 		expect(withMapOwner.name).toBe(context.viewer.name)
 		expect(withMapMaps.pageInfo.hasNextPage).toBe(false)
 		expect(withMapMaps.pageInfo.lastCursor).toBe(dbMaps[0].uid)
 		expect(withMapMaps.edges[0].node.title).toBe(dbMaps[0].title)
-		pinsToRemove.push(result.data.addPin)
+		pinsToRemove.push(result.data.createPin)
 	})
 
 	it('Should add a new pin (with map)', async () => {})

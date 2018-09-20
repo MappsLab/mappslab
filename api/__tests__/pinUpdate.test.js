@@ -1,17 +1,18 @@
 /* eslint-disable no-undef */
-import { request, getViewerForContext } from '../../../__tests__/utils'
-import { getFirstPins } from './utils'
-import { getFirstMaps } from '../../Map/__tests__/utils'
+import { request } from './utils/db'
+import { getDBUsers } from './utils/user'
+import { getDBPins } from './utils/pin'
+import { getDBMaps } from './utils/map'
 
 let firstPins
 let firstMaps
 let viewer
 
 beforeAll(async (done) => {
-	firstPins = await getFirstPins()
-	viewer = await getViewerForContext()
-	firstMaps = await getFirstMaps()
-
+	firstPins = await getDBPins()
+	const users = await getDBUsers()
+	viewer = users[0]
+	firstMaps = await getDBMaps()
 	done()
 })
 
@@ -80,13 +81,19 @@ describe('[updatePin]', () => {
 		expect(reset.data.updatePin.title).toBe(firstPins[0].title)
 	})
 
-	// it('should update a pin', async () => {
-	// 	const originalPin =
-	//  /* Arrange */
-	//  // const { container, getByTestId } = render( ... )
-	//  /* Act */
+	it.skip('should add and remove classroom connections', async () => {
+		/* Arrange */
+		// const { container, getByTestId } = render( ... )
+		/* Act */
+		/* Assert */
+		// expect(...)
+	})
 
-	//  /* Assert */
-	//  // expect(...)
-	// })
+	it.skip('should add and remove lesson connections', async () => {
+		/* Arrange */
+		// const { container, getByTestId } = render( ... )
+		/* Act */
+		/* Assert */
+		// expect(...)
+	})
 })

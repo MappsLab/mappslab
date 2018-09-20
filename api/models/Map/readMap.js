@@ -31,7 +31,7 @@ export const getMaps = async (/* args?: PaginationArgs */): Promise<Array<MapTyp
 	const filterString = ''
 	const q = /* GraphQL */ `
 		query getMaps {
-			Maps(func: eq(type, "Map")) ${filterString} {
+			Maps(func: eq(type, "map")) ${filterString} {
 				${publicFields}
 			}
 		}

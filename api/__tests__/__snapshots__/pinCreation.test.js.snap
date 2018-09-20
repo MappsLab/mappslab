@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`[addPin] should return an error if there is no current viewer 1`] = `
+exports[`[createPin] should return an error if there is no current viewer 1`] = `
 Array [
   [GraphQLError: You must be logged in to create new pins. Please log in and try again.],
 ]

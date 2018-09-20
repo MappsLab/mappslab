@@ -1,19 +1,24 @@
 /* eslint-disable no-undef */
 import { createJWT, verifyJWT } from 'Utils/auth'
-import { request } from './utils/request'
-import { getFirstUsers } from './utils/user'
-// import { joseph, john } from '../../../database/stubs/users'
+import { request } from './utils/db'
+import { getDBUsers } from './utils/user'
+// import { joseph, teacher } from '../../../database/stubs/users'
 
+/**
+ * NOTE:
+ * Only 'joseph' is seeded with a password: 'Password#1'
+ * all other users have a temporaryPassword of `temporary`
+ */
 let users
-let john
 let joseph
-let alex
+let teacher
+let student
 
 beforeAll(async (done) => {
-	users = await getFirstUsers()
+	users = await getDBUsers()
 	joseph = users.find((u) => u.email === 'joseph@good-idea.studio')
-	john = users.find((u) => u.email === 'john@cmwworld.com')
-	alex = users.find((u) => u.name === 'Alex Johnstone')
+	teacher = users.find((u) => u.roles.includes('teacher'))
+	student = users.find((u) => u.roles.includes('student'))
 	done()
 })
 
@@ -48,16 +53,16 @@ describe('queries', () => {
 	})
 
 	it('[loginViewer] should work with uid', async () => {
-		const variables = { uid: john.uid, password: 'Password#1' }
+		const variables = { uid: joseph.uid, password: 'Password#1' }
 		const result = await request(uidLogin, { variables })
 		const { jwt, viewer } = result.data.loginViewer
 		expect(/^Bearer/.test(jwt.token)).toBe(true)
 		expect(jwt.expires).toBeGreaterThan(1)
-		expect(viewer.name).toBe(john.name)
+		expect(viewer.name).toBe(joseph.name)
 	})
 
 	it('[loginViewer] should return `requiresReset` if the supplied password fails but matches `user.temporaryPassword`', async () => {
-		const variables = { uid: alex.uid, password: 'temporary' }
+		const variables = { uid: student.uid, password: 'temporary' }
 		const result = await request(uidLogin, { variables })
 		expect(result.data.loginViewer.resetToken.length).toBe(96)
 	})
@@ -102,20 +107,20 @@ describe('queries', () => {
 				}
 			}
 		`
-		const originalViewer = createJWT(john)
+		const originalViewer = createJWT(teacher)
 		const JWTviewer = await verifyJWT(originalViewer.token.replace(/^Bearer /, ''))
 		const context = { viewer: JWTviewer }
 		const result = await request(currentViewerQuery, { context })
 		const { viewer, jwt } = result.data.currentViewer
-		expect(viewer.uid).toBe(john.uid)
-		expect(viewer.email).toBe(john.email)
+		expect(viewer.uid).toBe(teacher.uid)
+		expect(viewer.email).toBe(teacher.email)
 		expect(jwt.token).toMatch(/^Bearer /)
 		expect(jwt.expires).toBe(86400)
 	})
 
 	describe('JWT creation & verification', async () => {
 		it('should only return username, email, uid in JWT token', async () => {
-			const jwt = createJWT(john)
+			const jwt = createJWT(teacher)
 			const result = await verifyJWT(jwt.token.replace(/^Bearer /, ''))
 			expect(result).toHaveProperty('uid')
 			expect(result).toHaveProperty('exp')
@@ -128,7 +133,7 @@ describe('queries', () => {
 
 describe('[updatePassword]', () => {
 	const getResetToken = async () => {
-		const variables = { uid: alex.uid, password: 'temporary' }
+		const variables = { uid: student.uid, password: 'temporary' }
 		const result = await request(uidLogin, { variables })
 		return result.data.loginViewer.resetToken
 	}
@@ -153,7 +158,7 @@ describe('[updatePassword]', () => {
 		}
 	`
 
-	it.only('should throw an error for an invalid token', async () => {
+	it('should throw an error for an invalid token', async () => {
 		const variables = { password: 'newPassword', resetToken: 'invalid' }
 		const result = await request(updatePasswordWithToken, { variables })
 		expect(result.errors[0].message).toBe('This reset token is invalid')

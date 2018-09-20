@@ -3,7 +3,42 @@
 import faker from 'faker'
 import type { PinType, NewPinData } from 'Types/PinTypes'
 import type { UserType } from 'Types/UserTypes'
+import Pin from 'Models/Pin'
 import { request } from './db'
+/**
+ * Pin Read
+ */
+export const getDBPins = Pin.getPins
+
+const pinQuery = /* GraphQL */ `
+	query GetPin($input: GetPinInput!) {
+		getPin(input: $input) {
+			uid
+			title
+			lat
+			lng
+			description
+			owner {
+				uid
+				name
+			}
+			maps {
+				edges {
+					node {
+						uid
+						title
+					}
+				}
+			}
+		}
+	}
+`
+
+export const getPin = async (uid: string): Promise<PinType> => {
+	const variables = { uid }
+	const result = await request(pinQuery, { variables })
+	return result.data.user
+}
 
 /**
  * Pin Creation

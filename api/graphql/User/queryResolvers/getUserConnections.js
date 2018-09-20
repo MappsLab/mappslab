@@ -14,6 +14,9 @@ export const classrooms = async (
 	{ input }: PaginationInput = {},
 	ctx: GraphQLContext,
 ): Promise<PageType | Error> => {
-	const fetchedClassrooms = await ctx.models.Classroom.getUserClassrooms(loadedUser.uid, input)
+	const method = loadedUser.roles.includes('teacher')
+		? ctx.models.Classroom.getTeacherClassrooms
+		: ctx.models.Classroom.getStudentClassrooms
+	const fetchedClassrooms = await method(loadedUser.uid, input)
 	return assemblePage(fetchedClassrooms, input)
 }
