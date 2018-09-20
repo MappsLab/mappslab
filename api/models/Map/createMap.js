@@ -6,7 +6,8 @@ import { clean, defaultValues, validateNew } from './mapDBSchema'
 
 const debug = require('debug')('api')
 
-export const createMap = async (mapData: NewMapData, classroomUid: string): Promise<MapType> => {
+export const createMap = async (input: NewMapData): Promise<MapType> => {
+	const { classroomUid, ...mapData } = input
 	const cleaned = await clean({ ...defaultValues, ...mapData, createdAt: new Date() })
 	// $FlowFixMe
 	const validatedMapData = await validateNew(cleaned).catch((err) => {

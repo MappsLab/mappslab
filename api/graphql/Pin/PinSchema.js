@@ -26,7 +26,7 @@ const Pin = /* GraphQL */ `
 
 	# Inputs
 
-	input NewPinArgs {
+	input NewPinInput {
 		title: String!
 		lat: Float!
 		lng: Float!
@@ -56,7 +56,7 @@ const Pin = /* GraphQL */ `
 	}
 
 	extend type Mutation {
-		addPin(input: NewPinArgs!): Pin!
+		createPin(input: NewPinInput!): Pin!
 		updatePin(input: UpdatePinInput!): Pin!
 		removePin(input: GetPinInput!): Boolean!
 	}

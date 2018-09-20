@@ -1,9 +1,9 @@
 // @flow
-import type { PinType, NewPinInput } from 'Types/PinTypes'
+import type { PinType, NewPinData } from 'Types/PinTypes'
 import type { GraphQLContext } from 'Types/sharedTypes'
 import pubsub, { MAP_RECEIVED_PIN } from '../../subscriptions'
 
-export const addPin = async (_: Object, { input }: NewPinInput, ctx: GraphQLContext): Promise<PinType | Error> => {
+export const createPin = async (_: Object, { input }: { input: NewPinData }, ctx: GraphQLContext): Promise<PinType | Error> => {
 	if (!ctx.viewer) throw Error('You must be logged in to create new pins. Please log in and try again.')
 	const newPin = await ctx.models.Pin.createPin(input, ctx.viewer.uid)
 	// Query the DB for the new pin so we can include relational data in the subscription filter

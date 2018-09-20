@@ -15,8 +15,8 @@ const generateMap = (): NewMapData => ({
 })
 
 const createMapMutation = /* GraphQL */ `
-	mutation createMap($input: NewMapInput!, $classroomUid: String!) {
-		createMap(input: $input, classroomUid: $classroomUid) {
+	mutation createMap($input: NewMapInput!) {
+		createMap(input: $input) {
 			uid
 			title
 			description
@@ -27,13 +27,12 @@ const createMapMutation = /* GraphQL */ `
 	}
 `
 
-export const createMap = async (
-	args: { input?: NewMapData, classroomUid: string },
-	{ viewer }: { viewer: UserType } = {},
-): Promise<MapType> => {
-	const input = args.input || generateMap()
+export const createMap = async ({ input }: { input: NewMapData }, { viewer }: { viewer: UserType } = {}): Promise<MapType> => {
+	const variables = { input }
 	const context = { viewer }
-	const variables = { ...args, input }
 	const result = await request(createMapMutation, { variables, context })
 	return result.data.createMap
 }
+
+export const createGeneratedMap = (mapArgs: { classroomUid: string }, { viewer }: { viewer: UserType }) =>
+	createMap({ input: { ...generateMap(), ...mapArgs } }, { viewer })

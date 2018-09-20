@@ -18,6 +18,7 @@ export type MapType = {
 export type NewMapData = {
 	title: string,
 	description?: string,
+	classroomUid: string,
 }
 
 export type UpdateMapData = {

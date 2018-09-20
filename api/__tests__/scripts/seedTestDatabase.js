@@ -5,8 +5,8 @@ import { setSchema } from 'Database/setSchema'
 import dbClient from 'Database/client'
 import { getUser, createTeacher, createStudent } from '../utils/user'
 import { createClassroom, assignUser } from '../utils/classroom'
-import { createMap } from '../utils/map'
-import { createPin } from '../utils/pin'
+import { createGeneratedMap } from '../utils/map'
+import { createGeneratedPin } from '../utils/pin'
 import { createAdminUser } from '../utils/db'
 
 const dgraph = require('dgraph-js')
@@ -68,13 +68,15 @@ const seedDatabase = async () => {
 	debug('🗺  Adding maps to classrooms')
 	const maps = await Promise.all(
 		classrooms.map(async (classroom) =>
-			promiseSerial(R.times(() => async () => createMap({ classroomUid: classroom.uid }, { viewer: classroom.teacher }), 2)),
+			promiseSerial(
+				R.times(() => async () => createGeneratedMap({ classroomUid: classroom.uid }, { viewer: classroom.teacher }), 2),
+			),
 		),
 	)
 	debug(`🗺  Added ${maps.length} maps to ${classrooms.length} classrooms`)
 
 	debug('📍  Creating some classroom map pins for students..')
-	const pins = await promiseSerial(
+	const userPins = await promiseSerial(
 		students.map((student) => async () => {
 			const currentUser = await getUser(student.uid)
 			const userClassroomMapIds = R.pipe(
@@ -86,12 +88,15 @@ const seedDatabase = async () => {
 				R.pluck('uid'),
 			)(currentUser)
 			// return userClassrooms
-			console.log(userClassroomMapIds)
 
 			// const newPins = await Promise.all(userClassroomMaps.map(m => R.times(() => async () => createPin({ addToMaps: []}, { viewer: fullUserData}))))
-			const newPins = await Promise.all(
-				R.times(() => async () => createPin({ addToMaps: [userClassroomMapIds] }, { viewer: currentUser }), 5),
+			return Promise.all(
+				userClassroomMapIds.map((id) =>
+					promiseSerial(R.times(() => async () => createGeneratedPin({ addToMaps: [id] }, { viewer: currentUser }), 3)),
+				),
 			)
+			// return newPins
+
 			// console.log(userClassrooms)
 
 			// const userMaps = fullUserData.classrooms.reduce
@@ -99,7 +104,11 @@ const seedDatabase = async () => {
 			// console.log(R.view(R.lensPath(['classrooms', 'edges']), fullUserData	))
 		}),
 	)
-	// console.log(pins)
+
+	const pins = R.flatten(userPins)
+	debug(`📍  Created ${pins.length} pins for ${students.length} students`)
+
+	debug('🌻 🌻 🌻 Successfully seeded test database 🌻 🌻 🌻 ')
 }
 
 seedDatabase()
