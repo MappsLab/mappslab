@@ -3,6 +3,11 @@
 import type { MapType } from 'Types/MapTypes'
 import type { ClassroomType } from 'Types/ClassroomTypes'
 
+export type JWT = {
+	token: string,
+	expires: number,
+}
+
 export type Role = 'admin' | 'teacher' | 'student'
 
 export type UserType = {

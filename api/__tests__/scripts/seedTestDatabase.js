@@ -6,6 +6,7 @@ import dbClient from 'Database/client'
 import { getUser, createTeacher, createStudent } from '../utils/user'
 import { createClassroom, assignUser } from '../utils/classroom'
 import { createMap } from '../utils/map'
+import { createPin } from '../utils/pin'
 import { createAdminUser } from '../utils/db'
 
 const dgraph = require('dgraph-js')
@@ -73,21 +74,32 @@ const seedDatabase = async () => {
 	debug(`🗺  Added ${maps.length} maps to ${classrooms.length} classrooms`)
 
 	debug('📍  Creating some classroom map pins for students..')
-	await promiseSerial(
+	const pins = await promiseSerial(
 		students.map((student) => async () => {
-			const fullUserData = await getUser(student.uid)
-			console.log(fullUserData.name)
-			const classrooms = R.pipe(
+			const currentUser = await getUser(student.uid)
+			const userClassroomMapIds = R.pipe(
 				R.path(['classrooms', 'edges']),
 				R.pluck('node'),
-			)(fullUserData)
-			console.log(classrooms)
+				R.map(R.path(['maps', 'edges'])),
+				R.flatten,
+				R.pluck('node'),
+				R.pluck('uid'),
+			)(currentUser)
+			// return userClassrooms
+			console.log(userClassroomMapIds)
+
+			// const newPins = await Promise.all(userClassroomMaps.map(m => R.times(() => async () => createPin({ addToMaps: []}, { viewer: fullUserData}))))
+			const newPins = await Promise.all(
+				R.times(() => async () => createPin({ addToMaps: [userClassroomMapIds] }, { viewer: currentUser }), 5),
+			)
+			// console.log(userClassrooms)
 
 			// const userMaps = fullUserData.classrooms.reduce
 			// console.log(fullUserData)
 			// console.log(R.view(R.lensPath(['classrooms', 'edges']), fullUserData	))
 		}),
 	)
+	// console.log(pins)
 }
 
 seedDatabase()

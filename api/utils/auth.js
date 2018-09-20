@@ -1,13 +1,8 @@
 // @flow
 import crypto from 'crypto-promise'
 import jwt from 'jsonwebtoken'
-import type { UserType } from 'Types/UserTypes'
+import type { JWT, UserType } from 'Types/UserTypes'
 import { JWT_KEY } from '../config'
-
-export type JWT = {
-	token: string,
-	expires: number,
-}
 
 export const createToken = (): Promise<string> =>
 	new Promise((resolve, reject) => {

@@ -20,7 +20,7 @@ export type NewMapData = {
 	description?: string,
 }
 
-export type UpdateMapArgs = {
+export type UpdateMapData = {
 	title?: string,
 	description?: string,
 }

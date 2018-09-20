@@ -18,7 +18,7 @@ export type PinType = {
 	routes?: Array<RouteType>,
 }
 
-export type NewPinArgs = {
+export type NewPinData = {
 	title: string,
 	lat: number,
 	lang: number,
@@ -26,11 +26,7 @@ export type NewPinArgs = {
 	addToLessons?: Array<string>,
 }
 
-export type NewPinInput = {
-	input: NewPinArgs,
-}
-
-export type UpdatePinArgs = {
+export type UpdatePinData = {
 	uid: string,
 	title?: string,
 	lat?: number,
