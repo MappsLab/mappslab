@@ -14,7 +14,7 @@ export const coreTypes = /* GraphQL */ `
 	scalar DateTime
 
 	interface Node {
-		uid: String! 
+		uid: String!
 	}
 
 	interface Edge {
@@ -31,24 +31,29 @@ export const coreTypes = /* GraphQL */ `
 	}
 
 	input QueryFilter {
-		key: String!,
-		value: String!,
+		key: String!
+		value: String!
 		operator: QueryOperator
 	}
 
 	input GetNodeInput {
-		uid: String 
+		uid: String
 		slug: String
 	}
 
 	input PaginationInput {
-		first: Int,
-		after: String!,
-		filter: [QueryFilter],
+		first: Int
+		after: String!
+		filter: [QueryFilter]
 	}
 
 	type PageInfo {
 		hasNextPage: Boolean!
 		lastCursor: String
+	}
+
+	type Success {
+		success: Boolean!
+		messages: [String]!
 	}
 `

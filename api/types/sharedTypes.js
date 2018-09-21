@@ -57,3 +57,8 @@ export type PageType = {
 	pageInfo: PageInfo,
 	edges: Array<?Edge>,
 }
+
+export type Success = {
+	success: boolean,
+	messages: Array<string>,
+}

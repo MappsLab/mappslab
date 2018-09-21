@@ -1,9 +1,32 @@
 // @flow
 import React from 'react'
+import { State } from 'react-automata'
+import NativeListener from 'react-native-listener'
 import { Form, Field } from 'Components/Forms'
-import { CreatePinMutation, UpdatePinMutation } from 'Queries/pin'
+import { Button } from 'Components/UI'
+import { CreatePinMutation, UpdatePinMutation, RemovePinMutation } from 'Queries/pin'
 import type { PinType, NewPinType } from 'Types'
 import type { Mutation } from 'Types/GraphQL'
+import { states } from '../statechart'
+
+/**
+ * RemovePinButton
+ */
+
+const RemovePinButton = () => (
+	<RemovePinMutation>
+		{(deletePin) => {
+			const handleClick = async () => {
+				await deletePin()
+			}
+			return (
+				<NativeListener onClick={handleClick}>
+					<Button secondary>Delete</Button>
+				</NativeListener>
+			)
+		}}
+	</RemovePinMutation>
+)
 
 /**
  * AddEditPin
@@ -33,10 +56,15 @@ const PinForm = ({ pin, mapUid, onSuccess, mutate }: FormProps) => {
 		})
 	}
 	return (
-		<Form onSubmit={handleSubmit} initialValues={pin}>
-			<Field label="Title" name="title" />
-			<Field label="Description" name="description" />
-		</Form>
+		<React.Fragment>
+			<Form onSubmit={handleSubmit} initialValues={pin}>
+				<Field label="Title" name="title" />
+				<Field label="Description" name="description" />
+			</Form>
+			<State is={states.EDIT_PIN}>
+				<RemovePinButton />
+			</State>
+		</React.Fragment>
 	)
 }
 

@@ -26,6 +26,10 @@ export type NewPinData = {
 	addToLessons?: Array<string>,
 }
 
+export type RemovePinInput = {
+	uid: string,
+}
+
 export type UpdatePinData = {
 	uid: string,
 	title?: string,
