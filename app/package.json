@@ -32,6 +32,7 @@
     "react-automata": "^4.0.3",
     "react-dom": "^16.4.2",
     "react-final-form": "^3.6.5",
+    "react-native-listener": "^1.0.2",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
     "recompose": "^0.28.2",

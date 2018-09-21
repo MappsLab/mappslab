@@ -1,5 +1,6 @@
 // @flow
 import React from 'react'
+import NativeListener from 'react-native-listener'
 import { Marker, CustomPopup } from 'mapp'
 import * as R from 'ramda'
 import { Action, State } from 'react-automata'
@@ -117,7 +118,11 @@ class Pin extends React.Component<Props, PinState> {
 											<h2>{title}</h2>
 											<p>{description}</p>
 											<p>{owner.name}</p>
-											{viewer.uid === owner.uid && <Button onClick={this.handleEditButtonClick}>Edit</Button>}
+											{viewer.uid === owner.uid && (
+												<NativeListener onClick={this.handleEditButtonClick}>
+													<Button>Edit</Button>
+												</NativeListener>
+											)}
 										</State>
 									</PopupWrapper>
 								</CustomPopup>

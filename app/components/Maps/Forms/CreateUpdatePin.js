@@ -2,7 +2,8 @@
 import React from 'react'
 import { Form, Field } from 'Components/Forms'
 import { CreatePinMutation, UpdatePinMutation } from 'Queries/pin'
-import type { PinType, NewPinType, Mutation } from 'Types'
+import type { PinType, NewPinType } from 'Types'
+import type { Mutation } from 'Types/GraphQL'
 
 /**
  * AddEditPin
