@@ -1,12 +1,11 @@
 // @flow
 import gql from 'graphql-tag'
-import withMutation from '../withMutation'
-import { unwindEdges } from '../utils'
+import { withDefaultMutation } from '../Mutation'
 import { query as mapQuery } from '../map/withMapQuery'
 
 const mutation = gql`
 	mutation createPin($title: String!, $description: String, $lat: Float!, $lng: Float!, $addToMaps: [String]) {
-		addPin(input: { title: $title, description: $description, lat: $lat, lng: $lng, addToMaps: $addToMaps }) {
+		createPin(input: { title: $title, description: $description, lat: $lat, lng: $lng, addToMaps: $addToMaps }) {
 			uid
 			title
 			lat
@@ -58,6 +57,4 @@ const config = {
 	// },
 }
 
-const withCreatePinMutation = withMutation(mutation, config)
-
-export default withCreatePinMutation
+export default withDefaultMutation(mutation, config)

@@ -2,13 +2,14 @@
 import React from 'react'
 import { Marker, CustomPopup } from 'mapp'
 import * as R from 'ramda'
-import { Action } from 'react-automata'
+import { Action, State } from 'react-automata'
 import type { PinType, NewPinType, ViewerType } from 'Types'
 import { Button } from 'Components/UI'
 import { PopupWrapper } from './InfoPopups'
-import AddEditPinForm from '../Forms/AddEditPin'
+import { CreatePinForm, UpdatePinForm } from '../Forms/CreateUpdatePin'
 import withPinModes from './pinModes'
-import { CLICKED_EDIT_PIN } from '../statechart'
+import { transitions, states } from '../statechart'
+
 // Make an object for the sake of flow
 const _eventNames = {
 	onClick: '',
@@ -33,14 +34,14 @@ type Props = {
 	mapUid: string,
 	updatePinSuccess: () => void,
 	mode: string,
-	transition: (string) => ({}) => void,
+	transition: (string) => (?{}) => void,
 }
 
-type State = {
+type PinState = {
 	mouseOver: boolean,
 }
 
-class Pin extends React.Component<Props, State> {
+class Pin extends React.Component<Props, PinState> {
 	state = {
 		mouseOver: false,
 	}
@@ -63,7 +64,6 @@ class Pin extends React.Component<Props, State> {
 	 */
 
 	handleEvent = (eventName: Event) => (payload) => {
-		console.log(eventName)
 		const { mode } = this.props
 		const handler = R.path(['props', 'modes', mode, eventName])(this)
 		if (handler) {
@@ -74,7 +74,7 @@ class Pin extends React.Component<Props, State> {
 
 	handleEditButtonClick = (e) => {
 		e.stopPropagation()
-		this.props.transition(CLICKED_EDIT_PIN)()
+		this.props.transition(transitions.CLICKED_EDIT_PIN)()
 	}
 
 	render() {
@@ -104,27 +104,24 @@ class Pin extends React.Component<Props, State> {
 									</CustomPopup>
 								)}
 							</Action>
-							<Action is="editPin">
-								{active && (
-									<CustomPopup anchor={anchor}>
-										<PopupWrapper>
-											<AddEditPinForm pin={pin} mapUid={mapUid} onSuccess={updatePinSuccess} />
-										</PopupWrapper>
-									</CustomPopup>
-								)}
-							</Action>
-							<Action is="inspectPin">
-								{active && (
-									<CustomPopup anchor={anchor}>
-										<PopupWrapper>
+							{active && (
+								<CustomPopup anchor={anchor}>
+									<PopupWrapper>
+										<State is={states.EDIT_PIN}>
+											<UpdatePinForm pin={pin} mapUid={mapUid} onSuccess={updatePinSuccess} />
+										</State>
+										<State is={`${states.CREATE_PIN}*`}>
+											<CreatePinForm pin={pin} mapUid={mapUid} onSuccess={updatePinSuccess} />
+										</State>
+										<State is={states.INSPECT_PIN}>
 											<h2>{title}</h2>
 											<p>{description}</p>
 											<p>{owner.name}</p>
 											{viewer.uid === owner.uid && <Button onClick={this.handleEditButtonClick}>Edit</Button>}
-										</PopupWrapper>
-									</CustomPopup>
-								)}
-							</Action>
+										</State>
+									</PopupWrapper>
+								</CustomPopup>
+							)}
 						</React.Fragment>
 					) : null
 				}

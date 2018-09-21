@@ -1,3 +1,3 @@
 // @flow
-export { default as withCreatePinMutation } from './createPinMutation'
-export { default as withUpdatePinMutation } from './updatePinMutation'
+export { default as CreatePinMutation } from './CreatePinMutation'
+export { default as UpdatePinMutation } from './UpdatePinMutation'

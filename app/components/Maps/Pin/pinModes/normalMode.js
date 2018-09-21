@@ -1,12 +1,12 @@
 // @flow
 
 import type { HandlerProps } from './types'
-import { CLICKED_PIN } from '../../statechart'
+import { transitions } from '../../statechart'
 
 const normalMode = {
 	onClick: () => () => {},
 	onDblClick: (props: HandlerProps) => () => {
-		props.transition(CLICKED_PIN)({ activePinUid: props.pin.uid })
+		props.transition(transitions.CLICKED_PIN)({ activePinUid: props.pin.uid })
 	},
 
 	onMouseOver: () => () => {

@@ -1,7 +1,6 @@
 // @flow
 import gql from 'graphql-tag'
-import withMutation from '../withMutation'
-import { unwindEdges } from '../utils'
+import { withDefaultMutation } from '../Mutation'
 import { query as mapQuery } from '../map/withMapQuery'
 
 const mutation = gql`
@@ -45,6 +44,4 @@ const config = {
 	// },
 }
 
-const withUpdatePinMutation = withMutation(mutation, config)
-
-export default withUpdatePinMutation
+export default withDefaultMutation(mutation, config)

@@ -12,6 +12,7 @@ export type PinType = {
 }
 
 export type NewPinType = {
+	uid: string,
 	lat: number,
 	lng: number,
 	title?: string,

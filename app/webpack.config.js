@@ -1,7 +1,7 @@
 const webpack = require('webpack')
 const merge = require('webpack-merge')
 const path = require('path')
-const babelConfig = require('./babel.config.js')
+const babelConfig = require('./.babelrc')
 // const fs = require('fs')
 
 // const babelConfig = JSON.parse(fs.readFileSync('.babelrc'))

@@ -2,7 +2,7 @@
 import React from 'react'
 import RoundButton from 'Components/UI/RoundButton'
 import { State } from 'react-automata'
-import { ADD_PIN, ADD_PIN_INFO } from '../statechart'
+import { states } from '../statechart'
 
 /**
  * NewPinButton
@@ -14,7 +14,7 @@ type Props = {
 
 const NewPinButton = ({ onClick }: Props) => (
 	<State
-		value={[ADD_PIN, ADD_PIN_INFO]}
+		is={`${states.CREATE_PIN}*`}
 		render={(isActive) => <RoundButton onClick={onClick} active={isActive} label="Add a new Pin" icon="📍" size="large" />}
 	/>
 )

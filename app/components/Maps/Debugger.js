@@ -2,7 +2,9 @@
 import * as React from 'react'
 import styled from 'styled-components'
 import { State } from 'react-automata'
-import { states } from './statechart'
+import { states as statesList } from './statechart'
+
+const states = Object.keys(statesList)
 
 const Wrapper = styled.div`
 	position: absolute;
@@ -62,20 +64,24 @@ const Property = ({ title, value }: { title: string, value: boolean | string }):
  */
 
 type Props = {
-	log: Array<{ timestamp: date, message: string }>,
+	log: Array<{ timestamp: Date, message: string }>,
 }
 
 const Debugger = ({ log }: Props) => (
 	<Wrapper>
 		{states.map((state) => (
-			<State value={state} key={state}>
+			<State is={state} key={state}>
 				<Property title="mode" value={state} />
 			</State>
 		))}
 		<hr />
 		<LogWrapper>
 			<Title>Log</Title>
-			<Log>{log.reverse().map((l) => <LogLine key={l.timestamp}>{l.message}</LogLine>)}</Log>
+			<Log>
+				{log.reverse().map((l) => (
+					<LogLine key={l.timestamp.getTime()}>{l.message}</LogLine>
+				))}
+			</Log>
 		</LogWrapper>
 	</Wrapper>
 )

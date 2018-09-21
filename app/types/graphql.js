@@ -1,3 +1,10 @@
 // @flow
-import type { DocumentNode } from 'graphql'
-import type { QueryRenderProps } from 'react-apollo'
+
+type MutationOptions = {
+	variables: {},
+	// refetchQueries:
+	// optimisticResponse:
+	// update:
+}
+
+export type Mutation = (options?: MutationOptions) => Promise<void>

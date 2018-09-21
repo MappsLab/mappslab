@@ -5,7 +5,7 @@ import type { FetchResult, ApolloError, DataProxy, MutationResult } from 'react-
 import { Mutation as ApolloMutation } from 'react-apollo'
 import { unwindEdges } from './utils'
 
-type MutationProps = {
+export type MutationProps = {
 	mutation: DocumentNode,
 	children: (Function, MutationResult<any>) => React.Node,
 	variables?: {},

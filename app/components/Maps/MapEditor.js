@@ -4,13 +4,13 @@ import * as R from 'ramda'
 import styled from 'styled-components'
 // import type { Map as GoogleMap } from 'mapp/types'
 import { withMapQuery, withCurrentViewerQuery } from 'Queries'
-import type { MapType, PinType, ViewerType } from 'Types'
+import type { MapType, PinType, ViewerType, MachineValue } from 'Types'
 import { withStateMachine } from 'react-automata'
-import { compose } from 'Utils/data'
+import { compose, getStateString } from 'Utils/data'
 import Debugger from './Debugger'
 import Pin from './Pin'
 import { NewPinButton, ZoomButton, Toolbar } from './Tools'
-import { statechart, SUCCESS, DROPPED_PIN, CANCEL, NEXT } from './statechart'
+import { statechart, transitions } from './statechart'
 import withEditorModes from './editorModes'
 
 /**
@@ -32,7 +32,7 @@ type Props = {
 	// googleMap: GoogleMap,
 	map: MapType,
 	machineState: {
-		value: string,
+		value: string | MachineValue,
 	},
 	subscribeToMorePins: (Function) => () => void,
 	transition: (string, ?{}) => void,
@@ -44,7 +44,7 @@ type Props = {
 }
 
 type State = {
-	log: Array<{ timestamp: number, message: string }>,
+	log: Array<{ timestamp: Date, message: string }>,
 }
 
 // Make an object for the sake of flow
@@ -85,7 +85,7 @@ class MapEditor extends React.Component<Props, State> {
 			this.log(`${newPin.owner.name} added pin ${newPin.title}`)
 		})
 		addEventListeners(this.listeners)
-		this.transition(NEXT)()
+		this.transition(transitions.NEXT)()
 	}
 
 	componentDidUpdate(prevProps) {
@@ -94,7 +94,7 @@ class MapEditor extends React.Component<Props, State> {
 		// trigger the onEntry event and log the transition
 		if (prevProps.machineState.value !== this.props.machineState.value) {
 			this.handleEvent('onEntry')()
-			this.log(`transition to: ${this.props.machineState.value}`)
+			this.log(`transition to: ${this.getMode()}`)
 		}
 	}
 
@@ -104,11 +104,15 @@ class MapEditor extends React.Component<Props, State> {
 	}
 
 	log = (message) => {
-		const now = new Date()
-		const newEntry = { timestamp: now.getTime(), message }
+		const timestamp = new Date()
+		const newEntry = { timestamp, message }
 		this.setState((prevState) => ({
 			log: [...prevState.log, newEntry],
 		}))
+	}
+
+	getMode = (value: MachineValue = this.props.machineState.value): string => {
+		return getStateString(value)
 	}
 
 	/**
@@ -119,8 +123,8 @@ class MapEditor extends React.Component<Props, State> {
 	 * See ./modes for the handlers for each mode.
 	 */
 	handleEvent = (eventName: Event) => (payload) => {
-		const mode = this.props.machineState.value
-		const handler = R.path(['props', 'modes', mode, eventName])(this)
+		const modePath = this.getMode().split('.')
+		const handler = R.path(['props', 'modes', ...modePath, eventName])(this)
 		if (handler) handler(this.props)(payload)
 	}
 
@@ -138,15 +142,18 @@ class MapEditor extends React.Component<Props, State> {
 	}
 
 	updatePinSuccess = () => {
-		this.transition(SUCCESS)({ activePinUid: null, inProgressPin: null })
+		this.transition(transitions.SUCCESS)({ activePinUid: null, inProgressPin: null })
 	}
 
 	updatePinCancel = () => {}
 
+	/* Method Types */
+	unsubscribe: () => void
+
 	render() {
 		const { map, activePinUid, inProgressPin, viewer } = this.props
 		const { pins } = map
-		const mode = this.props.machineState.value
+		const mode = this.getMode()
 		return (
 			<EditorWrapper>
 				<Debugger log={this.state.log} />
@@ -179,7 +186,7 @@ class MapEditor extends React.Component<Props, State> {
 					)}
 				</React.Fragment>
 				<Toolbar>
-					<NewPinButton onClick={this.transition(DROPPED_PIN)} />
+					<NewPinButton onClick={this.transition(transitions.ENTER_DROP_PIN)} />
 				</Toolbar>
 				<Toolbar align="right">
 					<ZoomButton direction="in" onClick={() => {}} />
