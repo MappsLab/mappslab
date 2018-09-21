@@ -5,7 +5,7 @@ import Title from './Title'
 import Item from './Item'
 
 const Wrapper = styled.div`
-	margin: ${({ theme }) => theme.spacing.double} 0;
+	margin: ${({ theme }) => theme.layout.spacing.double} 0;
 `
 
 const Menu = styled.div`
@@ -20,7 +20,7 @@ const Menu = styled.div`
 `
 
 const MenuInner = styled.div`
-	padding: ${({ theme }) => theme.spacing.half};
+	padding: ${({ theme }) => theme.layout.spacing.half};
 `
 
 /**

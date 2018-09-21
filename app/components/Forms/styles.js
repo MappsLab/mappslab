@@ -1,10 +1,6 @@
 // @flow
 import { css } from 'styled-components'
 
-import { lightGray, middleGray, red } from 'Styles/colors'
-import { spacing } from 'Styles/layout'
-import { semi, p, h4 } from 'Styles/text'
-
 /* Forms */
 
 export const formWrapperStyles = css`
@@ -22,11 +18,12 @@ export const formWrapperStyles = css`
 `
 
 export const formMessageStyles = css`
-	font-size: ${h4};
+	font-size: ${({ theme }) => theme.text.h4};
 `
 
 export const formErrorStyles = css`
-	${formMessageStyles} color: ${red};
+	${formMessageStyles};
+	color: ${({ theme }) => theme.colors.red};
 `
 
 /* Fields */
@@ -36,33 +33,33 @@ export const fieldWrapperStyles = css`
 	flex-direction: column;
 	align-items: flex-start;
 	width: 100%;
-	margin: ${({ theme }) => `${theme.spacing.single} 0 ${theme.spacing.double}`};
 `
+// margin: ${({ theme }) => `${theme.layout.spacing.single} 0 ${theme.layout.spacing.double}`};
 
 export const labelStyles = css`
-	font-weight: ${semi};
-	font-size: ${h4};
+	font-weight: ${({ theme }) => theme.text.semi};
+	font-size: ${({ theme }) => theme.text.h4};
 	text-transform: uppercase;
-	margin-bottom: ${spacing.half};
+	margin-bottom: ${({ theme }) => theme.layout.spacing.half};
 `
 
 export const helpTextStyles = css`
-	margin-top: ${spacing.eighth};
-	font-size: ${h4};
-	color: ${middleGray};
+	margin-top: ${({ theme }) => theme.layout.spacing.eighth};
+	font-size: ${({ theme }) => theme.text.h4};
+	color: ${({ theme }) => theme.colors.middleGray};
 	text-align: left;
 `
 
 export const validationErrorStyles = css`
 	${helpTextStyles};
-	color: ${red};
+	color: ${({ theme }) => theme.colors.red};
 `
 
 export const inputStyles = css`
-	font-size: ${p};
+	font-size: ${({ theme }) => theme.text.p};
 	width: 100%;
-	padding: ${spacing.quarter};
+	padding: ${({ theme }) => theme.layout.spacing.quarter};
 	border-bottom: 2px solid;
-	border-color: ${(props) => (props.active ? '' : lightGray)};
+	border-color: ${({ active, theme }) => (active ? '' : theme.colorslightGray)};
 	transition: 0.3s;
 `

@@ -2,8 +2,9 @@
 import bcrypt from 'bcrypt'
 import { dissoc, head } from 'ramda'
 import { query, mutateNode } from 'Database'
-import type { UserType, Credentials, PasswordReset } from 'Types/UserTypes'
+import type { UserType, Credentials, PasswordReset, PasswordResetInput } from 'Types/UserTypes'
 import { createToken } from 'Utils/auth'
+import { ValidationError } from 'Errors'
 import { publicFields, clean, validateUpdate } from './userDBSchema'
 
 // const debug = require('debug')('api')
@@ -47,4 +48,31 @@ export const createResetToken = async (userUid: string): Promise<PasswordReset> 
 	const validated = await validateUpdate(cleaned)
 	await mutateNode(userUid, validated)
 	return passwordReset
+}
+
+export const resetPassword = async (credentials: PasswordResetInput): Promise<UserType> => {
+	const { resetToken, password } = credentials
+	// First, make sure a user with this reset token exists, and that it has not expired.
+	const userQ = /* GraphQL */ `
+			query getUser($resetToken: string) {
+				getUser(func: eq(type, "user")) @filter(eq(passwordReset.token, $resetToken)){
+					uid
+					passwordReset.token
+					passwordReset.expires
+				}
+			}
+		`
+	const result = await query(userQ, { resetToken })
+	if (!result || !result.getUser || result.getUser[0].passwordReset.expires > new Date()) {
+		throw new ValidationError('This password reset request has expired.')
+	}
+	const user = result.getUser[0]
+	const passwordReset = {
+		token: null,
+		expires: null,
+	}
+	const cleaned = await clean({ password, passwordReset })
+	const validated = await clean(cleaned)
+	await mutateNode(user.uid, validated)
+	return user
 }

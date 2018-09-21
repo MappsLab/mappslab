@@ -1,5 +1,5 @@
 // @flow
-import React from 'react'
+import * as React from 'react'
 import type { Node } from 'react'
 import { Redirect, Route } from 'react-router-dom'
 import { withCurrentViewerQuery } from 'Queries'
@@ -13,13 +13,16 @@ import { Loading } from 'Components/Loading'
 type Props = {
 	viewer: null | ViewerType,
 	loading: boolean,
-	render: ({ viewer: ViewerType }) => Node | Array<Node>,
+	render?: null | (({ viewer: ViewerType }) => Node | Array<Node>),
+	children?: null | React.Node,
+	component?: null | React.ComponentType<any, any>,
 }
 
 const ViewerRouteComponent = ({ loading, viewer, render, children, component: Component, ...rest }: Props) => (
 	<Route
 		{...rest}
 		render={(routeProps) => {
+			console.log(viewer)
 			if (loading) return <Loading />
 			if (!viewer) return <Redirect to="/login/classrooms" />
 			if (Component) return <Component viewer={viewer} {...routeProps} />
@@ -29,5 +32,11 @@ const ViewerRouteComponent = ({ loading, viewer, render, children, component: Co
 		}}
 	/>
 )
+
+ViewerRouteComponent.defaultProps = {
+	children: null,
+	component: null,
+	render: null,
+}
 
 export const ViewerRoute = withCurrentViewerQuery(ViewerRouteComponent)

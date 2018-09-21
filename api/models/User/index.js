@@ -3,7 +3,7 @@ import { getUser, getUsers, getViewer } from './readUser'
 import { updateUser } from './updateUser'
 import { createUser } from './createUser'
 import { deleteUser } from './deleteUser'
-import { checkPassword, createResetToken } from './userAuth'
+import { checkPassword, createResetToken, resetPassword } from './userAuth'
 import {
 	userTeachesInClassroom,
 	userLearnsInClassroom,
@@ -11,7 +11,7 @@ import {
 	getClassroomStudents,
 	getClassroomTeachers,
 } from './readUserRelationships'
-import { updatePassword } from './updatePassword'
+// import { updatePassword } from './updatePassword'
 
 export default {
 	/* Create */
@@ -27,7 +27,7 @@ export default {
 
 	/* Update */
 	updateUser,
-	updatePassword,
+	resetPassword,
 	deleteUser,
 	createResetToken,
 	getPinOwner,

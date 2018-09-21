@@ -9,10 +9,10 @@ export const ButtonWrapper = styled.button`
 	text-transform: uppercase;
 
 	${({ theme, secondary }) => `
-		${secondary ? '' : theme.lightShadow};
+		${secondary ? '' : theme.layout.lightShadow};
 		${theme.text.display};
-		margin: ${theme.spacing.single} auto;	
-		padding: ${theme.spacing.half} ${theme.spacing.single};
+		margin: ${theme.layout.spacing.single} auto;	
+		padding: ${theme.layout.spacing.half} ${theme.layout.spacing.single};
 		background-color: ${secondary ? 'white' : theme.colors.primary};
 		border: ${secondary ? `1px solid ${theme.colors.middleGray}` : ''};
 		color: ${secondary ? theme.colors.gray : 'black'};

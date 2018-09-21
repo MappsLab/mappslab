@@ -3,8 +3,9 @@ const path = require('path')
 
 module.exports = () => ({
 	moduleFileExtensions: ['js'],
-	setupFiles: [path.resolve(__dirname, './jest/shims.js'), path.resolve(__dirname, './jest/adapter.js')],
 	setupTestFrameworkScriptFile: path.resolve(__dirname, './jest/setup.js'),
-	snapshotSerializers: ['enzyme-to-json/serializer'],
 	testMatch: ['**/__tests__/**/*.test.js'],
+	coveragePathIgnorePatterns: ['node_modules', 'coverage', '/__.*__/', 'jest.config.js'],
+	testEnvironment: 'jsdom',
+	coverageDirectory: path.resolve(__dirname, 'coverage'),
 })

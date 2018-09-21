@@ -17,9 +17,9 @@ export const SELECT_CLASSROOM = `${studentPrefix}_selectClassroom`
 export const SELECT_STUDENT = `${studentPrefix}_selectStudent`
 export const FIND_TEACHER = `${teacherPrefix}_findTeacher`
 export const FETCHING_TEACHER = `${teacherPrefix}_teacherPending`
-export const LOGIN_SUCCESS = 'loginSuccess'
-const ENTER_PASSWORD = `${loginPrefix}_enterPassword`
+export const ENTER_PASSWORD = `${loginPrefix}_enterPassword`
 export const SET_NEW_PASSWORD = `${loginPrefix}_setNewPassword`
+export const LOGIN_SUCCESS = 'loginSuccess'
 
 /**
  * Transitions

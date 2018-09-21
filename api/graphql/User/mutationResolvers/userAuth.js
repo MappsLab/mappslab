@@ -1,17 +1,16 @@
 // @flow
 import type { GraphQLContext } from 'Types/sharedTypes'
-import type { PasswordResetInput, ViewerType } from 'Types/UserTypes'
-import type { JWT } from 'Utils/auth'
+import type { Credentials, ViewerType, PasswordResetInput, JWT } from 'Types/UserTypes'
 import { createJWT } from 'Utils/auth'
 import { ValidationError } from 'Errors'
 
-const loginViewerMutation = async (
+export const loginViewer = async (
 	_: mixed,
-	args: { input: PasswordResetInput },
+	args: { input: Credentials },
 	ctx: GraphQLContext,
 ): Promise<{ viewer: ViewerType, jwt: JWT } | { resetToken: string }> => {
 	const { input } = args
-	const result = await ctx.models.User.updatePassword(input)
+	const result = await ctx.models.User.checkPassword(input)
 	if (result && !result.requiresReset) {
 		const jwt = createJWT(result)
 		return {
@@ -26,4 +25,15 @@ const loginViewerMutation = async (
 	throw new ValidationError('Email and password do not match')
 }
 
-export default loginViewerMutation
+export const resetPassword = async (
+	_: mixed,
+	{ input }: { input: PasswordResetInput },
+	ctx: GraphQLContext,
+): Promise<{ viewer: ViewerType, jwt: JWT } | { resetToken: string }> => {
+	const user = await ctx.models.User.resetPassword(input)
+	const jwt = createJWT(user)
+	return {
+		viewer: user,
+		jwt,
+	}
+}

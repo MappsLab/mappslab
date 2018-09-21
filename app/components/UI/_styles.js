@@ -9,7 +9,7 @@ export const buttonStyles = css`
 	${flexCenter};
 	cursor: pointer;
 	position: relative;
-	margin: ${(props) => (props.secondary ? '0 auto' : `${spacing.single} auto`)};
+	margin: ${({ theme, secondary }) => (secondary ? '0 auto' : `${theme.layout.spacing.single} auto`)};
 	width: auto;
 	height: 30px;
 	font-weight: ${semi};
@@ -19,7 +19,7 @@ export const buttonStyles = css`
 	border-radius: 0;
 	border-width: 1px;
 	border-radius: 4px;
-	padding: 0 ${spacing.single};
+	padding: 0 ${({ theme }) => theme.layout.spacing.single};
 	border-style: solid;
 	border-color: ${(props) => (props.secondary ? 'transparent' : 'currentColor')};
 	color: ${(props) => (props.secondary ? middleGray : 'currentColor')};

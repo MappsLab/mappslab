@@ -1,10 +1,18 @@
-const Enzyme = require('enzyme')
-const Adapter = require('enzyme-adapter-react-16')
+/* eslint-disable no-console */
+import 'jest-styled-components'
+// add some helpful assertions
+import 'jest-dom/extend-expect'
+// this is basically: afterEach(cleanup)
+import 'react-testing-library/cleanup-after-each'
 
-// React 16 Enzyme adapter
-Enzyme.configure({ adapter: new Adapter() })
+// Mock JSDom console for cleaner error reporting
+console.error = (err) => {
+	throw new Error(err)
+}
+console.warn = (warning) => {
+	throw new Error(warning)
+}
 
-// Fail tests on any warning
-// console.error = (message) => {
-// 	throw new Error(message)
-// }
+global.requestAnimationFrame = (callback) => {
+	setTimeout(callback, 0)
+}

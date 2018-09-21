@@ -7,7 +7,7 @@ import { withDefaultMutation } from '../Mutation'
 import { query as currentViewerQuery } from '../viewer/withCurrentViewerQuery'
 
 const mutation = gql`
-	mutation LoginViewer($resetToken: String!, $password: String) {
+	mutation LoginViewer($resetToken: String!, $password: String!) {
 		resetPassword(input: { resetToken: $resetToken, password: $password }) {
 			... on LoginSuccess {
 				jwt {
@@ -29,8 +29,8 @@ const mutation = gql`
 
 const config = {
 	update: (proxy, { data }) => {
-		const { loginViewer } = data
-		const { viewer, jwt } = loginViewer || {}
+		const { resetPassword } = data
+		const { viewer, jwt } = resetPassword || {}
 		if (viewer && jwt) {
 			const { token, expires } = jwt
 			const cookieExpiration = expires / 24 / 60 / 60
@@ -39,13 +39,13 @@ const config = {
 			proxy.writeQuery({
 				query: currentViewerQuery,
 				data: {
-					currentViewer: loginViewer,
+					currentViewer: resetPassword,
 				},
 			})
 		}
 	},
 }
 
-const UserLoginMutation = withDefaultMutation(mutation, config)
+const ResetPasswordMutation = withDefaultMutation(mutation, config)
 
-export default UserLoginMutation
+export default ResetPasswordMutation

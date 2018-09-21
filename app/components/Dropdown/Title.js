@@ -5,7 +5,7 @@ import { Header3 } from 'Components/Text'
 
 const Wrapper = styled.div`
 	position: relative;
-	padding: ${({ theme }) => theme.spacing.half};
+	padding: ${({ theme }) => theme.layout.spacing.half};
 `
 
 /**

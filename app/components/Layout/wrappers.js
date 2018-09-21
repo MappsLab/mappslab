@@ -4,19 +4,19 @@ import styled from 'styled-components'
 export const Main = styled.main`
 	${({ theme }) => `
 		${theme.heavyShadow};
-		margin: ${theme.spacing.triple} auto;
-		width: calc(100% - ${theme.spacing.quadruple});
-		padding: ${theme.spacing.double} ${theme.spacing.single};
+		margin: ${theme.layout.spacing.triple} auto;
+		width: calc(100% - ${theme.layout.spacing.quadruple});
+		padding: ${theme.layout.spacing.double} ${theme.layout.spacing.single};
 		border: 1px solid ${theme.colors.lightGray};
 	`};
 `
 
 export const Column = styled.section`
 	${({ theme }) => `
-		margin: ${theme.spacing.triple} auto;
+		margin: ${theme.layout.spacing.triple} auto;
 		max-width: 600px;
 		width: 100%;
-		padding: ${theme.spacing.double} ${theme.spacing.single};
+		padding: ${theme.layout.spacing.double} ${theme.layout.spacing.single};
 		border: 1px solid ${theme.colors.lightGray};
 	`};
 `

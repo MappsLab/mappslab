@@ -32,6 +32,7 @@ type QueryProps = {
 }
 
 const Query = (props: QueryProps) => {
+	console.log(props)
 	// A few more query props are available:
 	// https://www.apollographql.com/docs/react/essentials/queries.html#props
 	const { children, skip, delayQuery, ...queryProps } = props

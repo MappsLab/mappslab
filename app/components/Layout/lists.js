@@ -1,18 +1,16 @@
 // @flow
 import React from 'react'
 import styled from 'styled-components'
-import { spacing } from 'Styles/layout'
-import { gray } from 'Styles/colors'
 import { Header2, Header3 } from '../Text'
 
 export const HR = styled.hr`
-	border-bottom: 1px solid ${gray};
+	border-bottom: 1px solid ${({ theme }) => theme.colors.gray};
 `
 
 const ListItemWrapper = styled.div`
-	padding: ${spacing.single};
-	margin: 0 ${spacing.double};
-	border-bottom: 1px solid ${gray};
+	padding: ${({ theme }) => theme.layout.spacing.single};
+	margin: 0 ${({ theme }) => theme.layout.spacing.double};
+	border-bottom: 1px solid ${({ theme }) => theme.colors.gray};
 `
 
 type Props = {

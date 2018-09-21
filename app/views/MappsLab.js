@@ -14,7 +14,7 @@ const MappsLab = () => (
 	<Switch>
 		<Route path="/login" component={Login} />
 		<Route path="/maps/:uid" render={({ match }) => <Editor uid={match.params.uid} />} />
-		<ViewerRoute path="/dashboard" render={({ viewer }) => <Dashboard viewer={viewer} />} />
+		<ViewerRoute path="/dashboard" render={() => <Dashboard />} />
 		<Route render={() => <Redirect to="/login" />} />
 	</Switch>
 )

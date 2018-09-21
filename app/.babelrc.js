@@ -40,6 +40,7 @@ module.exports = {
 					Queries: './queries',
 					Types: './types',
 					Styles: './theme',
+					Test: './__tests__',
 				},
 			},
 		],

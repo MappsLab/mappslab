@@ -83,7 +83,7 @@ const User = /* GraphQL */ `
 		loginViewer(input: CredentialsInput!): LoginResult!
 		createStudent(input: NewUserData!, assignToClassrooms: [String]): User!
 		createTeacher(input: NewUserData!): User!
-		updatePassword(input: UpdatePasswordInput!): LoginResult!
+		resetPassword(input: UpdatePasswordInput!): LoginResult!
 		addUser(input: UserInput!): User!
 		modifyUser(input: UserInput!): User!
 		removeUser(uid: String!): Boolean!

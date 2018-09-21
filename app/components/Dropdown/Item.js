@@ -5,7 +5,7 @@ import styled from 'styled-components'
 const Wrapper = styled.button`
 	width: 100%;
 	display: block;
-	margin: ${({ theme }) => theme.spacing.quarter} 0;
+	margin: ${({ theme }) => theme.layout.spacing.quarter} 0;
 `
 
 /**

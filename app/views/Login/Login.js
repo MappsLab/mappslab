@@ -3,12 +3,14 @@ import React from 'react'
 import { withStateMachine, State, Action } from 'react-automata'
 import { Link } from 'react-router-dom'
 import Pane from 'Components/Pane'
-import { Header1, Header4 } from 'Components/Text'
+import { Header1 } from 'Components/Text'
 import { Centered } from 'Components/Layout'
 import { Button } from 'Components/UI'
 import StudentLogin from './StudentLogin'
 import TeacherLogin from './TeacherLogin'
 import UserLogin from './UserLogin'
+import LoginSuccess from './LoginSuccess'
+import SetNewPassword from './SetNewPassword'
 // import { ClassroomsQuery, ClassroomQuery, UserQuery } from 'Queries'
 // import SelectClassroom from './SelectClassroom'
 // import SelectStudent from './SelectStudent'
@@ -19,7 +21,9 @@ import {
 	WELCOME,
 	TEACHER_FLOW,
 	STUDENT_FLOW,
-	LOGIN_FLOW,
+	ENTER_PASSWORD,
+	SET_NEW_PASSWORD,
+	LOGIN_SUCCESS,
 	// transitions
 	SELECTED_TEACHER_FLOW,
 	SELECTED_STUDENT_FLOW,
@@ -36,6 +40,7 @@ import {
 type Props = {
 	transition: (string, ?{}) => void,
 	classroomUid?: null | string,
+	resetToken?: null | string,
 	userUid?: null | string,
 	error?: null | string,
 }
@@ -79,6 +84,10 @@ const Login = (props: Props) => {
 
 				<State is={SET_NEW_PASSWORD}>
 					<SetNewPassword {...childProps} />
+				</State>
+
+				<State is={LOGIN_SUCCESS}>
+					<LoginSuccess {...childProps} />
 				</State>
 
 				<State is={[WELCOME, STUDENT_FLOW]}>
@@ -125,10 +134,12 @@ const Login = (props: Props) => {
 // 		</button>
 // 	</Header4>
 // </Action>
+
 Login.defaultProps = {
 	classroomUid: null,
 	userUid: null,
 	error: null,
+	resetToken: null,
 }
 
 export default withStateMachine(statechart)(Login)

@@ -6,7 +6,7 @@ const CardWrapper = styled.div`
 	${({ theme, align }) => `
 		${theme.radius};
 		border: 2px solid ${theme.colors.lightGray};
-		padding: ${theme.spacing.half};
+		padding: ${theme.layout.spacing.half};
 		display: block;
 		text-align: ${align || 'left'};
 	`};

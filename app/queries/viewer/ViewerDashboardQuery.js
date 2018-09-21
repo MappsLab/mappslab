@@ -1,7 +1,6 @@
 // @flow
 import gql from 'graphql-tag'
-import { unwindEdges } from '../utils'
-import withQuery from '../withQuery'
+import { withDefaultQuery } from '../Query'
 
 export const query = gql`
 	query ViewerDashboardQuery {
@@ -9,7 +8,7 @@ export const query = gql`
 			viewer {
 				uid
 				name
-				role
+				roles
 				classrooms {
 					edges {
 						node {
@@ -29,7 +28,7 @@ export const query = gql`
 									node {
 										uid
 										name
-										role
+										roles
 									}
 								}
 							}
@@ -40,21 +39,7 @@ export const query = gql`
 		}
 	}
 `
-const config = {
-	props: (response) => {
-		const { loading, currentViewer, ...rest } = response.data
-		const { viewer } = currentViewer || {}
-		const combinedViewer = loading ? undefined : unwindEdges(viewer)
-		return {
-			loading,
-			viewer: combinedViewer,
-			request: {
-				...rest,
-			},
-		}
-	},
-}
 
-const withViewerDashboardQuery = withQuery(query, config)
+const withViewerDashboardQuery = withDefaultQuery(query)
 
 export default withViewerDashboardQuery

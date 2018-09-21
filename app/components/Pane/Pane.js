@@ -5,7 +5,7 @@ import styled from 'styled-components'
 const Wrapper = styled.div`
 	background-color: white;
 	${({ theme }) => `
-		padding: ${theme.spacing.single};
+		padding: ${theme.layout.spacing.single};
 		${theme.heavyShadow};
 
 	`}

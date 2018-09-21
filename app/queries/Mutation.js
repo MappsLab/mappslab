@@ -22,7 +22,7 @@ const Mutation = ({ children, ...mutationProps }: MutationProps) => (
 	<ApolloMutation {...mutationProps}>
 		{(mutate, { data, ...response }) => {
 			const responseProps = {
-				data: unwindEdges(data),
+				data: data ? unwindEdges(data) : data,
 				...response,
 			}
 			return children(mutate, responseProps)
