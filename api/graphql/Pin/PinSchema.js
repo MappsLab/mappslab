@@ -52,13 +52,13 @@ const Pin = /* GraphQL */ `
 	# Queries & Mutations
 
 	extend type Query {
-		pin(input: GetPinInput!): Pin!
+		pin(input: GetPinInput!): Pin
 	}
 
 	extend type Mutation {
 		createPin(input: NewPinInput!): Pin!
 		updatePin(input: UpdatePinInput!): Pin!
-		removePin(input: GetPinInput!): Boolean!
+		deletePin(input: GetPinInput!): Success!
 	}
 
 	input PinAddedSubscriptionInput {

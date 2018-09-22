@@ -1,6 +1,5 @@
 const path = require('path')
 
-console.log('!BABL')
 module.exports = {
 	presets: [
 		'@babel/preset-flow',

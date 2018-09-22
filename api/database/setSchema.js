@@ -38,6 +38,7 @@ export const setSchema = async () => {
 		'created_by: uid @reverse . ',
 		'has_lesson: uid @reverse @count . ',
 		'has_goal: uid @reverse @count . ',
+		/* <map> <has_pin> <pin> */
 		'has_pin: uid @reverse @count . ',
 		'has_route: uid @reverse @count . ',
 		'has_group: uid @reverse @count . ',
@@ -46,6 +47,7 @@ export const setSchema = async () => {
 		 * Lesson Indices
 		 */
 		'has_goal: uid @reverse @count . ',
+		/* <lesson> <has_pin> <pin> */
 		'has_pin: uid @reverse @count . ',
 		'has_route: uid @reverse @count . ',
 		'has_group: uid @reverse @count . ',

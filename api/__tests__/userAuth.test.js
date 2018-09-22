@@ -140,7 +140,7 @@ describe('[updatePassword]', () => {
 
 	const updatePasswordWithToken = /* GraphQL */ `
 		mutation UpdatePassword($resetToken: String!, $password: String!) {
-			updatePassword(input: { resetToken: $resetToken, password: $password }) {
+			resetPassword(input: { resetToken: $resetToken, password: $password }) {
 				... on LoginSuccess {
 					jwt {
 						token
@@ -161,7 +161,7 @@ describe('[updatePassword]', () => {
 	it('should throw an error for an invalid token', async () => {
 		const variables = { password: 'newPassword', resetToken: 'invalid' }
 		const result = await request(updatePasswordWithToken, { variables })
-		expect(result.errors[0].message).toBe('This reset token is invalid')
+		expect(result.errors[0].message).toMatchSnapshot()
 	})
 
 	it.skip('should throw an error for an expired token', async () => {

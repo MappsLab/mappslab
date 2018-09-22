@@ -7,7 +7,7 @@ import { publicFields, parsePinResult } from './pinDBSchema'
 export const getPin = async (uid: string): Promise<PinType | null> => {
 	const q = /* GraphQL */ `
 		query getPin {
-			getPin(func: uid(${uid})) {
+			getPin(func: uid(${uid})) @filter(eq(type, "pin")) {
 				${publicFields}
 			}
 		}

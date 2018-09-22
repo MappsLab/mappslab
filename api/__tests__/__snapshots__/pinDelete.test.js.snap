@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`[deletePin] should only allow owners to remove their pins 1`] = `
+Array [
+  [GraphQLError: You can only remove pins that you own],
+]
+`;

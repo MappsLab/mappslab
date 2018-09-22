@@ -1,20 +1,16 @@
 // @flow
 import type { PinType, RemovePinInput } from 'Types/PinTypes'
-import type { GraphQLContext } from 'Types/sharedTypes'
-import pubsub, { MAP_RECEIVED_PIN } from '../../subscriptions'
+import type { GraphQLContext, Success } from 'Types/sharedTypes'
+import pubsub, { MAP_REMOVED_PIN } from '../../subscriptions'
 
-export const deletePin = async (
-	_: Object,
-	{ input }: { input: RemovePinInput },
-	ctx: GraphQLContext,
-): Promise<PinType | Error> => {
-	if (!ctx.viewer) throw Error('You must be logged in to create new pins. Please log in and try again.')
-	const newPin = await ctx.models.Pin.createPin(input, ctx.viewer.uid)
+export const deletePin = async (_: Object, { input }: { input: RemovePinInput }, ctx: GraphQLContext): Promise<Success> => {
+	if (!ctx.viewer) throw Error('You must be logged in to remove pins. Please log in and try again.')
 
-	// Query the DB for the new pin so we can include relational data in the subscription filter
-	const pin = await ctx.models.Pin.getPin(newPin.uid)
-	if (input.addToMaps) {
-		pubsub.publish(MAP_RECEIVED_PIN, { [MAP_RECEIVED_PIN]: pin })
-	}
-	return pin
+	const { success, messages } = await ctx.models.Pin.deletePin(input, ctx.viewer)
+
+	// if (success) {
+	// 	const pin = await ctx.models.Pin.getPin(input.uid)
+	// 	pubsub.publish(MAP_REMOVED_PIN, { [MAP_REMOVED_PIN]: pin })
+	// }
+	return { success, messages }
 }

@@ -1,6 +1,6 @@
 // @flow
 import bcrypt from 'bcrypt'
-import { dissoc, head } from 'ramda'
+import { dissoc, head, path } from 'ramda'
 import { query, mutateNode } from 'Database'
 import type { UserType, Credentials, PasswordReset, PasswordResetInput } from 'Types/UserTypes'
 import { createToken } from 'Utils/auth'
@@ -63,7 +63,7 @@ export const resetPassword = async (credentials: PasswordResetInput): Promise<Us
 			}
 		`
 	const result = await query(userQ, { resetToken })
-	if (!result || !result.getUser || result.getUser[0].passwordReset.expires > new Date()) {
+	if (!result || !result.getUser.length || result.getUser[0].passwordReset.expires > new Date()) {
 		throw new ValidationError('This password reset request has expired.')
 	}
 	const user = result.getUser[0]

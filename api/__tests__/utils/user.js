@@ -17,6 +17,22 @@ export const getUser = async (uid: string): Promise<UserType> => {
 				uid
 				name
 				roles
+				pins {
+					edges {
+						node {
+							uid
+							title
+							maps {
+								edges {
+									node {
+										uid
+										title
+									}
+								}
+							}
+						}
+					}
+				}
 				classrooms {
 					edges {
 						node {

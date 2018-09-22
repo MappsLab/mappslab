@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`[updatePassword] should throw an error for an invalid token 1`] = `"This password reset request has expired."`;

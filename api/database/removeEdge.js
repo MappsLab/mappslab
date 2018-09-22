@@ -15,6 +15,7 @@ export type Relationship = [DBEdge, EdgeConfig]
 const removeEdge = async ({ fromUid, pred, toUid }: DBEdge, existingTxn?: Txn): Promise<boolean> => {
 	const txn = existingTxn || dbClient.newTxn()
 	try {
+		debug({ fromUid, pred, toUid })
 		if (!validateUid(fromUid)) throw new Error(`Uid ${fromUid} is not in a valid format`)
 		if (!validateUidOrWildcard(toUid)) throw new Error(`Uid ${toUid} is not in a valid format`)
 		const mu = new dgraph.Mutation()
