@@ -1,8 +1,10 @@
 // @flow
-import type { GraphQLContext } from 'Types/sharedTypes'
-import type { Credentials, ViewerType, PasswordResetInput, JWT } from 'Types/UserTypes'
+import type { GraphQLContext, Success } from 'Types/sharedTypes'
+import type { Credentials, ViewerType, PasswordResetInput, JWT, GetUserInput, SetTemporaryPasswordInput } from 'Types/UserTypes'
 import { createJWT } from 'Utils/auth'
 import { ValidationError } from 'Errors'
+
+const debug = require('debug')('api')
 
 export const loginViewer = async (
 	_: mixed,
@@ -10,19 +12,35 @@ export const loginViewer = async (
 	ctx: GraphQLContext,
 ): Promise<{ viewer: ViewerType, jwt: JWT } | { resetToken: string }> => {
 	const { input } = args
-	const result = await ctx.models.User.checkPassword(input)
-	if (result && !result.requiresReset) {
-		const jwt = createJWT(result)
+	const viewer = await ctx.models.User.checkPassword(input)
+	debug(viewer)
+	if (viewer && !viewer.requiresReset) {
+		const jwt = createJWT(viewer)
 		return {
-			viewer: result,
+			viewer,
 			jwt,
 		}
 	}
-	if (result && result.uid && result.requiresReset) {
-		const { token } = await ctx.models.User.createResetToken(result.uid)
+	if (viewer && viewer.uid && viewer.requiresReset) {
+		const { token } = await ctx.models.User.createResetToken(viewer.uid)
 		return { resetToken: token }
 	}
 	throw new ValidationError('Email and password do not match')
+}
+
+export const requestPasswordReset = async (
+	_: mixed,
+	{ input }: { input: GetUserInput },
+	ctx: GraphQLContext,
+): Promise<Success> => {
+	const user = await ctx.models.User.getUser(input)
+	if (user) {
+		await ctx.models.User.createResetToken(user.uid)
+	}
+	return {
+		success: true,
+		messages: [],
+	}
 }
 
 export const resetPassword = async (
@@ -36,4 +54,14 @@ export const resetPassword = async (
 		viewer: user,
 		jwt,
 	}
+}
+
+export const setTemporaryPassword = async (
+	_: mixed,
+	{ input }: { input: SetTemporaryPasswordInput },
+	ctx: GraphQLContext,
+): Promise<Success> => {
+	const { viewer } = ctx
+	const result = ctx.models.User.setTemporaryPassword(input, viewer)
+	return result
 }

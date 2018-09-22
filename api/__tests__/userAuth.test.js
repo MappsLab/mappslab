@@ -1,24 +1,26 @@
 /* eslint-disable no-undef */
 import { createJWT, verifyJWT } from 'Utils/auth'
 import { request } from './utils/db'
-import { getDBUsers } from './utils/user'
-// import { joseph, teacher } from '../../../database/stubs/users'
+import { getDBUsers, getDBUser } from './utils/user'
+// import { admin, teacher } from '../../../database/stubs/users'
 
 /**
  * NOTE:
- * Only 'joseph' is seeded with a password: 'Password#1'
+ * Only 'admin' is seeded with a password: 'Password#1'
  * all other users have a temporaryPassword of `temporary`
  */
 let users
-let joseph
+let admin
 let teacher
-let student
+let student1
+let student2
 
 beforeAll(async (done) => {
 	users = await getDBUsers()
-	joseph = users.find((u) => u.email === 'joseph@good-idea.studio')
-	teacher = users.find((u) => u.roles.includes('teacher'))
-	student = users.find((u) => u.roles.includes('student'))
+	admin = await getDBUser(users.find((u) => u.roles.includes('admin')).uid)
+	teacher = await getDBUser(users.find((u) => u.roles.includes('teacher')).uid)
+	student1 = await getDBUser(users.find((u) => u.roles.includes('student')).uid)
+	student2 = await getDBUser(users.find((u) => !u.roles.includes('admin') && u.uid !== student1.uid).uid)
 	done()
 })
 
@@ -44,31 +46,31 @@ const uidLogin = /* GraphQL */ `
 
 describe('queries', () => {
 	it('[loginViewer] should return a jwt and viewer', async () => {
-		const variables = { email: joseph.email, password: 'Password#1' }
+		const variables = { email: admin.email, password: 'Password#1' }
 		const result = await request(uidLogin, { variables })
 		const { jwt, viewer } = result.data.loginViewer
 		expect(/^Bearer/.test(jwt.token)).toBe(true)
 		expect(jwt.expires).toBeGreaterThan(1)
-		expect(viewer.name).toBe(joseph.name)
+		expect(viewer.name).toBe(admin.name)
 	})
 
 	it('[loginViewer] should work with uid', async () => {
-		const variables = { uid: joseph.uid, password: 'Password#1' }
+		const variables = { uid: admin.uid, password: 'Password#1' }
 		const result = await request(uidLogin, { variables })
 		const { jwt, viewer } = result.data.loginViewer
 		expect(/^Bearer/.test(jwt.token)).toBe(true)
 		expect(jwt.expires).toBeGreaterThan(1)
-		expect(viewer.name).toBe(joseph.name)
+		expect(viewer.name).toBe(admin.name)
 	})
 
 	it('[loginViewer] should return `requiresReset` if the supplied password fails but matches `user.temporaryPassword`', async () => {
-		const variables = { uid: student.uid, password: 'temporary' }
+		const variables = { uid: student2.uid, password: 'temporary' }
 		const result = await request(uidLogin, { variables })
 		expect(result.data.loginViewer.resetToken.length).toBe(96)
 	})
 
 	it('[loginViewer] should return a validation error with invalid credentials', async () => {
-		const variables = { email: joseph.email, password: 'wrongPassword' }
+		const variables = { email: admin.email, password: 'wrongPassword' }
 		const result = await request(uidLogin, { variables })
 		expect(result.errors[0].message).toBe('Email and password do not match')
 	})
@@ -131,15 +133,73 @@ describe('queries', () => {
 	})
 })
 
-describe('[updatePassword]', () => {
-	const getResetToken = async () => {
-		const variables = { uid: student.uid, password: 'temporary' }
-		const result = await request(uidLogin, { variables })
-		return result.data.loginViewer.resetToken
+const resetMutation = /* GraphQL */ `
+	mutation RequestReset($uid: String) {
+		requestPasswordReset(input: { uid: $uid }) {
+			success
+			messages
+		}
 	}
+`
 
-	const updatePasswordWithToken = /* GraphQL */ `
-		mutation UpdatePassword($resetToken: String!, $password: String!) {
+const requestReset = async (user) => {
+	const variables = { uid: user.uid }
+	return request(resetMutation, { variables })
+}
+
+describe('[requestReset]', () => {
+	it('should set reset information when requested', async () => {
+		await requestReset(student1)
+		const dbUser = await getDBUser(student1.uid)
+		expect(dbUser.passwordReset.token).toBeTruthy()
+		expect(dbUser.passwordReset.expires).toBeTruthy()
+	})
+})
+
+const setTempPassMutation = /* GraphQL */ `
+	mutation SetTemporaryPassword($uid: String!, $temporaryPassword: String!) {
+		setTemporaryPassword(input: { uid: $uid, temporaryPassword: $temporaryPassword }) {
+			success
+			messages
+		}
+	}
+`
+
+const setTemporaryPassword = async (user, viewer) => {
+	const variables = { uid: user.uid, temporaryPassword: 'temporary' }
+	const context = { viewer }
+	return request(setTempPassMutation, { variables, context })
+}
+
+describe('[setTemporaryPassword]', () => {
+	it('should allow teachers and admins to set temporary passwords for students', async () => {
+		/* Arrange */
+		const [result1, result2] = await Promise.all([setTemporaryPassword(student1, teacher), setTemporaryPassword(student2, admin)])
+		expect(result1.data.setTemporaryPassword.success).toBe(true)
+		expect(result2.data.setTemporaryPassword.success).toBe(true)
+	})
+
+	it('should disallow students from setting temporary passwords', async () => {
+		const result = await setTemporaryPassword(student1, student2)
+		expect(result.errors).toMatchSnapshot()
+	})
+
+	it('should disallow anyone from setting temporary passwords for admins', async () => {
+		const result = await setTemporaryPassword(admin, admin)
+		expect(result.errors).toMatchSnapshot()
+	})
+})
+
+const getResetToken = async (user) => {
+	await setTemporaryPassword(user.uid, 'temporary')
+	const variables = { uid: user.uid, password: 'temporary' }
+	const result = await request(uidLogin, { variables })
+	return result.data.loginViewer.resetToken
+}
+
+describe('[resetPassword]', () => {
+	const resetPasswordWithToken = /* GraphQL */ `
+		mutation ResetPassword($resetToken: String!, $password: String!) {
 			resetPassword(input: { resetToken: $resetToken, password: $password }) {
 				... on LoginSuccess {
 					jwt {
@@ -159,8 +219,9 @@ describe('[updatePassword]', () => {
 	`
 
 	it('should throw an error for an invalid token', async () => {
+		await requestReset(student1)
 		const variables = { password: 'newPassword', resetToken: 'invalid' }
-		const result = await request(updatePasswordWithToken, { variables })
+		const result = await request(resetPasswordWithToken, { variables })
 		expect(result.errors[0].message).toMatchSnapshot()
 	})
 
@@ -172,16 +233,20 @@ describe('[updatePassword]', () => {
 		// expect(...)
 	})
 
-	it.skip('should reset a users password given a valid token', async () => {
-		const resetToken = await getRestToken()
+	it('should reset a users password given a valid token', async () => {
+		await requestReset(student1)
+		// await setTemporaryPassword(student1)
+		const resetToken = await getResetToken(student1)
 		const variables = { password: 'newPassword', resetToken }
-		const result = await request(updatePasswordWithToken, { variables })
-		expect(result.errors[0].message).toBe('This reset token is invalid')
 
-		/* Arrange */
-		// const { container, getByTestId } = render( ... )
-		/* Act */
-		/* Assert */
-		// expect(...)
+		const result = await request(resetPasswordWithToken, { variables })
+		const { viewer } = result.data.resetPassword
+		expect(viewer.uid).toBeTruthy()
+
+		const dbUser = await getDBUser(viewer.uid)
+		expect(dbUser.temporaryPassword).toBeFalsy()
+		expect(dbUser.temporaryPasswordExpires).toBeFalsy()
+		expect(dbUser.resetPassword).toBeFalsy()
+		expect(dbUser.resetPassword).toBeFalsy()
 	})
 })

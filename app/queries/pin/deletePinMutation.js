@@ -4,8 +4,8 @@ import { withDefaultMutation } from '../Mutation'
 import { query as mapQuery } from '../map/withMapQuery'
 
 const mutation = gql`
-	mutation removePin($uid: String!) {
-		removePin(input: { uid: $uid }) {
+	mutation deletePin($uid: String!) {
+		deletePin(input: { uid: $uid }) {
 			success
 		}
 	}

@@ -2,11 +2,31 @@
 import type { NewUserData, UserType } from 'Types/UserTypes'
 import faker from 'faker'
 import User from 'Models/User'
+import { query } from 'Database'
 import { request } from './db'
 
 /**
  * User Read
  */
+
+export const getDBUser = async (uid: string) => {
+	const q = /* GraphQL */ `{
+		user(func: uid(${uid})) {
+			uid
+			name
+			roles
+			email
+			temporaryPassword
+			temporaryPasswordExpires
+			passwordReset.token
+			passwordReset.expires
+			password
+		}
+	}
+	`
+	const result = await query(q)
+	return result.user[0]
+}
 
 export const getDBUsers = User.getUsers
 

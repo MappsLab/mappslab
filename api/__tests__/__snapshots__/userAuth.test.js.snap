@@ -1,3 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`[updatePassword] should throw an error for an invalid token 1`] = `"This password reset request has expired."`;
+exports[`[resetPassword] should throw an error for an invalid token 1`] = `"This password reset request has expired."`;
+
+exports[`[setTemporaryPassword] should disallow anyone from setting temporary passwords for admins 1`] = `
+Array [
+  [GraphQLError: Admins cannot have temporary passwords],
+]
+`;
+
+exports[`[setTemporaryPassword] should disallow students from setting temporary passwords 1`] = `undefined`;

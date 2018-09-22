@@ -55,13 +55,9 @@ export type NewUserInput = {
 	addToClassrooms?: Array<string>,
 }
 
-export type GetUserArgs = {
+export type GetUserInput = {
 	uid?: string,
 	email?: string,
-}
-
-export type GetUserInput = {
-	input: GetUserArgs,
 }
 
 export type Credentials = {
@@ -73,6 +69,11 @@ export type Credentials = {
 export type PasswordResetInput = {
 	resetToken: string,
 	password: string,
+}
+
+export type SetTemporaryPasswordInput = {
+	uid: string,
+	temporaryPassword: string,
 }
 
 export type PasswordReset = {

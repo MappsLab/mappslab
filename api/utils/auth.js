@@ -19,8 +19,8 @@ export const createToken = (): Promise<string> =>
 
 export const createJWT = (user: UserType): JWT => {
 	const expires = 1 * 24 * 60 * 60 // 1 day
-	const { username, uid } = user
-	const token = jwt.sign({ username, uid }, JWT_KEY || 'abc', { expiresIn: 10800 })
+	const { username, uid, roles } = user
+	const token = jwt.sign({ username, uid, roles }, JWT_KEY || 'abc', { expiresIn: 10800 })
 	return {
 		token: `Bearer ${token}`,
 		expires,

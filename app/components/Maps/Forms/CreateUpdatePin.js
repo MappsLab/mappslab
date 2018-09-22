@@ -4,7 +4,7 @@ import { State } from 'react-automata'
 import NativeListener from 'react-native-listener'
 import { Form, Field } from 'Components/Forms'
 import { Button } from 'Components/UI'
-import { CreatePinMutation, UpdatePinMutation, RemovePinMutation } from 'Queries/pin'
+import { CreatePinMutation, UpdatePinMutation, DeletePinMutation } from 'Queries/pin'
 import type { PinType, NewPinType } from 'Types'
 import type { Mutation } from 'Types/GraphQL'
 import { states } from '../statechart'
@@ -13,11 +13,12 @@ import { states } from '../statechart'
  * RemovePinButton
  */
 
-const RemovePinButton = () => (
-	<RemovePinMutation>
+const RemovePinButton = ({ uid }: { uid: string }) => (
+	<DeletePinMutation>
 		{(deletePin) => {
 			const handleClick = async () => {
-				await deletePin()
+				const result = await deletePin({ variables: { uid } })
+				console.log(result)
 			}
 			return (
 				<NativeListener onClick={handleClick}>
@@ -25,7 +26,7 @@ const RemovePinButton = () => (
 				</NativeListener>
 			)
 		}}
-	</RemovePinMutation>
+	</DeletePinMutation>
 )
 
 /**
@@ -43,8 +44,9 @@ type FormProps = BaseProps & {
 }
 
 const PinForm = ({ pin, mapUid, onSuccess, mutate }: FormProps) => {
+	console.log(pin)
+	const { lat, lng, uid } = pin
 	const handleSubmit = async (values) => {
-		const { lat, lng } = pin
 		const variables = {
 			...values,
 			lat,
@@ -62,7 +64,7 @@ const PinForm = ({ pin, mapUid, onSuccess, mutate }: FormProps) => {
 				<Field label="Description" name="description" />
 			</Form>
 			<State is={states.EDIT_PIN}>
-				<RemovePinButton />
+				<RemovePinButton uid={uid} />
 			</State>
 		</React.Fragment>
 	)

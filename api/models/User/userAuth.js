@@ -1,13 +1,15 @@
 // @flow
 import bcrypt from 'bcrypt'
-import { dissoc, head, path } from 'ramda'
+import { dissoc, head } from 'ramda'
 import { query, mutateNode } from 'Database'
-import type { UserType, Credentials, PasswordReset, PasswordResetInput } from 'Types/UserTypes'
+import type { UserType, Credentials, PasswordReset, SetTemporaryPasswordInput, PasswordResetInput } from 'Types/UserTypes'
+import type { Success } from 'Types/sharedTypes'
 import { createToken } from 'Utils/auth'
 import { ValidationError } from 'Errors'
+import { getUser } from './readUser'
 import { publicFields, clean, validateUpdate } from './userDBSchema'
 
-// const debug = require('debug')('api')
+const debug = require('debug')('test')
 
 export const checkPassword = async (
 	credentials: Credentials,
@@ -71,8 +73,32 @@ export const resetPassword = async (credentials: PasswordResetInput): Promise<Us
 		token: null,
 		expires: null,
 	}
-	const cleaned = await clean({ password, passwordReset })
-	const validated = await clean(cleaned)
+	const cleaned = await clean({ password, passwordReset, temporaryPassword: null, temporaryPasswordExpires: null })
+	const validated = await validateUpdate(cleaned)
 	await mutateNode(user.uid, validated)
 	return user
+}
+
+export const setTemporaryPassword = async (input: SetTemporaryPasswordInput, viewer: UserType): Promise<Success> => {
+	if (!(viewer.roles.includes('teacher') || viewer.roles.includes('admin'))) {
+		throw new ValidationError('You must be a teacher or admin to set temporary passwords')
+	}
+	const { uid, temporaryPassword } = input
+	const user = await getUser({ uid })
+	if (!user) throw new ValidationError('A user with this ID does not exist')
+	if (user.roles.includes('teacher') && !viewer.roles.includes('admin')) {
+		throw new ValidationError('You must be an admin to set a temporary password for a teacher')
+	}
+	if (user.roles.includes('admin')) {
+		throw new ValidationError('Admins cannot have temporary passwords')
+	}
+
+	const temporaryPasswordExpires = new Date(Date.now() + 3600000)
+	const cleaned = await clean({ temporaryPassword, temporaryPasswordExpires })
+	const validated = await validateUpdate(cleaned)
+	await mutateNode(user.uid, validated)
+	return {
+		success: true,
+		messages: [],
+	}
 }

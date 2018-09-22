@@ -18,11 +18,37 @@ const mutateNode = async (uid: string, data: DBNode, existingTxn?: Txn): Promise
 			},
 			{ safe: true },
 		)
-		mu.setSetJson(flattened)
+		// setSetJson does not delete nodes.
+		// Separate out truthy and 'null' values into `setJson` and `deleteJson` objects
+		const split = Object.entries(flattened).reduce(
+			({ setJson, deleteJson }, [key, val]) => {
+				if (val === null) {
+					return {
+						setJson,
+						deleteJson: {
+							[key]: val,
+							...deleteJson,
+						},
+					}
+				}
+				return {
+					deleteJson,
+					setJson: {
+						[key]: val,
+						...setJson,
+					},
+				}
+			},
+			{ setJson: {}, deleteJson: {} },
+		)
+		const { setJson, deleteJson } = split
+		mu.setSetJson(setJson)
+		// Only delete if there are values to delete, otherwise dGraph deletes everything!
+		if (Object.keys(deleteJson).length > 0) mu.setDeleteJson({ uid, ...deleteJson })
 		await txn.mutate(mu)
 		if (!existingTxn) await txn.commit()
 		debug(`Mutated node with uid ${uid}:`)
-		debug({ uid, ...data })
+		debug({ uid, ...flattened })
 		// $FlowFixMe --- TODO
 		return {
 			uid,

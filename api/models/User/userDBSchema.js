@@ -2,7 +2,6 @@
 import Joi from 'joi'
 import { when, prop, assoc } from 'ramda'
 import bcrypt from 'bcrypt'
-import type { UpdateUserInput, NewUserInput } from 'Types/UserTypes'
 import { promisePipe, filterNullAndUndefined } from 'Utils'
 
 /**
@@ -31,11 +30,15 @@ export const userSchema = (isNew: boolean = true) =>
 			  })
 			: Joi.string(),
 		password: Joi.string(),
-		temporaryPassword: Joi.string(),
-		temporaryPasswordExpires: Joi.date(),
+		temporaryPassword: Joi.string().allow(null),
+		temporaryPasswordExpires: Joi.date().allow(null),
 		passwordReset: Joi.object().keys({
-			token: Joi.string().required(),
-			expires: Joi.date().required(),
+			token: Joi.string()
+				.required()
+				.allow(null),
+			expires: Joi.date()
+				.required()
+				.allow(null),
 		}),
 		requiresReset: Joi.boolean(),
 		createdAt: isNew ? Joi.date().required() : Joi.any().forbidden(),
@@ -84,7 +87,7 @@ const hashPassword = (key: 'password' | 'temporaryPassword') => (obj) =>
 export const clean = async (userData: UserInput = {}): Promise<UserInput> =>
 	promisePipe(
 		// Filter out 'undefined' values
-		filterNullAndUndefined,
+		// filterNullAndUndefined,
 		// When a new password is supplied, hash it
 		when(prop('password'), hashPassword('password')),
 		when(prop('temporaryPassword'), hashPassword('temporaryPassword')),

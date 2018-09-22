@@ -63,6 +63,11 @@ const User = /* GraphQL */ `
 		password: String!
 	}
 
+	input SetTemporaryPasswordInput {
+		uid: String!
+		temporaryPassword: String!
+	}
+
 	# User Creation
 
 	input NewUserData {
@@ -83,7 +88,9 @@ const User = /* GraphQL */ `
 		loginViewer(input: CredentialsInput!): LoginResult!
 		createStudent(input: NewUserData!, assignToClassrooms: [String]): User!
 		createTeacher(input: NewUserData!): User!
+		requestPasswordReset(input: GetUserInput): Success!
 		resetPassword(input: UpdatePasswordInput!): LoginResult!
+		setTemporaryPassword(input: SetTemporaryPasswordInput!): Success!
 		addUser(input: UserInput!): User!
 		modifyUser(input: UserInput!): User!
 		removeUser(uid: String!): Boolean!
