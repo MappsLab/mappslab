@@ -13,15 +13,16 @@ type LoadingProps = QueryRenderProps<any> & {
 	status: LoadingState,
 }
 
-type QueryProps = {
+type QueryConfig = {
 	query: DocumentNode,
-	children: (QueryRenderProps<any, any>) => React.Node,
 	variables?: {},
 	pollInterval?: number,
 	ssr?: boolean,
 	delayQuery?: boolean,
 	skip?: boolean,
 	displayName?: void | string,
+	onCompleted?: ({}) => void,
+	onError?: ({}) => void,
 	// An optional "Loading" component. Use a skeleton here. Pass 'false' to disable
 	LoadingComponent?: false | React.ComponentType<LoadingProps>,
 	// An optional "Error" component. Pass 'false' to disable
@@ -31,11 +32,21 @@ type QueryProps = {
 	// errorPolicy?: ''
 }
 
+type QueryChildrenProps = {
+	children: (QueryRenderProps<any, any>) => React.Node,
+	// eslint-disable-next-line react/require-default-props
+	query?: void | DocumentNode,
+}
+
+type QueryProps = QueryConfig & {
+	children: (QueryRenderProps<any, any>) => React.Node,
+}
+
 const Query = (props: QueryProps) => {
-	console.log(props)
 	// A few more query props are available:
 	// https://www.apollographql.com/docs/react/essentials/queries.html#props
 	const { children, skip, delayQuery, ...queryProps } = props
+	console.log(queryProps)
 	return (
 		<ApolloQuery {...queryProps} skip={skip || delayQuery}>
 			{(response) => {
@@ -82,10 +93,12 @@ Query.defaultProps = {
 	notifyOnNetworkStatusChange: true,
 	ssr: false,
 	pollInterval: 0,
+	onCompleted: () => {},
+	onError: () => {},
 }
 
 export default Query
 
-export const withDefaultQuery = (defaultQuery: DocumentNode) => (props: any) => (
-	<Query query={props.query || defaultQuery} {...props} />
+export const withDefaultQuery = (defaultQuery: DocumentNode, config?: QueryConfig) => (props: QueryChildrenProps) => (
+	<Query query={props.query || defaultQuery} {...props} {...config} />
 )

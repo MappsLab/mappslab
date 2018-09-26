@@ -2,41 +2,45 @@
 import * as React from 'react'
 import type { Node } from 'react'
 import { Redirect, Route } from 'react-router-dom'
-import { withCurrentViewerQuery } from 'Queries'
 import type { ViewerType } from 'Types/User'
 import { Loading } from 'Components/Loading'
+import { CurrentViewerQuery } from 'Queries/viewer'
 
 /**
  * ViewerRoute
  */
 
 type Props = {
-	viewer: null | ViewerType,
-	loading: boolean,
 	render?: null | (({ viewer: ViewerType }) => Node | Array<Node>),
 	children?: null | React.Node,
-	component?: null | React.ComponentType<any, any>,
+	Component?: null | React.ComponentType<any, any>,
 }
 
-const ViewerRouteComponent = ({ loading, viewer, render, children, component: Component, ...rest }: Props) => (
-	<Route
-		{...rest}
-		render={(routeProps) => {
-			console.log(viewer)
-			if (loading) return <Loading />
-			if (!viewer) return <Redirect to="/login/classrooms" />
-			if (Component) return <Component viewer={viewer} {...routeProps} />
-			if (children) return children({ viewer, ...routeProps })
-			if (render) return render({ viewer, ...routeProps })
-			return null
+// $FlowFixMe -- Flow doesn't like us using the keyword 'Component' as a normal variable
+export const ViewerRoute = ({ render, children, Component, ...rest }: Props) => (
+	<CurrentViewerQuery>
+		{({ data }) => {
+			const { viewer, loading } = data.currentViewer
+			return (
+				<Route
+					{...rest}
+					render={(routeProps) => {
+						if (loading) return <Loading />
+						// if (!viewer) return <Redirect to="/login/classrooms" />
+						if (!viewer) return <p>:(</p>
+						if (Component) return <Component viewer={viewer} {...routeProps} />
+						if (children) return children({ viewer, ...routeProps })
+						if (render) return render({ viewer, ...routeProps })
+						return null
+					}}
+				/>
+			)
 		}}
-	/>
+	</CurrentViewerQuery>
 )
 
-ViewerRouteComponent.defaultProps = {
+ViewerRoute.defaultProps = {
 	children: null,
-	component: null,
+	Component: null,
 	render: null,
 }
-
-export const ViewerRoute = withCurrentViewerQuery(ViewerRouteComponent)

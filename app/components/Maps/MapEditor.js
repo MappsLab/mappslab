@@ -3,7 +3,7 @@ import React from 'react'
 import * as R from 'ramda'
 import styled from 'styled-components'
 // import type { Map as GoogleMap } from 'mapp/types'
-import { withMapQuery, withCurrentViewerQuery } from 'Queries'
+import { withMapQuery, CurrentViewerQuery } from 'Queries'
 import type { MapType, PinType, ViewerType, MachineValue } from 'Types'
 import { withStateMachine } from 'react-automata'
 import { compose, getStateString } from 'Utils/data'
@@ -197,9 +197,10 @@ class MapEditor extends React.Component<Props, State> {
 	}
 }
 
-export default compose(
-	withCurrentViewerQuery,
+const Wrapper = compose(
 	withMapQuery,
 	withStateMachine(statechart),
 	withEditorModes,
 )(MapEditor)
+
+export default () => <CurrentViewerQuery>{({ data }) => <Wrapper viewer={data.viewer} />}</CurrentViewerQuery>

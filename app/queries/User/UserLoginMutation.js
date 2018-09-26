@@ -4,7 +4,7 @@ import { VIEWER_COOKIE_TOKEN } from 'Constants'
 import { setCookie } from 'Utils/storage'
 import { withDefaultMutation } from '../Mutation'
 
-import { query as currentViewerQuery } from '../viewer/withCurrentViewerQuery'
+import { query as currentViewerQuery } from '../viewer/CurrentViewerQuery'
 
 const mutation = gql`
 	mutation LoginViewer($password: String!, $uid: String, $email: String) {
@@ -29,9 +29,11 @@ const mutation = gql`
 
 const config = {
 	update: (proxy, { data }) => {
+		console.log(data)
 		const { loginViewer } = data
 		const { viewer, jwt } = loginViewer || {}
 		if (viewer && jwt) {
+			console.log(viewer, jwt)
 			const { token, expires } = jwt
 			const cookieExpiration = expires / 24 / 60 / 60
 			if (token) setCookie(VIEWER_COOKIE_TOKEN, token, { expires: cookieExpiration })

@@ -1,12 +1,15 @@
 // @flow
 import Cookies from 'js-cookie'
 
+const debug = require('debug')('app')
+
 type CookieConfig = {
 	expires?: number,
 	path?: string,
 }
 
 export const setCookie = (key: string, val: mixed, config?: CookieConfig) => {
+	debug(`Setting cookie ${key}`)
 	const defaults = {
 		expires: 7,
 		path: '/',

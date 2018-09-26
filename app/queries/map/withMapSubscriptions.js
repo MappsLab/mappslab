@@ -14,5 +14,15 @@ export const query = gql`
 				name
 			}
 		}
+		pinUpdated(input: { mapUid: $mapUid }) {
+			uid
+			title
+			lat
+			lng
+			description
+		}
+		pinDeleted(input: { mapUid: $mapUid }) {
+			uid
+		}
 	}
 `

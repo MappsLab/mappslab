@@ -2,7 +2,7 @@
 import gql from 'graphql-tag'
 import { VIEWER_COOKIE_TOKEN } from 'Constants'
 import { removeCookie, setCookie } from 'Utils/storage'
-import withQuery from '../withQuery'
+import { withDefaultQuery } from '../Query'
 
 // todo#16 : Make a Viewer fragment and reuse it in the viewer query
 export const query = gql`
@@ -20,9 +20,11 @@ export const query = gql`
 		}
 	}
 `
+
 const config = {
-	props: (response) => {
-		const { loading, data, ...rest } = response
+	onComplete: (response) => {
+		console.log(response)
+		const { loading, data } = response
 		const { currentViewer } = data
 		const { viewer, jwt } = currentViewer || {} // currentViewer may be undefined
 		if (!loading) {
@@ -31,19 +33,13 @@ const config = {
 				const cookieExpiration = expires / 24 / 60 / 60
 				if (token) setCookie(VIEWER_COOKIE_TOKEN, token, { expires: cookieExpiration })
 			} else {
-				removeCookie(VIEWER_COOKIE_TOKEN)
+				console.log('HERE')
+				// removeCookie(VIEWER_COOKIE_TOKEN)
 			}
-		}
-		return {
-			loading,
-			viewer,
-			request: {
-				...rest,
-			},
 		}
 	},
 }
 
-const withCurrentViewerQuery = withQuery(query, config)
+const withCurrentViewerQuery = withDefaultQuery(query)
 
 export default withCurrentViewerQuery

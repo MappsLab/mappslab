@@ -14,6 +14,7 @@ const Dashboard = () => (
 	<ViewerDashboardQuery>
 		{({ data }) => {
 			const { viewer } = data.currentViewer
+			console.log(data)
 			return (
 				<Main>
 					<Header1 align="left">Hi, {viewer.name}</Header1>
