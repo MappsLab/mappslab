@@ -1,19 +1,14 @@
 // @flow
-import type { PinType, NewPinArgs } from 'Types/PinTypes'
-import { ValidationError } from 'Errors'
+import type { PinType, NewPinData } from 'Types/PinTypes'
 import { createNodeWithEdges } from 'Database'
 import { clean, defaultValues, validateNew } from './pinDBSchema'
 
 const debug = require('debug')('api')
 
-export const createPin = async (args: NewPinArgs, ownerUid: string): Promise<PinType | void> => {
+export const createPin = async (args: NewPinData, ownerUid: string): Promise<PinType> => {
 	const { addToMaps, addToLessons, ...pinData } = args
 	const cleaned = await clean({ ...defaultValues, ...pinData, createdAt: new Date() })
-	const validatedPinData = await validateNew(cleaned).catch((err) => {
-		debug(err.details)
-		debug(err._object)
-		throw new ValidationError(err)
-	})
+	const validatedPinData = await validateNew(cleaned)
 	const edges = []
 
 	// Add the owner relationship (required)

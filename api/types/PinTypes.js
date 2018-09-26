@@ -38,7 +38,3 @@ export type UpdatePinData = {
 	addToMaps?: Array<string>,
 	addToLessons?: Array<string>,
 }
-
-export type UpdatePinInput = {
-	input: UpdatePinArgs,
-}

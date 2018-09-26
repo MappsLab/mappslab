@@ -1,7 +1,7 @@
 // @flow
-import type { PinType, RemovePinInput } from 'Types/PinTypes'
+import type { RemovePinInput } from 'Types/PinTypes'
 import type { GraphQLContext, Success } from 'Types/sharedTypes'
-import pubsub, { MAP_REMOVED_PIN } from '../../subscriptions'
+// import pubsub, { MAP_REMOVED_PIN } from '../../subscriptions'
 
 export const deletePin = async (_: Object, { input }: { input: RemovePinInput }, ctx: GraphQLContext): Promise<Success> => {
 	if (!ctx.viewer) throw Error('You must be logged in to remove pins. Please log in and try again.')

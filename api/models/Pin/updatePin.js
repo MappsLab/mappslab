@@ -1,9 +1,9 @@
 // @flow
-import type { PinType, UpdatePinArgs } from 'Types/PinTypes'
+import type { PinType, UpdatePinData } from 'Types/PinTypes'
 import { mutateNode, createEdge } from 'Database'
 import { clean, validateUpdate } from './pinDBSchema'
 
-export const updatePin = async (args: UpdatePinArgs): Promise<PinType> => {
+export const updatePin = async (args: UpdatePinData): Promise<PinType> => {
 	const { uid, addToMaps, ...pinData } = args
 	const cleaned = await clean(pinData)
 	// $FlowFixMe --- this is kind of a mess. Make separate out addPinToMaps / addPinToClassrooms

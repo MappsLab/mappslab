@@ -6,7 +6,7 @@ import { publicFields } from './userDBSchema'
 
 // const debug = require('debug')('api')
 
-export const getPinOwner = async (pinUid: string): Promise<UserType | null | Error> => {
+export const getPinOwner = async (pinUid: string): Promise<UserType | null> => {
 	const q = /* GraphQL */ `
 		query getUser($uid: string) {
 			getUser(func: eq(type, "user")) @filter(uid_in(pinned, ${pinUid})) {
@@ -21,7 +21,7 @@ export const getPinOwner = async (pinUid: string): Promise<UserType | null | Err
 export const getClassroomUsers = (userType: string): Function => async (
 	classroomUid: string,
 	/* args: PaginationArgs, */
-): Promise<Array<UserType> | Error> => {
+): Promise<Array<UserType>> => {
 	// TODO: build filter into `teaches` relationship
 	const relationship = userType === 'teachers' ? '~teaches_in' : '~learns_in'
 	const q = `query getTeachers($username: string) {
@@ -60,11 +60,13 @@ query getUser {
 export const userLearnsInClassroom = async (userUid: string, classroomUid: string): Promise<boolean> => {
 	const q = userInClassroomQuery(userUid, '~learns_in', classroomUid)
 	const result = await query(q)
+	if (!result || !result.classroom) return false
 	return result.classroom.length >= 1
 }
 
 export const userTeachesInClassroom = async (userUid: string, classroomUid: string): Promise<boolean> => {
 	const q = userInClassroomQuery(userUid, '~teaches_in', classroomUid)
 	const result = await query(q)
+	if (!result || !result.classroom) return false
 	return result.classroom.length >= 1
 }

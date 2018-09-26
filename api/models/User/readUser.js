@@ -35,6 +35,7 @@ export const getUsers = async (args?: PaginationArgs): Promise<Array<UserType>> 
 		}
 	`
 	const result = await query(q, { first, after })
+	if (!result || result.getUsers) return []
 	return result.getUsers
 }
 
@@ -47,6 +48,7 @@ export const getViewer = async (args: { uid: string }): Promise<UserType | null>
 		}
 	}`
 	const result = await query(q, args)
+	if (result || result.getUser) return null
 	const viewer = head(result.getUser)
 	return viewer
 }

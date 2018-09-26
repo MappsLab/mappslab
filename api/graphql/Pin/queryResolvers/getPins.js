@@ -7,5 +7,5 @@ type GetPinInput = {
 	input: GetPinArgs,
 }
 
-export const pin = (_: Object, { input }: GetPinInput, ctx: GraphQLContext): Promise<PinType | null | Error> =>
+export const pin = (_: Object, { input }: GetPinInput, ctx: GraphQLContext): Promise<PinType | null> =>
 	ctx.models.Pin.getPin(input.uid)

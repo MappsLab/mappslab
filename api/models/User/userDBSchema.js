@@ -2,7 +2,8 @@
 import Joi from 'joi'
 import { when, prop, assoc } from 'ramda'
 import bcrypt from 'bcrypt'
-import { promisePipe, filterNullAndUndefined } from 'Utils'
+import { promisePipe } from 'Utils'
+import type { NewUserData, UpdateUserData } from 'Types/UserTypes'
 
 /**
  * Schema
@@ -59,8 +60,8 @@ export const defaultValues = {
 	updatedAt: new Date(),
 }
 
-export const validateNew = (userData: UserInput) => Joi.validate(userData, userSchema(true))
-export const validateUpdate = (userData: UserInput) => Joi.validate(userData, userSchema(false))
+export const validateNew = (userData: NewUserData) => Joi.validate(userData, userSchema(true))
+export const validateUpdate = (userData: UpdateUserData) => Joi.validate(userData, userSchema(false))
 
 export const publicFields = ['name', 'roles', 'type', 'uid'].join('\n')
 export const viewerFields = ['email', 'disabled'].join('\n')
@@ -84,7 +85,7 @@ const hashPassword = (key: 'password' | 'temporaryPassword') => (obj) =>
 		})
 	})
 
-export const clean = async (userData: UserInput = {}): Promise<UserInput> =>
+export const clean = async <T>(userData: T): Promise<T> =>
 	promisePipe(
 		// Filter out 'undefined' values
 		// filterNullAndUndefined,

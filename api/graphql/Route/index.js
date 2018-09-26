@@ -1,4 +1,4 @@
 // @flow
-export RouteSchema from './RouteSchema'
-export RouteQueryResolvers from './queryResolvers'
-export RouteMutationResolvers from './mutationResolvers'
+export { default as RouteSchema } from './RouteSchema'
+export { default as RouteQueryResolvers } from './queryResolvers'
+export { default as RouteMutationResolvers } from './mutationResolvers'

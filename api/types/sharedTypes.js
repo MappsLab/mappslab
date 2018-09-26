@@ -3,8 +3,8 @@
 import models from 'Models'
 import type { UserType } from 'Types/UserTypes'
 
-export type DBNode = {
-	uid: string,
+export interface DBNode {
+	uid: string;
 }
 
 type Operator = 'eq' | 'le' | 'lt' | 'ge' | 'gt' | 'uid' | 'allofterms' | 'anyofterms' | 'regexp' | 'alloftext' | 'uid_in' | 'has'
@@ -43,9 +43,9 @@ export type GraphQLContext = {
 	session: Object,
 }
 
-export type Edge = {
+export type Edge<T> = {
 	cursor: string,
-	node: Object,
+	node: T,
 }
 
 export type PageInfo = {
@@ -53,9 +53,9 @@ export type PageInfo = {
 	lastCursor: null | string,
 }
 
-export type PageType = {
+export type PageType<T> = {
 	pageInfo: PageInfo,
-	edges: Array<?Edge>,
+	edges: Array<?Edge<T>>,
 }
 
 export type Success = {

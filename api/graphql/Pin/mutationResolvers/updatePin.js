@@ -1,9 +1,9 @@
 // @flow
-import type { PinType, UpdatePinInput } from 'Types/PinTypes'
+import type { PinType, UpdatePinData } from 'Types/PinTypes'
 import type { GraphQLContext } from 'Types/sharedTypes'
 import pubsub, { MAP_RECEIVED_PIN } from '../../subscriptions'
 
-export const updatePin = async (_: Object, { input }: UpdatePinInput, ctx: GraphQLContext): Promise<PinType | null> => {
+export const updatePin = async (_: Object, { input }: { input: UpdatePinData }, ctx: GraphQLContext): Promise<PinType | null> => {
 	if (!ctx.viewer) throw Error('You must be logged in to create new pins. Please log in and try again.')
 	const existingPin = await ctx.models.Pin.getPin(input.uid)
 	if (!existingPin) throw new Error('This pin does not exist')

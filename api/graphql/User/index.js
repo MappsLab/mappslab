@@ -1,4 +1,4 @@
 // @flow
-export UserSchema from './UserSchema'
-export UserQueryResolvers from './queryResolvers'
-export UserMutationResolvers from './mutationResolvers'
+export { default as UserSchema } from './UserSchema'
+export { default as UserQueryResolvers } from './queryResolvers'
+export { default as UserMutationResolvers } from './mutationResolvers'

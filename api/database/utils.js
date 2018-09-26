@@ -22,7 +22,7 @@ export const defaultPaginationArgs = {
 	after: '0x0',
 }
 
-export const makePaginationArgs = (args: PaginationArgs): PaginationArgs => {
+export const makePaginationArgs = (args?: PaginationArgs): PaginationArgs => {
 	// Adds +1 to the 'first' argument, we need this to see if there is a next page.
 	const { first, ...rest } = { ...defaultPaginationArgs, ...args }
 	return {

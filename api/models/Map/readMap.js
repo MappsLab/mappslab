@@ -8,7 +8,7 @@ import { publicFields } from './mapDBSchema'
 
 const debug = require('debug')('api')
 
-export const getMap = async (args: GetNodeArgs): Promise<MapType | null | Error> => {
+export const getMap = async (args: GetNodeArgs): Promise<MapType | null> => {
 	const key = Object.keys(args)[0]
 	if (!key || (key !== 'slug' && key !== 'uid')) throw new Error('getMap must be called with a `uid` or a `slug`')
 	if (typeof args.uid === 'string' && key === 'uid' && !validateUid(args.uid)) throw new Error(`Uid ${args.uid} is malformed`)
@@ -45,7 +45,7 @@ export const getMaps = async (/* args?: PaginationArgs */): Promise<Array<MapTyp
 	return result.Maps || []
 }
 
-export const getMapsByUser = async (user: UserType /* args?: PaginationArgs */): Promise<Array<MapType> | Error> => {
+export const getMapsByUser = async (user: UserType /* args?: PaginationArgs */): Promise<Array<MapType>> => {
 	const q = /* GraphQL */ `
 		query getMapsByUser {
 			Maps(func: eq(type, "Map")) @filter(uid_in(~learns_in, ${user.uid})) {

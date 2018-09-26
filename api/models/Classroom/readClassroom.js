@@ -2,13 +2,13 @@
 import { head } from 'ramda'
 import { query } from 'Database'
 import type { ClassroomType } from 'Types/ClassroomTypes'
-import type { PaginationArgs, GetNodeArgs } from 'Types/sharedTypes'
+import type { GetNodeArgs } from 'Types/sharedTypes'
 import { validateUid } from 'Database/utils'
 import { publicFields } from './classroomDBSchema'
 
 const debug = require('debug')('api')
 
-export const getClassroom = async (args: GetNodeArgs): Promise<ClassroomType | null | Error> => {
+export const getClassroom = async (args: GetNodeArgs): Promise<ClassroomType | null> => {
 	const key = head(Object.keys(args))
 	if (!key || (key !== 'slug' && key !== 'uid')) throw new Error('getClassroom must be called with a `uid` or a `slug`')
 	if (typeof args.uid === 'string' && key === 'uid' && !validateUid(args.uid)) throw new Error(`Uid ${args.uid} is malformed`)
@@ -26,7 +26,7 @@ export const getClassroom = async (args: GetNodeArgs): Promise<ClassroomType | n
 	return classroom
 }
 
-export const getClassrooms = async (args?: PaginationArgs): Promise<Array<ClassroomType>> => {
+export const getClassrooms = async (/* args?: PaginationArgs */): Promise<Array<ClassroomType>> => {
 	// const { first, after, filter } = makePaginationArgs(args)
 	// const filterString = filter ? createFilterString(filter) : ''
 	const filterString = ''

@@ -1,7 +1,7 @@
 // @flow
 import Joi from 'joi'
 import { pipe, head, assoc, dissoc, when, propEq, map } from 'ramda'
-import type { NewPinArgs, UpdatePinArgs, PinType } from 'Types/PinTypes'
+import type { NewPinData, UpdatePinData, PinType } from 'Types/PinTypes'
 import { promisePipe, filterNullAndUndefined } from 'Utils'
 import { parseSingularFields } from 'Utils/parsing'
 
@@ -53,14 +53,14 @@ export const publicFields = [
 
 const singleFields = ['owner']
 
-export const validateNew = (pinData: NewPinArgs) => Joi.validate(pinData, pinSchema(true))
-export const validateUpdate = (pinData: UpdatePinArgs) => Joi.validate(pinData, pinSchema(false))
+export const validateNew = (pinData: NewPinData): NewPinData => Joi.validate(pinData, pinSchema(true))
+export const validateUpdate = (pinData: UpdatePinData): UpdatePinData => Joi.validate(pinData, pinSchema(false))
 
 /**
  * Clean
  */
 
-export const clean = async (pinData: NewPinArgs | UpdatePinArgs): Promise<NewPinArgs | UpdatePinArgs> =>
+export const clean = async <T>(pinData: T): Promise<T> =>
 	promisePipe(filterNullAndUndefined, dissoc('addToMaps'), dissoc('addToLessons'), assoc('updatedAt', new Date()))(pinData)
 
 /**

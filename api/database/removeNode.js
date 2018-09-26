@@ -8,7 +8,7 @@ const debug = require('debug')('api')
 /**
  * Removes a node and all outgoing edges
  */
-const removeNode = async (uid: string, existingTxn: Txn): Promise<boolean | Error> => {
+const removeNode = async (uid: string, existingTxn: Txn): Promise<boolean> => {
 	const txn = existingTxn || dbClient.newTxn()
 	try {
 		const mu = new dgraph.Mutation()

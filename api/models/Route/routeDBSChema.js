@@ -1,6 +1,6 @@
 // @flow
 import Joi from 'joi'
-import type { RouteInput } from '../RouteTypes'
+import type { RouteInput } from 'Types/RouteTypes'
 import { promisePipe, filterNullAndUndefined } from 'Utils'
 
 /**

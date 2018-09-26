@@ -1,4 +1,4 @@
 // @flow
-export ClassroomSchema from './ClassroomSchema'
-export ClassroomQueryResolvers from './queryResolvers'
-export ClassroomMutationResolvers from './mutationResolvers'
+export { default as ClassroomSchema } from './ClassroomSchema'
+export { default as ClassroomQueryResolvers } from './queryResolvers'
+export { default as ClassroomMutationResolvers } from './mutationResolvers'

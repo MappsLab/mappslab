@@ -27,7 +27,7 @@ export const createJWT = (user: UserType): JWT => {
 	}
 }
 
-export const verifyJWT = (token: string): Promise<UserType | Error> =>
+export const verifyJWT = (token: string): Promise<UserType> =>
 	new Promise((resolve, reject) => {
 		jwt.verify(token, JWT_KEY, (err, decoded) => {
 			if (err) {

@@ -4,16 +4,18 @@ import type { ClassroomType } from 'Types/ClassroomTypes'
 import type { PageType, GetNodeInput, PaginationInput, GraphQLContext } from 'Types/sharedTypes'
 import { assemblePage } from 'Utils/graphql'
 
-export const classroom = (_: Object, { input }: GetNodeInput, ctx: GraphQLContext): Promise<ClassroomType | null | Error> =>
+export const classroom = (_: Object, { input }: GetNodeInput, ctx: GraphQLContext): Promise<ClassroomType | null> =>
 	ctx.models.Classroom.getClassroom(input)
 
 export const classrooms = async (
 	_: Object,
 	{ input }: PaginationInput,
 	ctx: GraphQLContext,
-): Promise<PageType | null | Error> => {
-	const fetchedClassrooms = await ctx.models.Classroom.getClassrooms(input).catch((err) => {
+): Promise<PageType<ClassroomType> | null> => {
+	const fetchedClassrooms = await ctx.models.Classroom.getClassrooms().catch((err) => {
 		throw err
 	})
-	return assemblePage(fetchedClassrooms, input)
+	if (!fetchedClassrooms) return null
+	const page = assemblePage(fetchedClassrooms, input)
+	return page
 }

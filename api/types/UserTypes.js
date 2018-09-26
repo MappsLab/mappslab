@@ -38,7 +38,7 @@ export type AdminType = TeacherType & {
 	roles: ['admin'],
 }
 
-export type UpdateUserInput = {
+export type UpdateUserData = {
 	name?: string,
 	email?: string,
 }

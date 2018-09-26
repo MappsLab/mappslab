@@ -3,7 +3,7 @@ import type { GetUserInput, UserType, JWT } from 'Types/UserTypes'
 import type { GraphQLContext } from 'Types/sharedTypes'
 import { createJWT } from 'Utils/auth'
 
-export const user = (_: Object, { input }: GetUserInput, ctx: GraphQLContext): Promise<UserType | null | Error> =>
+export const user = (_: Object, { input }: { input: GetUserInput }, ctx: GraphQLContext): Promise<UserType | null> =>
 	ctx.models.User.getUser(input)
 
 type CurrentViewer = {
