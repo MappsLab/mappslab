@@ -1,7 +1,8 @@
 // @flow
 import type { PinType, NewPinData } from 'Types/PinTypes'
 import type { GraphQLContext } from 'Types/sharedTypes'
-import pubsub, { MAP_RECEIVED_PIN } from '../../subscriptions'
+import pubsub from '../../subscriptions'
+import { MAP_RECEIVED_PIN } from '../subscriptionResolvers/pinSubscriptions'
 
 export const createPin = async (_: Object, { input }: { input: NewPinData }, ctx: GraphQLContext): Promise<PinType | null> => {
 	if (!ctx.viewer) throw Error('You must be logged in to create new pins. Please log in and try again.')

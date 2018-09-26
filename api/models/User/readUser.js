@@ -1,5 +1,4 @@
 // @flow
-import { head } from 'ramda'
 import { query } from 'Database'
 import { makePaginationArgs } from 'Database/utils'
 import type { GetUserInput, UserType } from 'Types/UserTypes'
@@ -35,7 +34,7 @@ export const getUsers = async (args?: PaginationArgs): Promise<Array<UserType>> 
 		}
 	`
 	const result = await query(q, { first, after })
-	if (!result || result.getUsers) return []
+	if (!result || !result.getUsers) return []
 	return result.getUsers
 }
 
@@ -48,7 +47,7 @@ export const getViewer = async (args: { uid: string }): Promise<UserType | null>
 		}
 	}`
 	const result = await query(q, args)
-	if (result || result.getUser) return null
-	const viewer = head(result.getUser)
+	if (!result || !result.getUser) return null
+	const [viewer] = result.getUser
 	return viewer
 }

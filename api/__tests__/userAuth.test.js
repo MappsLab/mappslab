@@ -45,7 +45,7 @@ const uidLogin = /* GraphQL */ `
 `
 
 describe('queries', () => {
-	it('[loginViewer] should return a jwt and viewer', async () => {
+	it.only('[loginViewer] should return a jwt and viewer', async () => {
 		const variables = { email: admin.email, password: 'Password#1' }
 		const result = await request(uidLogin, { variables })
 		const { jwt, viewer } = result.data.loginViewer

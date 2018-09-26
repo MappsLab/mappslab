@@ -1,6 +1,11 @@
 // @flow
 import { withFilter } from 'graphql-subscriptions'
-import pubsub, { MAP_RECEIVED_PIN, PIN_MODIFIED } from '../../subscriptions'
+import pubsub from '../../subscriptions'
+
+// Topics
+export const MAP_RECEIVED_PIN = 'pinAddedToMap'
+export const PIN_MODIFIED = 'pinModified'
+export const PIN_DELETED = 'pinDeleted'
 
 const debug = require('debug')('api:subscriptions')
 
@@ -18,11 +23,22 @@ export const pinAddedToMap = {
 
 export const pinModified = {
 	subscribe: withFilter(
-		() => pubsub.asyncinterator(PIN_MODIFIED),
+		() => pubsub.asyncIterator(PIN_MODIFIED),
 		(payload, args) => {
 			debug(`${PIN_MODIFIED} payload:`)
 			debug(payload)
 			// debug(args)
+			return true
+		},
+	),
+}
+
+export const pinDeleted = {
+	subscribe: withFilter(
+		() => pubsub.asyncIterator(PIN_DELETED),
+		(payload, args) => {
+			debug(`${PIN_DELETED} payload:`)
+			debug(payload)
 			return true
 		},
 	),

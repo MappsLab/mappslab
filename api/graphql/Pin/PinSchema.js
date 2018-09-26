@@ -61,17 +61,14 @@ const Pin = /* GraphQL */ `
 		deletePin(input: GetPinInput!): Success!
 	}
 
-	input PinAddedSubscriptionInput {
-		mapUid: String!
-	}
-
-	input PinModifiedSubscriptionInput {
+	input PinSubscriptionInput {
 		pinUid: String!
 	}
 
 	extend type Subscription {
-		pinAddedToMap(input: PinAddedSubscriptionInput!): Pin!
-		pinModified(input: PinModifiedSubscriptionInput!): Pin!
+		pinAddedToMap(input: PinSubscriptionInput!): Pin!
+		pinModified(input: PinSubscriptionInput!): Pin!
+		pinDeleted(input: PinSubscriptionInput!): Pin!
 	}
 `
 
