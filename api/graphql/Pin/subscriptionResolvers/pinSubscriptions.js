@@ -7,7 +7,7 @@ export const MAP_RECEIVED_PIN = 'pinAddedToMap'
 export const PIN_UPDATED = 'pinModified'
 export const PIN_DELETED = 'pinDeleted'
 
-const debug = require('debug')('api:subscriptions')
+const debug = require('debug')('api')
 
 export const pinAddedToMap = {
 	subscribe: withFilter(
@@ -27,8 +27,8 @@ export const pinUpdated = {
 		(payload, args) => {
 			debug(`${PIN_UPDATED} payload:`)
 			debug(payload)
-			// debug(args)
-			return true
+			const pinIsInSubscribedMap = payload.pinUpdated.maps.find((m) => m.uid === args.input.mapUid)
+			return Boolean(pinIsInSubscribedMap)
 		},
 	),
 }
@@ -39,7 +39,8 @@ export const pinDeleted = {
 		(payload, args) => {
 			debug(`${PIN_DELETED} payload:`)
 			debug(payload)
-			return true
+			const pinIsInSubscribedMap = payload.pinDeleted.maps.find((m) => m.uid === args.input.mapUid)
+			return Boolean(pinIsInSubscribedMap)
 		},
 	),
 }

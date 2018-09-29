@@ -1,4 +1,5 @@
 /* eslint-disable no-undef */
+import { dissoc } from 'ramda'
 import { createJWT, verifyJWT } from 'Utils/auth'
 import { request } from './utils/db'
 import { getDBUsers, getDBUser } from './utils/user'
@@ -44,8 +45,27 @@ const uidLogin = /* GraphQL */ `
 	}
 `
 
+describe('[createJWT]', () => {
+	it('should throw an error if called without the required values', async () => {
+		/* Arrange */
+		const errorMessage = 'createJWT requires a name, uid, and roles'
+		const noUid = () => createJWT(dissoc('uid', student1))
+		const noName = () => createJWT(dissoc('name', student1))
+		const noRoles = () => createJWT(dissoc('roles', student1))
+
+		expect(noUid).toThrow(errorMessage)
+		expect(noName).toThrow(errorMessage)
+		expect(noRoles).toThrow(errorMessage)
+		// const { container, getByTestId } = render( ... )
+		/* Act */
+
+		/* Assert */
+		// expect(...)
+	})
+})
+
 describe('queries', () => {
-	it.only('[loginViewer] should return a jwt and viewer', async () => {
+	it('[loginViewer] should return a jwt and viewer', async () => {
 		const variables = { email: admin.email, password: 'Password#1' }
 		const result = await request(uidLogin, { variables })
 		const { jwt, viewer } = result.data.loginViewer
@@ -127,7 +147,8 @@ describe('queries', () => {
 			expect(result).toHaveProperty('uid')
 			expect(result).toHaveProperty('exp')
 			expect(result).toHaveProperty('iat')
-			expect(result).not.toHaveProperty('name')
+			expect(result).toHaveProperty('name')
+			expect(result).toHaveProperty('roles')
 			expect(result).not.toHaveProperty('disabled')
 		})
 	})
@@ -240,6 +261,9 @@ describe('[resetPassword]', () => {
 		const variables = { password: 'newPassword', resetToken }
 
 		const result = await request(resetPasswordWithToken, { variables })
+		console.log(result)
+		console.log(result)
+		console.log(result)
 		const { viewer } = result.data.resetPassword
 		expect(viewer.uid).toBeTruthy()
 

@@ -4,7 +4,7 @@ import type { Credentials, ViewerType, PasswordResetInput, JWT, GetUserInput, Se
 import { createJWT } from 'Utils/auth'
 import { ValidationError } from 'Errors'
 
-const debug = require('debug')('api')
+// const debug = require('debug')('api')
 
 export const loginViewer = async (
 	_: mixed,
@@ -13,7 +13,6 @@ export const loginViewer = async (
 ): Promise<{ viewer: ViewerType, jwt: JWT } | { resetToken: string }> => {
 	const { input } = args
 	const viewer = await ctx.models.User.checkPassword(input)
-	debug(viewer)
 	if (viewer && !viewer.requiresReset) {
 		const jwt = createJWT(viewer)
 		return {
@@ -49,6 +48,7 @@ export const resetPassword = async (
 	ctx: GraphQLContext,
 ): Promise<{ viewer: ViewerType, jwt: JWT } | { resetToken: string }> => {
 	const user = await ctx.models.User.resetPassword(input)
+	console.log(user)
 	const jwt = createJWT(user)
 	return {
 		viewer: user,

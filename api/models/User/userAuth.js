@@ -9,7 +9,7 @@ import { ValidationError } from 'Errors'
 import { getUser } from './readUser'
 import { publicFields, clean, validateUpdate } from './userDBSchema'
 
-const debug = require('debug')('test')
+// const debug = require('debug')('test')
 
 export const checkPassword = async (
 	credentials: Credentials,
@@ -59,6 +59,8 @@ export const resetPassword = async (credentials: PasswordResetInput): Promise<Us
 			query getUser($resetToken: string) {
 				getUser(func: eq(type, "user")) @filter(eq(passwordReset.token, $resetToken)){
 					uid
+					name
+					roles
 					passwordReset.token
 					passwordReset.expires
 				}
