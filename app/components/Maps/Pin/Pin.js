@@ -80,7 +80,7 @@ class Pin extends React.Component<Props, PinState> {
 
 	render() {
 		const { active, pin, mapUid, updatePinSuccess, viewer } = this.props
-		const { lat, lng, title, description, owner } = pin
+		let { lat, lng, title, description, owner } = pin
 		const { mouseOver } = this.state
 		const options = {
 			position: {
@@ -88,6 +88,7 @@ class Pin extends React.Component<Props, PinState> {
 				lng,
 			},
 		}
+		if (!owner) owner = { uid: '1234', name: 'wtf!' }
 		return (
 			<Marker
 				options={options}
@@ -100,7 +101,6 @@ class Pin extends React.Component<Props, PinState> {
 									<CustomPopup anchor={anchor}>
 										<PopupWrapper>
 											<p>{title}</p>
-											<p>{pin.owner.name}</p>
 										</PopupWrapper>
 									</CustomPopup>
 								)}
@@ -117,7 +117,6 @@ class Pin extends React.Component<Props, PinState> {
 										<State is={states.INSPECT_PIN}>
 											<h2>{title}</h2>
 											<p>{description}</p>
-											<p>{owner.name}</p>
 											{viewer.uid === owner.uid && (
 												<NativeListener onClick={this.handleEditButtonClick}>
 													<Button>Edit</Button>

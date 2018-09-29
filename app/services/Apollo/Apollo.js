@@ -85,7 +85,7 @@ const logErrors = onError(({ graphQLErrors, networkError }) => {
 			return false
 		})
 	}
-	if (networkError) debug(`[Network Error] ${networkError}`, networkError.response, networkError.response.body)
+	if (networkError) debug(`[Network Error] ${networkError}`, networkError)
 })
 
 const link = ApolloLink.from([setAuthHeader, logQueries, logErrors, apiLink])

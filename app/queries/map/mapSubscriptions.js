@@ -3,20 +3,24 @@ import gql from 'graphql-tag'
 import * as R from 'ramda'
 import type { SubscriptionCallback, SubscriptionConfig } from 'Types/GraphQL'
 
+const pinFields = /* GraphQL */ `
+	uid
+	title
+	lat
+	lng
+	description
+	owner {
+		uid
+		name
+	}
+`
+
 export const pinAddedToMap: SubscriptionConfig = {
 	name: 'pinAddedToMap',
 	document: gql`
 		subscription pinAddedToMap($mapUid: String!) {
 			pinAddedToMap(input: { mapUid: $mapUid }) {
-				uid
-				title
-				lat
-				lng
-				description
-				owner {
-					uid
-					name
-				}
+				${pinFields}
 			}
 		}
 	`,
@@ -41,11 +45,7 @@ export const pinUpdated: SubscriptionConfig = {
 	document: gql`
 		subscription pinUpdated($mapUid: String!) {
 			pinUpdated(input: { mapUid: $mapUid }) {
-				uid
-				title
-				lat
-				lng
-				description
+				${pinFields}
 			}
 		}
 	`,
@@ -79,15 +79,15 @@ export const pinDeleted: SubscriptionConfig = {
 	document: gql`
 		subscription pinDeleted($mapUid: String!) {
 			pinDeleted(input: { mapUid: $mapUid }) {
-				uid
-				title
+				${pinFields}
 			}
 		}
 	`,
 	updateQuery: (callback: SubscriptionCallback | false = false) => (previous, { subscriptionData }) => {
-		const deletedPin = subscriptionData.pinDeleted
+		const deletedPin = subscriptionData.data.pinDeleted
 		const { edges } = previous.map.pins
 		const updatedEdges = edges.filter((edge) => edge.node.uid !== deletedPin.uid)
+
 		const map = R.assocPath(['pins', 'edges'], updatedEdges)(previous.map)
 
 		if (callback) callback(previous, deletedPin)

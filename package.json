@@ -9,7 +9,7 @@
 		"dev:app": "yarn workspace mappslab-app dev",
 		"dev:api": "yarn workspace mappslab-api dev",
 		"db:stopall": "docker stop $(docker ps -q)",
-		"db:test:init": "docker-compose -p mappslab-test -f ./api/__tests__/docker-compose.yml up -d",
+		"db:test:init": "docker-compose -p mappslab-test -f ./api/__tests__/scripts/docker-compose.yml up -d",
 		"db:test:start": "docker start mappslab-test_dgraph-zero mappslab-test_dgraph-server mappslab-test_dgraph-ratel",
 		"db:test:seed": "yarn workspace mappslab-api db:test:seed",
 		"db:test:stop": "docker stop mappslab-test_dgraph-zero mappslab-test_dgraph-server mappslab-test_dgraph-ratel",

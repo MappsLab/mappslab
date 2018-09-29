@@ -17,8 +17,7 @@ const RemovePinButton = ({ uid }: { uid: string }) => (
 	<DeletePinMutation>
 		{(deletePin) => {
 			const handleClick = async () => {
-				const result = await deletePin({ variables: { uid } })
-				console.log(result)
+				await deletePin({ variables: { uid } })
 			}
 			return (
 				<NativeListener onClick={handleClick}>
@@ -44,7 +43,6 @@ type FormProps = BaseProps & {
 }
 
 const PinForm = ({ pin, mapUid, onSuccess, mutate }: FormProps) => {
-	console.log(pin)
 	const { lat, lng, uid } = pin
 	const handleSubmit = async (values) => {
 		const variables = {

@@ -16,6 +16,9 @@ module.exports = {
 		development: {
 			plugins: ['flow-react-proptypes'],
 		},
+		production: {
+			plugins: ['graphql-tag'],
+		},
 		test: {
 			presets: [
 				[
@@ -49,7 +52,6 @@ module.exports = {
 		'@babel/plugin-proposal-object-rest-spread',
 		'@babel/plugin-proposal-export-default-from',
 		'react-hot-loader/babel',
-		'graphql-tag',
 		'lodash',
 		'ramda',
 	],
