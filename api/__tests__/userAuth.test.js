@@ -261,9 +261,6 @@ describe('[resetPassword]', () => {
 		const variables = { password: 'newPassword', resetToken }
 
 		const result = await request(resetPasswordWithToken, { variables })
-		console.log(result)
-		console.log(result)
-		console.log(result)
 		const { viewer } = result.data.resetPassword
 		expect(viewer.uid).toBeTruthy()
 

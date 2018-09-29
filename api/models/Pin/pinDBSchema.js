@@ -25,6 +25,7 @@ export const pinSchema = (isNew: boolean = true) =>
 		createdAt: isNew ? Joi.date().required() : Joi.any().forbidden(),
 		updatedAt: Joi.date().required(),
 		type: Joi.any().only('pin'),
+		deleted: isNew ? Joi.boolean().default(false) : Joi.boolean(),
 	})
 
 export const defaultValues = {

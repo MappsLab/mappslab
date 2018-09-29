@@ -12,7 +12,7 @@ export const getUserPins = async (userUid: string, args?: PaginationArgs): Promi
 	const q = /* GraphQL */ `
 		query getPins($uid: string, $first: int, $after: string) {
 			getPins(func: uid(${userUid})) ${filterString} {
-				pinned (first: $first, after: $after) {
+				pinned (first: $first, after: $after) @filter(eq(deleted, false)) {
 					${publicFields}
 				}
 			}
@@ -28,7 +28,7 @@ export const getMapPins = async (mapUid: string, args?: PaginationArgs): Promise
 
 	const q = /* GraphQL */ `
 		query getMapPins($uid: string, $first: int, $after: string) {
-			pins(func: eq(type, "pin")) @filter(uid_in(~has_pin, ${mapUid})) {
+			pins(func: eq(type, "pin")) @filter(uid_in(~has_pin, ${mapUid}) AND eq(deleted, false)) {
 				${publicFields}
 			}
 		}

@@ -5,6 +5,8 @@ import type { PinType, NewPinData } from 'Types/PinTypes'
 import type { UserType } from 'Types/UserTypes'
 import Pin from 'Models/Pin'
 import { request } from './db'
+import { probably } from './faker'
+
 /**
  * Pin Read
  */
@@ -50,6 +52,7 @@ const generatePin = (): NewPinData => ({
 	lat: faker.random.number({ max: 41, min: 40, precision: 0.00001 }).toFixed(7),
 	lng: faker.random.number({ max: -111, min: -112, precision: 0.00001 }).toFixed(7),
 	description: faker.lorem.sentences(2),
+	deleted: probably(false, true),
 })
 
 const createPinMutation = /* GraphQL */ `

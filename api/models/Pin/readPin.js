@@ -7,7 +7,7 @@ import { publicFields, parsePinResult } from './pinDBSchema'
 export const getPin = async (uid: string): Promise<PinType | null> => {
 	const q = /* GraphQL */ `
 		query getPin {
-			getPin(func: uid(${uid})) @filter(eq(type, "pin")) {
+			getPin(func: uid(${uid})) @filter(eq(type, "pin") AND eq(deleted, false)) {
 				${publicFields}
 			}
 		}
@@ -22,7 +22,7 @@ export const getPins = async (/* args?: PaginationArgs */): Promise<Array<PinTyp
 	// const { first, after } = makePaginationArgs(args)
 	const q = /* GraphQL */ `
 		query getPins {
-			getPins(func: eq(type, "pin")) {
+			getPins(func: eq(type, "pin")) @filter(eq(deleted, false)) {
 				${publicFields}
 			}
 		}

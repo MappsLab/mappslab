@@ -14,6 +14,7 @@ export type PinType = {
 	lat: number,
 	lng: number,
 	owner: UserType,
+	deleted: Boolean,
 	maps?: Array<MapType>,
 	routes?: Array<RouteType>,
 }

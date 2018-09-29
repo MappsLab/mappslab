@@ -48,7 +48,6 @@ export const resetPassword = async (
 	ctx: GraphQLContext,
 ): Promise<{ viewer: ViewerType, jwt: JWT } | { resetToken: string }> => {
 	const user = await ctx.models.User.resetPassword(input)
-	console.log(user)
 	const jwt = createJWT(user)
 	return {
 		viewer: user,

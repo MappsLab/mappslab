@@ -13,6 +13,7 @@ export const setSchema = async () => {
 		 */
 		'type: string @index(hash) .',
 		'slug: string @index(hash) . ',
+		'deleted: bool @index(bool) . ',
 
 		/**
 		 * User Indices

@@ -13,8 +13,6 @@ const getCurrentViewer = async (req: express$Request, res: express$Response, nex
 	const token = req.headers.authorization.replace(/^Bearer /, '')
 	try {
 		const viewer = await verifyJWT(token)
-		console.log('middleware')
-		console.log(viewer)
 		req.viewer = viewer
 	} catch (e) {
 		debug('JWT Validation Error:')

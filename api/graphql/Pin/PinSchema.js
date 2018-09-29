@@ -31,6 +31,7 @@ const Pin = /* GraphQL */ `
 		lat: Float!
 		lng: Float!
 		description: String
+		deleted: Boolean
 		addToMaps: [String]
 		lessonUids: [String]
 	}
