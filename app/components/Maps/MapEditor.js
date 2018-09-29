@@ -2,9 +2,14 @@
 import React from 'react'
 import * as R from 'ramda'
 import styled from 'styled-components'
-// import type { Map as GoogleMap } from 'mapp/types'
-import { withMapQuery, CurrentViewerQuery } from 'Queries'
+import type { MappRenderProps } from 'mapp/types'
 import type { MapType, PinType, ViewerType, MachineValue } from 'Types'
+import type { Subscription, SubscriptionConfig } from 'Types/GraphQL'
+// import type { Map as GoogleMap } from 'mapp/types'
+import { CurrentViewerQuery } from 'Queries'
+import { pinAddedToMap, pinDeleted, pinUpdated } from 'Queries/map/mapSubscriptions'
+import { MapQuery } from 'Queries/map'
+import { startSubscription } from 'Queries/startSubscription'
 import { withStateMachine } from 'react-automata'
 import { compose, getStateString } from 'Utils/data'
 import Debugger from './Debugger'
@@ -34,7 +39,8 @@ type Props = {
 	machineState: {
 		value: string | MachineValue,
 	},
-	subscribeToMorePins: (Function) => () => void,
+	// subscribeToMore returns a function that can be called to stop the subscription
+	subscribeToMore: (SubscriptionConfig) => () => void,
 	transition: (string, ?{}) => void,
 	viewer: ViewerType,
 	activePinUid?: string | null,
@@ -73,18 +79,8 @@ class MapEditor extends React.Component<Props, State> {
 	}
 
 	componentDidMount = async () => {
-		const { addEventListeners, subscribeToMorePins } = this.props
-		this.listeners = eventNames.reduce(
-			(acc, name) => ({
-				...acc,
-				[name]: this.handleEvent(name),
-			}),
-			{},
-		)
-		this.unsubscribe = subscribeToMorePins((newPin) => {
-			this.log(`${newPin.owner.name} added pin ${newPin.title}`)
-		})
-		addEventListeners(this.listeners)
+		this.addEventListeners()
+		this.startSubscriptions()
 		this.transition(transitions.NEXT)()
 	}
 
@@ -111,9 +107,25 @@ class MapEditor extends React.Component<Props, State> {
 		}))
 	}
 
-	getMode = (value: MachineValue = this.props.machineState.value): string => {
-		return getStateString(value)
+	logSubscriptionUpdate = (subscriptionName: string) => (prev, newData) => {
+		const pin = newData
+		const {
+			title,
+			owner: { name },
+		} = pin
+		const verb =
+			subscriptionName === 'pinAddedToMap'
+				? 'added'
+				: subscriptionName === 'pinUpdated'
+					? 'updated'
+					: subscriptionName === 'pinDeleted'
+						? 'deleted'
+						: '???'
+		const message = `[${subscriptionName}]: ${name} ${verb} pin ${title}`
+		this.log(message)
 	}
+
+	getMode = (value: MachineValue = this.props.machineState.value): string => getStateString(value)
 
 	/**
 	 * Factory function to create smart handlers for each type of event.
@@ -146,6 +158,47 @@ class MapEditor extends React.Component<Props, State> {
 	}
 
 	updatePinCancel = () => {}
+
+	subscriptions: Array<Subscription>
+
+	addEventListeners() {
+		const { addEventListeners } = this.props
+		this.listeners = eventNames.reduce(
+			(acc, name) => ({
+				...acc,
+				[name]: this.handleEvent(name),
+			}),
+			{},
+		)
+		addEventListeners(this.listeners)
+	}
+
+	startSubscriptions() {
+		const { subscribeToMore, map } = this.props
+		const subscriptions = [pinAddedToMap, pinDeleted, pinUpdated]
+
+		this.subscriptions = subscriptions.map((s) =>
+			startSubscription({
+				subscribeToMore,
+				variables: { mapUid: map.uid },
+				callback: this.logSubscriptionUpdate(s.name),
+				...s,
+			}),
+		)
+
+		// subscriptions.map(({ name, document, updateQuery }) => ({
+		// 	name,
+		// 	unsubscribe: subscribeToMore({
+		// 		document,
+		// 		updateQuery,
+		// 		variables: { mapUid: map.uid },
+		// 	}),
+		// }))
+	}
+
+	// stopSubscriptions() {
+
+	// }
 
 	/* Method Types */
 	unsubscribe: () => void
@@ -198,9 +251,22 @@ class MapEditor extends React.Component<Props, State> {
 }
 
 const Wrapper = compose(
-	withMapQuery,
 	withStateMachine(statechart),
 	withEditorModes,
 )(MapEditor)
 
-export default () => <CurrentViewerQuery>{({ data }) => <Wrapper viewer={data.viewer} />}</CurrentViewerQuery>
+type LoaderProps = MappRenderProps & {
+	uid: string,
+}
+
+export default ({ uid, ...props }: LoaderProps) => (
+	<CurrentViewerQuery>
+		{({ data: viewerQueryData }) => (
+			<MapQuery variables={{ uid }}>
+				{({ data: mapQueryData, ...queryProps }) => {
+					return <Wrapper viewer={viewerQueryData.currentViewer.viewer} map={mapQueryData.map} {...props} {...queryProps} />
+				}}
+			</MapQuery>
+		)}
+	</CurrentViewerQuery>
+)

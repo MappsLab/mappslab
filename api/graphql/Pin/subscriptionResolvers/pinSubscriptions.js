@@ -4,7 +4,7 @@ import pubsub from '../../subscriptions'
 
 // Topics
 export const MAP_RECEIVED_PIN = 'pinAddedToMap'
-export const PIN_MODIFIED = 'pinModified'
+export const PIN_UPDATED = 'pinModified'
 export const PIN_DELETED = 'pinDeleted'
 
 const debug = require('debug')('api:subscriptions')
@@ -21,11 +21,11 @@ export const pinAddedToMap = {
 	),
 }
 
-export const pinModified = {
+export const pinUpdated = {
 	subscribe: withFilter(
-		() => pubsub.asyncIterator(PIN_MODIFIED),
+		() => pubsub.asyncIterator(PIN_UPDATED),
 		(payload, args) => {
-			debug(`${PIN_MODIFIED} payload:`)
+			debug(`${PIN_UPDATED} payload:`)
 			debug(payload)
 			// debug(args)
 			return true

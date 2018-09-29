@@ -58,7 +58,7 @@ type MapUtils = {
 	latLngWithPixelOffset: (LatLng, x: number, y: number) => LatLng,
 }
 
-type RenderPropTypes = {
+export type MappRenderProps = {
 	googleMap: Map,
 	utils: MapUtils,
 	addEventListeners: (eventHandlers: EventHandlers) => void,
@@ -68,7 +68,7 @@ type RenderPropTypes = {
 type Props = {
 	APIKey: string,
 	initialOptions?: Object,
-	render: (RenderPropTypes) => React.Node,
+	render: (MappRenderProps) => React.Node,
 	style?: Object,
 }
 
@@ -172,5 +172,3 @@ class Mapp extends React.Component<Props, State> {
 }
 
 export default Mapp
-
-

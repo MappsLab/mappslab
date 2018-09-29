@@ -1,7 +1,7 @@
 // @flow
 import gql from 'graphql-tag'
 import { withDefaultMutation } from '../Mutation'
-import { query as mapQuery } from '../map/withMapQuery'
+import { query as mapQuery } from '../map/MapQuery'
 
 const mutation = gql`
 	mutation UpdatePin($uid: String!, $title: String, $description: String, $lat: Float, $lng: Float, $addToMaps: [String]) {

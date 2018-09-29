@@ -50,7 +50,7 @@ const Query = (props: QueryProps) => {
 	return (
 		<ApolloQuery {...queryProps} skip={skip || delayQuery}>
 			{(response) => {
-				const { networkStatus, error, client } = response
+				const { networkStatus, error, client, subscribeToMore } = response
 				// if `delay === true`, pass in a 'load' function to manually fire the query
 				// and return the results
 				const loadQuery = async (variables) => {
@@ -75,6 +75,7 @@ const Query = (props: QueryProps) => {
 				const renderProps = {
 					data: data ? unwindEdges(data) : data,
 					loadQuery,
+					subscribeToMore,
 					...responseProps,
 				}
 				return children(renderProps)

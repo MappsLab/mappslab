@@ -7,8 +7,6 @@ import MapEditor from 'Components/Maps/MapEditor'
  * Editor
  */
 
-type Props = {}
-
 const initialOptions = {
 	center: { lat: 40.65, lng: -111.85 },
 	zoom: 10,
@@ -17,7 +15,7 @@ const initialOptions = {
 	streetViewControlOptions: false,
 }
 
-const Editor = (props: Props) => (
+const Editor = (props: {}) => (
 	<Mapp
 		APIKey="AIzaSyCOqxjWmEzFlHKC9w-iUZ5zL2rIyBglAag"
 		//
