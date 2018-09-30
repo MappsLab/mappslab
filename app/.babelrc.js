@@ -44,6 +44,7 @@ module.exports = {
 					Types: './types',
 					Styles: './theme',
 					Test: './__tests__',
+					Jest: './jest',
 				},
 			},
 		],

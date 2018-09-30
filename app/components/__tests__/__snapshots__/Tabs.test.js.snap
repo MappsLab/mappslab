@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Tabs Component Mounts Correctly 1`] = `
+.c0 {
+  font-size: 16px;
+  border-bottom: 2px solid transparent;
+}
+
+<div>
+  <button
+    class="c0"
+    data-testid="tabButton-Nikes"
+  >
+    Nikes
+  </button>
+  <button
+    class="c0"
+    data-testid="tabButton-Ivy"
+  >
+    Ivy
+  </button>
+  <button
+    class="c0"
+    data-testid="tabButton-Pink + White"
+  >
+    Pink + White
+  </button>
+  <div
+    data-testid="tabContainer"
+  >
+    These bitches want Nikes
+  </div>
+</div>
+`;

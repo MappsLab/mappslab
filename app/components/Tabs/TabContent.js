@@ -36,7 +36,9 @@ class TabContent extends React.Component<Props> {
 	}
 }
 
-const Wrapper = (props: BaseProps) => <TabConsumer>{(contextValue) => <TabContent {...contextValue} {...props} />}</TabConsumer>
+const Wrapper = (props: BaseProps) => (
+	<TabConsumer>{(contextValue: TabContextValue) => <TabContent {...contextValue} {...props} />}</TabConsumer>
+)
 
 Wrapper.defaultProps = {
 	displayName: undefined,

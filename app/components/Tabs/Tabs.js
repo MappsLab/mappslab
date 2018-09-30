@@ -76,8 +76,6 @@ class Tabs extends React.Component<Props, State> {
 	}
 
 	changeTab = (activeTab: Tab) => () => {
-		console.log('chainge tab')
-		console.log(activeTab)
 		this.setState({ activeTab })
 	}
 
@@ -91,7 +89,6 @@ class Tabs extends React.Component<Props, State> {
 			registerTab: this.registerTab,
 			removeTab: this.removeTab,
 		}
-		console.log(value)
 		return <TabProvider value={value}>{children}</TabProvider>
 	}
 }

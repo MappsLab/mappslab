@@ -1,4 +1,15 @@
 // @flow
-const baseConfig = require('../config/jest.config')()
+const path = require('path')
 
-module.exports = baseConfig
+module.exports = {
+	setupTestFrameworkScriptFile: require.resolve('./jest/setup.js'),
+	testMatch: ['**/__tests__/**/*.test.js'],
+	coveragePathIgnorePatterns: ['node_modules', 'coverage', '/__.*__/'],
+	testEnvironment: 'jsdom',
+	testURL: 'http://localhost',
+	coverageDirectory: path.resolve(__dirname, 'coverage'),
+	// transformIgnorePatterns: ['^Shared/mockUtilsSchema'],
+	// transform: {
+	// 	'^.+\\.jsx?$': 'babel-jest',
+	// },
+}

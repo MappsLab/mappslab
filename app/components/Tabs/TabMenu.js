@@ -20,7 +20,7 @@ const TabMenu = () => (
 		{({ tabs, changeTab, activeTab }: TabContextValue) => {
 			if (!tabs) return null
 			return tabs.map(({ name, displayName }) => (
-				<TabButton key={name} active={name === activeTab} onClick={changeTab({ name })}>
+				<TabButton data-testid={`tabButton-${name}`} key={name} active={name === activeTab} onClick={changeTab({ name })}>
 					{displayName || name}
 				</TabButton>
 			))

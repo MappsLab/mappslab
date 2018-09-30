@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { ThemeProvider } from 'styled-components'
 import { render } from 'react-testing-library'
-import theme from '../../theme'
+import theme from '../theme'
 
 const renderWithWrapper = (node, ...options) => render(<ThemeProvider theme={theme}>{node}</ThemeProvider>, ...options)
 
