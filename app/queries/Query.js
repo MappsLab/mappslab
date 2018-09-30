@@ -46,7 +46,6 @@ const Query = (props: QueryProps) => {
 	// A few more query props are available:
 	// https://www.apollographql.com/docs/react/essentials/queries.html#props
 	const { children, skip, delayQuery, ...queryProps } = props
-	console.log(queryProps)
 	return (
 		<ApolloQuery {...queryProps} skip={skip || delayQuery}>
 			{(response) => {

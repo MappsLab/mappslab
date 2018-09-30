@@ -9,8 +9,8 @@ let admin
 
 beforeAll(async (done) => {
 	const users = await getDBUsers()
-	student1 = await getUser(users.find((u) => !u.roles.includes('admin')).uid)
-	student2 = await getUser(users.find((u) => !u.roles.includes('admin') && u.uid !== student1.uid).uid)
+	student1 = await getUser(users.find((u) => u.roles.includes('student')).uid)
+	student2 = await getUser(users.find((u) => u.roles.includes('student') && u.uid !== student1.uid).uid)
 	admin = await getUser(users.find((u) => u.roles.includes('admin')).uid)
 	done()
 })

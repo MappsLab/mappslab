@@ -1,9 +1,13 @@
 // @flow
 import React from 'react'
+import styled from 'styled-components'
 import { Link } from 'react-router-dom'
-import { Column } from 'Components/Layout'
 import { Header2 } from 'Components/Text'
 import { MapPreview } from 'Components/Dashboard'
+
+const Wrapper = styled.div`
+	width: 300px;
+`
 
 /**
  * MapCard
@@ -20,10 +24,10 @@ const MapCard = ({ uid, userUid, title }: Props) => {
 	const to = userUid ? `/maps/user/${userUid}` : `/maps/${uid}`
 	return (
 		<Link to={to}>
-			<Column>
+			<Wrapper>
 				<Header2>{title}</Header2>
 				<MapPreview />
-			</Column>
+			</Wrapper>
 		</Link>
 	)
 }

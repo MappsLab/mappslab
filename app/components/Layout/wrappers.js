@@ -8,6 +8,7 @@ export const Main = styled.main`
 		width: calc(100% - ${theme.layout.spacing.quadruple});
 		padding: ${theme.layout.spacing.double} ${theme.layout.spacing.single};
 		border: 1px solid ${theme.colors.lightGray};
+		background-color: white;
 	`};
 `
 
