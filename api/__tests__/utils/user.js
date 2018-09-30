@@ -99,6 +99,7 @@ const createTeacherMutation = /* GraphQL */ `
 		createTeacher(input: $input) {
 			uid
 			name
+			email
 			roles
 		}
 	}
@@ -119,7 +120,10 @@ const createUser = (type: 'teacher' | 'student') => async (
 	{ viewer }: { viewer: UserType } = {},
 ) => {
 	const { userData, assignToClassrooms } = args
-	const input = userData || generateUser(type)
+	const input = {
+		...generateUser(type),
+		...userData,
+	}
 	const context = { viewer }
 	const variables = { input, assignToClassrooms }
 	const m = type === 'teacher' ? createTeacherMutation : createStudentMutation
