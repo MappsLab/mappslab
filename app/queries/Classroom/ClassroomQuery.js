@@ -20,6 +20,14 @@ export const query = gql/* GraphQL */ `
 					}
 				}
 			}
+			maps {
+				edges {
+					node {
+						uid
+						name
+					}
+				}
+			}
 		}
 	}
 `
