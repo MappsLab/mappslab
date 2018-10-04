@@ -22,5 +22,7 @@ export const createPin = async (args: NewPinData, ownerUid: string): Promise<Pin
 
 	debug(validatedPinData, edges)
 
-	return createNodeWithEdges(validatedPinData, edges)
+	const pin: PinType = await createNodeWithEdges(validatedPinData, edges)
+
+	return pin
 }
