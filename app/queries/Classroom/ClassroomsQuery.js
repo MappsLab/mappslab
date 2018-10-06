@@ -3,8 +3,8 @@ import gql from 'graphql-tag'
 import { withDefaultQuery } from '../Query'
 
 export const query = gql/* GraphQL */ `
-	{
-		classrooms {
+	query ClassroomsQuery($first: Int, $after: String, $sort: ClassroomSortParameter, $filter: ClassroomFilterParameter) {
+		classrooms(input: { first: $first, after: $after, sort: $sort, filter: $filter }) {
 			pageInfo {
 				lastCursor
 				hasNextPage

@@ -22,6 +22,7 @@
     "apollo-utilities": "^1.0.19",
     "axios": "^0.18.0",
     "debug": "^3.1.0",
+    "downshift": "^2.2.3",
     "final-form": "^4.10.0",
     "graphql": "^0.13.2",
     "graphql-tag": "^2.9.2",
