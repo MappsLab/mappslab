@@ -35,7 +35,6 @@ const seedDatabase = async () => {
 		{ userData: { email: 'john@cmwworld.com', name: 'John Schaefer', roles: ['teacher'] } },
 		{ viewer: admin },
 	)
-	console.log(john)
 	const otherTeachers = await promiseSerial(R.times(() => async () => createTeacher({}, { viewer: admin }), 1))
 	const students = await promiseSerial(R.times(() => async () => createStudent({}, { viewer: admin }), 12))
 

@@ -28,6 +28,7 @@ export const classroomSchema = (isNew: boolean = true) =>
 			: Joi.string()
 					.min(3)
 					.max(35),
+		description: Joi.string().max(700),
 		createdAt: isNew ? Joi.date().required() : Joi.any().forbidden(),
 		updatedAt: Joi.date().required(),
 		type: Joi.any().only('classroom'),
@@ -39,7 +40,7 @@ export const defaultValues = {
 	updatedAt: new Date(),
 }
 
-export const publicFields = ['uid', 'title', 'slug', 'disabled', 'createdAt', 'updatedAt', 'type'].join('\n')
+export const publicFields = ['uid', 'title', 'description', 'slug', 'disabled', 'createdAt', 'updatedAt', 'type'].join('\n')
 
 export const validateNew = (classroomData: ClassroomInput) => Joi.validate(classroomData, classroomSchema(true))
 export const validateUpdate = (classroomData: ClassroomInput) => Joi.validate(classroomData, classroomSchema(false))
