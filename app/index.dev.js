@@ -3,10 +3,11 @@ import { render } from 'react-dom'
 import { AppContainer } from 'react-hot-loader'
 import { BrowserRouter } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components'
+import EntityProvider from 'Components/EntityBrowser/Provider'
 import ApolloWrapper from './services/Apollo'
 import theme from './theme'
 import MappsLab from './views/MappsLab'
-import './theme/global'
+import GlobalStyle from './theme/global'
 
 if (window.localStorage) {
 	window.localStorage.debug = 'app'
@@ -18,7 +19,10 @@ const renderApp = (Component) => {
 			<ApolloWrapper>
 				<BrowserRouter>
 					<ThemeProvider theme={theme}>
-						<Component />
+						<EntityProvider>
+							<GlobalStyle />
+							<Component />
+						</EntityProvider>
 					</ThemeProvider>
 				</BrowserRouter>
 			</ApolloWrapper>

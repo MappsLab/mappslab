@@ -10,6 +10,7 @@ export type UserType = {
 	roles: Array<Role>,
 	pins?: Array<PinType>,
 	classrooms?: Array<ClassroomType>,
+	__typename: 'User',
 }
 
 export type ViewerType = UserType & {

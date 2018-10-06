@@ -6,8 +6,18 @@ export const query = gql/* GraphQL */ `
 	query ClassroomQuery($uid: String, $slug: String) {
 		classroom(input: { uid: $uid, slug: $slug }) {
 			title
+			description
 			uid
 			slug
+			teachers {
+				edges {
+					node {
+						uid
+						name
+						roles
+					}
+				}
+			}
 			students {
 				pageInfo {
 					lastCursor
@@ -24,7 +34,7 @@ export const query = gql/* GraphQL */ `
 				edges {
 					node {
 						uid
-						name
+						title
 					}
 				}
 			}

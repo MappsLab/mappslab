@@ -4,6 +4,7 @@ import { ViewerDashboardQuery } from 'Queries'
 import { Main } from 'Components/Layout'
 import { Header1 } from 'Components/Text'
 import Tabs from 'Components/Tabs'
+import { EntityBrowser } from 'Components/EntityBrowser'
 import TeacherClassrooms from './TeacherClassrooms'
 
 /**
@@ -16,6 +17,7 @@ const Dashboard = () => (
 			const { viewer } = data.currentViewer
 			return (
 				<Main>
+					<EntityBrowser />
 					<Header1 align="left">Hi, Teach {viewer.name}</Header1>
 					<Tabs initialTab="Classrooms">
 						<Tabs.Menu />

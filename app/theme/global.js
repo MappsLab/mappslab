@@ -1,10 +1,10 @@
 // @flow
 /* eslint-disable */
 
-import { injectGlobal } from 'styled-components'
+import { createGlobalStyle } from 'styled-components'
 import normalized from './normalized'
 
-injectGlobal`
+const GlobalStyle = createGlobalStyle`
 	${normalized}
 	@import url('https://fonts.googleapis.com/css?family=Work+Sans:400,500,600');
 	
@@ -72,6 +72,6 @@ injectGlobal`
 	img {
 		max-width: 100%;
 	}
-
-
 `
+
+export default GlobalStyle
