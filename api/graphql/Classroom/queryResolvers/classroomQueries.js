@@ -11,11 +11,10 @@ export const classrooms = async (
 	_: Object,
 	{ input }: PaginationInput,
 	ctx: GraphQLContext,
-): Promise<PageType<ClassroomType> | null> => {
-	const fetchedClassrooms = await ctx.models.Classroom.getClassrooms().catch((err) => {
+): Promise<PageType<ClassroomType>> => {
+	const fetchedClassrooms = await ctx.models.Classroom.getClassrooms(input).catch((err) => {
 		throw err
 	})
-	if (!fetchedClassrooms) return null
 	const page = assemblePage(fetchedClassrooms, input)
 	return page
 }

@@ -38,4 +38,5 @@ export type UpdatePinData = {
 	lng?: number,
 	addToMaps?: Array<string>,
 	addToLessons?: Array<string>,
+	deleted: boolean,
 }

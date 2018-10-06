@@ -29,17 +29,12 @@ export const deletePin = async ({ uid }: RemovePinInput, viewer: UserType): Prom
 	}
 
 	const pin = result.getPin[0]
-
-	// const pinnedRelationships = result.getPin["~pinned"]
-	// const hasPinRelationships = pin.has_pin.map((fromNode) => ({ fromUid: fromNode.uid, pred: 'has_pin', toUid: uid }))
-	// const pinnedRelationships = pin.pinned.map((fromNode) => ({ fromUid: fromNode.uid, pred: 'pinned', toUid: uid }))
-
-	const cleaned = await clean({ deleted: true })
+	const cleaned = await clean({ uid, deleted: true })
 	const validatedPinData = await validateUpdate(cleaned)
-	const mutationResult = await mutateNode(pin.uid, validatedPinData)
-	// const mutationResult = await removeNodeWithEdges(uid, [...hasPinRelationships, ...pinnedRelationships])
+	const mutationResult = await mutateNode(pin.uid, { uid: pin.uid, ...validatedPinData })
+
 	return {
-		success: mutationResult,
+		success: mutationResult !== null,
 		messages: [],
 	}
 }

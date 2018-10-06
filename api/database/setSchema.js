@@ -13,6 +13,7 @@ export const setSchema = async () => {
 		 */
 		'type: string @index(hash) .',
 		'slug: string @index(hash) . ',
+		'title: string @index(trigram) . ',
 		'deleted: bool @index(bool) . ',
 
 		/**

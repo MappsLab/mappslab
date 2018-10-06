@@ -10,23 +10,25 @@ import { parseSingularFields } from 'Utils/parsing'
  */
 
 export const pinSchema = (isNew: boolean = true) =>
-	Joi.object().keys({
-		title: isNew
-			? Joi.string()
-					.min(3)
-					.max(35)
-					.required()
-			: Joi.string()
-					.min(3)
-					.max(35),
-		lat: isNew ? Joi.number().required() : Joi.number(),
-		lng: isNew ? Joi.number().required() : Joi.number(),
-		description: Joi.string().max(400),
-		createdAt: isNew ? Joi.date().required() : Joi.any().forbidden(),
-		updatedAt: Joi.date().required(),
-		type: Joi.any().only('pin'),
-		deleted: isNew ? Joi.boolean().default(false) : Joi.boolean(),
-	})
+	Joi.object()
+		.keys({
+			title: isNew
+				? Joi.string()
+						.min(3)
+						.max(35)
+						.required()
+				: Joi.string()
+						.min(3)
+						.max(35),
+			lat: isNew ? Joi.number().required() : Joi.number(),
+			lng: isNew ? Joi.number().required() : Joi.number(),
+			description: Joi.string().max(400),
+			createdAt: isNew ? Joi.date().required() : Joi.any().forbidden(),
+			updatedAt: Joi.date().required(),
+			type: Joi.any().only('pin'),
+			deleted: isNew ? Joi.boolean().default(false) : Joi.boolean(),
+		})
+		.options({ stripUnknown: true })
 
 export const defaultValues = {
 	type: 'pin',
@@ -54,8 +56,8 @@ export const publicFields = [
 
 const singleFields = ['owner']
 
-export const validateNew = (pinData: NewPinData): NewPinData => Joi.validate(pinData, pinSchema(true))
-export const validateUpdate = (pinData: UpdatePinData): UpdatePinData => Joi.validate(pinData, pinSchema(false))
+export const validateNew = (pinData: NewPinData): Promise<NewPinData> => Joi.validate(pinData, pinSchema(true))
+export const validateUpdate = (pinData: UpdatePinData): Promise<UpdatePinData> => Joi.validate(pinData, pinSchema(false))
 
 /**
  * Clean

@@ -37,6 +37,11 @@ export const coreTypes = /* GraphQL */ `
 		DESC
 	}
 
+	input NumberRange {
+		start: Float!
+		end: Float!
+	}
+
 	input StringOperators {
 		eq: String
 		contains: String
@@ -44,11 +49,6 @@ export const coreTypes = /* GraphQL */ `
 
 	input BooleanOperators {
 		eq: Boolean
-	}
-
-	input NumberRange {
-		start: Float!
-		end: Float!
 	}
 
 	input NumberOperators {
