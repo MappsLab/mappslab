@@ -35,9 +35,9 @@ describe('queries', () => {
 				}
 			}
 		`
-		const variables = { slug: classrooms[1].slug }
+		const variables = { slug: classrooms[0].slug }
 		const result = await request(query, { variables })
-		expect(result.data.classroom.title).toBe(classrooms[1].title)
+		expect(result.data.classroom.title).toBe(classrooms[0].title)
 	})
 
 	it('[classroom] should fetch its connections', async () => {
@@ -70,7 +70,7 @@ describe('queries', () => {
 				}
 			}
 		`
-		const variables = { slug: classrooms[2].slug }
+		const variables = { slug: classrooms[0].slug }
 		const result = await request(query, { variables })
 		const { students, teachers, maps } = result.data.classroom
 		expect(students.edges[0].node.name.length).toBeGreaterThan(0)
@@ -94,6 +94,6 @@ describe('queries', () => {
 			}
 		`
 		const uidResult = await request(uidQuery)
-		expect(uidResult.data.classrooms.edges.length).toBeGreaterThan(2)
+		expect(uidResult.data.classrooms.edges.length).toBeGreaterThan(0)
 	})
 })

@@ -1,5 +1,11 @@
 // @flow
+import * as React from 'react'
+import { CurrentViewerQuery } from 'Queries/viewer'
+import StudentDashboard from './StudentDashboard'
+import TeacherDashboard from './TeacherDashboard'
 
-import Dashboard from './Dashboard'
-
-export default Dashboard
+export default () => (
+	<CurrentViewerQuery>
+		{({ data }) => (data.currentViewer.viewer.roles.includes('teacher') ? <TeacherDashboard /> : <StudentDashboard />)}
+	</CurrentViewerQuery>
+)

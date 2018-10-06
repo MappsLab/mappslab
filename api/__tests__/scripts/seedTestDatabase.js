@@ -31,8 +31,14 @@ const seedDatabase = async () => {
 	debug('🤓  Creating admin user')
 	const admin = await createAdminUser()
 	debug('👶  Creating and inserting users...')
-	const teachers = await promiseSerial(R.times(() => async () => createTeacher({}, { viewer: admin }), 6))
-	const students = await promiseSerial(R.times(() => async () => createStudent({}, { viewer: admin }), 50))
+	const john = await createTeacher(
+		{ userData: { email: 'john@cmwworld.com', name: 'John Schaefer', roles: ['teacher'] } },
+		{ viewer: admin },
+	)
+	const otherTeachers = await promiseSerial(R.times(() => async () => createTeacher({}, { viewer: admin }), 1))
+	const students = await promiseSerial(R.times(() => async () => createStudent({}, { viewer: admin }), 12))
+
+	const teachers = [john, ...otherTeachers]
 
 	debug('🏫  Adding some classrooms..')
 	const teacherClassrooms = await Promise.all(
@@ -46,7 +52,7 @@ const seedDatabase = async () => {
 							teacher,
 						}
 					},
-					2,
+					1,
 				),
 			),
 		),
@@ -69,7 +75,7 @@ const seedDatabase = async () => {
 	const maps = await Promise.all(
 		classrooms.map(async (classroom) =>
 			promiseSerial(
-				R.times(() => async () => createGeneratedMap({ classroomUid: classroom.uid }, { viewer: classroom.teacher }), 2),
+				R.times(() => async () => createGeneratedMap({ classroomUid: classroom.uid }, { viewer: classroom.teacher }), 1),
 			),
 		),
 	)

@@ -5,6 +5,7 @@ const Classroom = /* GraphQL */ `
 		uid: String!
 		title: String
 		slug: String
+		description: String
 		students: UserConnection
 		teachers: UserConnection
 		maps: MapConnection
@@ -12,10 +13,12 @@ const Classroom = /* GraphQL */ `
 
 	input NewClassroomData {
 		title: String!
+		description: String
 	}
 
 	input ModifyClassroomData {
 		title: String
+		description: String
 	}
 
 	# Relationships

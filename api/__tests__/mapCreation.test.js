@@ -35,11 +35,14 @@ beforeAll(async (done) => {
 
 afterEach(async (done) => {
 	if (mapsToRemove.length)
-		mapsToRemove.map(async (map) => {
-			if (map.classroom)
-				await removeEdge({ fromUid: map.classroom.uid, pred: 'has_map', toUid: map.uid }).catch((e) => console.log(e))
-			await removeNode(map.uid)
-		})
+		await Promise.all(
+			mapsToRemove.map(async (map) => {
+				if (map.classroom) {
+					await removeEdge({ fromUid: map.classroom.uid, pred: 'has_map', toUid: map.uid }).catch((e) => console.log(e))
+				}
+				await removeNode(map.uid)
+			}),
+		)
 
 	done()
 })

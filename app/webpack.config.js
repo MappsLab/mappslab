@@ -28,6 +28,7 @@ const common = merge([
 				Types: path.resolve(__dirname, 'types'),
 				Styles: path.resolve(__dirname, 'theme'),
 				Test: path.resolve(__dirname, '__test__'),
+				Jest: path.resolve(__dirname, 'jest'),
 				mapp: path.resolve(__dirname, '../packages/mapp/dist'),
 			},
 			extensions: ['.js'],

@@ -46,6 +46,7 @@ module.name_mapper='^Queries' -> '<PROJECT_ROOT>/queries'
 module.name_mapper='^Types' -> '<PROJECT_ROOT>/types'
 module.name_mapper='^Styles' -> '<PROJECT_ROOT>/theme'
 module.name_mapper='^Test' -> '<PROJECT_ROOT>/__tests__'
+module.name_mapper='^Jest' -> '<PROJECT_ROOT>/jest'
 module.name_mapper='^mapp' -> '<PROJECT_ROOT>/../packages/mapp/src'
 
 suppress_type=$FlowIssue

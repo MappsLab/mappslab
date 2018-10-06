@@ -17,6 +17,7 @@ export const getDBClassrooms = Classroom.getClassrooms
 
 const generateClassroom = (): NewClassroomData => ({
 	title: `${faker.commerce.productAdjective()} ${faker.commerce.department()}`,
+	description: faker.lorem.paragraphs(),
 })
 
 const createClassroomMutation = /* GraphQL */ `
