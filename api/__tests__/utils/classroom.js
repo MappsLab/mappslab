@@ -15,10 +15,30 @@ export const getDBClassrooms = Classroom.getClassrooms
  * Classroom Creation
  */
 
-const generateClassroom = (): NewClassroomData => ({
-	title: `${faker.commerce.productAdjective()} ${faker.commerce.department()}`,
-	description: faker.lorem.paragraphs(),
-})
+const fixtures = [
+	{
+		title: 'Social Studies',
+		description: faker.lorem.paragraphs(),
+	},
+	{
+		title: 'Study Period',
+		description: faker.lorem.paragraph(),
+	},
+]
+
+let count = 0
+
+const generateClassroom = (): NewClassroomData => {
+	const classroom =
+		count < fixtures.length
+			? fixtures[count]
+			: {
+					title: `${faker.commerce.productAdjective()} ${faker.commerce.department()}`,
+					description: faker.lorem.paragraphs(),
+			  }
+	count += 1
+	return classroom
+}
 
 const createClassroomMutation = /* GraphQL */ `
 	mutation CreateClassroom($input: NewClassroomData!) {

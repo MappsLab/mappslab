@@ -2,10 +2,6 @@
 import DateTime from './DateTime'
 
 export const coreTypeResolvers = {
-	QueryOperator: {
-		EQ: '==',
-		NOTEQ: '!=',
-	},
 	DateTime,
 }
 
@@ -25,17 +21,6 @@ export const coreTypes = /* GraphQL */ `
 		pageInfo: PageInfo!
 	}
 
-	enum QueryOperator {
-		EQ
-		NOTEQ
-	}
-
-	input QueryFilter {
-		key: String!
-		value: String!
-		operator: QueryOperator
-	}
-
 	input GetNodeInput {
 		uid: String
 		slug: String
@@ -44,7 +29,47 @@ export const coreTypes = /* GraphQL */ `
 	input PaginationInput {
 		first: Int
 		after: String!
-		filter: [QueryFilter]
+		filter: [String]
+	}
+
+	enum SortOrder {
+		ASC
+		DESC
+	}
+
+	input StringOperators {
+		eq: String
+		contains: String
+	}
+
+	input BooleanOperators {
+		eq: Boolean
+	}
+
+	input NumberRange {
+		start: Float!
+		end: Float!
+	}
+
+	input NumberOperators {
+		eq: Float
+		lt: Float
+		lte: Float
+		gt: Float
+		gte: Float
+		between: NumberRange
+	}
+
+	input DateRange {
+		start: DateTime!
+		end: DateTime!
+	}
+
+	input DateOperators {
+		eq: DateTime
+		before: DateTime
+		after: DateTime
+		between: DateRange
 	}
 
 	type PageInfo {

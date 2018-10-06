@@ -81,17 +81,48 @@ export const getUser = async (uid: string): Promise<UserType> => {
  * User Creation
  */
 
+let teacherCount = 0
+const teacherFixtures = [
+	{
+		email: 'john@cmwworld.com',
+		name: 'John Schaefer',
+		roles: ['teacher'],
+	},
+]
+
+let studentCount = 0
+const studentFixtures = [{ name: 'Alex Johnstone', roles: ['student'] }, { name: 'Heidi Gaudet', roles: ['student'] }]
+
 const generateUser = (role: 'student' | 'teacher'): NewUserData => {
-	const name = faker.name.findName()
-	return {
-		name,
-		email: faker.internet
-			.email(name)
-			.toLowerCase()
-			.replace(/[.]+/, '.'),
-		roles: [role],
-		temporaryPassword: 'temporary',
+	if (role === 'student') {
+		const student =
+			studentCount < studentFixtures.length
+				? studentFixtures[studentCount]
+				: {
+						name: faker.name.findName(),
+						roles: ['student'],
+						temporaryPassword: 'temporary',
+				  }
+		studentCount += 1
+		return student
 	}
+	const name = faker.name.findName()
+
+	const teacher =
+		teacherCount < teacherFixtures.length
+			? teacherFixtures[teacherCount]
+			: {
+					name,
+					email: faker.internet
+						.email(name)
+						.toLowerCase()
+						.replace(/[.]+/, '.'),
+
+					roles: ['teacher'],
+					temporaryPassword: 'temporary',
+			  }
+	teacherCount += 1
+	return teacher
 }
 
 const createTeacherMutation = /* GraphQL */ `

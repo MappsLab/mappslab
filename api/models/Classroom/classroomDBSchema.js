@@ -28,7 +28,7 @@ export const classroomSchema = (isNew: boolean = true) =>
 			: Joi.string()
 					.min(3)
 					.max(35),
-		description: Joi.string().max(700),
+		description: Joi.string().max(1200),
 		createdAt: isNew ? Joi.date().required() : Joi.any().forbidden(),
 		updatedAt: Joi.date().required(),
 		type: Joi.any().only('classroom'),

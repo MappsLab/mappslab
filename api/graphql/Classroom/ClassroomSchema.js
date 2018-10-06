@@ -23,6 +23,21 @@ const Classroom = /* GraphQL */ `
 
 	# Relationships
 
+	input ClassroomSortParameter {
+		title: SortOrder
+	}
+
+	input ClassroomFilterParameter {
+		title: StringOperators
+	}
+
+	input ClassroomListOptions {
+		first: Int
+		after: String
+		sort: ClassroomSortParameter
+		filter: ClassroomFilterParameter
+	}
+
 	input AssignUserInput {
 		classroomUid: String!
 		userUid: String!
@@ -42,7 +57,7 @@ const Classroom = /* GraphQL */ `
 
 	extend type Query {
 		classroom(input: GetNodeInput): Classroom!
-		classrooms(input: PaginationInput): ClassroomConnection!
+		classrooms(input: ClassroomListOptions): ClassroomConnection!
 	}
 
 	extend type Mutation {
