@@ -16,9 +16,9 @@ export type Filter = {
 }
 
 export type PaginationArgs = {
-	first: number,
-	after: string,
-	filter: any,
+	first?: number,
+	after?: string,
+	filter?: any,
 }
 
 export type PaginationInput = {

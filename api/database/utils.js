@@ -139,6 +139,17 @@ export const makeFilterString = (filter?: FilterObject): string => {
 	return `@filter(${filters.join(' AND ')})`
 }
 
+/**
+ * Create a string to append to a dGraph query. Be sure to include the
+ * initial comma that appears after the root function, i.e. `, first: 5, after: 0x123`
+ * @param {number} first
+ * @param {string} after
+ */
+export const makePaginationString = ({ first, after }: { first?: number, after?: string }): string => {
+	if (!first) return ''
+	return ['', first ? `first: ${first}` : false, after ? `after: ${after}` : false].filter((i) => i !== false).join(', ')
+}
+
 export const createFilterString = (filter: Array<Filter>, connect: string = 'AND'): string => {
 	const funcs = filter.map(({ key, value, operator = 'eq' }) => `${operator}(${key}, "${value}")`)
 	return `@filter(${funcs.join(connect)})`

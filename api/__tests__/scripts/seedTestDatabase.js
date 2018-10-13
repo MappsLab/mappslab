@@ -47,7 +47,7 @@ const seedDatabase = async () => {
 							teacher,
 						}
 					},
-					2,
+					20,
 				),
 			),
 		),
