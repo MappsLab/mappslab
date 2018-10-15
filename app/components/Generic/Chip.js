@@ -5,25 +5,34 @@ import styled from 'styled-components'
 const Wrapper = styled.div`
 	${({ theme, size, active }) => `
 		width: 100%;
-		height: ${size === 'large' ? '36px' : '16px'};
+		height: ${theme.sizes.chip[size].height};
 		display: flex;
 		justify-content: flex-start;
 		align-items: center;	
-		border: ${active ? `2px solid ${theme.colors.red}` : `2px solid ${theme.colors.gray}`};
+		border: ${active ? `2px solid ${theme.colors.green}` : `2px solid ${theme.colors.gray}`};
 		background-color: white;
-		border-radius: ${size === 'large' ? '18px' : '8px'};
-		padding: ${size === 'large' ? '3px' : '2px'};
+		border-radius: calc(${theme.sizes.chip[size].height} / 2);
+		padding: 4px;
 	`};
 `
 
 const ImageWrapper = styled.figure`
-	${({ size }) => `
-		width: ${size === 'large' ? '24px' : '12px'};
-		height: ${size === 'large' ? '24px' : '12px'};
-		margin-right: ${size === 'large' ? '3px' : '2px'};
-		border-radius: ${size === 'large' ? '12px' : '6px'};
-		overflow: hidden;
-	`};
+	${({ theme, size }) => {
+		const width = `${theme.sizes.chip[size].height} - 10px`
+		return `
+			width: calc(${width});
+			height: calc(${width});
+			margin-right: ${size === 'large' ? '5px' : '3px'};
+			border-radius: calc(${width} / 2);
+			overflow: hidden;
+		`
+	}};
+
+	> img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
 `
 
 const TitleWrapper = styled.div`
@@ -61,7 +70,7 @@ type Props = {
 const Chip = ({ image, title, subtitle, size, active }: Props) => (
 	<Wrapper size={size} active={active}>
 		<ImageWrapper size={size}>
-			<img src={image} />
+			<img src="https://media0.giphy.com/media/1wnZQRxFfbKHnSIEIS/giphy.webp" />
 		</ImageWrapper>
 		<TitleWrapper>
 			<Title size={size}>{title}</Title>

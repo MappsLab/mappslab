@@ -4,6 +4,7 @@ import Selector from './Selector'
 import type { SelectorItem } from './Selector'
 
 type Props = {
+	disabled?: boolean,
 	onSelect: () => void,
 	refetchQuery: (string) => void,
 	refetchDelay?: number,
@@ -17,6 +18,7 @@ type State = {
 class LiveSelector extends React.Component<Props, State> {
 	static defaultProps = {
 		refetchDelay: 300,
+		disabled: false,
 	}
 
 	onInputValueChange = (value: string) => {
@@ -28,9 +30,15 @@ class LiveSelector extends React.Component<Props, State> {
 	refetchTimeout: TimeoutID
 
 	render() {
-		const { onSelect, items } = this.props
+		const { onSelect, items, disabled } = this.props
 		return (
-			<Selector label="Select your classroom" onInputValueChange={this.onInputValueChange} onChange={onSelect} items={items} />
+			<Selector
+				label="Select your classroom"
+				onInputValueChange={this.onInputValueChange}
+				onChange={onSelect}
+				items={items}
+				disabled={disabled}
+			/>
 		)
 	}
 }

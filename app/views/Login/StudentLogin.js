@@ -26,14 +26,13 @@ type Props = {
 
 const StudentLogin = ({ makeTransition, classroomUid }: Props) => {
 	const selectClassroom = (uid) => {
-		alert(`selected ${uid}`)
-
+		console.log(uid)
 		// makeTransition(SELECTED_CLASSROOM, { classroomUid: c.uid })
 	}
 
 	return (
 		<React.Fragment>
-			<State is={SELECT_CLASSROOM} render={(active) => <ClassroomSelector active={active} onSelect={selectClassroom} />} />
+			<State is={SELECT_CLASSROOM} render={(active) => <ClassroomSelector disabled={!active} onSelect={selectClassroom} />} />
 			<State is={SELECT_STUDENT}>
 				<ClassroomQuery variables={{ uid: classroomUid }}>
 					{({ data }) =>

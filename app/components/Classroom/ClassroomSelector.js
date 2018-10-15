@@ -8,11 +8,12 @@ import { ClassroomChip } from 'Components/Classroom'
  * ClassroomSelector
  */
 
-type WrapperProps = {
+type Props = {
+	disabled?: boolean,
 	onSelect: () => void,
 }
 
-const Wrapper = (props: WrapperProps) => (
+const ClassroomSelector = (props: Props) => (
 	<ClassroomsQuery variables={{ first: 25 }}>
 		{({ data, refetch }) => {
 			const refetchQuery = (input: string) => {
@@ -38,4 +39,8 @@ const Wrapper = (props: WrapperProps) => (
 	</ClassroomsQuery>
 )
 
-export default Wrapper
+ClassroomSelector.defaultProps = {
+	disabled: false,
+}
+
+export default ClassroomSelector
