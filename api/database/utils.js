@@ -17,8 +17,10 @@ export const createVariables = R.pipe(
 	),
 )
 
-export const defaultPaginationArgs = {
-	first: 50,
+export const DEFAULT_PAGE_COUNT = 50
+
+const defaultPaginationArgs = {
+	first: DEFAULT_PAGE_COUNT,
 	after: '0x0',
 }
 
@@ -145,7 +147,7 @@ export const makeFilterString = (filter?: FilterObject): string => {
  * @param {number} first
  * @param {string} after
  */
-export const makePaginationString = ({ first, after }: { first?: number, after?: string }): string => {
+export const makePaginationString = (first?: number, after?: string): string => {
 	if (!first) return ''
 	return ['', first ? `first: ${first}` : false, after ? `after: ${after}` : false].filter((i) => i !== false).join(', ')
 }
