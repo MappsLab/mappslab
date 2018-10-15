@@ -2,7 +2,7 @@
 import React from 'react'
 import { State } from 'react-automata'
 import { ClassroomsQuery, ClassroomQuery } from 'Queries'
-import { ClassroomCard } from 'Components/Classroom'
+import { ClassroomSelector } from 'Components/Classroom'
 import { UserCard } from 'Components/User'
 
 import {
@@ -25,19 +25,15 @@ type Props = {
 }
 
 const StudentLogin = ({ makeTransition, classroomUid }: Props) => {
+	const selectClassroom = (uid) => {
+		alert(`selected ${uid}`)
+
+		// makeTransition(SELECTED_CLASSROOM, { classroomUid: c.uid })
+	}
+
 	return (
 		<React.Fragment>
-			<State is={SELECT_CLASSROOM}>
-				<ClassroomsQuery>
-					{({ data }) =>
-						data.classrooms.map((c) => (
-							<button key={c.uid} type="button" onClick={makeTransition(SELECTED_CLASSROOM, { classroomUid: c.uid })}>
-								<ClassroomCard classroom={c} />
-							</button>
-						))
-					}
-				</ClassroomsQuery>
-			</State>
+			<State is={SELECT_CLASSROOM} render={(active) => <ClassroomSelector active={active} onSelect={selectClassroom} />} />
 			<State is={SELECT_STUDENT}>
 				<ClassroomQuery variables={{ uid: classroomUid }}>
 					{({ data }) =>
