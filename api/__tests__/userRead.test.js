@@ -39,7 +39,7 @@ describe('[user]', () => {
 		expect(result.data.user.name).toBe(users[0].name)
 	})
 
-	it("should fetch a fetch a user's classrooms, maps, and pins", async () => {
+	it("should fetch a fetch a user's classrooms and pins", async () => {
 		const q = /* GraphQL */ `
 			query user($uid: String!) {
 				user(input: { uid: $uid }) {
@@ -78,6 +78,7 @@ describe('[user]', () => {
 		expect(result.data.user.pins).toHaveProperty('pageInfo')
 		expect(result.data.user.pins).toHaveProperty('edges')
 		expect(result.data.user.pins.edges.length).toBeGreaterThan(1)
+		expect(result).toMatchSnapshot()
 	})
 
 	it.skip('should fetch a users classroom & pin count', async () => {

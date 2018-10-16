@@ -118,6 +118,48 @@ describe('[makeFilterString]', () => {
 		// expect(...)
 	})
 
+	it('should properly format relationship filters', async () => {
+		/* Arrange */
+		const filters = [
+			// users
+			{
+				where: { userTeachesIn: { eq: '0x123' } },
+				expected: '@filter((uid_in(teaches_in, 0x123)))',
+			},
+			{
+				where: { userLearnsIn: { eq: '0x123' } },
+				expected: '@filter((uid_in(learns_in, 0x123)))',
+			},
+
+			// classrooms
+			{
+				where: { classroomHasStudent: { eq: '0x123' } },
+				expected: '@filter((uid_in(~learns_in, 0x123)))',
+			},
+			{
+				where: { classroomHasTeacher: { eq: '0x123' } },
+				expected: '@filter((uid_in(~teaches_in, 0x123)))',
+			},
+
+			// pins
+
+			{
+				where: { pinnedByUser: { eq: '0x123' } },
+				expected: '@filter((uid_in(~pinned, 0x123)))',
+			},
+			{
+				where: { pinnedInMap: { eq: '0x123' } },
+				expected: '@filter((uid_in(~has_pin, 0x123)))',
+			},
+		]
+		assertFilters(filters)
+	})
+
+	it('should return an error when a relationship filter is used without "eq" or "notEq"', async () => {
+		const makeString = () => makeFilterString({ userTeachesIn: { contains: '0x123' } })
+		expect(makeString).toThrow('"contains" is an invalid operator. Relationship operator may only be "eq" or "notEq"')
+	})
+
 	it('should return an empty string when the filter is undefined or empty', async () => {
 		const result = makeFilterString({})
 		expect(result).toBe('')

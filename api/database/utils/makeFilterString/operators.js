@@ -43,5 +43,3 @@ export const between = (field: string, { start, end }: Range) => {
 
 export const before = genericNumberOperator('le')
 export const after = genericNumberOperator('ge')
-
-// export const lt = (field: string, value: number)

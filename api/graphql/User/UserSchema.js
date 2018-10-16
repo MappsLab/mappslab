@@ -68,7 +68,9 @@ const User = /* GraphQL */ `
 
 	input UserFilterParameter {
 		name: StringOperators
-		in: UserInRelationshipOperators
+		# User-specific relationship filters
+		teachesIn: String
+		learnsIn: String
 	}
 
 	input UpdatePasswordInput {
