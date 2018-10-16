@@ -37,7 +37,6 @@ export const getClassrooms = async (args?: PaginationArgs = {}): Promise<Array<C
 			}
 		}
 	`
-	// console.log(q)
 	const result: Object = await query(q).catch((err) => {
 		debug('Error in getClassrooms:')
 		debug(err)

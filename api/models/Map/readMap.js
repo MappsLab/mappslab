@@ -2,8 +2,8 @@
 import { query } from 'Database'
 import type { MapType } from 'Types/MapTypes'
 import type { UserType } from 'Types/UserTypes'
-import type { GetNodeArgs } from 'Types/sharedTypes'
-import { validateUid } from 'Database/utils'
+import type { GetNodeArgs, PaginationArgs } from 'Types/sharedTypes'
+import { validateUid, makeFilterString, makePaginationString } from 'Database/utils'
 import { publicFields } from './mapDBSchema'
 
 const debug = require('debug')('api')
@@ -25,13 +25,13 @@ export const getMap = async (args: GetNodeArgs): Promise<MapType | null> => {
 	return map
 }
 
-export const getMaps = async (/* args?: PaginationArgs */): Promise<Array<MapType>> => {
-	// const { first, after, filter } = makePaginationArgs(args)
-	// const filterString = filter ? createFilterString(filter) : ''
-	const filterString = ''
+export const getMaps = async (args?: PaginationArgs = {}): Promise<Array<MapType>> => {
+	const { first, after, filter } = args
+	const filterString = makeFilterString(filter)
+	const paginationString = makePaginationString(first, after)
 	const q = /* GraphQL */ `
 		query getMaps {
-			Maps(func: eq(type, "map")) ${filterString} {
+			Maps(func: eq(type, "map") ${paginationString}) ${filterString} {
 				${publicFields}
 			}
 		}

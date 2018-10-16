@@ -69,7 +69,6 @@ export const createPin = async ({ input }: { input: NewPinData }, { viewer }: { 
 	const context = { viewer }
 	const variables = { input }
 	const result = await request(createPinMutation, { variables, context })
-	// console.log(result)
 	return result.data.createPin
 }
 

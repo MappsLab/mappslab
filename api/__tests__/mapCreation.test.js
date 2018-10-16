@@ -1,4 +1,3 @@
-
 import { removeNode, removeEdge } from 'Database'
 import { request } from './utils/db'
 import { getDBUsers } from './utils/user'
@@ -38,7 +37,7 @@ afterEach(async (done) => {
 		await Promise.all(
 			mapsToRemove.map(async (map) => {
 				if (map.classroom) {
-					await removeEdge({ fromUid: map.classroom.uid, pred: 'has_map', toUid: map.uid }).catch((e) => console.log(e))
+					await removeEdge({ fromUid: map.classroom.uid, pred: 'has_map', toUid: map.uid })
 				}
 				await removeNode(map.uid)
 			}),

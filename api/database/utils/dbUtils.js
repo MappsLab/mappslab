@@ -17,33 +17,17 @@ export const createVariables = R.pipe(
 	),
 )
 
-export const DEFAULT_PAGE_COUNT = 50
-
-const defaultPaginationArgs = {
-	first: DEFAULT_PAGE_COUNT,
-	after: '0x0',
-}
-
-export const makePaginationArgs = (args?: PaginationArgs): PaginationArgs => {
-	// Adds +1 to the 'first' argument, we need this to see if there is a next page.
-	const { first, ...rest } = { ...defaultPaginationArgs, ...args }
-	return {
-		first: first + 1,
-		...rest,
-	}
-}
-
 /**
  * Create a string to append to a dGraph query. Be sure to include the
  * initial comma that appears after the root function, i.e. `, first: 5, after: 0x123`
  * @param {number} first
  * @param {string} after
  */
-export const makePaginationString = (first?: number, after?: string): string => {
+export const DEFAULT_PAGE_COUNT = 50
+
+export const makePaginationString = (first?: number = DEFAULT_PAGE_COUNT, after?: string): string => {
 	if (!first && after) throw new Error('You must supply a "first" when using "after"')
 	if (!first) return ''
-	console.log(first)
-	console.log(first + 1)
 	return [
 		'', // include a blank string so we start it with a comma
 		first // if a 'first' value is present, include it +1 so we can tell if there is a 'nextPage'

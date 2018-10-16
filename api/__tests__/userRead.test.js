@@ -121,20 +121,11 @@ describe('[users]', () => {
 		}
 	`
 
-	it.only('should return a paginated list of users', async () => {
+	it('should return a paginated list of users', async () => {
 		const result = await request(q, { variables: { first: 10 } })
-		console.log(result.data.users.pageInfo)
-		console.log(result.data.users.pageInfo)
-		console.log(result.data.users.pageInfo)
-		console.log(result.data.users.pageInfo)
 		expect(result.data.users.pageInfo.hasPrevPage).toBe(false)
 		expect(result.data.users.pageInfo.hasNextPage).toBe(true)
 		expect(result.data.users.edges.length).toBe(10)
-		/* Arrange */
-		// const { container, getByTestId } = render( ... )
-		/* Act */
-		/* Assert */
-		// expect(...)
 	})
 })
 

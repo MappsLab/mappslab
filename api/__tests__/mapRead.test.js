@@ -1,5 +1,3 @@
-// @flow
-
 import { request } from './utils/db'
 import { getDBMaps } from './utils/map'
 
@@ -21,7 +19,7 @@ describe('[map]', () => {
 			}
 		`
 		const variables = { uid: maps[0].uid }
-		const result = await request(query, { variables }).catch((e) => console.log(e))
+		const result = await request(query, { variables })
 		expect(result.data.map.title).toBe(maps[0].title)
 	})
 
@@ -51,7 +49,7 @@ describe('[map]', () => {
 			}
 		`
 		const variables = { uid: maps[0].uid }
-		const result = await request(query, { variables }).catch((e) => console.log(e))
+		const result = await request(query, { variables })
 		expect(result.data.map.title).toBe(maps[0].title)
 	})
 })

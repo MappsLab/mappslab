@@ -98,11 +98,7 @@ const seedDatabase = async () => {
 			)
 			// return newPins
 
-			// console.log(userClassrooms)
-
 			// const userMaps = fullUserData.classrooms.reduce
-			// console.log(fullUserData)
-			// console.log(R.view(R.lensPath(['classrooms', 'edges']), fullUserData	))
 		}),
 	)
 
