@@ -1,10 +1,19 @@
 // @flow
 import type { GetUserInput, UserType, JWT } from 'Types/UserTypes'
-import type { GraphQLContext } from 'Types/sharedTypes'
+import type { GraphQLContext, PaginationInput, PageType } from 'Types/sharedTypes'
 import { createJWT } from 'Utils/auth'
+import { assemblePage } from 'Utils/graphql'
 
 export const user = (_: Object, { input }: { input: GetUserInput }, ctx: GraphQLContext): Promise<UserType | null> =>
 	ctx.models.User.getUser(input)
+
+export const users = async (_: Object, { input }: PaginationInput, ctx: GraphQLContext): Promise<PageType<UserType>> => {
+	const fetchedClassrooms = await ctx.models.User.getUsers(input).catch((err) => {
+		throw err
+	})
+	const page = assemblePage(fetchedClassrooms, input)
+	return page
+}
 
 type CurrentViewer = {
 	viewer: UserType | null,

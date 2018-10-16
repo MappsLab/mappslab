@@ -44,6 +44,7 @@ export const coreTypes = /* GraphQL */ `
 
 	input StringOperators {
 		eq: String
+		notEq: String
 		contains: String
 	}
 
@@ -53,6 +54,7 @@ export const coreTypes = /* GraphQL */ `
 
 	input NumberOperators {
 		eq: Float
+		notEq: Float
 		lt: Float
 		lte: Float
 		gt: Float
@@ -67,6 +69,7 @@ export const coreTypes = /* GraphQL */ `
 
 	input DateOperators {
 		eq: DateTime
+		notEq: DateTime
 		before: DateTime
 		after: DateTime
 		between: DateRange

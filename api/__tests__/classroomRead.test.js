@@ -96,4 +96,12 @@ describe('queries', () => {
 		const uidResult = await request(uidQuery)
 		expect(uidResult.data.classrooms.edges.length).toBeGreaterThan(0)
 	})
+
+	it.skip('[classrooms] should properly filter classrooms with general operators', async () => {
+		/* Arrange */
+		// const { container, getByTestId } = render( ... )
+		/* Act */
+		/* Assert */
+		// expect(...)
+	})
 })

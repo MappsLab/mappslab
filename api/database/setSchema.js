@@ -13,7 +13,7 @@ export const setSchema = async () => {
 		 */
 		'type: string @index(hash) .',
 		'slug: string @index(hash) . ',
-		'title: string @index(trigram) . ',
+		'title: string @index(hash, trigram) . ',
 		'deleted: bool @index(bool) . ',
 
 		/**
@@ -21,6 +21,7 @@ export const setSchema = async () => {
 		 */
 		'email: string @index(hash) . ',
 		'roles: [string] @index(term) .',
+		'name: string @index(hash, trigram) . ',
 		'passwordReset.token: string @index(hash) .',
 		/* <user> <teaches_in> <classroom> */
 		'teaches_in: uid @reverse @count . ',

@@ -84,6 +84,22 @@ describe('[user]', () => {
 	it.skip('should fetch a users classroom & pin count', async () => {
 		// ...
 	})
+
+	it.skip('should properly filter users with general operators', async () => {
+		/* Arrange */
+		// const { container, getByTestId } = render( ... )
+		/* Act */
+		/* Assert */
+		// expect(...)
+	})
+
+	it.skip('should properly filter users by classroom', async () => {
+		/* Arrange */
+		// const { container, getByTestId } = render( ... )
+		/* Act */
+		/* Assert */
+		// expect(...)
+	})
 })
 
 describe('[userTeachesInClassroom]', () => {

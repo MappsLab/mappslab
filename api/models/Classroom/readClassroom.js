@@ -29,7 +29,7 @@ export const getClassroom = async (args: GetNodeArgs): Promise<ClassroomType | n
 export const getClassrooms = async (args?: PaginationArgs = {}): Promise<Array<ClassroomType>> => {
 	const { first, after, filter } = args
 	const filterString = makeFilterString(filter)
-	const paginationString = makePaginationString({ first, after })
+	const paginationString = makePaginationString(first, after)
 	const q = /* GraphQL */ `
 		query getClassrooms {
 			classrooms(func: eq(type, "classroom") ${paginationString} ) ${filterString} {

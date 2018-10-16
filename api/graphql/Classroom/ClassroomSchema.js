@@ -56,7 +56,7 @@ const Classroom = /* GraphQL */ `
 	# Queries & Mutations
 
 	extend type Query {
-		classroom(input: GetNodeInput): Classroom!
+		classroom(input: GetNodeInput): Classroom
 		classrooms(input: ClassroomListOptions): ClassroomConnection!
 	}
 

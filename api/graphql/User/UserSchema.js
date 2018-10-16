@@ -3,8 +3,7 @@
 const User = /* GraphQL */ `
 	type User implements Node {
 		uid: String!
-		username: String!
-		name: String
+		name: String!
 		classrooms: ClassroomConnection
 		maps: MapConnection
 		roles: [String]
@@ -58,9 +57,30 @@ const User = /* GraphQL */ `
 		password: String!
 	}
 
+	input UserSortParameter {
+		name: SortOrder
+	}
+
+	input UserInRelationshipOperators {
+		teachesIn: String
+		learnsIn: String
+	}
+
+	input UserFilterParameter {
+		name: StringOperators
+		in: UserInRelationshipOperators
+	}
+
 	input UpdatePasswordInput {
 		resetToken: String!
 		password: String!
+	}
+
+	input UsersListOptions {
+		first: Int
+		after: String
+		sort: UserSortParameter
+		filter: UserFilterParameter
 	}
 
 	input SetTemporaryPasswordInput {
@@ -81,6 +101,7 @@ const User = /* GraphQL */ `
 
 	extend type Query {
 		user(input: GetUserInput): User
+		users(input: UsersListOptions): UserConnection!
 		currentViewer: LoginSuccess
 	}
 
