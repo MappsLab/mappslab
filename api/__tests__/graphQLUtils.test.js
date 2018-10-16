@@ -1,4 +1,4 @@
-/* eslint-disable no-undef */
+
 import { assemblePage } from 'Utils/graphql'
 import { getDBUsers } from './utils/user'
 

@@ -1,5 +1,5 @@
 // @flow
-/* eslint-disable no-undef */
+
 import { request } from './utils/db'
 import { getDBClassrooms } from './utils/classroom'
 

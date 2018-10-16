@@ -5,6 +5,7 @@ module.exports = {
 	env: {
 		browser: true,
 		node: true,
+		jest: true,
 	},
 	extends: ['airbnb', 'prettier', 'plugin:flowtype/recommended'],
 	rules: {

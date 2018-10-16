@@ -1,4 +1,4 @@
-/* eslint-disable no-undef */
+
 import { dissoc } from 'ramda'
 import { createJWT, verifyJWT } from 'Utils/auth'
 import { request } from './utils/db'

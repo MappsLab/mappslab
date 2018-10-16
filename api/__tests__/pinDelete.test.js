@@ -1,4 +1,4 @@
-/* eslint-disable no-undef */
+
 import { request } from './utils/db'
 import { createGeneratedPin } from './utils/pin'
 import { getDBUsers, getUser } from './utils/user'

@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import { getDBUsers } from './utils/user'
 import { request } from './utils/db'
 

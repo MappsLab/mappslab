@@ -1,4 +1,4 @@
-/* global expect describe it */
+
 import { makeFilterString } from 'Database/utils'
 
 const assertFilters = (filters) =>

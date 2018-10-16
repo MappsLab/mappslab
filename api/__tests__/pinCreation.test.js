@@ -1,4 +1,4 @@
-/* eslint-disable no-undef */
+
 import { removeNode, removeEdge } from 'Database'
 import { request } from './utils/db'
 import { getDBUsers } from './utils/user'
