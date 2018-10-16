@@ -1,13 +1,29 @@
+import { makeFilterString, makePaginationString } from 'Database/utils'
 
-import { makeFilterString } from 'Database/utils'
-
-const assertFilters = (filters) =>
-	filters.forEach(({ filter, expected }) => {
-		const result = makeFilterString(filter)
-		expect(result).toBe(expected)
+describe('[makePaginationString]', () => {
+	it('should return a "first" that is +1 from the supplied "first"', async () => {
+		const result = makePaginationString(10)
+		expect(result).toBe(', first: 11')
 	})
 
+	it('should return an empty string if no "first" is supplied', async () => {
+		const result = makePaginationString(undefined)
+		expect(result).toBe('')
+	})
+
+	it('should return an error if an "after" is supplied without a "first"', async () => {
+		const makeString = () => makePaginationString(undefined, '0x1')
+		expect(makeString).toThrow('You must supply a "first" when using "after"')
+	})
+})
+
 describe('[makeFilterString]', () => {
+	const assertFilters = (filters) =>
+		filters.forEach(({ filter, expected }) => {
+			const result = makeFilterString(filter)
+			expect(result).toBe(expected)
+		})
+
 	it('should properly format string operators', async () => {
 		const filters = [
 			{

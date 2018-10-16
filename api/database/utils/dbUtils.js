@@ -40,8 +40,21 @@ export const makePaginationArgs = (args?: PaginationArgs): PaginationArgs => {
  * @param {string} after
  */
 export const makePaginationString = (first?: number, after?: string): string => {
+	if (!first && after) throw new Error('You must supply a "first" when using "after"')
 	if (!first) return ''
-	return ['', first ? `first: ${first}` : false, after ? `after: ${after}` : false].filter((i) => i !== false).join(', ')
+	console.log(first)
+	console.log(first + 1)
+	return [
+		'', // include a blank string so we start it with a comma
+		first // if a 'first' value is present, include it +1 so we can tell if there is a 'nextPage'
+			? `first: ${first + 1}`
+			: null,
+		after //
+			? `after: ${after}`
+			: null,
+	]
+		.filter((i) => i !== null)
+		.join(', ')
 }
 
 export const createFilterString = (filter: Array<Filter>, connect: string = 'AND'): string => {

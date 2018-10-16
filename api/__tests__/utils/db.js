@@ -47,9 +47,18 @@ type Options = {
 }
 
 // Nice little helper function for tests
-export const request = (query: mixed, { context, variables }: Options = {}): Promise<Object> =>
+export const request = (query: mixed, options: Options = {}): Promise<Object> => {
+	const { context, variables } = options
+	Object.keys(options).forEach((key) => {
+		if (key !== 'context' && key !== 'variables') {
+			// eslint-disable-next-line no-console
+			console.warn(
+				`[Request helper]: "${key}" is not a valid option and will be discarded. Did you mean to use include this within 'context' or 'variables'?`,
+			)
+		}
+	})
 	// $FlowFixMe
-	graphql(
+	return graphql(
 		schema,
 		query,
 		undefined,
@@ -59,3 +68,4 @@ export const request = (query: mixed, { context, variables }: Options = {}): Pro
 		},
 		variables,
 	)
+}

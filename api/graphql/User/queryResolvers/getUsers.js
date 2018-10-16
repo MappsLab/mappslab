@@ -8,6 +8,7 @@ export const user = (_: Object, { input }: { input: GetUserInput }, ctx: GraphQL
 	ctx.models.User.getUser(input)
 
 export const users = async (_: Object, { input }: PaginationInput, ctx: GraphQLContext): Promise<PageType<UserType>> => {
+	console.log(input)
 	const fetchedClassrooms = await ctx.models.User.getUsers(input).catch((err) => {
 		throw err
 	})

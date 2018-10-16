@@ -35,6 +35,8 @@ export const getUsers = async (args?: PaginationArgs = {}): Promise<Array<UserTy
 			}
 		}
 	`
+	console.log(args)
+	console.log(q)
 	const result = await query(q, { first, after })
 	if (!result || !result.getUsers) return []
 	return result.getUsers

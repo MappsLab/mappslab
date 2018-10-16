@@ -101,6 +101,43 @@ describe('[user]', () => {
 	})
 })
 
+describe('[users]', () => {
+	const q = /* GraphQL */ `
+		query UsersListQuery($first: Int, $after: String, $filter: UserFilterParameter) {
+			users(input: { first: $first, after: $after, filter: $filter }) {
+				pageInfo {
+					hasNextPage
+					hasPrevPage
+					lastCursor
+				}
+				edges {
+					cursor
+					node {
+						uid
+						name
+					}
+				}
+			}
+		}
+	`
+
+	it.only('should return a paginated list of users', async () => {
+		const result = await request(q, { variables: { first: 10 } })
+		console.log(result.data.users.pageInfo)
+		console.log(result.data.users.pageInfo)
+		console.log(result.data.users.pageInfo)
+		console.log(result.data.users.pageInfo)
+		expect(result.data.users.pageInfo.hasPrevPage).toBe(false)
+		expect(result.data.users.pageInfo.hasNextPage).toBe(true)
+		expect(result.data.users.edges.length).toBe(10)
+		/* Arrange */
+		// const { container, getByTestId } = render( ... )
+		/* Act */
+		/* Assert */
+		// expect(...)
+	})
+})
+
 describe('[userTeachesInClassroom]', () => {
 	it.skip('should return the correct value', async () => {
 		/* Arrange */
