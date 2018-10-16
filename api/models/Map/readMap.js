@@ -4,9 +4,9 @@ import type { MapType } from 'Types/MapTypes'
 import type { UserType } from 'Types/UserTypes'
 import type { GetNodeArgs, PaginationFilterArgs } from 'Types/sharedTypes'
 import { validateUid, makeFilterString, makePaginationString } from 'Database/utils'
-import { publicFields } from './mapDBSchema'
+import { publicFields, parseMapResult, parseMapResults } from './mapDBSchema'
 
-const debug = require('debug')('api')
+// const debug = require('debug')('api')
 
 export const getMap = async (args: GetNodeArgs): Promise<MapType | null> => {
 	const key = Object.keys(args)[0]
@@ -21,8 +21,7 @@ export const getMap = async (args: GetNodeArgs): Promise<MapType | null> => {
 		}
 	`
 	const result: Object = await query(q, args)
-	const map = result.getMap[0]
-	return map
+	return parseMapResult(result.getMap)
 }
 
 export const getMaps = async (args?: PaginationFilterArgs = {}): Promise<Array<MapType>> => {
@@ -36,13 +35,9 @@ export const getMaps = async (args?: PaginationFilterArgs = {}): Promise<Array<M
 			}
 		}
 	`
-	const result: Object = await query(q).catch((err) => {
-		debug('Error in getMaps:')
-		debug(err)
-		throw err
-	})
-
-	return result.Maps || []
+	const result: Object = await query(q)
+	if (!result || !result.getPins) return []
+	return parseMapResults(result.getMaps)
 }
 
 export const getMapsByUser = async (user: UserType /* args?: PaginationFilterArgs */): Promise<Array<MapType>> => {
