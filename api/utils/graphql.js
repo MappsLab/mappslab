@@ -1,6 +1,6 @@
 // @flow
 import { prop, last } from 'ramda'
-import type { PaginationArgs } from 'Types/sharedTypes'
+import type { PaginationFilterArgs } from 'Types/sharedTypes'
 import { DEFAULT_PAGE_COUNT } from 'Database/utils'
 
 interface DBNode {
@@ -29,7 +29,7 @@ const defaultPaginationArgs = {
 	after: null,
 }
 
-export const assemblePage = <T: DBNode>(items?: Array<T> = [], pArgs?: PaginationArgs = {}): PageType<T> => {
+export const assemblePage = <T: DBNode>(items?: Array<T> = [], pArgs?: PaginationFilterArgs = {}): PageType<T> => {
 	const { first, after } = {
 		...defaultPaginationArgs,
 		...pArgs,

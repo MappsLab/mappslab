@@ -80,7 +80,7 @@ const User = /* GraphQL */ `
 		first: Int
 		after: String
 		sort: UserSortParameter
-		filter: UserFilterParameter
+		where: UserFilterParameter
 	}
 
 	input SetTemporaryPasswordInput {

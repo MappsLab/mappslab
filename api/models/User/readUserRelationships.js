@@ -20,7 +20,7 @@ export const getPinOwner = async (pinUid: string): Promise<UserType | null> => {
 
 export const getClassroomUsers = (userType: string): Function => async (
 	classroomUid: string,
-	/* args: PaginationArgs, */
+	/* args: PaginationFilterArgs, */
 ): Promise<Array<UserType>> => {
 	// TODO: build filter into `teaches` relationship
 	const relationship = userType === 'teachers' ? '~teaches_in' : '~learns_in'

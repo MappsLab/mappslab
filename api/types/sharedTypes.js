@@ -9,20 +9,23 @@ export interface DBNode {
 
 type Operator = 'eq' | 'le' | 'lt' | 'ge' | 'gt' | 'uid' | 'allofterms' | 'anyofterms' | 'regexp' | 'alloftext' | 'uid_in' | 'has'
 
-export type Filter = {
-	key: string,
-	value: string,
-	operator?: Operator,
+type Where = {
+	[key: string]: Filter,
 }
 
-export type PaginationArgs = {
+export type Filter = {
+	operator: Operator,
+	value: string,
+}
+
+export type PaginationFilterArgs = {
 	first?: number,
 	after?: string,
-	filter?: any,
+	where?: Where,
 }
 
 export type PaginationInput = {
-	input?: PaginationArgs,
+	input?: PaginationFilterArgs,
 }
 
 export type GetNodeArgs =

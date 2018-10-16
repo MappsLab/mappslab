@@ -21,7 +21,7 @@ export const getMapClassroom = async (classroomUid: string): Promise<ClassroomTy
 }
 
 const getUserClassrooms = (pred: '~learns_in' | '~teaches_in') => async (
-	userUid: string /* args?: PaginationArgs */,
+	userUid: string /* args?: PaginationFilterArgs */,
 ): Promise<Array<ClassroomType>> => {
 	const q = /* GraphQL */ `
 		query getUserClassrooms {

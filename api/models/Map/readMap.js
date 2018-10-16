@@ -2,7 +2,7 @@
 import { query } from 'Database'
 import type { MapType } from 'Types/MapTypes'
 import type { UserType } from 'Types/UserTypes'
-import type { GetNodeArgs, PaginationArgs } from 'Types/sharedTypes'
+import type { GetNodeArgs, PaginationFilterArgs } from 'Types/sharedTypes'
 import { validateUid, makeFilterString, makePaginationString } from 'Database/utils'
 import { publicFields } from './mapDBSchema'
 
@@ -25,9 +25,9 @@ export const getMap = async (args: GetNodeArgs): Promise<MapType | null> => {
 	return map
 }
 
-export const getMaps = async (args?: PaginationArgs = {}): Promise<Array<MapType>> => {
-	const { first, after, filter } = args
-	const filterString = makeFilterString(filter)
+export const getMaps = async (args?: PaginationFilterArgs = {}): Promise<Array<MapType>> => {
+	const { first, after, where } = args
+	const filterString = makeFilterString(where)
 	const paginationString = makePaginationString(first, after)
 	const q = /* GraphQL */ `
 		query getMaps {
@@ -45,7 +45,7 @@ export const getMaps = async (args?: PaginationArgs = {}): Promise<Array<MapType
 	return result.Maps || []
 }
 
-export const getMapsByUser = async (user: UserType /* args?: PaginationArgs */): Promise<Array<MapType>> => {
+export const getMapsByUser = async (user: UserType /* args?: PaginationFilterArgs */): Promise<Array<MapType>> => {
 	const q = /* GraphQL */ `
 		query getMapsByUser {
 			Maps(func: eq(type, "Map")) @filter(uid_in(~learns_in, ${user.uid})) {

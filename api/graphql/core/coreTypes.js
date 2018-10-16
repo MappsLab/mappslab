@@ -29,7 +29,6 @@ export const coreTypes = /* GraphQL */ `
 	input PaginationInput {
 		first: Int
 		after: String!
-		filter: [String]
 	}
 
 	enum SortOrder {

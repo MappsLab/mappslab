@@ -35,7 +35,7 @@ const Classroom = /* GraphQL */ `
 		first: Int
 		after: String
 		sort: ClassroomSortParameter
-		filter: ClassroomFilterParameter
+		where: ClassroomFilterParameter
 	}
 
 	input AssignUserInput {

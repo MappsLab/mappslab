@@ -1,5 +1,3 @@
-// @flow
-
 import { request } from './utils/db'
 import { getDBClassrooms } from './utils/classroom'
 

@@ -5,29 +5,19 @@ describe('[makePaginationString]', () => {
 		const result = makePaginationString(10)
 		expect(result).toBe(', first: 11')
 	})
-
-	it('should return an empty string if no "first" is supplied', async () => {
-		const result = makePaginationString(undefined)
-		expect(result).toBe('')
-	})
-
-	it('should return an error if an "after" is supplied without a "first"', async () => {
-		const makeString = () => makePaginationString(undefined, '0x1')
-		expect(makeString).toThrow('You must supply a "first" when using "after"')
-	})
 })
 
 describe('[makeFilterString]', () => {
 	const assertFilters = (filters) =>
-		filters.forEach(({ filter, expected }) => {
-			const result = makeFilterString(filter)
+		filters.forEach(({ where, expected }) => {
+			const result = makeFilterString(where)
 			expect(result).toBe(expected)
 		})
 
 	it('should properly format string operators', async () => {
 		const filters = [
 			{
-				filter: {
+				where: {
 					title: {
 						contains: 'word',
 					},
@@ -35,7 +25,7 @@ describe('[makeFilterString]', () => {
 				expected: '@filter((regexp(title, /word/i)))',
 			},
 			{
-				filter: {
+				where: {
 					slug: {
 						notEq: 'nothing',
 					},
@@ -43,7 +33,7 @@ describe('[makeFilterString]', () => {
 				expected: '@filter((NOT eq(slug, "nothing")))',
 			},
 			{
-				filter: {
+				where: {
 					slug: {
 						eq: 'something',
 					},
@@ -58,7 +48,7 @@ describe('[makeFilterString]', () => {
 		const filters = [
 			// grouped filter
 			{
-				filter: {
+				where: {
 					title: {
 						contains: 'Fan',
 						notEq: 'Fantastic Music',
@@ -82,31 +72,31 @@ describe('[makeFilterString]', () => {
 	it('should properly format number operators', async () => {
 		const filters = [
 			{
-				filter: { a: { eq: 1 } },
+				where: { a: { eq: 1 } },
 				expected: '@filter((eq(a, 1)))',
 			},
 			{
-				filter: { a: { notEq: 0 } },
+				where: { a: { notEq: 0 } },
 				expected: `@filter((NOT eq(a, 0)))`,
 			},
 			{
-				filter: { a: { gt: 1 } },
+				where: { a: { gt: 1 } },
 				expected: '@filter((gt(a, 1)))',
 			},
 			{
-				filter: { a: { gte: 1 } },
+				where: { a: { gte: 1 } },
 				expected: '@filter((ge(a, 1)))',
 			},
 			{
-				filter: { a: { lt: 1 } },
+				where: { a: { lt: 1 } },
 				expected: '@filter((lt(a, 1)))',
 			},
 			{
-				filter: { a: { lte: 1 } },
+				where: { a: { lte: 1 } },
 				expected: '@filter((le(a, 1)))',
 			},
 			{
-				filter: {
+				where: {
 					studentCount: {
 						between: {
 							start: 5,

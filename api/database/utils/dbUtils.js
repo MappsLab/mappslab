@@ -1,7 +1,7 @@
 // @flow
 
 import * as R from 'ramda'
-import type { /* Filter */ PaginationArgs } from 'Types/sharedTypes'
+import type { Filter } from 'Types/sharedTypes'
 
 export const createVariables = R.pipe(
 	R.toPairs,
@@ -26,8 +26,6 @@ export const createVariables = R.pipe(
 export const DEFAULT_PAGE_COUNT = 50
 
 export const makePaginationString = (first?: number = DEFAULT_PAGE_COUNT, after?: string): string => {
-	if (!first && after) throw new Error('You must supply a "first" when using "after"')
-	if (!first) return ''
 	return [
 		'', // include a blank string so we start it with a comma
 		first // if a 'first' value is present, include it +1 so we can tell if there is a 'nextPage'
@@ -41,8 +39,8 @@ export const makePaginationString = (first?: number = DEFAULT_PAGE_COUNT, after?
 		.join(', ')
 }
 
-export const createFilterString = (filter: Array<Filter>, connect: string = 'AND'): string => {
-	const funcs = filter.map(({ key, value, operator = 'eq' }) => `${operator}(${key}, "${value}")`)
+export const createFilterString = (where: Array<Filter>, connect: string = 'AND'): string => {
+	const funcs = where.map(({ key, value, operator = 'eq' }) => `${operator}(${key}, "${value}")`)
 	return `@filter(${funcs.join(connect)})`
 }
 

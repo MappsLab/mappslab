@@ -1,7 +1,7 @@
 // @flow
 import { query } from 'Database'
 import type { PinType } from 'Types/PinTypes'
-import type { PaginationArgs } from 'Types/sharedTypes'
+import type { PaginationFilterArgs } from 'Types/sharedTypes'
 import { makeFilterString, makePaginationString } from 'Database/utils'
 import { publicFields, parsePinResult } from './pinDBSchema'
 
@@ -19,11 +19,11 @@ export const getPin = async (uid: string): Promise<PinType | null> => {
 	return pin
 }
 
-export const getPins = async (args?: PaginationArgs = {}): Promise<Array<PinType>> => {
-	const { first, after, filter } = args
+export const getPins = async (args?: PaginationFilterArgs = {}): Promise<Array<PinType>> => {
+	const { first, after, where } = args
 	const filterString = makeFilterString({
 		deleted: { eq: false },
-		...filter,
+		...where,
 	})
 	const paginationString = makePaginationString(first, after)
 	const q = /* GraphQL */ `
