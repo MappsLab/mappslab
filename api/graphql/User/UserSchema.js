@@ -57,13 +57,13 @@ const User = /* GraphQL */ `
 		password: String!
 	}
 
-	input UserSortParameter {
-		name: SortOrder
+	input UpdatePasswordInput {
+		resetToken: String!
+		password: String!
 	}
 
-	input UserInRelationshipOperators {
-		teachesIn: String
-		learnsIn: String
+	input UserSortParameter {
+		name: SortOrder
 	}
 
 	input UserFilterParameter {
@@ -71,11 +71,6 @@ const User = /* GraphQL */ `
 		# User-specific relationship filters
 		teachesIn: String
 		learnsIn: String
-	}
-
-	input UpdatePasswordInput {
-		resetToken: String!
-		password: String!
 	}
 
 	input UsersListOptions {

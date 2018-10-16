@@ -1,5 +1,5 @@
 // @flow
-
+import deepMerge from 'deepmerge'
 import type { MapType } from 'Types/MapTypes'
 import type { ClassroomType } from 'Types/ClassroomTypes'
 import type { PinType } from 'Types/PinTypes'
@@ -14,6 +14,15 @@ export const classroom = (fetchedMap: MapType, _: GetMapInput, ctx: GraphQLConte
 	ctx.models.Classroom.getMapClassroom(fetchedMap.uid)
 
 export const pins = async (fetchedMap: MapType, { input }: PaginationInput, ctx: GraphQLContext): Promise<PageType<PinType>> => {
-	const fetchedPins = await ctx.models.Pin.getMapPins(fetchedMap.uid, input)
+	const mapFilter = {
+		where: {
+			pinnedInMap: {
+				eq: fetchedMap.uid,
+			},
+		},
+	}
+	const mergedInput = deepMerge(input || {}, mapFilter)
+	const fetchedPins = await ctx.models.Pin.getPins(mergedInput)
+
 	return assemblePage(fetchedPins, input)
 }

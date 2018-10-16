@@ -1,5 +1,5 @@
 // @flow
-
+import deepMerge from 'deepmerge'
 import type { UserType } from 'Types/UserTypes'
 import type { PinType } from 'Types/PinTypes'
 import type { ClassroomType } from 'Types/ClassroomTypes'
@@ -7,7 +7,15 @@ import type { GraphQLContext, PaginationInput, PageType } from 'Types/sharedType
 import { assemblePage } from 'Utils/graphql'
 
 export const pins = async (loadedUser: UserType, { input }: PaginationInput, ctx: GraphQLContext): Promise<PageType<PinType>> => {
-	const fetchedPins = await ctx.models.Pin.getUserPins(loadedUser.uid, input)
+	const userFilter = {
+		where: {
+			pinnedByUser: {
+				eq: loadedUser.uid,
+			},
+		},
+	}
+	const mergedInput = deepMerge(input || {}, userFilter)
+	const fetchedPins = await ctx.models.Pin.getPins(mergedInput)
 	return assemblePage(fetchedPins, input)
 }
 

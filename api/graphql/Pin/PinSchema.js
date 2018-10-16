@@ -50,20 +50,41 @@ const Pin = /* GraphQL */ `
 		lessonUids: [String]
 	}
 
+	input PinSortParameter {
+		title: SortOrder
+		lat: SortOrder
+		lng: SortOrder
+	}
+
+	input PinFilterParameter {
+		title: StringOperators
+		# Pin-specific relationship filters
+		pinnedByUser: String
+		pinnedInMap: String
+	}
+
+	input PinListOptions {
+		first: Int
+		after: String
+		sort: PinSortParameter
+		where: PinFilterParameter
+	}
+
+	input PinSubscriptionInput {
+		mapUid: String!
+	}
+
 	# Queries & Mutations
 
 	extend type Query {
 		pin(input: GetPinInput!): Pin
+		pins(input: PinListOptions): PinConnection
 	}
 
 	extend type Mutation {
 		createPin(input: NewPinInput!): Pin!
 		updatePin(input: UpdatePinInput!): Pin!
 		deletePin(input: GetPinInput!): Success!
-	}
-
-	input PinSubscriptionInput {
-		mapUid: String!
 	}
 
 	extend type Subscription {

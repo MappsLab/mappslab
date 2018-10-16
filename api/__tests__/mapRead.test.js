@@ -51,5 +51,6 @@ describe('[map]', () => {
 		const variables = { uid: maps[0].uid }
 		const result = await request(query, { variables })
 		expect(result.data.map.title).toBe(maps[0].title)
+		expect(result.data.map.pins.edges.length).toBeGreaterThan(0)
 	})
 })
