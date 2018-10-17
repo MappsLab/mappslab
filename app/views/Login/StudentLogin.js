@@ -1,9 +1,8 @@
 // @flow
 import React from 'react'
 import { State } from 'react-automata'
-import { ClassroomsQuery, ClassroomQuery } from 'Queries'
 import { ClassroomSelector } from 'Components/Classroom'
-import { UserCard } from 'Components/User'
+// import { ClassroomSelector } from 'Components/Classroom'
 
 import {
 	// states
@@ -27,23 +26,13 @@ type Props = {
 const StudentLogin = ({ makeTransition, classroomUid }: Props) => {
 	const selectClassroom = (uid) => {
 		console.log(uid)
-		// makeTransition(SELECTED_CLASSROOM, { classroomUid: c.uid })
+		makeTransition(SELECTED_CLASSROOM, { classroomUid: c.uid })
 	}
 
 	return (
 		<React.Fragment>
-			<State is={SELECT_CLASSROOM} render={(active) => <ClassroomSelector disabled={!active} onSelect={selectClassroom} />} />
-			<State is={SELECT_STUDENT}>
-				<ClassroomQuery variables={{ uid: classroomUid }}>
-					{({ data }) =>
-						data.classroom.students.map((s) => (
-							<button key={s.uid} type="button" onClick={makeTransition(SELECTED_STUDENT, { user: s })}>
-								<UserCard user={s} />
-							</button>
-						))
-					}
-				</ClassroomQuery>
-			</State>
+			<State is={SELECT_CLASSROOM} render={() => <ClassroomSelector onSelect={selectClassroom} />} />
+			<State is={SELECT_STUDENT} render={(active) => <ClassroomSelector disabled={!active} onSelect={selectClassroom} />} />
 		</React.Fragment>
 	)
 }

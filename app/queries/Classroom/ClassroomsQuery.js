@@ -5,8 +5,8 @@ import type { QueryWrapper } from '../Query'
 import { withDefaultQuery } from '../Query'
 
 export const query = gql/* GraphQL */ `
-	query ClassroomsQuery($first: Int, $after: String, $sort: ClassroomSortParameter, $filter: ClassroomFilterParameter) {
-		classrooms(input: { first: $first, after: $after, sort: $sort, filter: $filter }) {
+	query ClassroomsQuery($first: Int, $after: String, $sort: ClassroomSortParameter, $where: ClassroomFilterParameter) {
+		classrooms(input: { first: $first, after: $after, sort: $sort, where: $where }) {
 			pageInfo {
 				lastCursor
 				hasNextPage

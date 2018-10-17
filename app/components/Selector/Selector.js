@@ -14,14 +14,16 @@ const LabelWrapper = styled.div`
 `
 
 const Wrapper = styled.div`
-	${({ theme }) => `
+	${({ theme, disabled }) => `
 		outline: 1px solid gray;
 		border-radius: 3px;
 		height: calc(${theme.sizes.chip.large.height} + 6px);
 		padding: 4px;
 		width: 100%;
-		margin: 0 auto;
+		margin: ${theme.layout.spacing.single} auto;
 		position: relative;
+		opacity: ${disabled ? '0.2' : 1};
+		pointer-events: ${disabled ? 'none' : 'inherit'};
 	`};
 `
 
@@ -111,6 +113,7 @@ export type SelectorProps = {
 	label: string,
 	items: Array<SelectorItem>,
 	inputFilter?: (input: string) => ({ [key: string]: any }) => boolean,
+	disabled?: boolean,
 }
 
 /**
@@ -121,7 +124,7 @@ const defaultItemToString = (i) => (i ? i.label : '')
 const defaultInputFilter = (inputValue) => (item) =>
 	!inputValue || inputValue.length < 2 || item.label.toLowerCase().includes(inputValue.toLowerCase())
 
-const Selector = ({ onChange, onSelect, itemToString, items, label, inputFilter }: SelectorProps) => (
+const Selector = ({ onChange, onSelect, itemToString, items, label, inputFilter, disabled }: SelectorProps) => (
 	<Downshift onChange={onChange} onSelect={onSelect} itemToString={itemToString || defaultItemToString}>
 		{({
 			getInputProps,
@@ -153,7 +156,7 @@ const Selector = ({ onChange, onSelect, itemToString, items, label, inputFilter 
 			const currentItem = selectedItem ? items.find((i) => i.value === selectedItem.value) : null
 			return (
 				<div>
-					<Wrapper>
+					<Wrapper disabled={disabled}>
 						<LabelWrapper {...getLabelProps} onClick={openMenu}>
 							{currentItem && currentItem.render ? renderItem(currentItem, 0) : <label {...getLabelProps()}>{label}</label>}
 						</LabelWrapper>
@@ -195,6 +198,7 @@ Selector.defaultProps = {
 	inputFilter: defaultInputFilter,
 	onChange: () => {},
 	onSelect: () => {},
+	disabled: false,
 }
 
 export default Selector

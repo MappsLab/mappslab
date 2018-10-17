@@ -18,11 +18,11 @@ const ClassroomSelector = (props: Props) => (
 		{({ data, refetch }) => {
 			const refetchQuery = (input: string) => {
 				if (input.length < 3) {
-					refetch({ filter: {} })
+					refetch({ where: {} })
 					return
 				}
 				refetch({
-					filter: {
+					where: {
 						title: {
 							contains: input,
 						},
