@@ -51,6 +51,11 @@ export const coreTypes = /* GraphQL */ `
 		eq: Boolean
 	}
 
+	input RelationshipOperators {
+		eq: String
+		notEq: String
+	}
+
 	input NumberOperators {
 		eq: Float
 		notEq: Float

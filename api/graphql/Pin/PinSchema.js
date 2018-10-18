@@ -59,8 +59,8 @@ const Pin = /* GraphQL */ `
 	input PinFilterParameter {
 		title: StringOperators
 		# Pin-specific relationship filters
-		pinnedByUser: String
-		pinnedInMap: String
+		pinnedByUser: RelationshipOperators
+		pinnedInMap: RelationshipOperators
 	}
 
 	input PinListOptions {

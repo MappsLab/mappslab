@@ -30,13 +30,13 @@ export const getMaps = async (args?: PaginationFilterArgs = {}): Promise<Array<M
 	const paginationString = makePaginationString(first, after)
 	const q = /* GraphQL */ `
 		query getMaps {
-			Maps(func: eq(type, "map") ${paginationString}) ${filterString} {
+			getMaps(func: eq(type, "map") ${paginationString}) ${filterString} {
 				${publicFields}
 			}
 		}
 	`
 	const result: Object = await query(q)
-	if (!result || !result.getPins) return []
+	if (!result || !result.getMaps) return []
 	return parseMapResults(result.getMaps)
 }
 

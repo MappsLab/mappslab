@@ -1,4 +1,3 @@
-
 import { request } from './utils/db'
 import { getDBUsers } from './utils/user'
 import { getDBPins } from './utils/pin'
@@ -72,7 +71,7 @@ describe('[updatePin]', () => {
 
 		// Attempt updating
 		const variables = getVariables()
-		const context = { viewer: firstPins[0].owner[0] }
+		const context = { viewer: firstPins[0].owner }
 		const result = await request(mutation, { variables, context })
 		expect(result.data.updatePin.title).toBe(variables.title)
 
