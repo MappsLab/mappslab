@@ -51,6 +51,7 @@ const MenuWrapper = styled.div`
 		display: ${visible ? 'block' : 'none'};
 		background-color: white;
 		position: absolute;
+		z-index: 10;
 		width: 100%;
 		top: 100%;
 		left: 0;

@@ -1,7 +1,7 @@
 // @flow
 import gql from 'graphql-tag'
-import { VIEWER_COOKIE_TOKEN } from 'Constants'
-import { removeCookie, setCookie } from 'Utils/storage'
+import type { UserType } from 'Types/User'
+import type { QueryWrapper } from '../Query'
 import { withDefaultQuery } from '../Query'
 
 // todo#16 : Make a Viewer fragment and reuse it in the viewer query
@@ -21,25 +21,10 @@ export const query = gql`
 	}
 `
 
-const config = {
-	onComplete: (response) => {
-		console.log(response)
-		const { loading, data } = response
-		const { currentViewer } = data
-		const { viewer, jwt } = currentViewer || {} // currentViewer may be undefined
-		if (!loading) {
-			if (viewer && jwt) {
-				const { token, expires } = jwt
-				const cookieExpiration = expires / 24 / 60 / 60
-				if (token) setCookie(VIEWER_COOKIE_TOKEN, token, { expires: cookieExpiration })
-			} else {
-				console.log('HERE')
-				// removeCookie(VIEWER_COOKIE_TOKEN)
-			}
-		}
-	},
+type ViewerResponse = {
+	currentViewer: UserType,
 }
 
-const withCurrentViewerQuery = withDefaultQuery(query)
+const CurrentViewerQuery: QueryWrapper<ViewerResponse> = withDefaultQuery(query)
 
-export default withCurrentViewerQuery
+export default CurrentViewerQuery

@@ -10,11 +10,12 @@ import { ClassroomChip } from 'Components/Classroom'
 
 type Props = {
 	disabled?: boolean,
-	onSelect: () => void,
+	delayQuery?: boolean,
+	onSelect: ({ value: string }) => void,
 }
 
-const ClassroomSelector = (props: Props) => (
-	<ClassroomsQuery variables={{ first: 25 }}>
+const ClassroomSelector = ({ disabled, delayQuery, onSelect }: Props) => (
+	<ClassroomsQuery variables={{ first: 25 }} delayQuery={delayQuery}>
 		{({ data, refetch }) => {
 			const refetchQuery = (input: string) => {
 				if (input.length < 3) {
@@ -34,13 +35,22 @@ const ClassroomSelector = (props: Props) => (
 				label: c.title,
 				render: ({ highlighted, selected }) => <ClassroomChip classroom={c} active={highlighted || selected} />,
 			}))
-			return <LiveSelector {...props} items={items} refetchQuery={refetchQuery} />
+			return (
+				<LiveSelector
+					label="Select your classroom"
+					disabled={disabled}
+					onSelect={onSelect}
+					items={items}
+					refetchQuery={refetchQuery}
+				/>
+			)
 		}}
 	</ClassroomsQuery>
 )
 
 ClassroomSelector.defaultProps = {
 	disabled: false,
+	delayQuery: false,
 }
 
 export default ClassroomSelector

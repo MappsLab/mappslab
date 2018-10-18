@@ -3,7 +3,7 @@ import React from 'react'
 import { FORM_ERROR } from 'final-form'
 import type { transition as transitionType } from 'react-automata'
 import type { UserType } from 'Types/User'
-import { UserLoginMutation } from 'Queries/User'
+import { UserLoginMutation, UserQuery } from 'Queries/User'
 import { Header2, Header4 } from 'Components/Text'
 import { Form, Field } from 'Components/Forms'
 import { SUCCESS, REQUIRE_RESET } from './statechart'
@@ -12,9 +12,12 @@ import { SUCCESS, REQUIRE_RESET } from './statechart'
  * UserLogin
  */
 
-type Props = {
-	user?: null | UserType,
+type BaseProps = {
 	transition: transitionType,
+}
+
+type Props = BaseProps & {
+	user: UserType,
 }
 
 const UserLogin = ({ user, transition }: Props) =>
@@ -56,8 +59,12 @@ const UserLogin = ({ user, transition }: Props) =>
 		<Header4>No user was supplied</Header4>
 	)
 
-UserLogin.defaultProps = {
-	user: null,
+type WrapperProps = BaseProps & {
+	userUid: string,
 }
 
-export default UserLogin
+const WithUser = ({ userUid, ...props }: WrapperProps) => (
+	<UserQuery variables={{ uid: userUid }}>{({ data }) => <UserLogin user={data.user} {...props} />}</UserQuery>
+)
+
+export default WithUser

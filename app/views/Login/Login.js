@@ -6,6 +6,7 @@ import Pane from 'Components/Pane'
 import { Header1 } from 'Components/Text'
 import { Centered } from 'Components/Layout'
 import { Button } from 'Components/UI'
+import type { UserType } from 'Types/User'
 import StudentLogin from './StudentLogin'
 import TeacherLogin from './TeacherLogin'
 import UserLogin from './UserLogin'
@@ -56,7 +57,7 @@ const Login = (props: Props) => {
 		transition(t, data)
 	}
 
-	console.log(props.machineState.value)
+	console.log(props.machineState.value, props)
 	const childProps = { ...props, makeTransition }
 	return (
 		<Centered>
@@ -78,9 +79,7 @@ const Login = (props: Props) => {
 					<TeacherLogin {...childProps} />
 				</State>
 
-				<State is={ENTER_PASSWORD}>
-					<UserLogin {...childProps} />
-				</State>
+				<State is={ENTER_PASSWORD}>{props.userUid !== null ? <UserLogin {...childProps} /> : null}</State>
 
 				<State is={SET_NEW_PASSWORD}>
 					<SetNewPassword {...childProps} />

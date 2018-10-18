@@ -2,6 +2,7 @@
 import React from 'react'
 import { State } from 'react-automata'
 import { ClassroomSelector } from 'Components/Classroom'
+import { UserSelector } from 'Components/User'
 // import { ClassroomSelector } from 'Components/Classroom'
 
 import {
@@ -20,19 +21,38 @@ import {
 type Props = {
 	makeTransition: (string, {}) => () => void,
 	classroomUid?: null | string,
-	//  transition: (string, {}) => void,
 }
 
 const StudentLogin = ({ makeTransition, classroomUid }: Props) => {
-	const selectClassroom = (uid) => {
-		console.log(uid)
-		makeTransition(SELECTED_CLASSROOM, { classroomUid: c.uid })
+	const selectClassroom = ({ value }) => {
+		makeTransition(SELECTED_CLASSROOM, { classroomUid: value })()
 	}
+
+	const selectUser = ({ value }) => {
+		console.log(value)
+		makeTransition(SELECTED_STUDENT, { userUid: value })()
+	}
+
+	const userVariables = classroomUid
+		? {
+				where: {
+					userLearnsIn: {
+						eq: classroomUid,
+					},
+				},
+		  }
+		: {}
+	console.log(classroomUid, userVariables)
 
 	return (
 		<React.Fragment>
 			<State is={SELECT_CLASSROOM} render={() => <ClassroomSelector onSelect={selectClassroom} />} />
-			<State is={SELECT_STUDENT} render={(active) => <ClassroomSelector disabled={!active} onSelect={selectClassroom} />} />
+			<State
+				is={SELECT_STUDENT}
+				render={(active) => (
+					<UserSelector delayQuery={!active} disabled={!active} onSelect={selectUser} variables={userVariables} />
+				)}
+			/>
 		</React.Fragment>
 	)
 }

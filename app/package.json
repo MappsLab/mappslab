@@ -27,6 +27,7 @@
     "graphql": "^0.13.2",
     "graphql-tag": "^2.9.2",
     "js-cookie": "^2.2.0",
+    "merge-deep": "^3.0.2",
     "ramda": "^0.25.0",
     "react": "^16.4.2",
     "react-apollo": "^2.1.11",

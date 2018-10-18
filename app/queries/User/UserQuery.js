@@ -1,5 +1,7 @@
 // @flow
 import gql from 'graphql-tag'
+import type { UserType } from 'Types/User'
+import type { QueryWrapper } from '../Query'
 import { withDefaultQuery } from '../Query'
 
 export const query = gql/* GraphQL */ `
@@ -19,6 +21,10 @@ export const query = gql/* GraphQL */ `
 	}
 `
 
-const UserQuery = withDefaultQuery(query)
+type UserResponse = {
+	user: UserType,
+}
+
+const UserQuery: QueryWrapper<UserResponse> = withDefaultQuery(query)
 
 export default UserQuery

@@ -59,12 +59,17 @@ const Subtitle = styled.div`
  * Chip
  */
 
-type Props = {
+export type ChipProps = {
+	size?: 'small' | 'large',
+	active?: boolean,
+}
+
+type Props = ChipProps & {
+	size?: 'small' | 'large',
 	active?: boolean,
 	image?: string | null,
 	title: string,
 	subtitle?: string | null,
-	size: 'small' | 'large',
 }
 
 const Chip = ({ image, title, subtitle, size, active }: Props) => (
@@ -80,6 +85,7 @@ const Chip = ({ image, title, subtitle, size, active }: Props) => (
 )
 
 Chip.defaultProps = {
+	size: 'large',
 	active: false,
 	image: null,
 	subtitle: null,
