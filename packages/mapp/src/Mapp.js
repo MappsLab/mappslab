@@ -132,7 +132,16 @@ class Mapp extends React.Component<Props, State> {
 			return this.overlay.getProjection().fromContainerPixelToLatLng(new google.maps.Point(newX, newY))
 		}
 
-		return { pixelToLatLng, latLngWithPixelOffset }
+		const zoom = (diff: number) => () => {
+			const currentZoom = this.map.getZoom()
+			const newZoom = currentZoom + diff
+			this.map.setZoom(newZoom)
+		}
+
+		const zoomIn = zoom(1)
+		const zoomOut = zoom(-1)
+
+		return { pixelToLatLng, latLngWithPixelOffset, zoomIn, zoomOut }
 	}
 
 	removeEventListeners = () => {
