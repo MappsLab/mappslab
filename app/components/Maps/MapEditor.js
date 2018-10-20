@@ -200,7 +200,8 @@ class MapEditor extends React.Component<Props, State> {
 
 	render() {
 		console.log(this.props)
-		const { map, activePinUid, inProgressPin, viewer } = this.props
+		const { map, activePinUid, inProgressPin, viewer, utils } = this.props
+		const { zoomIn, zoomOut } = utils
 		const { pins } = map
 		const mode = this.getMode()
 		return (
@@ -238,8 +239,8 @@ class MapEditor extends React.Component<Props, State> {
 					<NewPinButton onClick={this.transition(transitions.ENTER_DROP_PIN)} />
 				</Toolbar>
 				<Toolbar align="right">
-					<ZoomButton direction="in" onClick={() => {}} />
-					<ZoomButton direction="out" onClick={() => {}} />
+					<ZoomButton direction="in" onClick={zoomIn} />
+					<ZoomButton direction="out" onClick={zoomOut} />
 				</Toolbar>
 			</EditorWrapper>
 		)
