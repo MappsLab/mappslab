@@ -14,6 +14,9 @@ export const query = gql/* GraphQL */ `
 				edges {
 					node {
 						uid
+						title
+						slug
+						description
 					}
 				}
 			}

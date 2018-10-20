@@ -4,7 +4,7 @@ import type { Node } from 'react'
 import { Redirect, Route } from 'react-router-dom'
 import type { ViewerType } from 'Types/User'
 import { Loading } from 'Components/Loading'
-import { CurrentViewerQuery } from 'Queries/viewer'
+import { CurrentViewerQuery } from 'Queries/Viewer'
 
 /**
  * ViewerRoute

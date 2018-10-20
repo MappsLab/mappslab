@@ -7,8 +7,8 @@ import type { MapType, PinType, ViewerType, MachineValue } from 'Types'
 import type { Subscription, SubscriptionConfig } from 'Types/GraphQL'
 // import type { Map as GoogleMap } from 'mapp/types'
 import { CurrentViewerQuery } from 'Queries'
-import { pinAddedToMap, pinDeleted, pinUpdated } from 'Queries/map/mapSubscriptions'
-import { MapQuery } from 'Queries/map'
+import { pinAddedToMap, pinDeleted, pinUpdated } from 'Queries/Map/mapSubscriptions'
+import { MapQuery } from 'Queries/Map'
 import { startSubscription } from 'Queries/startSubscription'
 import { withStateMachine } from 'react-automata'
 import { compose, getStateString } from 'Utils/data'
@@ -97,6 +97,7 @@ class MapEditor extends React.Component<Props, State> {
 	componentWillUnmount() {
 		const { removeEventListeners } = this.props
 		removeEventListeners(this.listeners)
+		this.stopSubscriptions()
 	}
 
 	log = (message) => {
@@ -186,25 +187,19 @@ class MapEditor extends React.Component<Props, State> {
 				...s,
 			}),
 		)
-
-		// subscriptions.map(({ name, document, updateQuery }) => ({
-		// 	name,
-		// 	unsubscribe: subscribeToMore({
-		// 		document,
-		// 		updateQuery,
-		// 		variables: { mapUid: map.uid },
-		// 	}),
-		// }))
 	}
 
-	// stopSubscriptions() {
-
-	// }
+	stopSubscriptions() {
+		this.subscriptions.forEach((sub) => {
+			sub.unsubscribe()
+		})
+	}
 
 	/* Method Types */
 	unsubscribe: () => void
 
 	render() {
+		console.log(this.props)
 		const { map, activePinUid, inProgressPin, viewer } = this.props
 		const { pins } = map
 		const mode = this.getMode()

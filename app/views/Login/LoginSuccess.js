@@ -3,7 +3,7 @@ import React from 'react'
 import { Action } from 'react-automata'
 import { Link } from 'react-router-dom'
 import { Header2, Header4 } from 'Components/Text'
-import { CurrentViewerQuery } from 'Queries/viewer'
+import { CurrentViewerQuery } from 'Queries/Viewer'
 import { SHOW_NEWPW_SUCCESS } from './statechart'
 
 /**

@@ -1,6 +1,6 @@
 // @flow
 import React from 'react'
-import mergeDeep from 'merge-deep'
+import deepMerge from 'deepmerge'
 import { UsersQuery } from 'Queries'
 import { LiveSelector } from 'Components/Selector'
 import { UserChip } from 'Components/User'
@@ -31,7 +31,7 @@ const UserSelector = ({ disabled, onSelect, delayQuery, variables }: Props) => (
 						},
 					},
 				}
-				const newVariables = mergeDeep(variables, nameFilter)
+				const newVariables = deepMerge(variables, nameFilter)
 				refetch(newVariables)
 			}
 			const items = data.users

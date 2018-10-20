@@ -5,10 +5,10 @@ import type { MapType } from './Map'
 export type ClassroomType = {
 	uid: string,
 	title: string,
-	description: string,
+	description?: string,
 	slug: string,
-	students: Array<UserType>,
-	teachers: Array<UserType>,
-	maps: Array<MapType>,
+	students?: Array<UserType>,
+	teachers?: Array<UserType>,
+	maps?: Array<MapType>,
 	__typename: 'Classroom',
 }

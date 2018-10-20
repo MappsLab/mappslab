@@ -16,6 +16,7 @@ const query = gql/* GraphQL */ `
 				node {
 					uid
 					name
+					roles
 				}
 			}
 		}

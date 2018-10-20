@@ -4,7 +4,7 @@ import { VIEWER_COOKIE_TOKEN } from 'Constants'
 import { setCookie } from 'Utils/storage'
 import { withDefaultMutation } from '../Mutation'
 
-import { query as currentViewerQuery } from '../viewer/CurrentViewerQuery'
+import { query as currentViewerQuery } from '../Viewer/CurrentViewerQuery'
 
 const mutation = gql`
 	mutation LoginViewer($password: String!, $uid: String, $email: String) {

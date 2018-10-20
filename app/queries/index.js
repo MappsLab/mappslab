@@ -1,12 +1,6 @@
 // @flow
 
 export * from './Classroom'
-export * from './viewer'
+export * from './Viewer'
 export * from './User'
-export * from './map'
-
-// module.exports = {
-// 	...classroom,
-// 	...viewer,
-// 	...map,
-// }
+export * from './Map'
