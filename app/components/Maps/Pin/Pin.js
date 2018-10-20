@@ -35,7 +35,7 @@ type Props = {
 	mapUid: string,
 	updatePinSuccess: () => void,
 	mode: string,
-	transition: (string) => (?{}) => void,
+	transition: (string, {}) => void,
 }
 
 type PinState = {

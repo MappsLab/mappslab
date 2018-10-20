@@ -6,7 +6,7 @@ import { transitions } from '../../statechart'
 const normalMode = {
 	onClick: () => () => {},
 	onDblClick: (props: HandlerProps) => () => {
-		props.transition(transitions.CLICKED_PIN)({ activePinUid: props.pin.uid })
+		props.transition(transitions.CLICKED_PIN, { activePinUid: props.pin.uid })
 	},
 
 	onMouseOver: () => () => {

@@ -7,7 +7,7 @@ import { states } from '../../statechart'
 
 const modes = {
 	[states.NORMAL]: normalMode,
-	[states.ADD_PIN]: addPinMode,
+	[states.CREATE_PIN__DROP]: addPinMode,
 	[states.EDIT_PIN]: editPinMode,
 }
 

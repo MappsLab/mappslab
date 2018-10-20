@@ -7,5 +7,4 @@ export type HandlerProps = {
 	updateMapOptions: ({}) => void,
 	pin: PinType,
 	activePinUid: null | string,
-	transition: (string) => ({}) => void,
 }

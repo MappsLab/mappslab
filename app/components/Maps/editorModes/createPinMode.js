@@ -1,14 +1,14 @@
 // @flow
-import { transitions } from '../statechart'
+import { transitions, createPinStates } from '../statechart'
 
 import type { HandlerProps } from './types'
 
 const debug = require('debug')('app')
 
 const createPinMode = {
-	drop: {
+	[createPinStates.DROP_PIN]: {
 		onEntry: (props: HandlerProps) => () => {
-			debug('[createPinMode.drop]: onEntry')
+			debug('[createPinMode.dropPin]: onEntry')
 			props.googleMap.setOptions({
 				draggable: true,
 				draggableCursor: 'url("/images/newPin.svg") 18 49, crosshair',
@@ -33,7 +33,7 @@ const createPinMode = {
 			props.transition(transitions.NEXT, { activePinUid: tempUid, inProgressPin })
 		},
 	},
-	details: {
+	[createPinStates.DETAILS]: {
 		onEntry: (props: HandlerProps) => () => {
 			debug('[createPinMode.details]: onEntry')
 			props.googleMap.setOptions({

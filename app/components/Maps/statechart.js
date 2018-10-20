@@ -3,15 +3,19 @@
 // STATES
 
 // Child States
-const DROP = 'drop'
-const DETAILS = 'details'
+export const createPinStates = {
+	DROP_PIN: 'dropPin',
+	DROP_CONNECTED_PIN: 'dropConnectedPin',
+	DETAILS: 'details',
+}
 
 export const states = {
 	NORMAL: 'normal',
 	INSPECT_PIN: 'inspectPin',
 	CREATE_PIN: 'createNewPin',
-	CREATE_PIN__DROP: `createNewPin.${DROP}`,
-	CREATE_PIN__DETAILS: `createNewPin.${DETAILS}`,
+	CREATE_PIN__DROP: `createNewPin.${createPinStates.DROP_PIN}`,
+	CREATE_PIN__DROP_CONNECTED_PIN: `createNewPin.${createPinStates.DROP_CONNECTED_PIN}`,
+	CREATE_PIN__DETAILS: `createNewPin.${createPinStates.DETAILS}`,
 	EDIT_PIN: 'editPin',
 }
 
@@ -21,6 +25,7 @@ export const transitions = {
 	NEXT: 'next',
 	CANCEL: 'cancel',
 	ENTER_DROP_PIN: 'startedAddPin',
+	CONNECT_PIN: 'conectPin',
 	SUCCESS: 'success',
 	CLICKED_PIN: 'clickedPin',
 	CLICKED_EDIT_PIN: 'clickedEditPin',
@@ -54,14 +59,20 @@ export const statechart = {
 				[transitions.CANCEL]: states.NORMAL,
 				[transitions.SUCCESS]: states.NORMAL,
 			},
-			initial: DROP,
+			initial: createPinStates.DROP_PIN,
 			states: {
-				[DROP]: {
+				[createPinStates.DROP_PIN]: {
 					on: {
-						[transitions.NEXT]: DETAILS,
+						[transitions.CONNECT_PIN]: createPinStates.DROP_PIN,
+						[transitions.NEXT]: createPinStates.DETAILS,
 					},
 				},
-				[DETAILS]: {},
+				[createPinStates.DROP_CONNECTED_PIN]: {
+					on: {
+						[transitions.CANCEL]: states.NORMAL,
+					},
+				},
+				[createPinStates.DETAILS]: {},
 			},
 		},
 

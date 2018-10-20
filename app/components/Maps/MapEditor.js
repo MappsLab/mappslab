@@ -18,6 +18,8 @@ import { NewPinButton, ZoomButton, Toolbar } from './Tools'
 import { statechart, transitions } from './statechart'
 import withEditorModes from './editorModes'
 
+const debug = require('debug')('app')
+
 /**
  * MapEditor
  */
@@ -81,7 +83,7 @@ class MapEditor extends React.Component<Props, State> {
 	componentDidMount = async () => {
 		this.addEventListeners()
 		this.startSubscriptions()
-		this.transition(transitions.NEXT)()
+		this.transition(transitions.NEXT)
 	}
 
 	componentDidUpdate(prevProps) {
@@ -90,6 +92,7 @@ class MapEditor extends React.Component<Props, State> {
 		// trigger the onEntry event and log the transition
 		if (prevProps.machineState.value !== this.props.machineState.value) {
 			this.handleEvent('onEntry')()
+			debug(`[mode]: ${this.getMode()}`)
 			this.log(`transition to: ${this.getMode()}`)
 		}
 	}
@@ -136,8 +139,10 @@ class MapEditor extends React.Component<Props, State> {
 	 * See ./modes for the handlers for each mode.
 	 */
 	handleEvent = (eventName: Event) => (payload) => {
-		const modePath = this.getMode().split('.')
+		const mode = this.getMode()
+		const modePath = mode.split('.')
 		const handler = R.path(['props', 'modes', ...modePath, eventName])(this)
+		debug(`[event]: ${eventName}, ${mode}, ${Boolean(handler).toString()}`)
 		if (handler) handler(this.props)(payload)
 	}
 
@@ -146,16 +151,21 @@ class MapEditor extends React.Component<Props, State> {
 	 * components.
 	 *
 	 * TODO: this gets weird with events, which is why `withProps` is defined as a property.
-	 * Think about a
 	 */
-	transition = (action: string) => (payload: SyntheticEvent<> | void | {}) => {
+
+	createTransition = (action: string) => (payload: SyntheticEvent<> | void | {}) => {
+		this.transition(action, payload)
+	}
+
+	transition = (action: string, payload: SyntheticEvent<> | void | {}) => {
 		// do some duck typing to prevent passing a syntheticEvent in as updated props.
 		const newValues = payload && payload.nativeEvent ? {} : payload
+		debug(`[transition] -> ${action}`, newValues)
 		this.props.transition(action, newValues)
 	}
 
 	updatePinSuccess = () => {
-		this.transition(transitions.SUCCESS)({ activePinUid: null, inProgressPin: null })
+		this.transition(transitions.SUCCESS, { activePinUid: null, inProgressPin: null })
 	}
 
 	updatePinCancel = () => {}
@@ -199,7 +209,6 @@ class MapEditor extends React.Component<Props, State> {
 	unsubscribe: () => void
 
 	render() {
-		console.log(this.props)
 		const { map, activePinUid, inProgressPin, viewer, utils } = this.props
 		const { zoomIn, zoomOut } = utils
 		const { pins } = map
@@ -236,7 +245,7 @@ class MapEditor extends React.Component<Props, State> {
 					)}
 				</React.Fragment>
 				<Toolbar>
-					<NewPinButton onClick={this.transition(transitions.ENTER_DROP_PIN)} />
+					<NewPinButton onClick={this.createTransition(transitions.ENTER_DROP_PIN)} />
 				</Toolbar>
 				<Toolbar align="right">
 					<ZoomButton direction="in" onClick={zoomIn} />
