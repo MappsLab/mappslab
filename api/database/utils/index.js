@@ -1,2 +1,3 @@
-export { default as makeFilterString } from './makeFilterString'
+// @flow
+
 export * from './dbUtils'

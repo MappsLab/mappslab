@@ -1,43 +1,67 @@
 // @flow
-import * as operators from './operators'
-import * as relationships from './relationships'
-
-type Operator = 'contains' | 'eq' | 'notEq' | 'lt' | 'lte' | 'gt' | 'gte' | 'between'
+import type { Filter } from 'Types/sharedTypes'
+import createRelationshipFilter from './relationships'
+import createOperatorFilter from './operators'
+import type { FilterStrings } from '../dbUtils'
 
 export type Range = {
 	start: Date,
 	end: Date,
 }
 
-type Filter = {
-	[key: Operator]: string | number | boolean | Date | Range,
-}
-
 export type FilterObject = {
 	[key: string]: Filter,
 }
 
-const makeFilterPartial = (field: string) => ([operator: string, value: string]) => {
-	if (!operators[operator] && !relationships[field]) throw new Error(`"${operator}" is not a valid operator`)
-	// Relationship filters are formatted a little differently.
-	// If a relationship filter is available, use it.
-	if (relationships[field]) return relationships[field](operator, value)
-	// Otherwise, use the normal operator filter.
-	return operators[operator](field, value)
+const joinStrings = (connect: string) => (a: string, b: string): string => `${a}${a.length && b.length ? connect : ''}${b}`
+
+const andJoin = joinStrings(' AND ')
+const nJoin = joinStrings('\n')
+
+const groupFilterStrings = ({ filterString, varBlocks }: FilterStrings) => ({
+	varBlocks,
+	filterString: `(${filterString})`,
+})
+
+const joinFilterStrings = (filters: Array<FilterStrings>) => {
+	const joined = filters.reduce(
+		(acc, current) => ({
+			filterString: andJoin(acc.filterString, current.filterString),
+			varBlocks: nJoin(acc.varBlocks, current.varBlocks),
+		}),
+		{
+			filterString: '',
+			varBlocks: '',
+		},
+	)
+	return groupFilterStrings(joined)
 }
 
-const makeFilterString = (where?: FilterObject): string => {
-	if (!where) return ''
-	const filters = Object.entries(where)
-		.map(([field, fieldFilters]) => {
-			const strings = Object.entries(fieldFilters)
-				.map(makeFilterPartial(field))
-				.join(' AND ')
-			return `(${strings})`
-		})
-		.join(' AND ')
-	if (!filters.length) return ''
-	return `@filter(${filters})`
+/**
+ * makeFilterPartial
+ * returns joined filterStrings and varBlocks for a single field
+ */
+const makeFilterPartial = (field: string) => ([operator: string, value: string]): FilterStrings => {
+	// const r = createOperatorFilter
+	const filters = createRelationshipFilter(operator, field, value) || createOperatorFilter(operator, field, value)
+	return filters
+}
+
+const makeFieldFilter = ([field: string, filters: Filter]) => {
+	const filterStrings = Object.entries(filters).map(makeFilterPartial(field))
+	return joinFilterStrings(filterStrings)
+}
+
+const makeFilterString = (where?: FilterObject): FilterStrings => {
+	if (!where) return { varBlocks: '', filterString: '' }
+	// Separate out the 'where' object into field -> filter pairs.
+	// Each of these fields will have its filters applied as a group.
+	const fieldFilters = Object.entries(where).map(makeFieldFilter)
+	const { filterString, varBlocks } = joinFilterStrings(fieldFilters)
+	return {
+		varBlocks,
+		filterString: `@filter${filterString}`,
+	}
 }
 
 export default makeFilterString

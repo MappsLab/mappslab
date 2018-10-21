@@ -23,6 +23,7 @@ export const mapSchema = (isNew: boolean = true) =>
 		updatedAt: Joi.date().required(),
 		description: Joi.string().max(1200),
 		type: Joi.any().only('map'),
+		deleted: isNew ? Joi.boolean().default(false) : Joi.boolean(),
 	})
 
 export const defaultValues = {

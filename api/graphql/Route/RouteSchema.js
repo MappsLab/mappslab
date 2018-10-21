@@ -4,18 +4,38 @@ const Route = /* GraphQL */ `
 	type Route implements Node {
 		uid: String!
 		title: String
-		owner: User
-		lines: [Line]
-		maps: [Map]
+		owner: User!
+		pins: PinConnection
+		maps: MapConnection
 	}
 
-	type Line {
-		from: Pin
-		to: Pin
+	input NewRouteInput {
+		title: String
+		addPin: String
+		addPins: [String]
 	}
 
-	input RouteInput {
-		title: String!
+	input UpdateRouteInput {
+		title: String
+		addPin: String
+		removePin: String
+		addPins: [String]
+		removePins: [String]
+	}
+
+	input GetRouteInput {
+		uid: String!
+	}
+
+	input RouteFilterParameter {
+		routeContainsPin: RelationshipOperators
+		usedInMap: RelationshipOperators
+	}
+
+	input RouteListOptions {
+		first: Int
+		after: String
+		where: RouteFilterParameter
 	}
 
 	# Relationships
@@ -33,13 +53,14 @@ const Route = /* GraphQL */ `
 	# Queries & Mutations
 
 	extend type Query {
-		route(uid: String!): Route!
+		route(input: GetRouteInput!): Route!
+		routes(input: RouteListOptions): RouteConnection!
 	}
 
 	extend type Mutation {
-		addRoute(input: RouteInput!): Route!
-		modifyRoute(input: RouteInput!): Route!
-		removeRoute(uid: String!): Boolean!
+		createRoute(input: NewRouteInput!): Route!
+		updateRoute(input: UpdateRouteInput!): Route!
+		deleteRoute(uid: String!): Boolean!
 	}
 `
 

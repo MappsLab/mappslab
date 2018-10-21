@@ -7,15 +7,15 @@ export interface DBNode {
 	uid: string;
 }
 
-type Operator = 'eq' | 'le' | 'lt' | 'ge' | 'gt' | 'uid' | 'allofterms' | 'anyofterms' | 'regexp' | 'alloftext' | 'uid_in' | 'has'
-
-type Where = {
-	[key: string]: Filter,
-}
+type Operator = 'contains' | 'eq' | 'notEq' | 'lt' | 'lte' | 'gt' | 'gte' | 'between'
 
 export type Filter = {
 	operator: Operator,
-	value: string,
+	value: string | Date | number | boolean,
+}
+
+type Where = {
+	[key: string]: Filter,
 }
 
 export type PaginationFilterArgs = {

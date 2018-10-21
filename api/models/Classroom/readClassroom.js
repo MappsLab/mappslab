@@ -3,7 +3,7 @@ import { head } from 'ramda'
 import { query } from 'Database'
 import type { ClassroomType } from 'Types/ClassroomTypes'
 import type { GetNodeArgs, PaginationFilterArgs } from 'Types/sharedTypes'
-import { validateUid, makeFilterString, makePaginationString } from 'Database/utils'
+import { validateUid, createQueryStrings } from 'Database/utils'
 import { publicFields } from './classroomDBSchema'
 
 const debug = require('debug')('api')
@@ -27,11 +27,10 @@ export const getClassroom = async (args: GetNodeArgs): Promise<ClassroomType | n
 }
 
 export const getClassrooms = async (args?: PaginationFilterArgs = {}): Promise<Array<ClassroomType>> => {
-	const { first, after, where } = args
-	const filterString = makeFilterString(where)
-	const paginationString = makePaginationString(first, after)
+	const { varBlocks, filterString, paginationString } = createQueryStrings(args)
 	const q = /* GraphQL */ `
 		query getClassrooms {
+			${varBlocks}
 			classrooms(func: eq(type, "classroom") ${paginationString} ) ${filterString} {
 				${publicFields}
 			}

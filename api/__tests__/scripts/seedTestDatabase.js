@@ -7,6 +7,7 @@ import { getUser, createTeacher, createStudent } from '../utils/user'
 import { createClassroom, assignUser } from '../utils/classroom'
 import { createGeneratedMap } from '../utils/map'
 import { createGeneratedPin } from '../utils/pin'
+import { createRoute } from '../utils/route'
 import { createAdminUser } from '../utils/db'
 
 const dgraph = require('dgraph-js')
@@ -91,12 +92,26 @@ const seedDatabase = async () => {
 			// return userClassrooms
 
 			// const newPins = await Promise.all(userClassroomMaps.map(m => R.times(() => async () => createPin({ addToMaps: []}, { viewer: fullUserData}))))
-			return Promise.all(
+			const PIN_COUNT = 6
+			const newPinsByClassroom = await Promise.all(
 				userClassroomMapIds.map((id) =>
-					promiseSerial(R.times(() => async () => createGeneratedPin({ addToMaps: [id] }, { viewer: currentUser }), 3)),
+					promiseSerial(R.times(() => async () => createGeneratedPin({ addToMaps: [id] }, { viewer: currentUser }), PIN_COUNT)),
 				),
 			)
-			// return newPins
+
+			const newRoutes = await Promise.all(
+				newPinsByClassroom.map(async (pins) => {
+					const addPins = pins.slice(0, Math.round(PIN_COUNT / 2)).map((p) => p.uid)
+					// console.log(connections)
+					const route = await createRoute({ addPins }, { viewer: currentUser })
+					return route
+					// createRoute({})
+				}),
+			)
+
+			// console.log(newRoutes)
+
+			return newPinsByClassroom
 
 			// const userMaps = fullUserData.classrooms.reduce
 		}),

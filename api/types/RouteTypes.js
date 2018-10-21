@@ -12,8 +12,13 @@ export type RouteType = {
 	maps?: Array<MapType>,
 }
 
-export type RouteInput = {
+export type NewRouteData = {
 	title?: string,
-	lat?: number,
-	lng?: number,
+	addPins?: Array<string>,
+	addPin?: string,
+}
+
+export type UpdateRouteData = NewRouteData & {
+	removePin?: string,
+	removepins?: Array<string>,
 }

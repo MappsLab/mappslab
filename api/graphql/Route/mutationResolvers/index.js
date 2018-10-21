@@ -1,9 +1,11 @@
 // @flow
+import { createRoute } from './createRoute'
+// import updateRoute from './updateRoute'
 
-export default  {
+export default {
 	Mutation: {
-		// modifyRoute
-		// addRoute
-		// removeRoute
+		createRoute,
+		// updateRoute,
+		// deleteRoute
 	},
 }

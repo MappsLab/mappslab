@@ -1,6 +1,6 @@
 // @flow
 import { query } from 'Database'
-import { makeFilterString, makePaginationString } from 'Database/utils'
+import { createQueryStrings } from 'Database/utils'
 import type { GetUserInput, UserType } from 'Types/UserTypes'
 import type { PaginationFilterArgs } from 'Types/sharedTypes'
 import { publicFields, viewerFields } from './userDBSchema'
@@ -24,18 +24,18 @@ export const getUser = async ({ uid, email }: GetUserInput): Promise<UserType | 
 }
 
 export const getUsers = async (args?: PaginationFilterArgs = {}): Promise<Array<UserType>> => {
-	const { first, after, where } = args
-	const filterString = makeFilterString(where)
-	const paginationString = makePaginationString(first, after)
+	const { varBlocks, filterString, paginationString } = createQueryStrings(args)
+
 	const q = /* GraphQL */ `
 		query getUsers {
+			${varBlocks}
 			getUsers(func: eq(type, "user") ${paginationString}) ${filterString} {
 				${publicFields}
 				email
 			}
 		}
 	`
-	const result = await query(q, { first, after })
+	const result = await query(q)
 	if (!result || !result.getUsers) return []
 	return result.getUsers
 }

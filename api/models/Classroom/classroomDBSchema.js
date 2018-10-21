@@ -32,6 +32,7 @@ export const classroomSchema = (isNew: boolean = true) =>
 		createdAt: isNew ? Joi.date().required() : Joi.any().forbidden(),
 		updatedAt: Joi.date().required(),
 		type: Joi.any().only('classroom'),
+		deleted: isNew ? Joi.boolean().default(false) : Joi.boolean(),
 		disabled: Joi.boolean(),
 	})
 

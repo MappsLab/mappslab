@@ -51,6 +51,7 @@ export const userSchema = (isNew: boolean = true) =>
 					.required()
 			: Joi.any().only('user'),
 		disabled: isNew ? Joi.boolean().required() : Joi.boolean(),
+		deleted: isNew ? Joi.boolean().default(false) : Joi.boolean(),
 	})
 
 export const defaultValues = {
