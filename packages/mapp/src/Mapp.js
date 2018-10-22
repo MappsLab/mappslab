@@ -7,63 +7,49 @@ import loadGoogleMaps from './services/googleMaps'
 // import { getNewValues, separateOptionsAndEvents } from './utils/data'
 import { addListeners, removeListeners } from './utils/listeners'
 import type { Map, OverlayView, LatLng } from './types'
+import { mappedMapEventNames } from './eventNames'
+/**
+ * Context Setup
+ */
+
+const MappContext = React.createContext()
+export const MappConsumer = MappContext.Consumer
+
+export type MapContextType = {
+	map: Map,
+}
 
 type EventHandlers = {}
 
 declare var google: any
 
-/**
- * Context Setup
- */
+type Offset = {
+	x?: number,
+	y?: number,
+}
 
-const MapContext = React.createContext()
-export const MapConsumer = MapContext.Consumer
+export type MappUtils = {
+	zoom: (number) => void,
+	zoomIn: () => void,
+	zoomOut: () => void,
+	panTo: (LatLng, Offset) => void,
+	addEventListeners: (eventHandlers: EventHandlers) => void,
+	removeEventListeners: (eventHandlers: EventHandlers) => void,
+}
 
-export type MapContextType = {
-	map: Map,
+export type MappRenderProps = {
+	googleMap: Map,
+	overlay: OverlayView,
+	utils: MappUtils,
 }
 
 /**
  * Events
  */
 
-const mapEventNames = {
-	onBoundsChanged: 'bounds_changed',
-	onCenterChanged: 'center_changed',
-	onClick: 'click',
-	onDblClick: 'dblclick',
-	onDrag: 'drag',
-	onDragEnd: 'dragend',
-	onDragStart: 'dragstart',
-	onHeadingChanged: 'heading_changed',
-	onIdle: 'idle',
-	onMapTypeIdChanged: 'maptypeid_changed',
-	onMouseMove: 'mousemove',
-	onMouseOut: 'mouseout',
-	onMouseOver: 'mouseover',
-	onProjectionChanged: 'projection_changed',
-	onResize: 'resize',
-	onRightClick: 'rightclick',
-	onTilesLoaded: 'tilesloaded',
-	onTiltChanged: 'tilt_changed',
-	onZoomChanged: 'zoom_changed',
-}
-
 /**
  * Types
  */
-
-type MapUtils = {
-	pixelToLatLng: (x: number, y: number) => LatLng,
-	latLngWithPixelOffset: (LatLng, x: number, y: number) => LatLng,
-}
-
-export type MappRenderProps = {
-	googleMap: Map,
-	utils: MapUtils,
-	addEventListeners: (eventHandlers: EventHandlers) => void,
-	removeEventListeners: (eventHandlers: EventHandlers) => void,
-}
 
 type Props = {
 	APIKey: string,
@@ -118,30 +104,49 @@ class Mapp extends React.Component<Props, State> {
 		this.overlay.setMap(this.map)
 	}
 
-	getUtils() {
-		// console.log(this.overlay.projection.fromContainerPixelToLatLng)
-		// const projection = this.overlay.projection
+	getUtils = () => {
+		// const pixelToLatLng = (x: number, y: number) =>
+		// 	this.overlay.getProjection().fromContainerPixelToLatLng(new google.maps.Point(x, y))
 
-		const pixelToLatLng = (x: number, y: number) =>
-			this.overlay.getProjection().fromContainerPixelToLatLng(new google.maps.Point(x, y))
-
-		const latLngWithPixelOffset = (latLng: LatLng, x: number, y: number) => {
+		/**
+		 * panTo
+		 * Pans to a geo point with an optional x / y pixel offset
+		 *
+		 * @param {LatLng} latLng
+		 * @param {Offset} [offset]
+		 * @returns {void}
+		 */
+		const panTo = (latLng: LatLng, offset?: Offset): void => {
+			const { x, y } = {
+				x: 0,
+				y: 0,
+				...offset,
+			}
 			const actual = this.overlay.getProjection().fromLatLngToContainerPixel(new google.maps.LatLng(latLng))
 			const newX = actual.x + x
 			const newY = actual.y + y
 			return this.overlay.getProjection().fromContainerPixelToLatLng(new google.maps.Point(newX, newY))
 		}
 
-		const zoom = (diff: number) => () => {
+		const zoom = (diff: number): void => {
 			const currentZoom = this.map.getZoom()
 			const newZoom = currentZoom + diff
 			this.map.setZoom(newZoom)
 		}
 
-		const zoomIn = zoom(1)
-		const zoomOut = zoom(-1)
+		const zoomFactory = (diff: number) => () => zoom(diff)
 
-		return { pixelToLatLng, latLngWithPixelOffset, zoomIn, zoomOut }
+		const zoomIn = zoomFactory(1)
+		const zoomOut = zoomFactory(-1)
+
+		return {
+			panTo,
+			zoom,
+			zoomIn,
+			zoomOut,
+			removeEventListeners: this.removeEventListeners,
+			addEventListeners: this.addEventListeners,
+		}
 	}
 
 	removeEventListeners = () => {
@@ -149,7 +154,7 @@ class Mapp extends React.Component<Props, State> {
 	}
 
 	addEventListeners = (eventHandlers: EventHandlers) => {
-		this.listeners = addListeners(this.map, mapEventNames, eventHandlers)
+		this.listeners = addListeners(this.map, mappedMapEventNames, eventHandlers)
 	}
 
 	overlay: OverlayView
@@ -161,21 +166,22 @@ class Mapp extends React.Component<Props, State> {
 	render() {
 		const { style, render } = this.props
 		const { ready } = this.state
-		const contextValue = {
+		const value = {
 			map: this.map,
 		}
 		return (
-			<MapContext.Provider value={contextValue}>
+			<MappContext.Provider value={value}>
 				<div style={style} ref={this.mapRef} />
 				{ready
 					? render({
+							overlay: this.overlay,
 							googleMap: this.map,
 							utils: this.getUtils(),
 							addEventListeners: this.addEventListeners,
 							removeEventListeners: this.removeEventListeners,
 					  })
 					: null}
-			</MapContext.Provider>
+			</MappContext.Provider>
 		)
 	}
 }

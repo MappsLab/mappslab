@@ -2,7 +2,7 @@
 import * as React from 'react'
 import ReactDOM from 'react-dom'
 import type { LatLng, Map, Marker, OverlayView } from '../../types'
-import { MapConsumer } from '../../Mapp'
+import { MappConsumer } from '../../Mapp'
 import type { MapContextType as MapContext } from '../../Mapp'
 import createPopup from './PopupClass'
 
@@ -74,10 +74,10 @@ class CustomPopup extends React.Component<Props, State> {
 type BaseProps = {}
 
 const CustomPopupWithContext = (props: BaseProps): React.Node => (
-	<MapConsumer>
+	<MappConsumer>
 		{// $FlowFixMe
 		(mapContext: MapContext) => <CustomPopup {...mapContext} {...props} />}
-	</MapConsumer>
+	</MappConsumer>
 )
 
 export default CustomPopupWithContext

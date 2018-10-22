@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react'
-import { MapConsumer } from '../Mapp'
+import { MappConsumer } from '../Mapp'
 import { addListeners, removeListeners } from '../utils/listeners'
 import { getNewValues, separateOptionsAndEvents } from '../utils/data'
 import type { Marker as MarkerType, MarkerOptions } from '../types'
@@ -95,10 +95,10 @@ class Marker extends React.Component<MarkerProps, State> {
 }
 
 const MarkerWithContext = (props: BaseProps): React.Node => (
-	<MapConsumer>
+	<MappConsumer>
 		{// $FlowFixMe
 		(mapContext: MapContext) => <Marker map={mapContext.map} {...props} />}
-	</MapConsumer>
+	</MappConsumer>
 )
 
 export default MarkerWithContext

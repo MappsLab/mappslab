@@ -2,7 +2,7 @@
 import * as React from 'react'
 import { addListeners, removeListeners } from '../utils/listeners'
 import type { LatLng, Map, Marker, InfoWindow as InfoWindowType, InfoWindowOptions } from '../types'
-import { MapConsumer } from '../Mapp'
+import { MappConsumer } from '../Mapp'
 import type { MapContextType as MapContext } from '../Mapp'
 
 /**
@@ -77,10 +77,10 @@ class InfoWindow extends React.Component<Props, State> {
 	}
 }
 const InfoWindowWithContext = (props: BaseProps): React.Node => (
-	<MapConsumer>
+	<MappConsumer>
 		{// $FlowFixMe
 		(mapContext: MapContext) => <InfoWindow {...mapContext} {...props} />}
-	</MapConsumer>
+	</MappConsumer>
 )
 
 InfoWindowWithContext.defaultProps = defaultProps
