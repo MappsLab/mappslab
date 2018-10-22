@@ -34,6 +34,11 @@ export const routes = async (
 	ctx: GraphQLContext,
 ): Promise<PageType<RouteType>> => {
 	const mapFilter = {
-		where: {},
+		where: {
+			routeWithinMap: { eq: fetchedMap.uid },
+		},
 	}
+	const mergedInput = deepMerge(input || {}, mapFilter)
+	const fetchedRoutes = await ctx.models.Route.getRoutes(mergedInput)
+	return assemblePage(fetchedRoutes, input)
 }

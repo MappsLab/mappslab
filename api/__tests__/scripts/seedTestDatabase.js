@@ -102,7 +102,6 @@ const seedDatabase = async () => {
 			const newRoutes = await Promise.all(
 				newPinsByClassroom.map(async (pins) => {
 					const addPins = pins.slice(0, Math.round(PIN_COUNT / 2)).map((p) => p.uid)
-					// console.log(connections)
 					const route = await createRoute({ addPins }, { viewer: currentUser })
 					return route
 					// createRoute({})

@@ -39,6 +39,7 @@ const relationshipStringCreators = {
 	// Pin-first relationships
 	pinnedByUser: genericRelationship('~pinned'),
 	pinnedInMap: genericRelationship('~has_pin'),
+	pinWithinRoute: genericRelationship('~includes_pin'),
 
 	// Route-first relationships
 	routeContainsPin: genericRelationship('includes_pin'),

@@ -29,7 +29,7 @@ const Route = /* GraphQL */ `
 
 	input RouteFilterParameter {
 		routeContainsPin: RelationshipOperators
-		usedInMap: RelationshipOperators
+		routeWithinMap: RelationshipOperators
 	}
 
 	input RouteListOptions {

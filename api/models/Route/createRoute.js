@@ -24,7 +24,4 @@ export const createRoute = async ({ addPin, addPins, ...rest }: NewRouteData, ow
 
 	const route: RouteType = await createNodeWithEdges(validated, edges)
 	return route
-	// return route
-
-	// const
 }
