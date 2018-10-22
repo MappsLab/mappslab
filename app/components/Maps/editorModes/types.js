@@ -5,10 +5,6 @@ import type { PinType } from 'Types/Pin'
 import type { ViewerType } from 'Types/User'
 import type { LatLng, LatLngLiteral } from 'mapp/types'
 
-type EditorUtils = {
-	latLngWithPixelOffset: (LatLng | LatLngLiteral, number, number) => LatLng,
-}
-
 export type HandlerProps = {
 	transition: (string, {}) => void,
 	viewer: ViewerType,
@@ -16,5 +12,4 @@ export type HandlerProps = {
 	googleMap: Object,
 	inProgressPin: PinType,
 	activePinUid: string,
-	utils: EditorUtils,
 }

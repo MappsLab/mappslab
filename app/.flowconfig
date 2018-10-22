@@ -1,24 +1,8 @@
 [ignore]
-; We fork some components by platform
-.*/*[.]android.js
-
-; Ignore "BUCK" generated dirs
-<PROJECT_ROOT>/\.buckd/
-
-; Ignore unexpected extra "@providesModule"
-.*/node_modules/.*/node_modules/fbjs/.*
-
-; Ignore duplicate module providers
-; For RN Apps installed via npm, "Libraries" folder is inside
-; "node_modules/react-native" but in the source repo it is in the root
-.*/Libraries/react-native/React.js
-
-; Ignore polyfills
-.*/Libraries/polyfills/.*
 
 [include]
 ;../node_modules/
-../packages/mapp/src/**/*
+<PROJECT_ROOT>/../packages/mapp/src/**/*
 
 [libs]
 ./flow-typed
@@ -46,6 +30,7 @@ module.name_mapper='^Styles' -> '<PROJECT_ROOT>/theme'
 module.name_mapper='^Test' -> '<PROJECT_ROOT>/__tests__'
 module.name_mapper='^Jest' -> '<PROJECT_ROOT>/jest'
 module.name_mapper='^mapp' -> '<PROJECT_ROOT>/../packages/mapp/src'
+
 
 suppress_type=$FlowIssue
 suppress_type=$FlowFixMe

@@ -2,11 +2,10 @@
 import { css } from 'styled-components'
 
 export const z = {
-	titleBar: 50,
-	settingsMenu: 80,
-	overlay: 100,
-	modal: 120,
-	alert: 150,
+	map: 1,
+	mapTool: 50,
+	modal: 100,
+	alert: 200,
 }
 
 export const spacing = {

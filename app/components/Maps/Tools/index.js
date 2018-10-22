@@ -1,4 +1,5 @@
 // @flow
-export { default as NewPinButton } from './NewPinButton'
-export { default as Toolbar } from './Toolbar'
-export { default as ZoomButton } from './ZoomButtons'
+
+import Tools from './Tools'
+
+export default Tools

@@ -1,5 +1,7 @@
 // @flow
 import gql from 'graphql-tag'
+import type { MapType } from 'Types/Map'
+import type { QueryWrapper } from '../Query'
 import { withDefaultQuery } from '../Query'
 
 export const query = gql/* GraphQL */ `
@@ -31,50 +33,10 @@ export const query = gql/* GraphQL */ `
 	}
 `
 
-// type MapQueryResponse = {
-// 	data: {
-// 		loading: boolean,
-// 		map: MapType,
-// 		rest: {},
-// 	},
-// }
+type MapResponse = {
+	map: MapType,
+}
 
-// const config = {
-// 	options: ({ uid }) => ({
-// 		variables: { uid },
-// 	}),
-// 	props: ({ data }: MapQueryResponse) => {
-// 		// $FlowFixMe
-// 		console.log(data)
-// 		const { loading, map, ...rest } = unwindEdges(data)
-// 		return {
-// 			loading,
-// 			map,
-// 			request: {
-// 				...rest,
-// 			},
-// 		}
-// 	},
-// 	// subscriptionName: 'subscribeToMorePins',
-// 	// subscriptionOptions: ({ uid }, callback: (p: PinType) => void = () => {}) => ({
-// 	// 	document: newPinAddedQuery,
-// 	// 	variables: { mapUid: uid },
-// 	// 	updateQuery: (previous, { subscriptionData }) => {
-// 	// 		const newPin = subscriptionData.data.pinAddedToMap
-// 	// 		// console.log(previous)
-// 	// 		callback(newPin)
-// 	// 		const { edges } = previous.map.pins
-
-// 	// 		const newEdges = R.uniqBy(R.path(['node', 'uid']))([...edges, { node: newPin, __typename: 'PinEdge' }])
-// 	// 		const map = R.assocPath(['pins', 'edges'], newEdges)(previous.map)
-// 	// 		return {
-// 	// 			...previous,
-// 	// 			map,
-// 	// 		}
-// 	// 	},
-// 	// }),
-// }
-
-const MapQuery = withDefaultQuery(query)
+const MapQuery: QueryWrapper<MapResponse> = withDefaultQuery(query)
 
 export default MapQuery

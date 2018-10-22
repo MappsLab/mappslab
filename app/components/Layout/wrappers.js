@@ -23,9 +23,13 @@ export const Column = styled.section`
 `
 
 export const Centered = styled.div`
-	width: 100%;
-	height: 100%;
-	display: flex;
-	justify-content: center;
-	align-items: center;
+	${({ theme }) => `
+		position: relative;
+		z-index: ${theme.layout.z.modal};
+		width: 100%;
+		height: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	`};
 `
