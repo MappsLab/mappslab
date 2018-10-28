@@ -16,7 +16,6 @@ export const pinSchema = (isNew: boolean = true) =>
 				? Joi.string()
 						.min(3)
 						.max(35)
-						.required()
 				: Joi.string()
 						.min(3)
 						.max(35),
@@ -27,17 +26,20 @@ export const pinSchema = (isNew: boolean = true) =>
 			updatedAt: Joi.date().required(),
 			type: Joi.any().only('pin'),
 			deleted: isNew ? Joi.boolean().default(false) : Joi.boolean(),
+			draft: isNew ? Joi.boolean().default(false) : Joi.boolean(false),
 		})
 		.options({ stripUnknown: true })
 
 export const defaultValues = {
 	type: 'pin',
 	updatedAt: new Date(),
+	draft: false,
 }
 
 export const publicFields = [
 	'uid',
 	'title',
+	'draft',
 	'lat',
 	'lng',
 	'description',
@@ -74,6 +76,7 @@ const parse = pipe(
 	// $FlowFixMe -- TODO
 	parseSingularFields(singleFields),
 	when(propEq('description', undefined), assoc('description', '')),
+	when(propEq('draft', undefined), assoc('draft', false)),
 )
 
 export const parsePinResult = (o: Array<Object>): PinType | null =>

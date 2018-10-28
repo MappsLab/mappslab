@@ -3,13 +3,14 @@
 const Pin = /* GraphQL */ `
 	type Pin implements Node {
 		uid: String!
-		title: String!
+		title: String
 		lat: Float!
 		lng: Float!
 		description: String
 		owner: User
 		maps: MapConnection
 		routes: RouteConnection
+		draft: Boolean
 	}
 
 	# Relationships
@@ -27,12 +28,13 @@ const Pin = /* GraphQL */ `
 	# Inputs
 
 	input NewPinInput {
-		title: String!
+		title: String
+		draft: Boolean!
 		lat: Float!
 		lng: Float!
 		description: String
 		deleted: Boolean
-		addToMaps: [String]
+		addToMaps: [String]!
 		lessonUids: [String]
 	}
 
