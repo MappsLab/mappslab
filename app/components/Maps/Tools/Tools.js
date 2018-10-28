@@ -1,5 +1,6 @@
 // @flow
 import React from 'react'
+import { State } from 'react-automata'
 import type { ProviderProps } from '../Provider'
 import NewPinButton from './NewPinButton'
 import ZoomButton from './ZoomButton'
@@ -9,14 +10,13 @@ import Toolbar from './Toolbar'
  */
 
 const Tools = (props: ProviderProps) => {
-	const { zoomIn, zoomOut, setView, mapView } = props
+	const { zoomIn, zoomOut, transition } = props
 	const onNewPinClick = () => {
-		const newView = mapView === 'addPin' ? 'normal' : 'addPin'
-		setView(newView)
+		transition('clickedDropPin')
 	}
 
 	return (
-		<React.Fragment>
+		<State is="Lesson*">
 			<Toolbar>
 				<NewPinButton onClick={onNewPinClick} />
 			</Toolbar>
@@ -24,7 +24,7 @@ const Tools = (props: ProviderProps) => {
 				<ZoomButton direction="in" onClick={() => zoomIn()} />
 				<ZoomButton direction="out" onClick={() => zoomOut()} />
 			</Toolbar>
-		</React.Fragment>
+		</State>
 	)
 }
 

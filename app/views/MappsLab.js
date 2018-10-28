@@ -18,8 +18,8 @@ const MappsLab = () => (
 		APIKey={apiKey}
 		render={(googleMap) => (
 			<Switch>
+				<Route path="/" exact component={Login} />
 				<Route path="/sandbox" component={Sandbox} />
-				<Route path="/login" component={Login} />
 				<Route path="/maps/:uid" render={({ match }) => <MapEditor mapUid={match.params.uid} map={googleMap} />} />
 				<ViewerRoute path="/dashboard" render={() => <Dashboard />} />
 			</Switch>

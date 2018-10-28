@@ -1,7 +1,5 @@
 // @flow
 import React from 'react'
-import * as R from 'ramda'
-import type { NestedArray } from 'ramda'
 import styled from 'styled-components'
 import { Field as FinalFormField } from 'react-final-form'
 import { composeValidators, required } from './validators'
@@ -35,8 +33,6 @@ type Props = {
 	type?: string,
 	required?: boolean,
 }
-
-export const arrayifyFunctions = (...things: NestedArray<Function>): Array<Function> => R.flatten(things)
 
 const Field = (props: Props) => {
 	const validators = props.validate

@@ -107,8 +107,9 @@ export type SelectorItem = {
 export type SelectorProps = {
 	// Downshift props. More are available:
 	// https://github.com/paypal/downshift#usage
+	selectedItem?: void | string,
 	onChange?: ({ value: string }) => void,
-	onSelect?: ({ value: string }) => void,
+	onSelect?: ({ value: string }, {}) => void,
 	itemToString?: (SelectorItem) => string,
 	// Additional props
 	label: string,
@@ -125,76 +126,113 @@ const defaultItemToString = (i) => (i ? i.label : '')
 const defaultInputFilter = (inputValue) => (item) =>
 	!inputValue || inputValue.length < 2 || item.label.toLowerCase().includes(inputValue.toLowerCase())
 
-const Selector = ({ onChange, onSelect, itemToString, items, label, inputFilter, disabled }: SelectorProps) => (
-	<Downshift onChange={onChange} onSelect={onSelect} itemToString={itemToString || defaultItemToString}>
-		{({
-			getInputProps,
-			getItemProps,
-			getLabelProps,
-			getMenuProps,
-			isOpen,
-			inputValue,
-			highlightedIndex,
-			selectedItem,
-			openMenu,
-			clearSelection,
-		}) => {
-			const filterItems = inputFilter || defaultInputFilter
-			const renderItem = ({ render, ...item }: SelectorItem, index: number): React.Node => {
-				const itemProps = {
-					...getItemProps({
-						key: item.value,
-						index,
-						item,
-						highlighted: index === highlightedIndex ? true : undefined,
-						selected: item === selectedItem ? true : undefined,
-					}),
-				}
+const getSelectedItemByValue = (value: string, items: Array<SelectorItem>): SelectorItem | void =>
+	items.find((i) => i.value === value)
+const getSelectedItem = (selectedItem: SelectorItem, items: Array<SelectorItem>): SelectorItem | void => {
+	if (!selectedItem) return undefined
+	return getSelectedItemByValue(selectedItem.value, items)
+}
 
-				return <SelectorListItem {...itemProps}>{render ? render(itemProps) : <span>{item.label}</span>}</SelectorListItem>
+const stateReducer = (state, changes) => {
+	// this prevents the menu from being closed when the user
+	// selects an item with a keyboard or mouse
+
+	switch (changes.type) {
+		case Downshift.stateChangeTypes.clickItem:
+			return {
+				...changes,
+				inputValue: 'hi',
 			}
+		default:
+			return changes
+	}
+}
 
-			const currentItem = selectedItem ? items.find((i) => i.value === selectedItem.value) : null
-			return (
-				<div>
-					<Wrapper disabled={disabled}>
-						<LabelWrapper {...getLabelProps} onClick={openMenu}>
-							{currentItem && currentItem.render ? renderItem(currentItem, 0) : <label {...getLabelProps()}>{label}</label>}
-						</LabelWrapper>
-						<MenuWrapper visible={isOpen}>
-							<Ul {...getMenuProps()}>
-								{isOpen && selectedItem === null ? (
-									// if nothing is selected, render the input and the filtered items
-									<React.Fragment>
-										<ItemContainer>
-											<Input autoFocus {...getInputProps()} placeholder="start typing.." />
-										</ItemContainer>
-										{items.filter(filterItems(inputValue)).map(renderItem)}
-									</React.Fragment>
-								) : (
-									// otherwise, render a 'clear' button
-									<ItemContainer>
-										<button
-											type="button"
-											onClick={() => {
-												clearSelection()
-												openMenu()
-											}}
-										>
-											clear
-										</button>
-									</ItemContainer>
-								)}
-							</Ul>
-						</MenuWrapper>
-					</Wrapper>
-				</div>
-			)
-		}}
-	</Downshift>
-)
+const Selector = ({
+	onChange,
+	onSelect: passedOnSelect,
+	itemToString,
+	items,
+	label,
+	inputFilter,
+	disabled,
+	selectedItem: controlledSelectedItem,
+}: SelectorProps) => {
+	const controlledValue =
+		controlledSelectedItem !== undefined
+			? // If a controlled value is provided, find it in the items.
+			  // fall back to 'null' so the component remains controlled
+			  getSelectedItemByValue(controlledSelectedItem, items) || null
+			: // otherwise, provide 'undefined' so the input remains uncontrolled.
+			  undefined
 
+	const onSelect = (selectedItem: any, stateAndHelpers: any) => {
+		stateAndHelpers.setState({ inputValue: '' })
+		if (passedOnSelect) passedOnSelect(selectedItem, stateAndHelpers)
+	}
+	return (
+		<Downshift
+			onChange={onChange}
+			onSelect={onSelect}
+			stateReducer={stateReducer}
+			itemToString={itemToString || defaultItemToString}
+			initialSelectedItem={controlledValue}
+		>
+			{({
+				getInputProps,
+				getItemProps,
+				getLabelProps,
+				getMenuProps,
+				isOpen,
+				inputValue,
+				highlightedIndex,
+				selectedItem,
+				openMenu,
+				clearSelection,
+			}) => {
+				const filterItems = inputFilter || defaultInputFilter
+				const renderItem = ({ render, ...item }: SelectorItem, index: number): React.Node => {
+					const itemProps = {
+						...getItemProps({
+							key: item.value,
+							index,
+							item,
+							highlighted: index === highlightedIndex ? true : undefined,
+							selected: item === selectedItem ? true : undefined,
+						}),
+					}
+
+					return <SelectorListItem {...itemProps}>{render ? render(itemProps) : <span>{item.label}</span>}</SelectorListItem>
+				}
+				const currentItem = getSelectedItem(selectedItem, items)
+				return (
+					<div>
+						<Wrapper disabled={disabled}>
+							<LabelWrapper {...getLabelProps} onClick={openMenu}>
+								{currentItem && currentItem.render ? renderItem(currentItem, 0) : <label {...getLabelProps()}>{label}</label>}
+							</LabelWrapper>
+							<MenuWrapper visible={isOpen}>
+								<Ul {...getMenuProps()}>
+									{isOpen ? (
+										// if nothing is selected, render the input and the filtered items
+										<React.Fragment>
+											<ItemContainer>
+												<Input autoFocus {...getInputProps()} placeholder="start typing.." />
+											</ItemContainer>
+											{items.filter(filterItems(inputValue)).map(renderItem)}
+										</React.Fragment>
+									) : null}
+								</Ul>
+							</MenuWrapper>
+						</Wrapper>
+					</div>
+				)
+			}}
+		</Downshift>
+	)
+}
 Selector.defaultProps = {
+	selectedItem: undefined,
 	itemToString: defaultItemToString,
 	inputFilter: defaultInputFilter,
 	onChange: () => {},

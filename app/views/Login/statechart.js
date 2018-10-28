@@ -12,6 +12,7 @@ export const TEACHER_FLOW = `${teacherPrefix}_*`
 export const STUDENT_FLOW = `${studentPrefix}_*`
 export const LOGIN_FLOW = `${loginPrefix}_*`
 
+const INIT = 'init'
 export const WELCOME = 'welcome'
 export const SELECT_CLASSROOM = `${studentPrefix}_selectClassroom`
 export const SELECT_STUDENT = `${studentPrefix}_selectStudent`
@@ -26,6 +27,8 @@ export const LOGIN_SUCCESS = 'loginSuccess'
  */
 
 const ERROR = 'error'
+export const WITH_VIEWER = 'withViewer'
+export const NO_VIEWER = 'noViewer'
 export const SELECTED_STUDENT_FLOW = 'selectedStudentFlow'
 export const SELECTED_TEACHER_FLOW = 'selectedTeacherFlow'
 export const SELECTED_CLASSROOM = 'selectedClassroom'
@@ -44,8 +47,14 @@ export const SHOW_STUDENT_BUTTON = 'showStudentButton'
 export const DISABLE_INPUT = 'disableInput'
 
 export const statechart = {
-	initial: WELCOME,
+	initial: INIT,
 	states: {
+		[INIT]: {
+			on: {
+				[WITH_VIEWER]: LOGIN_SUCCESS,
+				[NO_VIEWER]: WELCOME,
+			},
+		},
 		[WELCOME]: {
 			on: {
 				[SELECTED_STUDENT_FLOW]: SELECT_CLASSROOM,
@@ -103,6 +112,10 @@ export const statechart = {
 				},
 			},
 		},
-		[LOGIN_SUCCESS]: {},
+		[LOGIN_SUCCESS]: {
+			on: {
+				[SELECTED_CLASSROOM]: LOGIN_SUCCESS,
+			},
+		},
 	},
 }

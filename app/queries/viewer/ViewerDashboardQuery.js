@@ -1,5 +1,7 @@
 // @flow
 import gql from 'graphql-tag'
+import type { ViewerType } from 'Types/User'
+import type { QueryWrapper } from '../Query'
 import { withDefaultQuery } from '../Query'
 
 export const query = gql`
@@ -40,6 +42,10 @@ export const query = gql`
 	}
 `
 
-const withViewerDashboardQuery = withDefaultQuery(query)
+type ViewerResponse = {
+	viewer: ViewerType,
+}
 
-export default withViewerDashboardQuery
+const ViewerClassroomsQuery: QueryWrapper<ViewerResponse> = withDefaultQuery(query)
+
+export default ViewerClassroomsQuery

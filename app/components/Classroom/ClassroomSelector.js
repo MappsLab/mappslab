@@ -1,56 +1,29 @@
 // @flow
 import React from 'react'
-import { ClassroomsQuery } from 'Queries'
-import { LiveSelector } from 'Components/Selector'
-import { ClassroomChip } from 'Components/Classroom'
+import { Selector } from 'Components/Selector'
+import type { ClassroomType } from 'Types/Classroom'
+import ClassroomChip from './ClassroomChip'
 
 /**
  * ClassroomSelector
  */
 
 type Props = {
-	disabled?: boolean,
-	delayQuery?: boolean,
-	onSelect: ({ value: string }) => void,
+	label?: string,
+	classrooms: Array<ClassroomType>,
 }
 
-const ClassroomSelector = ({ disabled, delayQuery, onSelect }: Props) => (
-	<ClassroomsQuery variables={{ first: 25 }} delayQuery={delayQuery}>
-		{({ data, refetch }) => {
-			const refetchQuery = (input: string) => {
-				if (input.length < 3) {
-					refetch({ where: {} })
-					return
-				}
-				refetch({
-					where: {
-						title: {
-							contains: input,
-						},
-					},
-				})
-			}
-			const items = data.classrooms.map((c) => ({
-				value: c.uid,
-				label: c.title,
-				render: ({ highlighted, selected }) => <ClassroomChip classroom={c} active={highlighted || selected} />,
-			}))
-			return (
-				<LiveSelector
-					label="Select your classroom"
-					disabled={disabled}
-					onSelect={onSelect}
-					items={items}
-					refetchQuery={refetchQuery}
-				/>
-			)
-		}}
-	</ClassroomsQuery>
-)
+const ClassroomSelector = ({ classrooms, label, ...props }: Props) => {
+	const items = classrooms.map((c) => ({
+		value: c.uid,
+		label: c.title,
+		render: ({ highlighted, selected }) => <ClassroomChip classroom={c} active={highlighted || selected} />,
+	}))
+	return <Selector items={items} label={label || 'Select a Classroom'} {...props} />
+}
 
 ClassroomSelector.defaultProps = {
-	disabled: false,
-	delayQuery: false,
+	label: 'Select a Classroom',
 }
 
 export default ClassroomSelector

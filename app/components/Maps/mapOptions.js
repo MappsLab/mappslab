@@ -1,6 +1,5 @@
 // @flow
-import type { MapOptions } from 'mapp/types/mapTypes'
-import type { View } from './Provider'
+import { createObjectSearchByState } from './utils'
 
 const defaults = {
 	draggable: true,
@@ -8,29 +7,29 @@ const defaults = {
 	clickableIcons: false,
 }
 
-const optionsForView = new Map([
-	[
-		'addPin',
-		{
-			draggable: true,
-			draggableCursor: 'url("/images/newPin.svg") 18 49, crosshair',
+const PIN_CURSOR = 'url("/images/newPin.svg") 18 49, crosshair'
+
+const mapOptions = {
+	Welcome: {
+		options: {
+			draggable: false,
 			clickableIcons: false,
 		},
-	],
-	[
-		'inspect',
-		{
-			draggable: false,
-		},
-	],
-	['normal', {}],
-	['street', {}],
-])
+	},
+	Lesson: {
+		options: defaults,
 
-export const getOptionsForView = (view: View): MapOptions => {
-	const options = optionsForView.get(view) || {}
-	return {
-		...defaults,
-		...options,
-	}
+		DropPin: {
+			DropMode: {
+				options: {
+					draggableCursor: PIN_CURSOR,
+				},
+			},
+		},
+	},
 }
+
+export const getOptionsForState = createObjectSearchByState({
+	chart: mapOptions,
+	searchKey: 'options',
+})

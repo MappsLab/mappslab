@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react'
 import type { DocumentNode } from 'graphql'
-import type { QueryRenderProps, ApolloQueryResult } from 'react-apollo'
+import type { QueryRenderProps } from 'react-apollo'
 import { Query as ApolloQuery } from 'react-apollo'
 import { Loading, FetchError } from './Network'
 import { getNetworkStatus, unwindEdges } from './utils'
@@ -13,20 +13,17 @@ type LoadingProps<T> = QueryRenderProps<T> & {
 }
 
 type CustomRenderProps<T> = QueryRenderProps<T>
-//  & {
-// 	// loadQuery: ({ [key: string]: any }) => Promise<ApolloQueryResult<T>>,
-// }
 
 type QueryConfig<T> = {
-	query: DocumentNode,
+	query?: DocumentNode,
 	variables?: {},
 	pollInterval?: number,
 	ssr?: boolean,
 	delayQuery?: boolean,
 	skip?: boolean,
 	displayName?: void | string,
-	onCompleted?: ({}) => void,
-	onError?: ({}) => void,
+	onCompleted?: (any) => void,
+	onError?: (any) => void,
 	// An optional "Loading" component. Use a skeleton here. Pass 'false' to disable
 	LoadingComponent?: false | React.ComponentType<LoadingProps<T>>,
 	// An optional "Error" component. Pass 'false' to disable
@@ -39,7 +36,7 @@ type QueryConfig<T> = {
 type GenericResponse = { [key: string]: any }
 
 type QueryProps<T> = QueryConfig<T> & {
-	query?: void | DocumentNode,
+	query: void | DocumentNode,
 	children: (CustomRenderProps<T>) => React.Node,
 }
 
@@ -47,6 +44,7 @@ const Query = <T: GenericResponse>(props: QueryProps<T>) => {
 	// A few more query props are available:
 	// https://www.apollographql.com/docs/react/essentials/queries.html#props
 	const { children, skip, delayQuery, ...queryProps } = props
+	if (!queryProps.query) throw new Error('No query was supplied.')
 	return (
 		<ApolloQuery {...queryProps} skip={skip || delayQuery}>
 			{(response: QueryRenderProps<T>) => {
@@ -100,10 +98,6 @@ Query.defaultProps = {
 export default Query
 
 export type QueryWrapper<Response> = (props: QueryProps<Response>) => React.Element<typeof Query>
-
-// export const withDefaultQuery = <T>(defaultQuery: DocumentNode, config?: QueryConfig<T>) => (props: QueryChildProps<T>) => (
-// 	<Query query={props.query || defaultQuery} {...props} {...config} />
-// )
 
 export const withDefaultQuery = <ResponseType: GenericResponse>(
 	defaultQuery: DocumentNode,

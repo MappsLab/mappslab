@@ -96,9 +96,6 @@ class Mapp extends React.Component<Props, State> {
 				ready: true,
 			})
 		})
-		google.maps.event.addListener(this.map, 'click', (e) => {
-			console.log('Map', 'click', e.xa)
-		})
 
 		this.overlay = new google.maps.OverlayView()
 		this.overlay.setMap(this.map)
@@ -125,7 +122,8 @@ class Mapp extends React.Component<Props, State> {
 			const actual = this.overlay.getProjection().fromLatLngToContainerPixel(new google.maps.LatLng(latLng))
 			const newX = actual.x + x
 			const newY = actual.y + y
-			return this.overlay.getProjection().fromContainerPixelToLatLng(new google.maps.Point(newX, newY))
+			const newCenter = this.overlay.getProjection().fromContainerPixelToLatLng(new google.maps.Point(newX, newY))
+			this.map.panTo(newCenter)
 		}
 
 		const zoom = (diff: number): void => {

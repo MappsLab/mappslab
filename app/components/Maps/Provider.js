@@ -1,137 +1,146 @@
 // @flow
 import * as React from 'react'
-import { CurrentViewerQuery, MapQuery } from 'Queries'
 import type { MappRenderProps, MappUtils } from 'mapp'
-import type { MapType, ViewerType } from 'Types'
-import { getOptionsForView } from './mapOptions'
-
-// import type { MappRenderProps, MappUtils } from 'mapp/types'
+import { withStateMachine } from 'react-automata'
+import { CurrentViewerQuery, MapQuery } from 'Queries'
+import { CreatePinMutation } from 'Queries/Pin'
+import type { MapType, ViewerType, PinType } from 'Types'
+import type { Mutation, SubscriptionConfig } from 'Types/GraphQL'
+import { getOptionsForState } from './mapOptions'
+import statechart from './statechart'
 
 const { Provider, Consumer } = React.createContext({})
-
 export const MapConsumer = Consumer
 
 /**
  * Provider
  */
 
-export type View = 'normal' | 'addPin' | 'street' | 'inspect'
+export type View = 'normal' | 'street'
 
 type Notification = {
 	text: string,
 	title: string,
 }
 
-export type ProviderProps = MappUtils & {
-	viewer?: ViewerType,
-	setMap: (string) => void,
-	mapData?: MapType,
-	setView: (View) => void,
-	mapView: View,
-	setInspectItem: (string) => void,
-	inspectedItem?: string,
-	sendNotification: (Notification) => void,
-}
-
-// export type MappUtils = {
-// 	zoom: (number) => void,
-// 	zoomIn: () => void,
-// 	zoomOut: () => void,
-// 	panTo: (LatLng, Offset) => void,
-// 	addEventListeners: (eventHandlers: EventHandlers) => void,
-// 	removeEventListeners: (eventHandlers: EventHandlers) => void,
-// }
-
-// export type MappRenderProps = {
-// 	googleMap: Map,
-// 	overlay: OverlayView,
-// 	utils: MappUtils,
-// }
-
 type Props = MappRenderProps & {
 	initialView?: View,
 	initialMapUid?: string | null,
 	children: React.Node,
+	inspectedItem?: PinType | null,
+
+	// MappRenderProps:
+	// (copied for reference)
+	// googleMap: Map,
+	// overlay: OverlayView,
+	// utils: {
+	// 	zoom: (number) => void,
+	// 	zoomIn: () => void,
+	// 	zoomOut: () => void,
+	// 	panTo: (LatLng, Offset) => void,
+	// 	addEventListeners: (eventHandlers: EventHandlers) => void,
+	// 	removeEventListeners: (eventHandlers: EventHandlers) => void,
+	// },
 }
 
 type State = {
 	mapUid: string | null,
-	mapView: View,
-	inspectedItem: string | null,
-	// layers: Array<Layer>
+	// mapView: View,
+	notifications: Array<Notification>,
 }
 
-export class MapProvider extends React.Component<Props, State> {
+export type ProviderProps = MappUtils &
+	State & {
+		viewer?: ViewerType,
+		setMap: (string) => void,
+		mapData?: MapType,
+		sendNotification: (Notification) => void,
+		transition: (string, ?{}) => void,
+		createPin: Mutation,
+		subscribeToMore: (SubscriptionConfig) => () => void,
+	}
+
+class MapProviderClass extends React.Component<Props, State> {
 	static defaultProps = {
 		initialView: 'normal',
 		initialMapUid: null,
+		inspectedItem: null,
 	}
 
 	state = {
 		mapUid: this.props.initialMapUid || null,
-		mapView: this.props.initialView || 'normal',
-		inspectedItem: null,
+		notifications: [],
+	}
+
+	componentDidMount() {
+		this.updateOptions()
 	}
 
 	getEditorUtils = () => ({
-		setView: this.setView,
 		setMap: this.setMap,
-		setInspectItem: this.setInspectItem,
 		sendNotification: this.sendNotification,
 	})
 
-	updateOptionsForView = (view: View = this.state.mapView) => {
-		const { googleMap } = this.props
-		const options = getOptionsForView(view)
-		console.log(options)
+	updateOptions = (props: Props = this.props) => {
+		const { googleMap, machineState } = props
+		const options = getOptionsForState(machineState.value)
 		googleMap.setOptions(options)
 	}
 
-	setView = (mapView: View) => {
-		this.setState({ mapView }, () => {
-			this.updateOptionsForView(mapView)
-		})
+	componentDidTransition = () => {
+		this.updateOptions()
 	}
 
 	setMap = (mapUid: string) => {
 		this.setState({ mapUid })
 	}
 
-	setInspectItem = (itemUid: string | null) => {
-		this.setState({ inspectedItem: itemUid })
-	}
-
-	sendNotification = (message: Notification) => {
-		console.log(message)
+	sendNotification = (notification: Notification) => {
+		this.setState(({ notifications }) => ({
+			notifications: [...notifications, notification],
+		}))
 	}
 
 	render() {
-		const { children, utils } = this.props
-		const { mapUid, mapView, inspectedItem } = this.state
+		const { children, utils, transition, machineState, inspectedItem } = this.props
+		const { mapUid, notifications } = this.state
 		const value = {
-			mapView,
 			inspectedItem,
+			notifications,
+			transition,
+			machineState,
 			...utils,
 			...this.getEditorUtils(),
 		}
 		return (
-			<CurrentViewerQuery>
-				{({ data: viewerQueryData }) => (
-					<MapQuery variables={{ uid: mapUid }} delayQuery={mapUid === null}>
-						{({ data: mapQueryData }) => (
-							<Provider
-								value={{
-									...value,
-									viewer: viewerQueryData.currentViewer.viewer,
-									mapData: mapQueryData.map,
-								}}
-							>
-								{children}
-							</Provider>
-						)}
-					</MapQuery>
+			<CreatePinMutation>
+				{(createPin) => (
+					<CurrentViewerQuery>
+						{({ data: viewerQueryData }) => {
+							const viewer = viewerQueryData.currentViewer ? viewerQueryData.currentViewer.viewer : null
+							return (
+								<MapQuery variables={{ uid: mapUid }} delayQuery={mapUid === null}>
+									{({ data: mapQueryData, subscribeToMore }) => (
+										<Provider
+											value={{
+												...value,
+												viewer,
+												subscribeToMore,
+												mapData: mapQueryData.map,
+												createPin,
+											}}
+										>
+											{children}
+										</Provider>
+									)}
+								</MapQuery>
+							)
+						}}
+					</CurrentViewerQuery>
 				)}
-			</CurrentViewerQuery>
+			</CreatePinMutation>
 		)
 	}
 }
+
+export const MapProvider = withStateMachine(statechart)(MapProviderClass)

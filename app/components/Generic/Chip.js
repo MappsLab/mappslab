@@ -1,6 +1,7 @@
 // @flow
 import React from 'react'
 import styled from 'styled-components'
+import { Link } from 'react-router-dom'
 
 const Wrapper = styled.div`
 	${({ theme, size, active }) => `
@@ -64,29 +65,48 @@ export type ChipProps = {
 	active?: boolean,
 }
 
-type Props = ChipProps & {
+type Props = {
 	size?: 'small' | 'large',
 	active?: boolean,
 	image?: string | null,
 	title: string,
 	subtitle?: string | null,
+	onClick?: null | (() => any | (() => Promise<any>)),
+	to?: null | string,
 }
 
-const Chip = ({ image, title, subtitle, size, active }: Props) => (
-	<Wrapper size={size} active={active}>
-		<ImageWrapper size={size}>
-			<img src="https://media0.giphy.com/media/1wnZQRxFfbKHnSIEIS/giphy.webp" />
-		</ImageWrapper>
-		<TitleWrapper>
-			<Title size={size}>{title}</Title>
-			<Subtitle size={size}>{subtitle}</Subtitle>
-		</TitleWrapper>
-	</Wrapper>
-)
-
+const Chip = ({ image, title, subtitle, size, active, to, onClick }: Props) => {
+	const as = to
+		? // if 'to', use a Link
+		  Link
+		: // else, if 'onClick', use a button
+		  onClick
+			? 'button'
+			: undefined
+	return (
+		<Wrapper
+			size={size}
+			active={active || undefined}
+			as={as}
+			type={as === 'button' ? 'button' : undefined}
+			to={to}
+			onClick={onClick}
+		>
+			<ImageWrapper size={size}>
+				<img src="https://media0.giphy.com/media/1wnZQRxFfbKHnSIEIS/giphy.webp" />
+			</ImageWrapper>
+			<TitleWrapper>
+				<Title size={size}>{title}</Title>
+				<Subtitle size={size}>{subtitle}</Subtitle>
+			</TitleWrapper>
+		</Wrapper>
+	)
+}
 Chip.defaultProps = {
 	size: 'large',
 	active: false,
+	to: null,
+	onClick: null,
 	image: null,
 	subtitle: null,
 }

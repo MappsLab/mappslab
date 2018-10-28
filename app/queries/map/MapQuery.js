@@ -10,6 +10,22 @@ export const query = gql/* GraphQL */ `
 			title
 			uid
 			slug
+			description
+			classroom {
+				uid
+				title
+				slug
+				description
+				teachers {
+					edges {
+						node {
+							uid
+							name
+							roles
+						}
+					}
+				}
+			}
 			pins {
 				pageInfo {
 					lastCursor
@@ -22,9 +38,11 @@ export const query = gql/* GraphQL */ `
 						lat
 						lng
 						description
+						draft
 						owner {
 							uid
 							name
+							roles
 						}
 					}
 				}

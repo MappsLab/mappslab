@@ -1,87 +1,86 @@
-// @flow
+// // States
+// const WELCOME = 'welcome'
+// const LESSON = 'lesson'
+// const CAPTURE = 'captureView'
 
-// STATES
+// // Child States
+// // -> LESSON
+// const BROWSE = 'browse'
+// const DROP_PIN = 'dropPin'
+// const INSPECT = 'inspect'
 
-// Child States
-export const createPinStates = {
-	DROP_PIN: 'dropPin',
-	DROP_CONNECTED_PIN: 'dropConnectedPin',
-	DETAILS: 'details',
-}
+// // Transitions
+// const RESTART = 'restart'
+// const ENTER_LESSON = 'enterLesson'
+// const ENTER_DROP_PIN = 'enterDropPin'
+// const DROPPED_PIN = 'droppedPin'
+// const CONNECTED_PIN = 'connectedPin'
+// const END_CONNECTION = 'endedConnection'
+// const CLOSE = 'close'
 
-export const states = {
-	NORMAL: 'normal',
-	INSPECT_PIN: 'inspectPin',
-	CREATE_PIN: 'createNewPin',
-	CREATE_PIN__DROP: `createNewPin.${createPinStates.DROP_PIN}`,
-	CREATE_PIN__DROP_CONNECTED_PIN: `createNewPin.${createPinStates.DROP_CONNECTED_PIN}`,
-	CREATE_PIN__DETAILS: `createNewPin.${createPinStates.DETAILS}`,
-	EDIT_PIN: 'editPin',
-}
-
-// ACTIONS
-
-export const transitions = {
-	NEXT: 'next',
-	CANCEL: 'cancel',
-	ENTER_DROP_PIN: 'startedAddPin',
-	CONNECT_PIN: 'conectPin',
-	SUCCESS: 'success',
-	CLICKED_PIN: 'clickedPin',
-	CLICKED_EDIT_PIN: 'clickedEditPin',
-}
-
-export const statechart = {
-	initial: 'init',
+const statechart = {
 	states: {
-		init: {
-			on: {
-				[transitions.NEXT]: states.NORMAL,
-			},
-		},
-		[states.NORMAL]: {
-			on: {
-				[transitions.ENTER_DROP_PIN]: states.CREATE_PIN,
-				[transitions.CLICKED_PIN]: states.INSPECT_PIN,
-			},
-			onEntry: ['allowPinHover'],
-		},
-		// The user has opened a pin info window
-		[states.INSPECT_PIN]: {
-			on: {
-				[transitions.CANCEL]: states.NORMAL,
-				[transitions.CLICKED_EDIT_PIN]: states.EDIT_PIN,
-			},
-		},
-
-		[states.CREATE_PIN]: {
-			on: {
-				[transitions.CANCEL]: states.NORMAL,
-				[transitions.SUCCESS]: states.NORMAL,
-			},
-			initial: createPinStates.DROP_PIN,
+		Welcome: { id: 'Welcome', states: {} },
+		Lesson: {
+			id: 'Lesson',
 			states: {
-				[createPinStates.DROP_PIN]: {
+				Browse: { id: 'Browse', states: {}, on: { clickedDropPin: '#DropPin', clickedItem: '#Inspect' } },
+				DropPin: {
+					id: 'DropPin',
+					states: {
+						DropMode: {
+							id: 'DropMode',
+							states: {
+								Drop: { id: 'Drop', states: {} },
+								Connect: { id: 'Connect', states: {} },
+							},
+							initial: 'Drop',
+							on: {},
+						},
+					},
+					initial: 'DropMode',
 					on: {
-						[transitions.CONNECT_PIN]: createPinStates.DROP_PIN,
-						[transitions.NEXT]: createPinStates.DETAILS,
+						droppedPin: '#Inspect',
+						enterConnect: '#Connect',
 					},
 				},
-				[createPinStates.DROP_CONNECTED_PIN]: {
-					on: {
-						[transitions.CANCEL]: states.NORMAL,
-					},
-				},
-				[createPinStates.DETAILS]: {},
+				Inspect: { id: 'Inspect', states: {}, on: { close: '#Lesson' } },
 			},
+			initial: 'Browse',
+			on: {},
 		},
-
-		// The user is entering / editing info for an existing pin
-		[states.EDIT_PIN]: {
-			on: {
-				[transitions.SUCCESS]: states.NORMAL,
-				[transitions.CANCEL]: states.NORMAL,
-			},
-		},
+		CaptureView: { id: 'CaptureView', states: {} },
 	},
+	initial: 'Welcome',
+	on: { enterLesson: '#Lesson', returnToWelcome: '#Welcome' },
 }
+
+// const statechart = {
+// 	initial: WELCOME,
+// 	states: {
+// 		[WELCOME]: {},
+// 		[LESSON]: {
+// 			initial: BROWSE,
+// 			states: {
+// 				[BROWSE]: {
+// 					on: {
+// 						[ENTER_DROP_PIN]: DROP_PIN,
+// 					},
+// 				},
+// 				[DROP_PIN]: {},
+// 				[INSPECT]: {},
+// 			},
+// 			on: {
+// 				[ENTER_DROP_PIN]: DROP_PIN,
+// 				[DROPPED_PIN]: INSPECT,
+// 			},
+// 		},
+// 		[CAPTURE]: {},
+// 		on: {
+// 			[ENTER_LESSON]: LESSON,
+// 			[RESTART]: WELCOME,
+// 		},
+// 	},
+// }
+
+export default statechart

@@ -9,6 +9,7 @@ const pinFields = /* GraphQL */ `
 	lat
 	lng
 	description
+	draft
 	owner {
 		uid
 		name

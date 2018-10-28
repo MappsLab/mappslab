@@ -12,8 +12,8 @@ type Props = ChipProps & {
 	classroom: ClassroomType,
 }
 
-const ClassroomChip = ({ size, active, classroom }: Props) => (
-	<Chip size={size || 'large'} active={active} title={classroom.title} />
+const ClassroomChip = ({ size, active, classroom, ...rest }: Props) => (
+	<Chip size={size || 'large'} active={active} title={classroom.title} {...rest} />
 )
 
 export default ClassroomChip

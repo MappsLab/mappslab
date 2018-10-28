@@ -53,7 +53,7 @@ type SubscribeToMoreOptions = {
 export type StartSubscriptionOptions = SubscriptionConfig & {
 	variables?: {},
 	subscribeToMore: (SubscribeToMoreOptions) => Subscription,
-	callback: SubscriptionCallback,
+	callback?: SubscriptionCallback,
 }
 
 type MutationOptions = {

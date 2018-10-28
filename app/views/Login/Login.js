@@ -1,18 +1,18 @@
 // @flow
 import React from 'react'
 import { withStateMachine, State, Action } from 'react-automata'
-import { Link } from 'react-router-dom'
+// import { Link } from 'react-router-dom'
 import Pane from 'Components/Pane'
 import { Header1 } from 'Components/Text'
 import { Centered } from 'Components/Layout'
 import { Button } from 'Components/UI'
-import type { UserType } from 'Types/User'
+import { CurrentViewerQuery } from 'Queries/Viewer'
+import type { ViewerType } from 'Types/User'
 import StudentLogin from './StudentLogin'
 import TeacherLogin from './TeacherLogin'
 import UserLogin from './UserLogin'
 import LoginSuccess from './LoginSuccess'
 import SetNewPassword from './SetNewPassword'
-// import { ClassroomsQuery, ClassroomQuery, UserQuery } from 'Queries'
 // import SelectClassroom from './SelectClassroom'
 // import SelectStudent from './SelectStudent'
 // import Welcome from './Welcome'
@@ -26,6 +26,8 @@ import {
 	SET_NEW_PASSWORD,
 	LOGIN_SUCCESS,
 	// transitions
+	WITH_VIEWER,
+	NO_VIEWER,
 	SELECTED_TEACHER_FLOW,
 	SELECTED_STUDENT_FLOW,
 	// actions
@@ -38,101 +40,73 @@ import {
  * Login
  */
 
-type Props = {
+type BaseProps = {
 	transition: (string, ?{}) => void,
+}
+
+type Props = BaseProps & {
+	viewer?: null | ViewerType,
 	classroomUid?: null | string,
 	resetToken?: null | string,
 	userUid?: null | string,
 	error?: null | string,
 }
 
-/**
- * Login
- */
-
-const Login = (props: Props) => {
-	const { transition, error } = props
-	// Factory function to make handlers easier to define
-	const makeTransition = (t: string, data: {} = {}) => () => {
-		transition(t, data)
+class Login extends React.Component<Props, State> {
+	componentDidMount() {
+		const { viewer, transition } = this.props
+		const transitionName = viewer ? WITH_VIEWER : NO_VIEWER
+		transition(transitionName)
 	}
 
-	console.log(props.machineState.value, props)
-	const childProps = { ...props, makeTransition }
-	return (
-		<Centered>
-			<Pane size="small">
-				<Header1 align="center">Welcome to Mappslab!</Header1>
-				<State is={WELCOME}>
-					<Button onClick={makeTransition(SELECTED_STUDENT_FLOW)}>Find Your Classroom →</Button>
-				</State>
+	transitionEvent = (t: string, data: {} = {}) => () => {
+		this.props.transition(t, data)
+	}
 
-				<Action is={SHOW_ERROR}>
-					<p>{error}</p>
-				</Action>
+	render() {
+		const childProps = this.props
 
-				<State is={STUDENT_FLOW}>
-					<StudentLogin {...childProps} />
-				</State>
+		return (
+			<Centered>
+				<Pane size="small">
+					<Header1 align="center">Welcome to Mappslab!</Header1>
+					<State is={WELCOME}>
+						<Button onClick={this.transitionEvent(SELECTED_STUDENT_FLOW)}>Find Your Classroom →</Button>
+					</State>
 
-				<State is={TEACHER_FLOW}>
-					<TeacherLogin {...childProps} />
-				</State>
+					<Action is={SHOW_ERROR}>
+						<p>{this.props.error}</p>
+					</Action>
 
-				<State is={ENTER_PASSWORD}>{props.userUid !== null ? <UserLogin {...childProps} /> : null}</State>
+					<State is={STUDENT_FLOW}>
+						<StudentLogin {...childProps} />
+					</State>
 
-				<State is={SET_NEW_PASSWORD}>
-					<SetNewPassword {...childProps} />
-				</State>
+					<State is={TEACHER_FLOW}>
+						<TeacherLogin {...childProps} />
+					</State>
 
-				<State is={LOGIN_SUCCESS}>
-					<LoginSuccess {...childProps} />
-				</State>
+					<State is={ENTER_PASSWORD}>{childProps.userUid !== null ? <UserLogin {...childProps} /> : null}</State>
 
-				<State is={[WELCOME, STUDENT_FLOW]}>
-					<Button onClick={makeTransition(SELECTED_TEACHER_FLOW)}>Login as a teacher</Button>
-				</State>
-				<State is={[TEACHER_FLOW]}>
-					<Button onClick={makeTransition(SELECTED_STUDENT_FLOW)}>Login as a student</Button>
-				</State>
-			</Pane>
-		</Centered>
-	)
+					<State is={SET_NEW_PASSWORD}>
+						<SetNewPassword {...childProps} />
+					</State>
+
+					<State is={LOGIN_SUCCESS}>
+						<LoginSuccess {...childProps} />
+					</State>
+
+					<State is={[WELCOME, STUDENT_FLOW]}>
+						<Button onClick={this.transitionEvent(SELECTED_TEACHER_FLOW)}>Login as a teacher</Button>
+					</State>
+					<State is={[TEACHER_FLOW]}>
+						<Button onClick={this.transitionEvent(SELECTED_STUDENT_FLOW)}>Login as a student</Button>
+					</State>
+				</Pane>
+			</Centered>
+		)
+	}
 }
-
-// <Action is={[ENTER_CLASSROOM_SELECT]}>
-// 	<ClassroomsQuery>
-// 		{({ data }) => <SelectClassroom transition={transition} classrooms={data.classrooms} />}
-// 	</ClassroomsQuery>
-// </Action>
-// <Action is={[ENTER_STUDENT_SELECT]}>
-// 	<ClassroomQuery variables={{ uid: classroomUid }}>
-// 		{({ data }) => <SelectStudent classroom={data.classroom} transition={transition} />}
-// 	</ClassroomQuery>
-// </Action>
-// <Action is={[ENTER_WELCOME, ENTER_STUDENT_SELECT]}>
-// 	<Button secondary onClick={goToTeacherLogin}>
-// 		Teacher Login
-// 	</Button>
-// </Action>
-
-// <Action is={ENTER_USER_LOGIN}>
-// 	<UserQuery variables={{ uid: userUid }}>
-// 		{({ data }) => <UserLogin user={data.user} transition={transition} />}
-// 	</UserQuery>
-// </Action>
-
-// <Action is={ENTER_SUCCESS}>
-// 	<Link to="/dashboard">Go to your dashboard</Link>
-// </Action>
-// <Action is={[]}>
-// 	YOU ARE A TEACHER
-// 	<Header4 align="center">
-// 		<button onClick={goBack} type="button">
-// 			back
-// 		</button>
-// 	</Header4>
-// </Action>
 
 Login.defaultProps = {
 	classroomUid: null,
@@ -141,4 +115,14 @@ Login.defaultProps = {
 	resetToken: null,
 }
 
-export default withStateMachine(statechart)(Login)
+const Wrapper = (props: BaseProps) => (
+	<CurrentViewerQuery>
+		{({ data }) => {
+			const viewer = data.currentViewer ? data.currentViewer.viewer : null
+			return <Login {...props} viewer={viewer} />
+		}}
+	</CurrentViewerQuery>
+)
+
+export default withStateMachine(statechart)(Wrapper)
+// withStateMachine(statechart)(Login)

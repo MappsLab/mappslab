@@ -1,24 +1,22 @@
 // @flow
 import React from 'react'
 import { mapEventNames } from 'mapp/eventNames'
-// import type { MappRenderProps, MappUtils } from 'mapp/types'
-// import type { MapType, ViewerType } from 'Types'
-// import type { Map as GoogleMap } from 'mapp/types'
-// import { pinAddedToMap, pinDeleted, pinUpdated } from 'Queries/Map/mapSubscriptions'
-// import { startSubscription } from 'Queries/startSubscription'
-// import { withStateMachine } from 'react-automata'
-// import { compose, getStateString } from 'Utils/data'
-// import Debugger from './Debugger'
+import { State } from 'react-automata'
+import type { Subscription } from 'Types/GraphQL'
+import { startSubscription } from 'Queries/startSubscription'
+import { pinAddedToMap, pinDeleted, pinUpdated } from 'Queries/Map/mapSubscriptions'
 import Pin from './Pin'
 import Tools from './Tools'
 // import withEditorModes from './editorModes'
 import { MapConsumer } from './Provider'
 import type { ProviderProps } from './Provider'
+import WelcomeDialog from './WelcomeDialog'
+import { getHandlersForState } from './mapEventHandlers'
 
 // const debug = require('debug')('app')
 
 type Props = ProviderProps & {
-	mapUid: string,
+	mapUid: null | string,
 }
 
 class MapEditor extends React.Component<Props> {
@@ -31,14 +29,30 @@ class MapEditor extends React.Component<Props> {
 
 	componentDidMount() {
 		const { mapUid, setMap } = this.props
-		if (mapUid) setMap(mapUid)
+		if (mapUid) {
+			setMap(mapUid)
+			this.startSubscriptions()
+		}
 		this.addEventListeners()
 	}
 
 	componentWillUpdate(nextProps) {
 		if (nextProps.mapUid !== this.props.mapUid) {
 			this.props.setMap(nextProps.mapUid)
+			this.stopSubscriptions()
+			this.startSubscriptions()
 		}
+	}
+
+	componentDidUpdate(prevProps) {
+		if (prevProps.machineState.value !== this.props.machineState.value) {
+			this.handleEvent('onEntry')()
+		}
+	}
+
+	componentWillUnmount() {
+		this.removeEventListeners()
+		this.stopSubscriptions()
 	}
 
 	/**
@@ -46,15 +60,11 @@ class MapEditor extends React.Component<Props> {
 	 * If the current mode has a handler for this event,
 	 * this will call it with the (optional) payload.
 	 *
-	 * See ./modes for the handlers for each mode.
 	 */
-	handleEvent = (eventName: Event) => (payload) => {
-		if (false) console.log(eventName, payload)
-		// const mode = this.getMode()
-		// const modePath = mode.split('.')
-		// const handler = R.path(['props', 'modes', ...modePath, eventName])(this)
-		// debug(`[event]: ${eventName}, ${mode}, ${Boolean(handler).toString()}`)
-		// if (handler) handler(this.props)(payload)
+	handleEvent = (eventName: string) => (payload) => {
+		const { machineState } = this.props
+		const handlers = getHandlersForState(machineState.value)
+		if (handlers[eventName]) handlers[eventName](payload, this.props)
 	}
 
 	addEventListeners() {
@@ -67,6 +77,37 @@ class MapEditor extends React.Component<Props> {
 			{},
 		)
 		addEventListeners(this.listeners)
+	}
+
+	removeEventListeners() {
+		const { removeEventListeners } = this.props
+		removeEventListeners(this.listeners)
+		this.listeners = {}
+	}
+
+	startSubscriptions() {
+		const { subscribeToMore, mapUid } = this.props
+		if (!mapUid) this.stopSubscriptions()
+		// const subscriptions = [pinAddedToMap, pinDeleted, pinUpdated]
+		const subscriptions = [pinAddedToMap, pinUpdated, pinDeleted]
+
+		this.subscriptions = subscriptions.map((s) =>
+			startSubscription({
+				subscribeToMore,
+				variables: { mapUid },
+				// callback: this.logSubscriptionUpdate(s.name),
+				...s,
+			}),
+		)
+	}
+
+	subscriptions: Array<Subscription>
+
+	stopSubscriptions() {
+		this.subscriptions.forEach((sub) => {
+			sub.unsubscribe()
+		})
+		this.subscriptions = []
 	}
 
 	renderMapData() {
@@ -83,10 +124,16 @@ class MapEditor extends React.Component<Props> {
 	}
 
 	render() {
+		const { mapData, transition } = this.props
+		console.log(this.props.machineState.value)
+		if (!mapData) return null
 		return (
 			<React.Fragment>
-				{this.renderMapData()}
+				<State is="Welcome">
+					<WelcomeDialog map={mapData} transition={transition} />
+				</State>
 				<Tools {...this.props} />
+				{this.renderMapData()}
 			</React.Fragment>
 		)
 	}
@@ -104,7 +151,7 @@ const Wrapper = ({ mapUid }: WrapperProps) => (
 	<MapConsumer>
 		{(contextValue) => (
 			//
-			<MapEditor mapUid={mapUid} {...contextValue} />
+			<MapEditor mapUid={mapUid || null} {...contextValue} />
 		)}
 	</MapConsumer>
 )

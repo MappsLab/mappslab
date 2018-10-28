@@ -3,6 +3,8 @@ import Cookies from 'js-cookie'
 
 const debug = require('debug')('app')
 
+export const VIEWER_COOKIE_TOKEN = 'mappslab_user'
+
 type CookieConfig = {
 	expires?: number,
 	path?: string,

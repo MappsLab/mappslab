@@ -1,7 +1,6 @@
 // @flow
 import gql from 'graphql-tag'
-import { VIEWER_COOKIE_TOKEN } from 'Constants'
-import { setCookie } from 'Utils/storage'
+import { setCookie, VIEWER_COOKIE_TOKEN } from 'Utils/storage'
 import { withDefaultMutation } from '../Mutation'
 
 import { query as currentViewerQuery } from '../Viewer/CurrentViewerQuery'

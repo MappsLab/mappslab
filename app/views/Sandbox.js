@@ -1,6 +1,6 @@
 // @flow
 import React from 'react'
-import { ClassroomSelector } from 'Components/Classroom'
+import { LiveClassroomSelector } from 'Components/Classroom'
 
 /**
  * Sandbox
@@ -15,7 +15,7 @@ const MyComponent = (props: Props) => {
 		console.log('!!!')
 		console.log(a, b)
 	}
-	return <ClassroomSelector onSelect={onSelect} />
+	return <LiveClassroomSelector onSelect={onSelect} />
 }
 
 export default MyComponent
