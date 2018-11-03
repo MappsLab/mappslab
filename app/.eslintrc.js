@@ -10,13 +10,13 @@ module.exports = {
 		'import/resolver': {
 			alias: {
 				map: [
-					['Constants', path.resolve(__dirname, 'constants')],
-					['Components', path.resolve(__dirname, 'components')],
-					['Views', path.resolve(__dirname, 'views')],
-					['Utils', path.resolve(__dirname, 'utils')],
-					['Queries', path.resolve(__dirname, 'queries')],
-					['Types', path.resolve(__dirname, 'types')],
-					['Styles', path.resolve(__dirname, 'theme')],
+					['Constants', path.resolve(__dirname, 'src', 'constants')],
+					['Components', path.resolve(__dirname, 'src', 'components')],
+					['Views', path.resolve(__dirname, 'src', 'views')],
+					['Utils', path.resolve(__dirname, 'src', 'utils')],
+					['Queries', path.resolve(__dirname, 'src', 'queries')],
+					['Types', path.resolve(__dirname, 'src', 'types')],
+					['Styles', path.resolve(__dirname, 'src', 'theme')],
 					['mapp', path.resolve(__dirname, '..', 'packages', 'mapp', 'src')],
 				],
 				extensions: ['.js', '.jsx'],

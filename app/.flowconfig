@@ -20,14 +20,14 @@ module.file_ext=.web.js
 module.name_mapper='^[./a-zA-Z0-9$_-]+\.\(bmp\|gif\|jpg\|jpeg\|png\|psd\|svg\|webp\|m4v\|mov\|mp4\|mpeg\|mpg\|webm\|aac\|aiff\|caf\|m4a\|mp3\|wav\|html\|pdf\)$' -> 'RelativeImageStub'
 
 ; Mirror the babel & webpack aliases
-module.name_mapper='^Components' -> '<PROJECT_ROOT>/components'
-module.name_mapper='^Constants' -> '<PROJECT_ROOT>/constants'
-module.name_mapper='^Views' -> '<PROJECT_ROOT>/views'
-module.name_mapper='^Utils' -> '<PROJECT_ROOT>/utils'
-module.name_mapper='^Queries' -> '<PROJECT_ROOT>/queries'
-module.name_mapper='^Types' -> '<PROJECT_ROOT>/types'
-module.name_mapper='^Styles' -> '<PROJECT_ROOT>/theme'
-module.name_mapper='^Test' -> '<PROJECT_ROOT>/__tests__'
+module.name_mapper='^Components' -> '<PROJECT_ROOT>/src/components'
+module.name_mapper='^Constants' -> '<PROJECT_ROOT>/src/constants'
+module.name_mapper='^Views' -> '<PROJECT_ROOT>/src/views'
+module.name_mapper='^Utils' -> '<PROJECT_ROOT>/src/utils'
+module.name_mapper='^Queries' -> '<PROJECT_ROOT>/src/queries'
+module.name_mapper='^Types' -> '<PROJECT_ROOT>/src/types'
+module.name_mapper='^Styles' -> '<PROJECT_ROOT>/src/theme'
+module.name_mapper='^Test' -> '<PROJECT_ROOT>/src/__tests__'
 module.name_mapper='^Jest' -> '<PROJECT_ROOT>/jest'
 module.name_mapper='^mapp' -> '<PROJECT_ROOT>/../packages/mapp/src'
 

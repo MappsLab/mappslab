@@ -2,10 +2,7 @@ const webpack = require('webpack')
 const merge = require('webpack-merge')
 const path = require('path')
 const babelConfig = require('./.babelrc')
-// const fs = require('fs')
 
-// const babelConfig = JSON.parse(fs.readFileSync('.babelrc'))
-const projectRoot = path.resolve(__dirname, '..')
 const common = merge([
 	{
 		module: {
@@ -21,14 +18,14 @@ const common = merge([
 			symlinks: false,
 			alias: {
 				deepmerge$: path.resolve(__dirname, 'node_modules/deepmerge/dist/umd.js'),
-				Constants: path.resolve(__dirname, 'constants'),
-				Components: path.resolve(__dirname, 'components'),
-				Views: path.resolve(__dirname, 'views'),
-				Utils: path.resolve(__dirname, 'utils'),
-				Queries: path.resolve(__dirname, 'queries'),
-				Types: path.resolve(__dirname, 'types'),
-				Styles: path.resolve(__dirname, 'theme'),
-				Test: path.resolve(__dirname, '__test__'),
+				Constants: path.resolve(__dirname, 'src', 'constants'),
+				Components: path.resolve(__dirname, 'src', 'components'),
+				Views: path.resolve(__dirname, 'src', 'views'),
+				Utils: path.resolve(__dirname, 'src', 'utils'),
+				Queries: path.resolve(__dirname, 'src', 'queries'),
+				Types: path.resolve(__dirname, 'src', 'types'),
+				Styles: path.resolve(__dirname, 'src', 'theme'),
+				Test: path.resolve(__dirname, 'src', '__test__'),
 				Jest: path.resolve(__dirname, 'jest'),
 				mapp: path.resolve(__dirname, '../packages/mapp/dist'),
 			},
@@ -45,7 +42,7 @@ const development = merge([
 			'react-hot-loader/patch',
 			'webpack-dev-server/client?http://localhost:8080',
 			'webpack/hot/only-dev-server',
-			'./index.dev.js',
+			'./src/index.dev.js',
 		],
 		module: {
 			rules: [
@@ -68,7 +65,7 @@ const development = merge([
 			],
 		},
 		output: {
-			path: path.resolve(__dirname, '/js'),
+			path: path.resolve(__dirname, 'public', 'js'),
 			publicPath: '/js',
 			filename: 'app.js',
 			sourceMapFilename: 'app.js.map',
@@ -91,7 +88,7 @@ const development = merge([
 			extensions: ['.js'],
 		},
 		devServer: {
-			contentBase: path.resolve(projectRoot, 'public'),
+			contentBase: path.resolve(__dirname, 'public'),
 			historyApiFallback: true,
 			hot: true,
 			host: '0.0.0.0',
@@ -109,9 +106,9 @@ const development = merge([
 const production = merge([
 	{
 		mode: 'production',
-		entry: ['@babel/polyfill', './index.js'],
+		entry: ['@babel/polyfill', './src/index.js'],
 		output: {
-			path: path.resolve(projectRoot, 'public/js/'),
+			path: path.resolve(__dirname, 'public', 'js'),
 			filename: 'app.js',
 			sourceMapFilename: 'app.js.map',
 		},
