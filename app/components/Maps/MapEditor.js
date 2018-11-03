@@ -1,6 +1,6 @@
 // @flow
 import React from 'react'
-import { mapEventNames } from 'mapp/eventNames'
+import { mapEventNames } from 'mapp'
 import { State } from 'react-automata'
 import type { Subscription } from 'Types/GraphQL'
 import { startSubscription } from 'Queries/startSubscription'
@@ -15,11 +15,11 @@ import { getHandlersForState } from './mapEventHandlers'
 
 // const debug = require('debug')('app')
 
-type Props = ProviderProps & {
+type EditorProps = ProviderProps & {
 	mapUid: null | string,
 }
 
-class MapEditor extends React.Component<Props> {
+class MapEditor extends React.Component<EditorProps> {
 	static defaultProps = {
 		viewer: null,
 		mapData: null,
@@ -37,7 +37,7 @@ class MapEditor extends React.Component<Props> {
 	}
 
 	componentWillUpdate(nextProps) {
-		if (nextProps.mapUid !== this.props.mapUid) {
+		if (nextProps.mapUid && nextProps.mapUid !== this.props.mapUid) {
 			this.props.setMap(nextProps.mapUid)
 			this.stopSubscriptions()
 			this.startSubscriptions()
@@ -114,18 +114,11 @@ class MapEditor extends React.Component<Props> {
 		const { mapData } = this.props
 		if (!mapData) return null
 		const { pins } = mapData
-		return (
-			<React.Fragment>
-				{pins.map((p) => (
-					<Pin key={p.uid} pin={p} />
-				))}
-			</React.Fragment>
-		)
+		return <React.Fragment>{pins && pins.map((p) => <Pin key={p.uid} pin={p} />)}</React.Fragment>
 	}
 
 	render() {
 		const { mapData, transition } = this.props
-		console.log(this.props.machineState.value)
 		if (!mapData) return null
 		return (
 			<React.Fragment>
@@ -148,12 +141,7 @@ type WrapperProps = {
 }
 
 const Wrapper = ({ mapUid }: WrapperProps) => (
-	<MapConsumer>
-		{(contextValue) => (
-			//
-			<MapEditor mapUid={mapUid || null} {...contextValue} />
-		)}
-	</MapConsumer>
+	<MapConsumer>{(contextValue) => <MapEditor mapUid={mapUid || null} {...contextValue} />}</MapConsumer>
 )
 
 Wrapper.defaultProps = {

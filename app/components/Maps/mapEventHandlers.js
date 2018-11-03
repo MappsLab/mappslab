@@ -1,6 +1,8 @@
 // @flow
 import { createObjectSearchByState } from './utils'
 
+const debug = require('debug')('app')
+
 const mapEvents = {
 	Lesson: {
 		handlers: {
@@ -32,7 +34,7 @@ const mapEvents = {
 			handlers: {
 				onEntry: (e, props) => {
 					const { panTo, inspectedItem } = props
-					console.log('panning to', inspectedItem)
+					debug('panning to', inspectedItem)
 					panTo(inspectedItem)
 				},
 				onClick: (e, props) => {

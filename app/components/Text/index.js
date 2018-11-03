@@ -51,3 +51,17 @@ export const Header5 = styled.h5`
 	${commonTextStyles};
 	font-size: ${h5};
 `
+
+export const Input = styled.input`
+	${commonTextStyles};
+	display: block;
+	border: 0;
+	padding: 0;
+`
+
+export const TextArea = styled.textarea`
+	${commonTextStyles};
+	display: block;
+	font-size: ${p};
+	resize: none;
+`

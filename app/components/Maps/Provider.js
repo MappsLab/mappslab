@@ -2,6 +2,7 @@
 import * as React from 'react'
 import type { MappRenderProps, MappUtils } from 'mapp'
 import { withStateMachine } from 'react-automata'
+import type { MachineState } from 'react-automata'
 import { CurrentViewerQuery, MapQuery } from 'Queries'
 import { CreatePinMutation } from 'Queries/Pin'
 import type { MapType, ViewerType, PinType } from 'Types'
@@ -9,7 +10,22 @@ import type { Mutation, SubscriptionConfig } from 'Types/GraphQL'
 import { getOptionsForState } from './mapOptions'
 import statechart from './statechart'
 
-const { Provider, Consumer } = React.createContext({})
+const debug = require('debug')('app')
+
+const defaults = {
+	mapUid: null,
+	notifications: [],
+	viewer: undefined,
+	mapData: undefined,
+	setMap: () => {},
+	createPin: async () => {},
+	transition: () => {},
+	sendNotification: () => {},
+	subscribeToMore: () => () => {},
+	machineState: 'none',
+}
+
+const { Provider, Consumer } = React.createContext(defaults)
 export const MapConsumer = Consumer
 
 /**
@@ -45,20 +61,23 @@ type Props = MappRenderProps & {
 
 type State = {
 	mapUid: string | null,
-	// mapView: View,
 	notifications: Array<Notification>,
 }
 
-export type ProviderProps = MappUtils &
-	State & {
-		viewer?: ViewerType,
-		setMap: (string) => void,
-		mapData?: MapType,
-		sendNotification: (Notification) => void,
-		transition: (string, ?{}) => void,
-		createPin: Mutation,
-		subscribeToMore: (SubscriptionConfig) => () => void,
-	}
+type Utils = $PropertyType<MappRenderProps, 'utils'>
+
+export type ProviderProps = Utils & {
+	mapUid: string | null,
+	notifications: Array<Notification>,
+	viewer?: ViewerType,
+	setMap: (string) => void,
+	mapData?: MapType,
+	sendNotification: (Notification) => void,
+	transition: (string, ?{}) => void,
+	createPin: Mutation,
+	subscribeToMore: (SubscriptionConfig) => () => void,
+	machineState: MachineState,
+}
 
 class MapProviderClass extends React.Component<Props, State> {
 	static defaultProps = {
@@ -88,6 +107,7 @@ class MapProviderClass extends React.Component<Props, State> {
 	}
 
 	componentDidTransition = () => {
+		debug(`Transitioned to:`, this.props.machineState.value)
 		this.updateOptions()
 	}
 

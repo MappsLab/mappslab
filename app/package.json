@@ -30,6 +30,7 @@
     "js-cookie": "^2.2.0",
     "ramda": "^0.25.0",
     "react": "^16.4.2",
+    "react-adopt": "^0.6.0",
     "react-apollo": "^2.1.11",
     "react-automata": "^4.0.3",
     "react-dom": "^16.4.2",
