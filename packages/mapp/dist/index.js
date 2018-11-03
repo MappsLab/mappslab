@@ -3,6 +3,11 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+var _exportNames = {
+  Marker: true,
+  InfoWindow: true,
+  CustomPopup: true
+};
 Object.defineProperty(exports, "Marker", {
   enumerable: true,
   get: function get() {
@@ -24,6 +29,19 @@ Object.defineProperty(exports, "CustomPopup", {
 exports.default = void 0;
 
 var _Mapp = _interopRequireDefault(require("./Mapp"));
+
+var _eventNames = require("./eventNames");
+
+Object.keys(_eventNames).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _eventNames[key];
+    }
+  });
+});
 
 var _Marker = _interopRequireDefault(require("./components/Marker"));
 

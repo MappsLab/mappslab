@@ -18,6 +18,12 @@
 				"extensions": [".js", ".jsx"]
 			}
 		],
+		"react/sort-comp": [
+			1,
+			{
+				"order": ["static-methods", "constructor", "type-annotations", "lifecycle", "/^on.+$/", "everything-else", "render"]
+			}
+		],
 		"import/prefer-default-export": 0,
 		"import/no-extraneous-dependencies": [
 			"error",

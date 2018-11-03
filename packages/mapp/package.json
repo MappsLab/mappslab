@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "babel ./src --out-dir ./dist",
-    "watch-build": "watch 'yarn build' ./src",
+    "build:watch": "watch 'yarn build' ./src",
     "test": "jest"
   },
   "author": "Joseph Thomas | Good Idea Studio",

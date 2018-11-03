@@ -46,7 +46,6 @@ const definePopup = (): OverlayView => {
 			left: ${options.offset.left};
 			transform: translate(-50%, -100%);
 		`
-		console.log(content)
 		pixelOffset.appendChild(content)
 
 		this.anchorDiv = document.createElement('div')
@@ -89,7 +88,7 @@ const definePopup = (): OverlayView => {
 	Popup.prototype.stopEventPropagation = function() {
 		const { anchorDiv, container } = this
 		anchorDiv.style.cursor = 'auto'
-		const events = ['click', 'dblclick', 'contextmenu', 'wheel', 'mousedown', 'touchstart','pointerdown']
+		const events = ['click', 'dblclick', 'contextmenu', 'wheel', 'mousedown', 'touchstart', 'pointerdown']
 		events.forEach((eventName) => {
 			container.addEventListener(eventName, (e) => {
 				e.stopPropagation()

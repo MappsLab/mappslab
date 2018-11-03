@@ -34,14 +34,10 @@ const markerEventNames = {
  * Marker
  */
 
-type BaseProps = {
+type MarkerProps = {
 	render?: ({ anchor: MarkerType }) => null | React.Node,
 	events?: {},
 	options?: MarkerOptions,
-}
-
-type MarkerProps = BaseProps & {
-	// map: Map,
 }
 
 type State = {
@@ -67,7 +63,7 @@ class Marker extends React.Component<MarkerProps, State> {
 		const { events } = this.props
 		const { options } = separateOptionsAndEvents(this.props, markerEventNames)
 		this.entity = new window.google.maps.Marker(options)
-		if (this.entity) this.listeners = addListeners(this.entity, markerEventNames, events)
+		if (this.entity && events) this.listeners = addListeners(this.entity, markerEventNames, events)
 		this.setState({ ready: true })
 	}
 
