@@ -13,9 +13,6 @@ import TeacherLogin from './TeacherLogin'
 import UserLogin from './UserLogin'
 import LoginSuccess from './LoginSuccess'
 import SetNewPassword from './SetNewPassword'
-// import SelectClassroom from './SelectClassroom'
-// import SelectStudent from './SelectStudent'
-// import Welcome from './Welcome'
 
 import {
 	// states
