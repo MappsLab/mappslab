@@ -13,3 +13,9 @@ export const chip = {
 		width: '100%',
 	},
 }
+
+export const column = {
+	wide: '900px',
+	medium: '600px',
+	narrow: '350px',
+}

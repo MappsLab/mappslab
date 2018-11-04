@@ -13,10 +13,10 @@ export const Main = styled.main`
 `
 
 export const Column = styled.section`
-	${({ theme }) => `
-		margin: ${theme.layout.spacing.double} auto;
+	${({ theme, size }) => `
+		margin: ${size === 'narrow' ? theme.layout.spacing.half : theme.layout.spacing.double} auto;
 		padding: 0 ${theme.layout.spacing.single};
-		max-width: 600px;
+		max-width: ${theme.sizes.column[size] || theme.sizes.column.medium};
 		width: 100%;
 	`};
 `

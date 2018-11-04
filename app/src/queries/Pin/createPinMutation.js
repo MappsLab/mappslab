@@ -12,6 +12,7 @@ const mutation = gql`
 			owner {
 				uid
 				name
+				roles
 			}
 			maps {
 				pageInfo {

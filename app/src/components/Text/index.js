@@ -34,6 +34,7 @@ export const P = styled.p`
 	${commonTextStyles};
 	${({ theme }) => `
 		font-size: ${theme.text.size.p};
+		font-weight: ${theme.text.weight.regular};
 	`};
 `
 
@@ -66,6 +67,7 @@ export const TextArea = styled.textarea`
 	${({ theme }) => `
 		display: block;
 		font-size: ${theme.text.size.p};
+		font-weight: ${theme.text.weight.regular};
 		resize: none;
 	`};
 `

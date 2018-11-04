@@ -66,13 +66,14 @@ class EditableText extends React.Component<Props, State> {
 	}
 
 	render() {
-		const { viewerCanEdit, textSize, placeholder, multiline } = this.props
+		const { viewerCanEdit, textSize, placeholder, multiline, autoFocus } = this.props
 		const { value, rows } = this.state
 		const Text = textComponentsMap[textSize] || textComponentsMap.p
 		return viewerCanEdit ? (
 			<Text
 				onBlur={this.submitChange}
 				as={multiline ? TextArea : Input}
+				autoFocus
 				onChange={this.handleChange}
 				value={value}
 				rows={multiline ? rows : undefined}

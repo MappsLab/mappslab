@@ -5,12 +5,11 @@ import { Link } from 'react-router-dom'
 
 const Wrapper = styled.div`
 	${({ theme, size, active }) => `
-		width: ${theme.sizes.chip[size].width};
 		height: ${theme.sizes.chip[size].height};
-		display: flex;
+		display: inline-flex;
 		justify-content: flex-start;
 		align-items: center;	
-		margin: ${size === 'large' ? theme.layout.spacing.half : theme.layout.spacing.half}
+		margin: ${size === 'large' ? theme.layout.spacing.half : theme.layout.spacing.half} 0;
 		padding: 0 ${size === 'large' ? theme.layout.spacing.single : theme.layout.spacing.half};
 		background-color: ${active ? theme.color.primary.muted : 'white'};
 		border: 1px solid ${theme.color.primary.normal};
@@ -45,14 +44,14 @@ const TitleWrapper = styled.div`
 	align-items: flex-start;
 `
 
-const Title = styled.div`
+const Title = styled.span`
 	${({ theme, size }) => `
-		font-size: ${size === 'small' ? theme.text.size.h4 : theme.text.size.h4};
-		font-weight: 500;
+		font-size: ${size === 'small' ? theme.text.size.h5 : theme.text.size.h4};
+		font-weight: ${size === 'small' ? theme.text.weight.semi : theme.text.weight.semi};
 	`};
 `
 
-const Subtitle = styled.div`
+const Subtitle = styled.span`
 	${({ theme, size }) => `
 		font-size: ${theme.text.size.h5};
 		display: ${size === 'large' ? 'block' : 'none'};

@@ -8,6 +8,7 @@ import { CurrentViewerQuery } from 'Queries/Viewer'
 import { UpdatePinMutation } from 'Queries/Pin'
 import { Column } from 'Components/Layout'
 import { EditableText } from 'Components/Inspectors'
+import { UserChip } from 'Components/User'
 import { PopupWrapper } from './InfoPopups'
 
 /**
@@ -36,7 +37,7 @@ const PinInspector = (props: PinInspectorProps) => {
 	}
 	return (
 		<PopupWrapper>
-			<Column>
+			<Column size="narrow">
 				<EditableText
 					name="title"
 					updateFn={submitUpdate}
@@ -44,6 +45,7 @@ const PinInspector = (props: PinInspectorProps) => {
 					placeholder="Untitled Pin"
 					initialValue={pin.title}
 					viewerCanEdit={viewerIsOwner}
+					autoFocus
 				/>
 				<EditableText
 					name="description"
@@ -54,6 +56,7 @@ const PinInspector = (props: PinInspectorProps) => {
 					initialValue={pin.description}
 					viewerCanEdit={viewerIsOwner}
 				/>
+				pinned by <UserChip size="small" user={pin.owner} />
 			</Column>
 		</PopupWrapper>
 	)
