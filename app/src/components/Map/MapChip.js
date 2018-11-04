@@ -5,15 +5,15 @@ import { Chip } from 'Components/Generic'
 import type { ChipProps } from 'Components/Generic/Chip'
 
 /**
- * ClassroomChip
+ * MapChip
  */
 
 type Props = ChipProps & {
 	map: MapType,
 }
 
-const ClassroomChip = ({ size, active, map, ...rest }: Props) => (
-	<Chip size={size || 'large'} active={active} title={map.title} {...rest} />
+const MapChip = ({ size, active, map, ...rest }: Props) => (
+	<Chip size={size || 'large'} active={active} title={map.title} subtitle={map.classroom && map.classroom.title} {...rest} />
 )
 
-export default ClassroomChip
+export default MapChip

@@ -1,29 +1,8 @@
 // @flow
 import React from 'react'
-import styled from 'styled-components'
 import { Field as FinalFormField } from 'react-final-form'
 import { composeValidators, required } from './validators'
-import { fieldWrapperStyles, labelStyles, helpTextStyles, inputStyles, validationErrorStyles } from './styles'
-
-export const Wrapper = styled.div`
-	${fieldWrapperStyles};
-`
-
-export const Label = styled.label`
-	${labelStyles};
-`
-
-export const HelpText = styled.h4`
-	${helpTextStyles};
-`
-
-const Input = styled.input`
-	${inputStyles};
-`
-
-export const ValidationError = styled.h4`
-	${validationErrorStyles};
-`
+import { FieldWrapper, Label, HelpText, Input, ValidationError } from './styles'
 
 type Props = {
 	label: false | string,
@@ -45,13 +24,17 @@ const Field = (props: Props) => {
 			name={props.name}
 			validate={validators}
 			render={({ input, meta }) => (
-				<Wrapper hidden={props.type === 'hidden'}>
-					{props.label && <Label required={props.required}>{props.label}</Label>}
+				<FieldWrapper hidden={props.type === 'hidden'}>
+					{props.label && (
+						<Label active={meta.active} required={props.required}>
+							{props.label}
+						</Label>
+					)}
 					<Input {...input} type={props.type} active={meta.active} />
 					<HelpText>{props.helpText}</HelpText>
 					{meta.error && meta.touched ? <ValidationError>{meta.error}</ValidationError> : null}
 					{meta.submitError && !meta.dirtySinceLastSubmit ? <ValidationError>{meta.submitError}</ValidationError> : null}
-				</Wrapper>
+				</FieldWrapper>
 			)}
 		/>
 	)

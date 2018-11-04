@@ -4,20 +4,18 @@
  * Text
  */
 
-export const h1 = '25px'
-export const h2 = '20px'
-export const h3 = '16px'
-export const p = '16px'
-export const h4 = '14px'
-export const h5 = '12px'
+export const size = {
+	h1: '25px',
+	h2: '20px',
+	h3: '16px',
+	p: '16px',
+	h4: '14px',
+	h5: '12px',
+}
 
-export const light = '200'
-export const regular = '400'
-export const semi = '600'
-export const strong = '800'
-
-export const display = `
-	letter-spacing: 0.06em;
-	text-transform: uppercase;
-	font-size: ${h4};
-`
+export const weight = {
+	light: '200',
+	regular: '400',
+	semi: '500',
+	strong: '800',
+}

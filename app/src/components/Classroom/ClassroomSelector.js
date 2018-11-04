@@ -1,8 +1,7 @@
 // @flow
 import React from 'react'
-import { Selector } from 'Components/Selector'
+import { Selector, SelectorItem } from 'Components/Selector'
 import type { ClassroomType } from 'Types/Classroom'
-import ClassroomChip from './ClassroomChip'
 
 /**
  * ClassroomSelector
@@ -17,7 +16,7 @@ const ClassroomSelector = ({ classrooms, label, ...props }: Props) => {
 	const items = classrooms.map((c) => ({
 		value: c.uid,
 		label: c.title,
-		render: ({ highlighted, selected }) => <ClassroomChip classroom={c} active={highlighted || selected} />,
+		render: ({ highlighted, selected }) => <SelectorItem title={c.title} active={highlighted || selected} />,
 	}))
 	return <Selector items={items} label={label || 'Select a Classroom'} {...props} />
 }

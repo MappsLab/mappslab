@@ -5,21 +5,23 @@ import { Link } from 'react-router-dom'
 
 const Wrapper = styled.div`
 	${({ theme, size, active }) => `
-		width: 100%;
+		width: ${theme.sizes.chip[size].width};
 		height: ${theme.sizes.chip[size].height};
 		display: flex;
 		justify-content: flex-start;
 		align-items: center;	
-		border: ${active ? `2px solid ${theme.colors.green}` : `2px solid ${theme.colors.gray}`};
-		background-color: white;
-		border-radius: calc(${theme.sizes.chip[size].height} / 2);
-		padding: 4px;
+		margin: ${size === 'large' ? theme.layout.spacing.half : theme.layout.spacing.half}
+		padding: 0 ${size === 'large' ? theme.layout.spacing.single : theme.layout.spacing.half};
+		background-color: ${active ? theme.color.primary.muted : 'white'};
+		border: 1px solid ${theme.color.primary.normal};
+		border-radius: 2px;
 	`};
 `
 
 const ImageWrapper = styled.figure`
 	${({ theme, size }) => {
-		const width = `${theme.sizes.chip[size].height} - 10px`
+		const { height } = theme.sizes.chip[size]
+		const width = size === 'large' ? `${height} - 18px` : `${height} - 12px`
 		return `
 			width: calc(${width});
 			height: calc(${width});
@@ -45,14 +47,16 @@ const TitleWrapper = styled.div`
 
 const Title = styled.div`
 	${({ theme, size }) => `
-		font-size: ${size === 'large' ? theme.text.h2 : theme.text.h3};
+		font-size: ${size === 'small' ? theme.text.size.h4 : theme.text.size.h4};
+		font-weight: 500;
 	`};
 `
 
 const Subtitle = styled.div`
 	${({ theme, size }) => `
-		font-size: ${theme.text.h3};
-		display: ${size === 'large' ? 'none' : 'block'};
+		font-size: ${theme.text.size.h5};
+		display: ${size === 'large' ? 'block' : 'none'};
+		color: ${theme.color.middleGray};
 	`};
 `
 
@@ -61,12 +65,12 @@ const Subtitle = styled.div`
  */
 
 export type ChipProps = {
-	size?: 'small' | 'large',
+	size?: 'small' | 'large' | 'full',
 	active?: boolean,
 }
 
 type Props = {
-	size?: 'small' | 'large',
+	size?: 'small' | 'large' | 'full',
 	active?: boolean,
 	image?: string | null,
 	title: string,

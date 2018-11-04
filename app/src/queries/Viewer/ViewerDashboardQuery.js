@@ -22,6 +22,11 @@ export const query = gql`
 									node {
 										uid
 										title
+										classroom {
+											uid
+											title
+											slug
+										}
 									}
 								}
 							}

@@ -1,9 +1,9 @@
 // @flow
-import { css } from 'styled-components'
-
+import styled from 'styled-components'
+import { Header4, Header5 } from 'Components/Text'
 /* Forms */
 
-export const formWrapperStyles = css`
+export const FormWrapper = styled.form`
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -17,49 +17,57 @@ export const formWrapperStyles = css`
 	`};
 `
 
-export const formMessageStyles = css`
-	font-size: ${({ theme }) => theme.text.h4};
-`
-
-export const formErrorStyles = css`
-	${formMessageStyles};
-	color: ${({ theme }) => theme.colors.red};
+export const FormError = styled(Header4)`
+	color: ${({ theme }) => theme.color.error};
 `
 
 /* Fields */
 
-export const fieldWrapperStyles = css`
-	display: ${({ hidden }) => (hidden ? 'none' : 'flex')};
-	flex-direction: column;
-	align-items: flex-start;
-	width: 100%;
-`
-// margin: ${({ theme }) => `${theme.layout.spacing.single} 0 ${theme.layout.spacing.double}`};
-
-export const labelStyles = css`
-	font-weight: ${({ theme }) => theme.text.semi};
-	font-size: ${({ theme }) => theme.text.h4};
-	text-transform: uppercase;
-	margin-bottom: ${({ theme }) => theme.layout.spacing.half};
+export const FieldWrapper = styled.div`
+	${({ theme, hidden }) => `
+		position: relative;
+		display: ${hidden ? 'none' : 'flex'};
+		margin: ${theme.layout.spacing.single} 0;
+		flex-direction: column;
+		align-items: flex-start;
+		width: 100%;
+	`};
 `
 
-export const helpTextStyles = css`
+export const Label = styled.label`
+	${({ theme, active }) => `
+		position: absolute;
+		top: calc(-${theme.text.size.h5} / 2);
+		left: 10px;
+		padding: 1px;
+		background-color: white;
+		font-weight: ${theme.text.weight.semi};
+		font-size: ${theme.text.size.h5};
+		text-transform: uppercase;
+		color: ${active ? theme.color.primary.accent : ''};
+	`};
+`
+
+export const HelpText = styled(Header5)`
 	margin-top: ${({ theme }) => theme.layout.spacing.eighth};
-	font-size: ${({ theme }) => theme.text.h4};
-	color: ${({ theme }) => theme.colors.middleGray};
+	color: ${({ theme }) => theme.color.primary.normal};
 	text-align: left;
 `
 
-export const validationErrorStyles = css`
-	${helpTextStyles};
-	color: ${({ theme }) => theme.colors.red};
+export const ValidationError = styled(HelpText)`
+	color: ${({ theme }) => theme.color.error};
 `
 
-export const inputStyles = css`
-	font-size: ${({ theme }) => theme.text.p};
-	width: 100%;
-	padding: ${({ theme }) => theme.layout.spacing.quarter};
-	border-bottom: 2px solid;
-	border-color: ${({ active, theme }) => (active ? '' : theme.colorslightGray)};
-	transition: 0.3s;
+export const Input = styled.input`
+	${({ theme }) => `
+		font-size: ${theme.text.size.p};
+		width: 100%;
+		padding: ${theme.layout.spacing.single};
+		border: 1px solid currentColor;
+
+		&:focus {
+			border-color: ${theme.color.primary.accent};
+
+		}
+	`};
 `

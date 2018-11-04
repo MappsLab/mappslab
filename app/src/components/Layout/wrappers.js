@@ -7,18 +7,17 @@ export const Main = styled.main`
 		margin: ${theme.layout.spacing.triple} auto;
 		width: calc(100% - ${theme.layout.spacing.quadruple});
 		padding: ${theme.layout.spacing.double} ${theme.layout.spacing.single};
-		border: 1px solid ${theme.colors.lightGray};
+		border: 1px solid ${theme.color.lightGray};
 		background-color: white;
 	`};
 `
 
 export const Column = styled.section`
 	${({ theme }) => `
-		margin: ${theme.layout.spacing.triple} auto;
+		margin: ${theme.layout.spacing.double} auto;
+		padding: 0 ${theme.layout.spacing.single};
 		max-width: 600px;
 		width: 100%;
-		padding: ${theme.layout.spacing.double} ${theme.layout.spacing.single};
-		border: 1px solid ${theme.colors.lightGray};
 	`};
 `
 

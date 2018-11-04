@@ -17,7 +17,7 @@ type Props = {
 }
 
 const UserSelector = ({ disabled, onSelect, delayQuery, variables }: Props) => (
-	<UsersQuery variables={variables} delayQuery={delayQuery}>
+	<UsersQuery variables={variables} delayQuery={delayQuery} LoadingComponent={false}>
 		{({ data, refetch }) => {
 			const refetchQuery = (input: string) => {
 				if (input.length < 3) {
@@ -34,17 +34,18 @@ const UserSelector = ({ disabled, onSelect, delayQuery, variables }: Props) => (
 				const newVariables = deepMerge(variables, nameFilter)
 				refetch(newVariables)
 			}
-			const items = data.users
-				? data.users.map((user) => ({
-						value: user.uid,
-						label: user.name,
-						render: ({ highlighted, selected }) => <UserChip user={user} active={highlighted || selected} />,
-				  }))
-				: []
+			const items =
+				data && data.users
+					? data.users.map((user) => ({
+							value: user.uid,
+							label: user.name,
+							render: ({ highlighted, selected }) => <UserChip user={user} active={highlighted || selected} />,
+					  }))
+					: []
 			return (
 				<LiveSelector
 					label="select your account"
-					disabled={disabled}
+					disabled={disabled || items.length === 0}
 					onSelect={onSelect}
 					items={items}
 					refetchQuery={refetchQuery}

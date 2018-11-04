@@ -43,7 +43,7 @@ const StudentLogin = ({ transition, classroomUid }: Props) => {
 		: {}
 
 	return (
-		<React.Fragment>
+		<div>
 			<State is={SELECT_CLASSROOM} render={() => <LiveClassroomSelector onSelect={selectClassroom} />} />
 			<State
 				is={SELECT_STUDENT}
@@ -51,7 +51,7 @@ const StudentLogin = ({ transition, classroomUid }: Props) => {
 					<UserSelector delayQuery={!active} disabled={!active} onSelect={selectUser} variables={userVariables} />
 				)}
 			/>
-		</React.Fragment>
+		</div>
 	)
 }
 

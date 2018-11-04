@@ -9,26 +9,13 @@ export const z = {
 }
 
 export const spacing = {
-	eighth: '2px',
-	quarter: '4px',
+	quarter: '3px',
 	half: '7px',
-	single: '14px',
+	single: '12px',
 	double: '24px',
 	triple: '36px',
 	quadruple: '48px',
 }
-
-export const radius = css`
-	border-radius: 7px;
-`
-
-export const heavyShadow = css`
-	box-shadow: 0px 2px 5px 1px rgba(50, 50, 50, 0.5);
-`
-
-export const lightShadow = css`
-	box-shadow: 0px 2px 3px 0px rgba(50, 50, 50, 0.5);
-`
 
 export const flexCenter = css`
 	display: flex;

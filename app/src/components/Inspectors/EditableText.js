@@ -50,9 +50,9 @@ class EditableText extends React.Component<Props, State> {
 	}
 
 	handleChange = (e: SyntheticInputEvent<HTMLInputElement>) => {
+		const { value } = e.target
 		this.setState(({ rows }) => {
 			const { multiline } = this.props
-			const { value } = e.target
 			const inputRef = this.inputRef ? this.inputRef.current : undefined
 			const newRows = multiline && inputRef ? Math.max(0, Math.floor(inputRef.scrollHeight / 18)) : rows
 			return { value, rows: newRows }

@@ -28,11 +28,9 @@ const mutation = gql`
 
 const config = {
 	update: (proxy, { data }) => {
-		console.log(data)
 		const { loginViewer } = data
 		const { viewer, jwt } = loginViewer || {}
 		if (viewer && jwt) {
-			console.log(viewer, jwt)
 			const { token, expires } = jwt
 			const cookieExpiration = expires / 24 / 60 / 60
 			if (token) setCookie(VIEWER_COOKIE_TOKEN, token, { expires: cookieExpiration })

@@ -40,17 +40,15 @@ const UserLogin = ({ user, transition }: Props) =>
 							[FORM_ERROR]: e.message,
 						}
 					}
-					// console.log(errors)
-					// if (errors) return errors
 					return undefined
 				}
 
 				return (
 					<Form disabled={loading} onSubmit={handleSubmit} initialValues={{ uid }} submitButtonText="login">
 						{loading ? 'Loading...' : <Header2>Hi, {name}</Header2>}
-						<Header4 color="middleGray">Please enter your password to log in.</Header4>
+						<Header4>Please enter your password to log in.</Header4>
 						<Field label="uid" name="uid" type="hidden" value="UID" />
-						<Field label={false} name="password" type="password" />
+						<Field label="Password" name="password" type="password" />
 					</Form>
 				)
 			}}

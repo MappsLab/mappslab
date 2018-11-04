@@ -20,7 +20,6 @@ const SetNewPassword = ({ resetToken, transition }: Props) =>
 	resetToken ? (
 		<ResetPasswordMutation>
 			{(resetPassword, { loading }) => {
-				// console.log(props)
 				const handleSubmit = async (variables) => {
 					try {
 						await resetPassword({ variables })
@@ -31,12 +30,11 @@ const SetNewPassword = ({ resetToken, transition }: Props) =>
 						}
 					}
 				}
-				// console.log(resetPassword, loading)
 				return (
 					<Form disabled={loading} onSubmit={handleSubmit} initialValues={{ resetToken }}>
-						<Header4 color="middleGray">Create a new password</Header4>
-						<Field label="resetToken" name="resetToken" value="resetPasswordToken" />
-						<Field label="Password" name="password" type="password" />
+						<Header4>Create a new password</Header4>
+						<Field label="resetToken" name="resetToken" type="hidden" value="resetPasswordToken" />
+						<Field label="New Password" name="password" type="password" />
 					</Form>
 				)
 			}}

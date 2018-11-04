@@ -1,7 +1,7 @@
 // @flow
 import gql from 'graphql-tag'
 import type { UserType } from 'Types/User'
-import { removeCookie, VIEWER_COOKIE_TOKEN } from 'Utils/storage'
+import { getCookie, removeCookie, VIEWER_COOKIE_TOKEN } from 'Utils/storage'
 import type { QueryWrapper } from '../Query'
 import { withDefaultQuery } from '../Query'
 
@@ -29,7 +29,7 @@ type ViewerResponse = {
 
 const config = {
 	onCompleted: ({ currentViewer }: ViewerResponse) => {
-		if (!currentViewer) {
+		if (getCookie(VIEWER_COOKIE_TOKEN) && !currentViewer) {
 			debug('User JWT has expired. Clearing cookies..')
 			removeCookie(VIEWER_COOKIE_TOKEN)
 		}

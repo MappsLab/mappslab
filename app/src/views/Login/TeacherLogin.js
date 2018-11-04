@@ -32,7 +32,7 @@ const TeacherLogin = ({ teacherEmail, transition }: Props) => (
 				transition(SUBMIT)
 				const r = await loadQuery({ email })
 				if (r && r.data && r.data.user) {
-					transition(FETCHED_TEACHER, { user: r.data.user })
+					transition(FETCHED_TEACHER, { userUid: r.data.user.uid })
 				}
 			}
 

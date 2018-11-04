@@ -16,7 +16,6 @@ type Props = {
 }
 
 const ClassroomBrowser = ({ viewer, classroom, canEdit }: Props) => {
-	console.log(viewer, canEdit)
 	return (
 		<div>
 			<h1>{classroom.title}</h1>

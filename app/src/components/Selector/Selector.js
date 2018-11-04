@@ -1,89 +1,8 @@
 // @flow
 import * as React from 'react'
-import styled from 'styled-components'
 import type { GetItemPropsReturn } from 'downshift'
 import Downshift from 'downshift'
-
-const LabelWrapper = styled.div`
-	width: 100%;
-	height: 100%;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	text-align: center;
-`
-
-const Wrapper = styled.div`
-	${({ theme, disabled }) => `
-		outline: 1px solid gray;
-		border-radius: 3px;
-		height: calc(${theme.sizes.chip.large.height} + 6px);
-		padding: 4px;
-		width: 100%;
-		margin: ${theme.layout.spacing.single} auto;
-		position: relative;
-		opacity: ${disabled ? '0.2' : 1};
-		pointer-events: ${disabled ? 'none' : 'inherit'};
-	`};
-`
-
-const ItemContainer = styled.div`
-	${({ theme }) => `
-		height: calc(${theme.sizes.chip.large.height} + 6px);
-		width: 100%;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-	`};
-`
-
-const Input = styled.input`
-	${({ theme }) => `
-		padding: 5px 10px;
-		width: 100%;
-		height: 100%;
-		font-size: ${theme.text.h3};
-	`};
-`
-
-const MenuWrapper = styled.div`
-	${({ visible }) => `
-		display: ${visible ? 'block' : 'none'};
-		background-color: white;
-		position: absolute;
-		z-index: 10;
-		width: 100%;
-		top: 100%;
-		left: 0;
-		margin: 0;
-		outline: 1px solid gray;
-		list-style: none;
-		max-height: 190px;
-		overflow-y: scroll;
-		padding: 0;
-	`};
-`
-
-const Ul = styled.ul`
-	${() => `
-		width: 100%;
-		margin: 0;
-		list-style: none;
-		max-height: 190px;
-		overflow-y: scroll;
-		padding: 0;
-	`};
-`
-
-const SelectorListItem = styled.li`
-	${({ highlighted, selected }) => `
-		color: ${selected ? 'purple' : 'black'};
-		cursor: pointer;
-		padding: 2px;
-		width: 100%;
-		list-style-type: none;
-	`};
-`
+import { LabelWrapper, Wrapper, ItemContainer, Input, MenuWrapper, List, SelectorListItem, MenuArrow, Label } from './styled'
 
 export type SelectorRenderProps = GetItemPropsReturn & {
 	onMouseMove: (e: SyntheticEvent<Element>) => void,
@@ -101,6 +20,7 @@ export type SelectorRenderProps = GetItemPropsReturn & {
 export type SelectorItem = {
 	value: string,
 	label: string,
+	// eslint-disable-next-line
 	render?: (SelectorRenderProps) => React.Node,
 }
 
@@ -188,9 +108,10 @@ const Selector = ({
 				highlightedIndex,
 				selectedItem,
 				openMenu,
-				clearSelection,
+				// clearSelection,
 			}) => {
 				const filterItems = inputFilter || defaultInputFilter
+				const currentItem = getSelectedItem(selectedItem, items)
 				const renderItem = ({ render, ...item }: SelectorItem, index: number): React.Node => {
 					const itemProps = {
 						...getItemProps({
@@ -204,15 +125,15 @@ const Selector = ({
 
 					return <SelectorListItem {...itemProps}>{render ? render(itemProps) : <span>{item.label}</span>}</SelectorListItem>
 				}
-				const currentItem = getSelectedItem(selectedItem, items)
 				return (
 					<div>
-						<Wrapper disabled={disabled}>
+						<Wrapper disabled={disabled} isOpen={isOpen}>
 							<LabelWrapper {...getLabelProps} onClick={openMenu}>
-								{currentItem && currentItem.render ? renderItem(currentItem, 0) : <label {...getLabelProps()}>{label}</label>}
+								<MenuArrow down={isOpen} />
+								{currentItem && currentItem.render ? renderItem(currentItem, 0) : <Label {...getLabelProps()}>{label}</Label>}
 							</LabelWrapper>
 							<MenuWrapper visible={isOpen}>
-								<Ul {...getMenuProps()}>
+								<List {...getMenuProps()}>
 									{isOpen ? (
 										// if nothing is selected, render the input and the filtered items
 										<React.Fragment>
@@ -222,7 +143,7 @@ const Selector = ({
 											{items.filter(filterItems(inputValue)).map(renderItem)}
 										</React.Fragment>
 									) : null}
-								</Ul>
+								</List>
 							</MenuWrapper>
 						</Wrapper>
 					</div>

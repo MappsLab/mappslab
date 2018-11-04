@@ -12,8 +12,13 @@ type Props = ChipProps & {
 	classroom: ClassroomType,
 }
 
+const getTeacherNames = (classroom: ClassroomType): null | string => {
+	const teachers = classroom.teachers && classroom.teachers.map((t) => t.name).join(',')
+	return teachers || null
+}
+
 const ClassroomChip = ({ size, active, classroom, ...rest }: Props) => (
-	<Chip size={size || 'large'} active={active} title={classroom.title} {...rest} />
+	<Chip size={size || 'large'} active={active} title={classroom.title} subtitle={getTeacherNames(classroom)} {...rest} />
 )
 
 export default ClassroomChip

@@ -34,10 +34,6 @@ const GlobalStyle = createGlobalStyle`
 		color: #454545;
 	}
 
-	label{
-		color: #454545;
-	}
-
 	button {
 		cursor: pointer;
 	}

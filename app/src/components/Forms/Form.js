@@ -2,21 +2,9 @@
 import React from 'react'
 import type { Node } from 'react'
 import { Form as FinalForm } from 'react-final-form'
-import styled from 'styled-components'
+import { Header4 } from 'Components/Text'
 import { SubmitButton } from '../UI/Buttons'
-import { formWrapperStyles, formMessageStyles, formErrorStyles } from './styles'
-
-const FormWrapper = styled.form`
-	${formWrapperStyles};
-`
-
-export const FormMessage = styled.h4`
-	${formMessageStyles};
-`
-
-export const FormError = styled.h4`
-	${formErrorStyles};
-`
+import { FormWrapper, FormError } from './styles'
 
 /**
  * Form
@@ -46,7 +34,7 @@ const Form = (props: Props) => (
 			return (
 				<FormWrapper disabled={props.disabled} onSubmit={handleSubmit}>
 					{props.children || (props.render && props.render(formProps))}
-					{message ? <FormMessage>{message}</FormMessage> : null}
+					{message ? <Header4>{message}</Header4> : null}
 					{error && !submitting && !dirtySinceLastSubmit ? <FormError>{error}</FormError> : null}
 					{props.showSubmitButton && (
 						<SubmitButton wide disabled={buttonDisabled}>

@@ -62,11 +62,9 @@ class Login extends React.Component<Props, State> {
 
 	render() {
 		const childProps = this.props
-
 		return (
 			<Centered>
-				<Pane size="small">
-					<Header1 align="center">Welcome to Mappslab!</Header1>
+				<Pane size="small" title="Welcome to Mappslab!">
 					<State is={WELCOME}>
 						<Button onClick={this.transitionEvent(SELECTED_STUDENT_FLOW)}>Find Your Classroom →</Button>
 					</State>
@@ -94,10 +92,14 @@ class Login extends React.Component<Props, State> {
 					</State>
 
 					<State is={[WELCOME, STUDENT_FLOW]}>
-						<Button onClick={this.transitionEvent(SELECTED_TEACHER_FLOW)}>Login as a teacher</Button>
+						<Button level="tertiary" onClick={this.transitionEvent(SELECTED_TEACHER_FLOW)}>
+							Login as a teacher
+						</Button>
 					</State>
 					<State is={[TEACHER_FLOW]}>
-						<Button onClick={this.transitionEvent(SELECTED_STUDENT_FLOW)}>Login as a student</Button>
+						<Button level="tertiary" onClick={this.transitionEvent(SELECTED_STUDENT_FLOW)}>
+							Login as a student
+						</Button>
 					</State>
 				</Pane>
 			</Centered>

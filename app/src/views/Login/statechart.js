@@ -36,6 +36,7 @@ export const SELECTED_STUDENT = 'selectedStudent'
 export const FETCHED_TEACHER = 'fetchedTeacher'
 export const REQUIRE_RESET = 'requireReset'
 export const SUCCESS = 'success'
+export const LOGOUT = 'logout'
 
 export const SUBMIT = 'submit'
 
@@ -48,6 +49,11 @@ export const DISABLE_INPUT = 'disableInput'
 
 export const statechart = {
 	initial: INIT,
+	on: {
+		[SELECTED_STUDENT_FLOW]: SELECT_CLASSROOM,
+		[SELECTED_TEACHER_FLOW]: FIND_TEACHER,
+	},
+
 	states: {
 		[INIT]: {
 			on: {
@@ -55,12 +61,7 @@ export const statechart = {
 				[NO_VIEWER]: WELCOME,
 			},
 		},
-		[WELCOME]: {
-			on: {
-				[SELECTED_STUDENT_FLOW]: SELECT_CLASSROOM,
-				[SELECTED_TEACHER_FLOW]: FIND_TEACHER,
-			},
-		},
+		[WELCOME]: {},
 		[SELECT_CLASSROOM]: {
 			on: {
 				[SELECTED_TEACHER_FLOW]: FIND_TEACHER,
@@ -114,7 +115,7 @@ export const statechart = {
 		},
 		[LOGIN_SUCCESS]: {
 			on: {
-				[SELECTED_CLASSROOM]: LOGIN_SUCCESS,
+				[LOGOUT]: WELCOME,
 			},
 		},
 	},
