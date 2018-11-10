@@ -25,20 +25,28 @@ import { createObjectSearchByState } from '../utils'
 
 const pinEvents = {
 	Lesson: {
-		Browse: {
-			handlers: {
-				onClick: (payload, props) => {
-					props.transition('clickedItem', { inspectedItem: props.pin })
-					return { mouseOver: false }
-				},
-				onMouseOver: () => ({
-					mouseOver: true,
-				}),
-				onMouseOut: () => ({
-					mouseOver: false,
-				}),
+		handlers: {
+			onClick: (payload, props) => {
+				props.transition('clickedItem', { inspectedItem: props.pin })
+				return { mouseOver: false }
 			},
+			onMouseOver: () => ({
+				mouseOver: true,
+			}),
+			onMouseOut: () => ({
+				mouseOver: false,
+			}),
 		},
+		// Browse: {
+		// },
+		// Inspect: {
+		// 	handlers: {
+		// 		onClick: (payload, props) => {
+		// 			props.transition('clickedItem', { inspectedItem: props.pin })
+		// 			return { mouseOver: false }
+		// 		},
+		// 	},
+		// },
 	},
 }
 

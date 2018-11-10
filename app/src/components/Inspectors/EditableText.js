@@ -47,6 +47,7 @@ class EditableText extends React.Component<Props, State> {
 
 	componentWillUnmount() {
 		this.submitChange()
+		const inputRef = this.inputRef ? this.inputRef.current : undefined
 	}
 
 	handleChange = (e: SyntheticInputEvent<HTMLInputElement>) => {

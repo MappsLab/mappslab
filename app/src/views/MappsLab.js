@@ -1,7 +1,7 @@
 // @flow
 import React from 'react'
 import { Switch, Route, Redirect } from 'react-router-dom'
-import { BaseMap, MapEditor } from 'Components/Maps'
+import { BaseMap, MapEditor } from './Editor'
 import Login from './Login'
 import Sandbox from './Sandbox'
 

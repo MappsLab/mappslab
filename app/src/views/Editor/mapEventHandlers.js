@@ -35,7 +35,9 @@ const mapEvents = {
 				onEntry: (e, props) => {
 					const { panTo, inspectedItem } = props
 					debug('panning to', inspectedItem)
-					panTo(inspectedItem)
+					const yOffset = window.innerHeight / 2 - 150
+					console.log(yOffset)
+					panTo(inspectedItem, { x: 0, y: -yOffset })
 				},
 				onClick: (e, props) => {
 					const { transition } = props

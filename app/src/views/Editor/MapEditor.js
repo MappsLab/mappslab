@@ -45,9 +45,9 @@ class MapEditor extends React.Component<EditorProps> {
 	}
 
 	componentDidUpdate(prevProps) {
-		if (prevProps.machineState.value !== this.props.machineState.value) {
-			this.handleEvent('onEntry')()
-		}
+		this.handleEvent('onEntry')()
+		// if (prevProps.machineState.value !== this.props.machineState.value) {
+		// }
 	}
 
 	componentWillUnmount() {
