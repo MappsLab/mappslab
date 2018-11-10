@@ -1,6 +1,8 @@
 // @flow
 import gql from 'graphql-tag'
+import type { ClassroomType } from 'Types'
 import { withDefaultQuery } from '../Query'
+import type { QueryWrapper } from '../Query'
 
 export const query = gql/* GraphQL */ `
 	query ClassroomQuery($uid: String, $slug: String) {
@@ -42,6 +44,10 @@ export const query = gql/* GraphQL */ `
 	}
 `
 
-const ClassroomQuery = withDefaultQuery(query)
+type ClassroomResponse = {
+	classroom: ClassroomType,
+}
+
+const ClassroomQuery: QueryWrapper<ClassroomResponse> = withDefaultQuery(query)
 
 export default ClassroomQuery

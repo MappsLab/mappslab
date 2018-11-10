@@ -46,14 +46,14 @@ const TitleWrapper = styled.div`
 
 const Title = styled.span`
 	${({ theme, size }) => `
-		font-size: ${size === 'small' ? theme.text.size.h5 : theme.text.size.h4};
-		font-weight: ${size === 'small' ? theme.text.weight.semi : theme.text.weight.semi};
+		font-size: ${size === 'small' ? theme.font.size.h5 : theme.font.size.h4};
+		font-weight: ${size === 'small' ? theme.font.weight.semi : theme.font.weight.semi};
 	`};
 `
 
 const Subtitle = styled.span`
 	${({ theme, size }) => `
-		font-size: ${theme.text.size.h5};
+		font-size: ${theme.font.size.h5};
 		display: ${size === 'large' ? 'block' : 'none'};
 		color: ${theme.color.middleGray};
 	`};

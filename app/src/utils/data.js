@@ -3,6 +3,11 @@ import * as R from 'ramda'
 import type { NestedArray } from 'ramda'
 import type { MachineValue } from 'Types'
 
+export const findLastIndex = <T>(array: Array<T>, fn: (T) => boolean): number => {
+	const reverseIndex = [...array].reverse().findIndex(fn)
+	return array.length - reverseIndex - 1
+}
+
 export const findNextInArray = (array: Array<mixed>, item: mixed): any | void => {
 	if (!array.includes(item)) return null
 	let nextI

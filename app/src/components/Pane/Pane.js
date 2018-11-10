@@ -36,7 +36,7 @@ const Content = styled(FlexContainer)`
 const TitleIcon = styled(Header1)`
 	${({ theme }) => `
 		margin-right: 0.2em;
-		font-size: calc(${theme.text.size.h1} + 4px);
+		font-size: calc(${theme.font.size.h1} + 4px);
 		vertical-align: middle;
 	`};
 `

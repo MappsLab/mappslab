@@ -7,6 +7,7 @@ import type { ViewerType } from 'Types/User'
 import { UserChip } from 'Components/User'
 import { MapChip } from 'Components/Map'
 import { Button } from 'Components/UI'
+import { InspectorConsumer } from 'Components/Inspector'
 import { VIEWER_COOKIE_TOKEN, removeCookie } from 'Utils/storage'
 import { SHOW_NEWPW_SUCCESS, LOGOUT } from './statechart'
 
@@ -28,9 +29,7 @@ const LoginSuccess = ({ viewer, transition }: Props) => {
 		removeCookie(VIEWER_COOKIE_TOKEN)
 		transition(LOGOUT, { userUid: null })
 	}
-	const manageClassrooms = () => {
-		alert('coming soon!')
-	}
+
 	if (!viewer.classrooms || viewer.classrooms.length < 1) return null
 	const isTeacher = viewer.roles.includes('teacher')
 	const viewerMaps =
@@ -59,7 +58,7 @@ const LoginSuccess = ({ viewer, transition }: Props) => {
 				</React.Fragment>
 			) : null}
 			{isTeacher && (
-				<Button onClick={manageClassrooms} level="tertiary">
+				<Button to={encodeURI(`/dashboard?inspect=user-${viewer.uid}-${viewer.name}`)} level="tertiary">
 					Manage my classrooms
 				</Button>
 			)}
@@ -68,7 +67,13 @@ const LoginSuccess = ({ viewer, transition }: Props) => {
 }
 
 const Wrapper = (props: BaseProps) => (
-	<ViewerDashboardQuery>{({ data }) => <LoginSuccess {...props} viewer={data.currentViewer.viewer} />}</ViewerDashboardQuery>
+	<InspectorConsumer>
+		{(inspectorProps) => (
+			<ViewerDashboardQuery>
+				{({ data }) => <LoginSuccess {...props} {...inspectorProps} viewer={data.currentViewer.viewer} />}
+			</ViewerDashboardQuery>
+		)}
+	</InspectorConsumer>
 )
 
 Wrapper.defaultProps = {

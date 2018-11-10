@@ -58,7 +58,7 @@ export const statechart = {
 		[INIT]: {
 			on: {
 				[WITH_VIEWER]: LOGIN_SUCCESS,
-				[NO_VIEWER]: WELCOME,
+				[NO_VIEWER]: SELECT_CLASSROOM,
 			},
 		},
 		[WELCOME]: {},

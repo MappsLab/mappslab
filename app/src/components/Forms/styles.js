@@ -37,12 +37,12 @@ export const FieldWrapper = styled.div`
 export const Label = styled.label`
 	${({ theme, active }) => `
 		position: absolute;
-		top: calc(-${theme.text.size.h5} / 2);
+		top: calc(-${theme.font.size.h5} / 2);
 		left: 10px;
 		padding: 1px;
 		background-color: white;
-		font-weight: ${theme.text.weight.semi};
-		font-size: ${theme.text.size.h5};
+		font-weight: ${theme.font.weight.semi};
+		font-size: ${theme.font.size.h5};
 		text-transform: uppercase;
 		color: ${active ? theme.color.primary.accent : ''};
 	`};
@@ -60,7 +60,7 @@ export const ValidationError = styled(HelpText)`
 
 export const Input = styled.input`
 	${({ theme }) => `
-		font-size: ${theme.text.size.p};
+		font-size: ${theme.font.size.p};
 		width: 100%;
 		padding: ${theme.layout.spacing.single};
 		border: 1px solid currentColor;

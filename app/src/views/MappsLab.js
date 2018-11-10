@@ -1,6 +1,8 @@
 // @flow
 import React from 'react'
 import { Switch, Route, Redirect } from 'react-router-dom'
+import { InspectorProvider } from 'Components/Inspector'
+import { ViewerRoute } from 'Components/Auth'
 import { BaseMap, MapEditor } from './Editor'
 import Login from './Login'
 import Sandbox from './Sandbox'
@@ -15,18 +17,17 @@ const MappsLab = () => (
 	<BaseMap
 		APIKey={apiKey}
 		render={(googleMap) => (
-			<Switch>
-				<Route path="/" exact component={Login} />
-				<Route path="/sandbox" component={Sandbox} />
-				<Route path="/maps/:uid" render={({ match }) => <MapEditor mapUid={match.params.uid} map={googleMap} />} />
-				<Route render={() => <Redirect to="/login" />} />
-			</Switch>
+			<InspectorProvider>
+				<Switch>
+					<Route path="/sandbox" component={Sandbox} />
+					<Route path="/login" exact component={Login} />
+					<Route path="/dashboard" render={() => null} />
+					<Route path="/maps/:uid" render={({ match }) => <MapEditor mapUid={match.params.uid} map={googleMap} />} />
+					<Redirect to="/login" />
+				</Switch>
+			</InspectorProvider>
 		)}
 	/>
 )
-
-MappsLab.defaultProps = {
-	viewer: null,
-}
 
 export default MappsLab

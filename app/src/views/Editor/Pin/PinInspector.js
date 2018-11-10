@@ -9,7 +9,7 @@ import { UpdatePinMutation } from 'Queries/Pin'
 import { Column } from 'Components/Layout'
 import { EditableText } from 'Components/Inspectors'
 import { UserChip } from 'Components/User'
-import { PopupWrapper } from './InfoPopups'
+import Pane from 'Components/Pane'
 
 /**
  * PinInspector
@@ -36,7 +36,7 @@ const PinInspector = (props: PinInspectorProps) => {
 		await updatePin({ variables })
 	}
 	return (
-		<PopupWrapper>
+		<Pane>
 			<Column size="narrow">
 				<EditableText
 					name="title"
@@ -58,7 +58,7 @@ const PinInspector = (props: PinInspectorProps) => {
 				/>
 				pinned by <UserChip size="small" user={pin.owner} />
 			</Column>
-		</PopupWrapper>
+		</Pane>
 	)
 }
 

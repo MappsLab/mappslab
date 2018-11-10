@@ -42,7 +42,7 @@ const TitleWrapper = styled.div`
 
 const Title = styled.div`
 	${({ theme }) => `
-		font-size: ${theme.text.size.h4};
+		font-size: ${theme.font.size.h4};
 		font-weight: 500;
 	`};
 `

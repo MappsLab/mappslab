@@ -32,7 +32,7 @@ export const LabelWrapper = styled.div`
 
 export const Label = styled.label`
 	${({ theme }) => `
-		font-size: ${theme.text.size.h5};
+		font-size: ${theme.font.size.h5};
 	`};
 `
 
@@ -50,7 +50,7 @@ export const Input = styled.input`
 	${({ theme }) => `
 		padding: 0 0 0 15px;
 		width: 100%;
-		font-size: ${theme.text.size.h4};
+		font-size: ${theme.font.size.h4};
 	`};
 `
 
