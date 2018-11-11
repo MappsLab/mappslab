@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`[updateClassroom] should return an error if the teacher does not own the classroom 1`] = `
+Array [
+  [GraphQLError: You can only modify classrooms that you teach in.],
+]
+`;
+
+exports[`[updateClassroom] should return an error if the user is not a teacher 1`] = `
+Array [
+  [GraphQLError: You must be a teacher to create a classroom],
+]
+`;
+
+exports[`[updateClassroom] should return an error if there is no current viewer 1`] = `
+Array [
+  [GraphQLError: You must be logged in to create a new classroom. Please log in and try again.],
+]
+`;

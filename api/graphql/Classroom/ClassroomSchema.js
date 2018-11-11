@@ -11,12 +11,13 @@ const Classroom = /* GraphQL */ `
 		maps: MapConnection
 	}
 
-	input NewClassroomData {
+	input NewClassroomInput {
 		title: String!
 		description: String
 	}
 
-	input ModifyClassroomData {
+	input UpdateClassroomInput {
+		uid: String!
 		title: String
 		description: String
 	}
@@ -61,8 +62,8 @@ const Classroom = /* GraphQL */ `
 	}
 
 	extend type Mutation {
-		createClassroom(input: NewClassroomData!, assignTeachers: [String]): Classroom!
-		modifyClassroom(input: ModifyClassroomData!): Classroom!
+		createClassroom(input: NewClassroomInput!, assignTeachers: [String]): Classroom!
+		updateClassroom(input: UpdateClassroomInput!): Classroom!
 		removeClassroom(uid: String!): Boolean!
 		assignUserToClassroom(input: AssignUserInput!): User!
 	}

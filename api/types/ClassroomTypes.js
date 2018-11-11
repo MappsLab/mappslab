@@ -11,13 +11,20 @@ export type ClassroomType = {
 	maps?: Array<MapType>,
 }
 
-export type NewClassroomData = {
+export type NewClassroomInput = {
 	title: string,
+	description: string,
 	teacherUid?: string,
 }
 
+export type UpdateClassroomInput = {
+	uid: string,
+	title?: string,
+	description?: string,
+}
+
 export type NewClassroomArgs = {
-	input: NewClassroomData,
+	input: NewClassroomInput,
 	assignTeachers?: Array<string>,
 }
 

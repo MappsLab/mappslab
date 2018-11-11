@@ -15,7 +15,7 @@ beforeAll(async (done) => {
 })
 
 const q = /* GraphQL */ `
-	mutation createPin($title: String!, $lat: Float!, $lng: Float!, $addToMaps: [String], $lessonUids: [String]) {
+	mutation createPin($title: String!, $lat: Float!, $lng: Float!, $addToMaps: [String]!, $lessonUids: [String]) {
 		createPin(input: { title: $title, lat: $lat, lng: $lng, addToMaps: $addToMaps, lessonUids: $lessonUids }) {
 			uid
 			title
@@ -43,12 +43,6 @@ const q = /* GraphQL */ `
 `
 const pinsToRemove = []
 
-const variables = {
-	title: 'a new pin',
-	lat: 145.123,
-	lng: 111.222,
-}
-
 const removeNewPins = async () => {
 	if (pinsToRemove.length)
 		pinsToRemove.map(async (pin) => {
@@ -57,43 +51,34 @@ const removeNewPins = async () => {
 		})
 }
 
-const sleep = (ms = 100) => new Promise((resolve) => setTimeout(resolve, ms))
-
 afterEach(async (done) => {
 	await removeNewPins
 	done()
 })
 
+const getVariables = () => ({
+	title: 'a new pin',
+	lat: 145.123,
+	lng: 111.222,
+	addToMaps: [dbMaps[0].uid],
+})
+
 describe('[createPin]', () => {
 	it('should return an error if there is no current viewer', async () => {
+		const variables = getVariables()
 		const result = await request(q, { variables })
 		expect(result.errors).toMatchSnapshot()
 	})
 
-	it('Should add a new pin (with a map and without a map)', async () => {
+	it('Should add a new pin', async () => {
+		const variables = getVariables()
 		const result = await request(q, { variables, context })
 		const { title, owner, maps } = result.data.createPin
 		expect(title).toBe(variables.title)
 		expect(owner.name).toBe(context.viewer.name)
-		expect(maps.edges.length).toBe(0)
+		expect(maps.edges.length).toBe(1)
 		expect(maps.pageInfo.hasNextPage).toBe(false)
-		expect(maps.pageInfo.lastCursor).toBe(null)
-		pinsToRemove.push(result.data.createPin)
-
-		await removeNewPins()
-		await sleep()
-
-		const vars = {
-			addToMaps: [dbMaps[0].uid],
-			...variables,
-		}
-		const withMapResult = await request(q, { variables: vars, context })
-		const { title: withMapTitle, owner: withMapOwner, maps: withMapMaps } = withMapResult.data.createPin
-		expect(withMapTitle).toBe(variables.title)
-		expect(withMapOwner.name).toBe(context.viewer.name)
-		expect(withMapMaps.pageInfo.hasNextPage).toBe(false)
-		expect(withMapMaps.pageInfo.lastCursor).toBe(dbMaps[0].uid)
-		expect(withMapMaps.edges[0].node.title).toBe(dbMaps[0].title)
+		expect(maps.pageInfo.lastCursor).toBe(dbMaps[0].uid)
 		pinsToRemove.push(result.data.createPin)
 	})
 

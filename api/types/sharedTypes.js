@@ -10,8 +10,7 @@ export interface DBNode {
 type Operator = 'contains' | 'eq' | 'notEq' | 'lt' | 'lte' | 'gt' | 'gte' | 'between'
 
 export type Filter = {
-	operator: Operator,
-	value: string | Date | number | boolean,
+	[key: Operator]: string | Date | number | boolean,
 }
 
 type Where = {

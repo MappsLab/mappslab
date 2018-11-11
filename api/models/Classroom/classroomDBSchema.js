@@ -1,6 +1,6 @@
 // @flow
 import Joi from 'joi'
-import { when, prop } from 'ramda'
+import { when, prop, assoc } from 'ramda'
 import type { ClassroomInput } from 'Types/ClassroomTypes'
 import { promisePipe, filterNullAndUndefined, createSlugFrom } from 'Utils'
 
@@ -54,5 +54,6 @@ export const clean = async (classroomData: ClassroomInput = {}): Promise<Classro
 	promisePipe(
 		// When a title is supplied without a slug, make a slug from it
 		when((o) => prop('title')(o) && !prop('slug')(o), createSlugFrom('title')),
+		assoc('updatedAt', new Date()),
 		filterNullAndUndefined,
 	)(classroomData)

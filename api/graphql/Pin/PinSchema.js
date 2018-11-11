@@ -29,7 +29,7 @@ const Pin = /* GraphQL */ `
 
 	input NewPinInput {
 		title: String
-		draft: Boolean!
+		draft: Boolean
 		lat: Float!
 		lng: Float!
 		description: String
