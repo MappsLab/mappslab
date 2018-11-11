@@ -2,8 +2,7 @@
 import React from 'react'
 import deepMerge from 'deepmerge'
 import { UsersQuery } from 'Queries'
-import { LiveSelector } from 'Components/Selector'
-import { UserChip } from 'Components/User'
+import { LiveSelector, SelectorItem } from 'Components/Selector'
 
 /**
  * UserSelector
@@ -39,7 +38,7 @@ const UserSelector = ({ disabled, onSelect, delayQuery, variables }: Props) => (
 					? data.users.map((user) => ({
 							value: user.uid,
 							label: user.name,
-							render: ({ highlighted, selected }) => <UserChip user={user} active={highlighted || selected} />,
+							render: ({ highlighted, selected }) => <SelectorItem title={user.name} active={highlighted || selected} />,
 					  }))
 					: []
 			return (

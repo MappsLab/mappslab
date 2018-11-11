@@ -1,10 +1,10 @@
 // @flow
 import * as React from 'react'
-import type { ViewerType, UserType, MapType } from 'Types'
-import { MapQuery } from 'Queries'
-import { Header1, Header4 } from 'Components/Text'
+import type { ViewerType, MapType } from 'Types'
+import { Button } from 'Components/Buttons'
 import type { InspectItem } from '../InspectorProvider'
 import List from './List'
+import EditableText from '../EditableText'
 
 /**
  * MapInspector
@@ -12,7 +12,7 @@ import List from './List'
 
 type Props = {
 	map: MapType,
-	viewer: ViewerType,
+	viewer: null | ViewerType,
 	inspectItem: InspectItem,
 }
 
@@ -33,18 +33,11 @@ const MapInspector = (props: Props) => {
 
 	return (
 		<React.Fragment>
-			<Header1>{map.title}</Header1>
-			<List title="Classrooms" items={classrooms} />
+			<EditableText label="Description" name="description" initialValue={map.description} />
+			<Button to={`/maps/${map.uid}`}>Go to map →</Button>
+			<List title="Classrooms" type="classroom" items={classrooms} />
 		</React.Fragment>
 	)
 }
 
-type BaseProps = {
-	viewer: ViewerType,
-	uid: string,
-	inspectItem: InspectItem,
-}
-
-export default ({ uid, ...baseProps }: BaseProps) => (
-	<MapQuery variables={{ uid }}>{({ data }) => <MapInspector map={data.map} {...baseProps} />}</MapQuery>
-)
+export default MapInspector

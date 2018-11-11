@@ -58,9 +58,9 @@ export const Input = styled.input`
 		display: block;
 		border: 0;
 		padding: 0;
-		font-size: ${theme.font.size.p};
 	`};
 `
+// font-size: ${theme.font.size.p};
 
 export const TextArea = styled.textarea`
 	${commonTextStyles};

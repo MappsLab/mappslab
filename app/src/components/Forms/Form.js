@@ -3,7 +3,7 @@ import React from 'react'
 import type { Node } from 'react'
 import { Form as FinalForm } from 'react-final-form'
 import { Header4 } from 'Components/Text'
-import { SubmitButton } from '../UI/Buttons'
+import { SubmitButton } from '../Buttons'
 import { FormWrapper, FormError } from './styles'
 
 /**

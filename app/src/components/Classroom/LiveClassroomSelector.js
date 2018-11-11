@@ -1,8 +1,7 @@
 // @flow
 import React from 'react'
 import { ClassroomsQuery } from 'Queries'
-import { LiveSelector } from 'Components/Selector'
-import { ClassroomChip } from 'Components/Classroom'
+import { LiveSelector, SelectorItem } from 'Components/Selector'
 
 /**
  * LiveClassroomSelector
@@ -37,7 +36,7 @@ const LiveClassroomSelector = ({ disabled, delayQuery, onSelect }: Props) => (
 					? data.classrooms.map((c) => ({
 							value: c.uid,
 							label: c.title,
-							render: ({ highlighted, selected }) => <ClassroomChip classroom={c} active={highlighted || selected} />,
+							render: ({ highlighted, selected }) => <SelectorItem title={c.title} active={highlighted || selected} />,
 					  }))
 					: []
 			return (

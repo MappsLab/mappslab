@@ -1,11 +1,10 @@
 // @flow
 import * as React from 'react'
-import type { ViewerType, ClassroomType, UserType, MapType } from 'Types'
-import { ClassroomQuery } from 'Queries'
-import { Header1 } from 'Components/Text'
+import type { ViewerType, ClassroomType, UserType } from 'Types'
 import type { InspectItem } from '../InspectorProvider'
 import List from './List'
 import type { ListItemType } from './List'
+import EditableText from '../EditableText'
 
 /**
  * ClassroomInspector
@@ -13,7 +12,7 @@ import type { ListItemType } from './List'
 
 type Props = {
 	classroom: ClassroomType,
-	viewer: ViewerType,
+	viewer: null | ViewerType,
 	inspectItem: InspectItem,
 }
 
@@ -43,22 +42,17 @@ const ClassroomInspector = (props: Props) => {
 
 	return (
 		<React.Fragment>
-			<Header1>{classroom.title}</Header1>
-			<List title="Maps" items={maps} />
-			<List title="Students" items={students} />
-			<List title="Teachers" items={teachers} />
+			<EditableText
+				initialValue={classroom.description}
+				name="description"
+				label="Description"
+				placeholder="Give this classroom a descrpition.."
+			/>
+			<List title="Maps" type="map" items={maps} />
+			<List title="Students" type="user" items={students} />
+			<List title="Teachers" type="user" items={teachers} />
 		</React.Fragment>
 	)
 }
 
-type BaseProps = {
-	viewer: ViewerType,
-	uid: string,
-	inspectItem: InspectItem,
-}
-
-export default ({ uid, ...baseProps }: BaseProps) => (
-	<ClassroomQuery variables={{ uid }}>
-		{({ data }) => <ClassroomInspector classroom={data.classroom} {...baseProps} />}
-	</ClassroomQuery>
-)
+export default ClassroomInspector

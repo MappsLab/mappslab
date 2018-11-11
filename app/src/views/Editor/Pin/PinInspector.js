@@ -7,7 +7,7 @@ import type { Mutation } from 'Types/GraphQL'
 import { CurrentViewerQuery } from 'Queries/Viewer'
 import { UpdatePinMutation } from 'Queries/Pin'
 import { Column } from 'Components/Layout'
-import { EditableText } from 'Components/Inspectors'
+import { EditableText } from 'Components/Inspector'
 import { UserChip } from 'Components/User'
 import Pane from 'Components/Pane'
 
@@ -36,28 +36,28 @@ const PinInspector = (props: PinInspectorProps) => {
 		await updatePin({ variables })
 	}
 	return (
-		<Pane>
-			<Column size="narrow">
-				<EditableText
-					name="title"
-					updateFn={submitUpdate}
-					textSize="h2"
-					placeholder="Untitled Pin"
-					initialValue={pin.title}
-					viewerCanEdit={viewerIsOwner}
-					autoFocus
-				/>
-				<EditableText
-					name="description"
-					updateFn={submitUpdate}
-					multiline
-					placeholder="Describe your pin"
-					textSize="p"
-					initialValue={pin.description}
-					viewerCanEdit={viewerIsOwner}
-				/>
-				pinned by <UserChip size="small" user={pin.owner} />
-			</Column>
+		<Pane size="small">
+			<EditableText
+				name="title"
+				label="Title"
+				updateFn={submitUpdate}
+				textSize="h1"
+				placeholder="Untitled Pin"
+				initialValue={pin.title}
+				viewerCanEdit={viewerIsOwner}
+				autoFocus
+			/>
+			<EditableText
+				label="Description"
+				name="description"
+				updateFn={submitUpdate}
+				multiline
+				placeholder="Describe your pin"
+				textSize="p"
+				initialValue={pin.description}
+				viewerCanEdit={viewerIsOwner}
+			/>
+			pinned by <UserChip size="small" user={pin.owner} />
 		</Pane>
 	)
 }

@@ -1,7 +1,8 @@
 // @flow
 import * as React from 'react'
 import styled from 'styled-components'
-import { Header2, Header4 } from 'Components/Text'
+import { Header2, Header5 } from 'Components/Text'
+import ItemIcon from '../ItemIcon'
 
 const ListTitle = styled(Header2)`
 	${({ theme }) => `
@@ -9,20 +10,36 @@ const ListTitle = styled(Header2)`
 	`}
 `
 
-const ListWrapper = styled.div``
-
-const ListItem = styled.button`
-	display: flex;
-	justify-content: space-between;
+const ListWrapper = styled.div`
+	${({ theme }) => `
+		margin-top: ${theme.layout.spacing.quadruple};
+	`}
 `
 
-const ItemTitle = styled(Header4)`
+const ListItem = styled.div`
+	${({ theme }) => `
+		display: flex;
+		justify-content: space-between;
+		padding: ${theme.layout.spacing.half} ${theme.layout.spacing.half};
+		border-top: 1px solid ${theme.color.middleGray};
+
+		&:hover {
+			background-color: ${theme.color.xLightGray};
+		}
+
+		&:last-child {
+			border-bottom: 1px solid ${theme.color.middleGray};
+		}
+	`}
+`
+
+const ItemTitle = styled(Header5)`
 	${({ theme }) => `
 		font-weight: ${theme.font.weight.semi};
 	`}
 `
 
-const ItemInfo = styled(Header4)`
+const ItemInfo = styled(Header5)`
 	${({ theme }) => `
 		color: ${theme.color.middleGray};
 	`}
@@ -38,15 +55,19 @@ export type ListItemType = {
 type Props = {
 	items: Array<ListItemType>,
 	title: string,
+	type: string,
 }
 
 /**
  * List
  */
 
-const List = ({ items, title }: Props) => (
+const List = ({ items, title, type }: Props) => (
 	<ListWrapper>
-		<ListTitle>{title}</ListTitle>
+		<ListTitle>
+			<ItemIcon type={type} />
+			{title}
+		</ListTitle>
 		{items.map(({ key, title: itemTitle, info, onClick }) => (
 			<ListItem key={key} onClick={onClick}>
 				<ItemTitle>{itemTitle}</ItemTitle>

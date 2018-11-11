@@ -2,7 +2,6 @@
 import * as React from 'react'
 import styled from 'styled-components'
 import { Header1, Header5 } from 'Components/Text'
-import { FlexContainer, Column } from 'Components/Layout'
 
 const Wrapper = styled.div`
 	${({ theme }) => `
@@ -10,13 +9,14 @@ const Wrapper = styled.div`
 		box-shadow: ${theme.mixins.boxShadow.heavy};
 		border-radius: 2px;
 		border: 1px solid ${theme.color.darkGray};
+		position: relative;
 	`};
 `
 
 const Title = styled.div`
-	${({ theme }) => `
-		padding: ${theme.layout.spacing.single};
+	${({ theme, size }) => `
 		border-bottom: 1px solid ${theme.color.darkGray};
+		height: ${size === 'full' ? '60px' : '60px'};
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -26,10 +26,16 @@ const Title = styled.div`
 
 const TitleText = styled.div``
 
-const Content = styled(FlexContainer)`
-	${({ theme }) => `
-		padding: ${theme.layout.spacing.double} ${theme.layout.spacing.single};
-		min-height: 300px;
+const Content = styled.div`
+	${({ theme, size }) => `
+		display: flex;
+		flex-direction: column;
+		justify-content: ${size === 'full' ? 'flex-start' : 'center'};
+		padding: ${size === 'small' ? theme.layout.spacing.single : theme.layout.spacing.triple};
+		height: ${size === 'full' ? 'calc(85vh - 60px)' : 'auto'};
+		min-height: ${size === 'small' ? 'auto' : '300px'};
+		width: ${size === 'full' ? '650px' : size === 'small' ? '320px' : '425px'};
+		position: relative;
 	`};
 `
 
@@ -50,24 +56,25 @@ type Props = {
 	subtitle?: string,
 	icon?: string,
 	children: React.Node,
+	size?: 'small' | 'normal' | 'full',
 }
 
-const Pane = ({ title, subtitle, children, icon }: Props) => {
+const Pane = ({ title, subtitle, children, icon, size }: Props) => {
 	return (
-		<Column>
-			<Wrapper>
-				{title && (
-					<Title>
-						{icon && <TitleIcon>{icon}</TitleIcon>}
-						<TitleText>
-							<Header1 align="center">{title}</Header1>
-							{subtitle && <Header5 color="middleGray">{subtitle}</Header5>}
-						</TitleText>
-					</Title>
-				)}
-				<Content direction="column">{children}</Content>
-			</Wrapper>
-		</Column>
+		<Wrapper size={size}>
+			{title && (
+				<Title size={size}>
+					{icon && <TitleIcon>{icon}</TitleIcon>}
+					<TitleText>
+						<Header1 align="center">{title}</Header1>
+						{subtitle && <Header5 color="middleGray">{subtitle}</Header5>}
+					</TitleText>
+				</Title>
+			)}
+			<Content direction="column" size={size}>
+				{children}
+			</Content>
+		</Wrapper>
 	)
 }
 
@@ -75,6 +82,7 @@ Pane.defaultProps = {
 	title: undefined,
 	subtitle: undefined,
 	icon: undefined,
+	size: 'normal',
 }
 
 export default Pane

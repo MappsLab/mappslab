@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 
 export const ButtonWrapper = styled.button`
 	${({ theme, level }) => `
-		display: block;
+		display: inline-block;
 		margin: ${level === 'tertiary' ? theme.layout.spacing.quarter : theme.layout.spacing.single} auto;	
 		padding: ${level === 'tertiary' ? theme.layout.spacing.half : theme.layout.spacing.single};
 		font-size: ${level === 'tertiary' ? theme.font.size.h5 : theme.font.size.p};

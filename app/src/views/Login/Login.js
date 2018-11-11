@@ -5,7 +5,7 @@ import { withStateMachine, State, Action } from 'react-automata'
 import Pane from 'Components/Pane'
 import { Header1 } from 'Components/Text'
 import { Centered } from 'Components/Layout'
-import { Button } from 'Components/UI'
+import { Button } from 'Components/Buttons'
 import { CurrentViewerQuery } from 'Queries/Viewer'
 import type { ViewerType } from 'Types/User'
 import StudentLogin from './StudentLogin'
@@ -64,7 +64,7 @@ class Login extends React.Component<Props, State> {
 		const childProps = this.props
 		return (
 			<Centered>
-				<Pane size="small" title="Welcome to Mappslab!">
+				<Pane title="Welcome to Mappslab!">
 					<State is={WELCOME}>
 						<Button onClick={this.transitionEvent(SELECTED_STUDENT_FLOW)}>Find Your Classroom →</Button>
 					</State>

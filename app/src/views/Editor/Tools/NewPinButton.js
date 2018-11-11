@@ -1,6 +1,6 @@
 // @flow
 import React from 'react'
-import RoundButton from 'Components/UI/RoundButton'
+import { RoundButton } from 'Components/Buttons'
 import { State } from 'react-automata'
 
 /**

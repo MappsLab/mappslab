@@ -1,7 +1,19 @@
 // @flow
 import * as React from 'react'
-import { Button } from 'Components/UI'
+import styled from 'styled-components'
+import { Button } from 'Components/Buttons'
 import type { InspectorItem } from './InspectorProvider'
+import ItemIcon from './ItemIcon'
+
+const Wrapper = styled.div`
+	${({ theme }) => `
+	
+		position: absolute;
+		top: -${theme.layout.spacing.quadruple};
+		left: ${theme.layout.spacing.single};
+		z-index: 20;
+	`}
+`
 
 /**
  * Breadcrumbs
@@ -12,18 +24,8 @@ type Props = {
 	inspectorHistory: Array<InspectorItem>,
 }
 
-const IconByType = ({ type }: { type: string }) => {
-	const emoji = type === 'user' ? '👤' : type === 'map' ? '🗺' : type === 'classroom' ? '🎓' : '❓'
-	return (
-		<span role="img" aria-label={type}>
-			{emoji}
-		</span>
-	)
-}
-
 const Breadcrumbs = (props: Props) => {
 	const { goBackTo, inspectorHistory } = props
-	console.log('crumbs', props)
 	if (inspectorHistory.length < 2) return null
 	const previousItem = inspectorHistory[inspectorHistory.length - 2]
 
@@ -32,9 +34,11 @@ const Breadcrumbs = (props: Props) => {
 	}
 
 	return (
-		<Button onClick={goBackToItem(previousItem)} level="tertiary">
-			← <IconByType type={previousItem.type} /> {previousItem.title}
-		</Button>
+		<Wrapper>
+			<Button onClick={goBackToItem(previousItem)} level="tertiary">
+				← <ItemIcon type={previousItem.type} /> {previousItem.title}
+			</Button>
+		</Wrapper>
 	)
 }
 

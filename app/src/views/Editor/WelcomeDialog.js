@@ -5,7 +5,7 @@ import type { Transition } from 'react-automata'
 import { Centered } from 'Components/Layout'
 import Pane from 'Components/Pane'
 import { Header2, P } from 'Components/Text'
-import { Button } from 'Components/UI'
+import { Button } from 'Components/Buttons'
 
 /**
  * MyComponent
@@ -23,7 +23,7 @@ const MyComponent = ({ map, transition }: Props) => {
 	const { title, description, classroom } = map
 	return (
 		<Centered>
-			<Pane size="small" icon="🗺" title={title} subtitle={classroom.title}>
+			<Pane icon="🗺" title={title} subtitle={classroom.title}>
 				{description && <P>{description}</P>}
 				<Header2 align="center">Let’s get started!</Header2>
 				<Button onClick={enterLesson()}>Free Play</Button>

@@ -1,8 +1,9 @@
 // @flow
 export const darkGray = '#454545'
 export const gray = '#404040'
-export const lightGray = '#BABABA'
 export const middleGray = '#979797'
+export const lightGray = '#BABABA'
+export const xLightGray = 'hsla(0, 0%, 96%, 1)'
 
 export const error = '#f54040'
 
