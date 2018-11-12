@@ -41,13 +41,13 @@ const joinFilterStrings = (filters: Array<FilterStrings>) => {
  * makeFilterPartial
  * returns joined filterStrings and varBlocks for a single field
  */
-const makeFilterPartial = (field: string) => ([operator: string, value: string]): FilterStrings => {
+const makeFilterPartial = (field: string) => ([operator, value]: [string, string]): FilterStrings => {
 	// const r = createOperatorFilter
 	const filters = createRelationshipFilter(operator, field, value) || createOperatorFilter(operator, field, value)
 	return filters
 }
 
-const makeFieldFilter = ([field: string, filters: Filter]) => {
+const makeFieldFilter = ([field, filters]: [string, Filter]) => {
 	const filterStrings = Object.entries(filters).map(makeFilterPartial(field))
 	return joinFilterStrings(filterStrings)
 }
