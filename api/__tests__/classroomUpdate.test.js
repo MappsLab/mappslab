@@ -81,17 +81,14 @@ describe('[updateClassroom]', () => {
 	it('should properly update a classroom', async () => {
 		const original = await request(query, { variables: { uid: classroom.uid } })
 		const originalDescription = original.data.classroom.description
-		/* Arrange */
+		const originalTitle = original.data.classroom.title
 		const variables = getVariables()
 		const context = { viewer: teacher }
 		const result = await request(mutation, { variables, context })
 		expect(result.data.updateClassroom.description).toBe(variables.description)
-		// const { container, getByTestId } = render( ... )
+		expect(result.data.updateClassroom.title).toBe(originalTitle)
 		const restore = await request(mutation, { variables: { ...variables, description: originalDescription }, context })
 		expect(restore.data.updateClassroom.description).toBe(originalDescription)
-		/* Act */
-
-		/* Assert */
-		// expect(...)
+		expect(result.data.updateClassroom.title).toBe(originalTitle)
 	})
 })
