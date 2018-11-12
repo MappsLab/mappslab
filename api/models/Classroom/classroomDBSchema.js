@@ -41,7 +41,19 @@ export const defaultValues = {
 	updatedAt: new Date(),
 }
 
-export const publicFields = ['uid', 'title', 'description', 'slug', 'disabled', 'createdAt', 'updatedAt', 'type'].join('\n')
+export const publicFields = [
+	//
+	'uid',
+	'title',
+	'description',
+	'slug',
+	'disabled',
+	'createdAt',
+	'updatedAt',
+	'type',
+	`vit as count(~teaches_in @filter(uid($viewerUid)))
+    viewerIsTeacher: math(vit == 1)`,
+].join('\n')
 
 export const validateNew = (classroomData: ClassroomInput) => Joi.validate(classroomData, classroomSchema(true))
 export const validateUpdate = (classroomData: ClassroomInput) => Joi.validate(classroomData, classroomSchema(false))

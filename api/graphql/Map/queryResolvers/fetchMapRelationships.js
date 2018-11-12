@@ -11,8 +11,11 @@ type GetMapInput = {
 	input: GetNodeArgs,
 }
 
-export const classroom = (fetchedMap: MapType, _: GetMapInput, ctx: GraphQLContext): Promise<ClassroomType | null> =>
-	ctx.models.Classroom.getMapClassroom(fetchedMap.uid)
+export const classroom = async (fetchedMap: MapType, _: GetMapInput, ctx: GraphQLContext): Promise<ClassroomType | null> => {
+	const filter = { where: { classroomHasMap: { eq: fetchedMap.uid } } }
+	const result = await ctx.models.Classroom.getClassrooms(filter, ctx.viewer)
+	return result && result[0]
+}
 
 export const pins = async (fetchedMap: MapType, { input }: PaginationInput, ctx: GraphQLContext): Promise<PageType<PinType>> => {
 	const mapFilter = {

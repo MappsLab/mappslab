@@ -8,6 +8,7 @@ const Classroom = /* GraphQL */ `
 		description: String
 		students: UserConnection
 		teachers: UserConnection
+		viewerIsTeacher: Boolean!
 		maps: MapConnection
 	}
 

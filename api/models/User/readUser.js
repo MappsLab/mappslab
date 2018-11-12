@@ -7,16 +7,18 @@ import { publicFields, viewerFields } from './userDBSchema'
 
 // const debug = require('debug')('api')
 
-export const getUser = async ({ uid, email }: GetUserInput): Promise<UserType | null> => {
+export const getUser = async (args: GetUserInput): Promise<UserType | null> => {
+	const { varBlocks, filterString } = createQueryStrings(args)
+	const { uid, email } = args
 	const func = uid ? `uid(${uid})` : `eq(email, $email)`
 	const q = /* GraphQL */ `
 		query getUser($uid: string, $email: string) {
-			getUser(func: ${func}) {
+			${varBlocks}
+			getUser(func: ${func}) ${filterString} {
 				${publicFields}
 			}
 		}
 	`
-
 	const result = await query(q, { uid, email })
 	if (!result) return null
 	const user = result.getUser[0]

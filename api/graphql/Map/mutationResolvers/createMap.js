@@ -7,7 +7,7 @@ export const createMap = async (_: Object, { input }: { input: NewMapData }, ctx
 	if (!ctx.viewer) throw Error('You must be logged in to create new maps. Please log in and try again.')
 	const { classroomUid } = input
 	const { viewer } = ctx
-	const existingClassroom = await ctx.models.Classroom.getClassroom({ uid: classroomUid })
+	const existingClassroom = await ctx.models.Classroom.getClassroom({ uid: classroomUid }, viewer)
 	if (!existingClassroom) throw new UserError(`Classroom with uid ${classroomUid} does not exist`)
 	if (!viewer.roles.includes('admin') && !ctx.models.User.userTeachesInClassroom(viewer.uid, classroomUid)) {
 		throw new UserError('You must be an admin to add a map to a classroom that you do not teach in')

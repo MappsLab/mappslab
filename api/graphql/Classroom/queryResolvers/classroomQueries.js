@@ -5,14 +5,14 @@ import type { PageType, GetNodeInput, PaginationInput, GraphQLContext } from 'Ty
 import { assemblePage } from 'Utils/graphql'
 
 export const classroom = (_: Object, { input }: GetNodeInput, ctx: GraphQLContext): Promise<ClassroomType | null> =>
-	ctx.models.Classroom.getClassroom(input)
+	ctx.models.Classroom.getClassroom(input, ctx.viewer)
 
 export const classrooms = async (
 	_: Object,
 	{ input }: PaginationInput,
 	ctx: GraphQLContext,
 ): Promise<PageType<ClassroomType>> => {
-	const fetchedClassrooms = await ctx.models.Classroom.getClassrooms(input).catch((err) => {
+	const fetchedClassrooms = await ctx.models.Classroom.getClassrooms(input, ctx.viewer).catch((err) => {
 		throw err
 	})
 	const page = assemblePage(fetchedClassrooms, input)

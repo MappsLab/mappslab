@@ -31,10 +31,16 @@ const relationshipStringCreators = {
 	// User-first relationships
 	userTeachesIn: genericRelationship('teaches_in'),
 	userLearnsIn: genericRelationship('learns_in'),
+	userOwnsPin: genericRelationship('pinned'),
 
 	// Classroom-first relationships
 	classroomHasStudent: genericRelationship('~learns_in'),
 	classroomHasTeacher: genericRelationship('~teaches_in'),
+	classroomHasMap: genericRelationship('has_map'),
+
+	// Map-first relationships
+	mapHasPin: genericRelationship('has_pin'),
+	mapBelongsToClassroom: genericRelationship('~has_map'),
 
 	// Pin-first relationships
 	pinnedByUser: genericRelationship('~pinned'),

@@ -9,15 +9,19 @@ type GetPinInput = {
 	input: GetPinArgs,
 }
 
-export const owner = (fetchedPin: PinType, _: GetPinInput, ctx: GraphQLContext): Promise<UserType | null> =>
-	ctx.models.User.getPinOwner(fetchedPin.uid)
+export const owner = async (fetchedPin: PinType, _: GetPinInput, ctx: GraphQLContext): Promise<UserType | null> => {
+	const filter = { where: { userOwnsPin: { eq: fetchedPin.uid } } }
+	const result = await ctx.models.User.getUsers(filter)
+	return result && result[0]
+}
 
 export const maps = async (
 	fetchedPin: PinType,
 	{ input }: PaginationInput,
 	ctx: GraphQLContext,
 ): Promise<PageType<MapType> | null> => {
-	const fetchedMaps = await ctx.models.Map.getPinMaps(fetchedPin.uid /* input */)
+	const filter = { where: { mapHasPin: { eq: fetchedPin.uid } } }
+	const fetchedMaps = await ctx.models.Map.getMaps(filter /* input */)
 	if (!fetchedMaps) return null
 	return assemblePage(fetchedMaps, input)
 }
