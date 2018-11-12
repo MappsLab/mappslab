@@ -21,38 +21,9 @@ const splitEdges = (obj: withEdges) => ({
 	pageInfo: obj.pageInfo || {},
 })
 
-// export const unwindEdges = (obj: any) =>
-// 	typeof obj === 'object'
-// 		? Object.entries(obj).reduce((acc, [key, value]) => {
-// 				if (value && value.edges && Array.isArray(value.edges)) {
-// 					// $FlowFixMe
-// 					const { edges, pageInfo } = splitEdges(value)
-// 					const pageInfoKey = `${key}PageInfo`
-// 					return {
-// 						[key]: edges.map(unwindEdges),
-// 						[pageInfoKey]: pageInfo,
-// 						...acc,
-// 					}
-// 				}
-// 				const parsed =
-// 					typeof value === 'object'
-// 						? // unwind recursively if there are more values
-// 						  Array.isArray(value)
-// 							? // if it's an array, unwind each item as a new array
-// 							  value.map(unwindEdges)
-// 							: // otherwise, pass in the object as is
-// 							  unwindEdges(value)
-// 						: // otherwise, value is OK
-// 						  value
-// 				return {
-// 					[key]: parsed,
-// 					...acc,
-// 				}
-// 		  }, {})
-// 		: obj
-
-export const unwindEdges = (o: Object): Object => {
+export const unwindEdges = <T>(o: T): T => {
 	if (typeof o !== 'object') return o
+	// $FlowFixMe
 	return R.pipe(
 		R.toPairs,
 		// Iterate over the properties and their values
@@ -67,11 +38,11 @@ export const unwindEdges = (o: Object): Object => {
 							R.assoc(key.replace(/Connection$/, ''), R.pluck('node', value.edges).map(unwindEdges)),
 					  )(acc)
 					: // otherwise, if it's an object (and not null bc null is an object)
-					  value && typeof value === 'object'
-						? // unwind it
-						  R.assoc(key, Array.isArray(value) ? value.map(unwindEdges) : unwindEdges(value))(acc)
-						: // lastly, return the value as is
-						  R.assoc(key, value)(acc),
+					value && typeof value === 'object'
+					? // unwind it
+					  R.assoc(key, Array.isArray(value) ? value.map(unwindEdges) : unwindEdges(value))(acc)
+					: // lastly, return the value as is
+					  R.assoc(key, value)(acc),
 			{},
 		),
 	)(o)

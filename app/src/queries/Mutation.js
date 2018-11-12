@@ -1,13 +1,13 @@
 // @flow
 import * as React from 'react'
 import type { DocumentNode } from 'graphql'
-import type { FetchResult, ApolloError, DataProxy, MutationResult } from 'react-apollo'
+import type { FetchResult, ApolloError, DataProxy, MutationResult, MutationFunction } from 'react-apollo'
 import { Mutation as ApolloMutation } from 'react-apollo'
 import { unwindEdges } from './utils'
 
-export type MutationProps = {
+type MutationProps<Response> = {
 	mutation: DocumentNode,
-	children: (Function, MutationResult<any>) => React.Node,
+	children: (MutationFunction<Response>, MutationResult<Response>) => React.Node,
 	variables?: {},
 	update?: (DataProxy, FetchResult<any>) => void,
 	ignoreResults?: boolean,
@@ -18,9 +18,11 @@ export type MutationProps = {
 	onError?: void | ((ApolloError) => void),
 }
 
-const Mutation = ({ children, ...mutationProps }: MutationProps) => (
+type GenericResponse = { [key: string]: any }
+
+export const Mutation = <T: GenericResponse>({ children, ...mutationProps }: MutationProps<T>) => (
 	<ApolloMutation {...mutationProps}>
-		{(mutate, { data, ...response }) => {
+		{(mutate, { data, ...response }: MutationResult<T>) => {
 			const responseProps = {
 				data: data ? unwindEdges(data) : data,
 				...response,
@@ -41,6 +43,8 @@ Mutation.defaultProps = {
 	onError: undefined,
 }
 
-export const withDefaultMutation = (mutation: DocumentNode, options: MutationProps | {} = {}) => (props: any) => (
-	<Mutation mutation={mutation} {...options} {...props} />
-)
+export type MutationWrapper<Response> = (props: MutationProps<Response>) => React.Element<typeof Mutation>
+
+export const withDefaultMutation = <T: GenericResponse>(mutation: DocumentNode, options: MutationProps<T> | {} = {}) => (
+	props: any,
+) => <Mutation mutation={mutation} {...options} {...props} />

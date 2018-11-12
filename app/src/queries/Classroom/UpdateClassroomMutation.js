@@ -1,21 +1,46 @@
 // @flow
 import gql from 'graphql-tag'
+import type { ClassroomType } from 'Types'
 import { withDefaultMutation } from '../Mutation'
+import type { MutationWrapper } from '../Mutation'
 
 const mutation = gql`
-	mutation UpdateClassroom($uid: String!, $title: String, $description: String, $lat: Float, $lng: Float, $addToMaps: [String]) {
-		updatePin(input: { uid: $uid, description: $description, title: $title, lat: $lat, lng: $lng, addToMaps: $addToMaps }) {
+	mutation UpdateClassroom($uid: String!, $title: String, $description: String) {
+		updateClassroom(input: { uid: $uid, title: $title, description: $description }) {
 			uid
-			title
 			description
-			lat
-			lng
-			owner {
-				uid
-				name
+			teachers {
+				pageInfo {
+					hasNextPage
+					hasPrevPage
+				}
+				edges {
+					node {
+						uid
+						name
+					}
+				}
+			}
+			students {
+				pageInfo {
+					hasNextPage
+					hasPrevPage
+				}
+				edges {
+					node {
+						uid
+						name
+					}
+				}
 			}
 		}
 	}
 `
 
-export default withDefaultMutation(mutation)
+type Response = {
+	updateClassroom: ClassroomType,
+}
+
+const UpdateClassroomMutation: MutationWrapper<Response> = withDefaultMutation(mutation)
+
+export default UpdateClassroomMutation
