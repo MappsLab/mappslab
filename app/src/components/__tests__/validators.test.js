@@ -1,6 +1,4 @@
 /* eslint-disable no-undef */
-import React from 'react'
-import { shallow } from 'enzyme'
 
 import {
 	required,
@@ -81,7 +79,7 @@ describe('Validator: maxValue', () => {
 	})
 })
 
-describe('Validator: maxValue', () => {
+describe('Validator: minMmaxValue', () => {
 	it('Validates a maximum value', () => {
 		expect(minMaxValue(10, 20)('foo')).toBe('Must be a number')
 		expect(minMaxValue(10, 20)(5)).toBe('Should be between 10 and 20')

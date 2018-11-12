@@ -2,6 +2,7 @@
 import * as React from 'react'
 import styled from 'styled-components'
 import { Header1, Header5 } from 'Components/Text'
+import { EditableText } from 'Components/Inspector'
 
 const Wrapper = styled.div`
 	${({ theme }) => `
@@ -53,6 +54,8 @@ const TitleIcon = styled(Header1)`
 
 type Props = {
 	title?: string,
+	viewerCanEdit?: boolean,
+	titleUpdateFn?: ({ [key: string]: any }) => Promise<void>,
 	subtitle?: string,
 	icon?: string,
 	children: React.Node,
@@ -66,7 +69,7 @@ const Pane = ({ title, subtitle, children, icon, size }: Props) => {
 				<Title size={size}>
 					{icon && <TitleIcon>{icon}</TitleIcon>}
 					<TitleText>
-						<Header1 align="center">{title}</Header1>
+						<EditableText size="h1" initialValue={title} viewerCanEdit={viewerCanEdit} updateFn={titleUpdateFn} />
 						{subtitle && <Header5 color="middleGray">{subtitle}</Header5>}
 					</TitleText>
 				</Title>
@@ -83,6 +86,8 @@ Pane.defaultProps = {
 	subtitle: undefined,
 	icon: undefined,
 	size: 'normal',
+	viewerCanEdit: false,
+	titleUpdateFn: undefined,
 }
 
 export default Pane

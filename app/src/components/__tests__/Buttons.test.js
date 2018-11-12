@@ -1,14 +1,14 @@
 /* eslint-disable no-undef */
 import React from 'react'
-import { shallow } from 'enzyme'
+import { render } from 'react-testing-library'
 
-import { Button } from '../UI/Buttons'
+import { Button } from 'Components/Buttons'
 
 const buttonText = 'Click Me!'
 
 describe('Button Component', () => {
 	it('Mounts Correctly', () => {
-		const wrapper = shallow(<Button>{buttonText}</Button>)
-		expect(wrapper).toMatchSnapshot()
+		const { container } = render(<Button>{buttonText}</Button>)
+		expect(container).toMatchSnapshot()
 	})
 })
