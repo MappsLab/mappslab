@@ -41,7 +41,7 @@ const generateClassroom = (): NewClassroomData => {
 }
 
 const createClassroomMutation = /* GraphQL */ `
-	mutation CreateClassroom($input: NewClassroomData!) {
+	mutation CreateClassroom($input: NewClassroomInput!) {
 		createClassroom(input: $input) {
 			uid
 			title
@@ -57,6 +57,7 @@ export const createClassroom = async (
 	const context = { viewer }
 	const variables = { input }
 	const result = await request(createClassroomMutation, { variables, context })
+	console.log(result)
 	return result.data.createClassroom
 }
 

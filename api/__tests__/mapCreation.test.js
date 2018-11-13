@@ -16,7 +16,7 @@ const q = /* GraphQL */ `
 		}
 	}
 `
-const mapsToRemove = []
+let mapsToRemove = []
 let classrooms
 const context = {}
 
@@ -42,7 +42,7 @@ afterEach(async (done) => {
 				await removeNode(map.uid)
 			}),
 		)
-
+	mapsToRemove = []
 	done()
 })
 
@@ -86,9 +86,9 @@ describe('[createMap]', () => {
 			classroomUid: classrooms[0].uid,
 		}
 		const result = await request(q, { variables: vars, context })
+		mapsToRemove.push(result.data.createMap)
 		expect(result.data.createMap.title).toBe(variables.title)
 		expect(result.data.createMap.classroom.title).toBe(classrooms[0].title)
-		mapsToRemove.push(result.data.createMap)
 	})
 
 	it.skip('should deny permission to users without admin or teacher roles', async () => {
