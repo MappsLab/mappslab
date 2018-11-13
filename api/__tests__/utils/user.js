@@ -86,12 +86,15 @@ const teacherFixtures = [
 	{
 		email: 'john@cmwworld.com',
 		name: 'John Schaefer',
-		roles: ['teacher'],
+		temporaryPassword: 'temporary',
 	},
 ]
 
 let studentCount = 0
-const studentFixtures = [{ name: 'Alex Johnstone', roles: ['student'] }, { name: 'Heidi Gaudet', roles: ['student'] }]
+const studentFixtures = [
+	{ name: 'Alex Johnstone', temporaryPassword: 'temporary' },
+	{ name: 'Heidi Gaudet', temporaryPassword: 'temporary' },
+]
 
 const generateUser = (role: 'student' | 'teacher'): NewUserData => {
 	if (role === 'student') {
@@ -100,7 +103,6 @@ const generateUser = (role: 'student' | 'teacher'): NewUserData => {
 				? studentFixtures[studentCount]
 				: {
 						name: faker.name.findName(),
-						roles: ['student'],
 						temporaryPassword: 'temporary',
 				  }
 		studentCount += 1
@@ -117,8 +119,6 @@ const generateUser = (role: 'student' | 'teacher'): NewUserData => {
 						.email(name)
 						.toLowerCase()
 						.replace(/[.]+/, '.'),
-
-					roles: ['teacher'],
 					temporaryPassword: 'temporary',
 			  }
 	teacherCount += 1
@@ -126,7 +126,7 @@ const generateUser = (role: 'student' | 'teacher'): NewUserData => {
 }
 
 const createTeacherMutation = /* GraphQL */ `
-	mutation CreateTeacher($input: NewUserData!) {
+	mutation CreateTeacher($input: NewTeacherData!) {
 		createTeacher(input: $input) {
 			uid
 			name
@@ -137,8 +137,8 @@ const createTeacherMutation = /* GraphQL */ `
 `
 
 const createStudentMutation = /* GraphQL */ `
-	mutation CreateStudent($input: NewUserData!, $assignToClassrooms: [String]) {
-		createStudent(input: $input, assignToClassrooms: $assignToClassrooms) {
+	mutation CreateStudent($input: NewStudentData!) {
+		createStudent(input: $input) {
 			uid
 			name
 			roles

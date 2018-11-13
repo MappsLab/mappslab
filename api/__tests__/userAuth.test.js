@@ -1,6 +1,6 @@
-
 import { dissoc } from 'ramda'
 import { createJWT, verifyJWT } from 'Utils/auth'
+import { removeNode } from 'Database'
 import { request } from './utils/db'
 import { getDBUsers, getDBUser } from './utils/user'
 // import { admin, teacher } from '../../../database/stubs/users'
@@ -47,7 +47,6 @@ const uidLogin = /* GraphQL */ `
 
 describe('[createJWT]', () => {
 	it('should throw an error if called without the required values', async () => {
-		/* Arrange */
 		const errorMessage = 'createJWT requires a name, uid, and roles'
 		const noUid = () => createJWT(dissoc('uid', student1))
 		const noName = () => createJWT(dissoc('name', student1))
@@ -56,11 +55,6 @@ describe('[createJWT]', () => {
 		expect(noUid).toThrow(errorMessage)
 		expect(noName).toThrow(errorMessage)
 		expect(noRoles).toThrow(errorMessage)
-		// const { container, getByTestId } = render( ... )
-		/* Act */
-
-		/* Assert */
-		// expect(...)
 	})
 })
 
@@ -84,9 +78,27 @@ describe('queries', () => {
 	})
 
 	it('[loginViewer] should return `requiresReset` if the supplied password fails but matches `user.temporaryPassword`', async () => {
-		const variables = { uid: student2.uid, password: 'temporary' }
+		/* Create a new user with a temporary password */
+		const createUserMutation = /* GraphQL */ `
+			mutation CreateStudent($input: NewStudentData!) {
+				createStudent(input: $input) {
+					uid
+					name
+				}
+			}
+		`
+
+		const context = { viewer: admin }
+		const createVariables = { input: { name: 'Some Name', temporaryPassword: 'qwerty1' } }
+		const createResult = await request(createUserMutation, { variables: createVariables, context })
+		const newUser = createResult.data.createStudent
+		/* Try logging in with the temporary password */
+		const variables = { uid: newUser.uid, password: 'qwerty1' }
 		const result = await request(uidLogin, { variables })
 		expect(result.data.loginViewer.resetToken.length).toBe(96)
+
+		/* Remove the new user from the database */
+		await removeNode(newUser.uid)
 	})
 
 	it('[loginViewer] should return a validation error with invalid credentials', async () => {

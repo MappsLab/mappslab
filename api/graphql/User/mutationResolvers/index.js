@@ -1,6 +1,6 @@
 // @flow
 import { loginViewer, requestPasswordReset, resetPassword, setTemporaryPassword } from './userAuth'
-import { createTeacher, createStudent } from './createUser'
+import { createTeacher, createStudent, createAdmin } from './createUser'
 
 export default {
 	Mutation: {
@@ -10,6 +10,7 @@ export default {
 		setTemporaryPassword,
 		createTeacher,
 		createStudent,
+		createAdmin,
 		// addStudent
 		// addTeacher
 		// removeUser

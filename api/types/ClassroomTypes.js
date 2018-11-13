@@ -8,6 +8,7 @@ export type ClassroomType = {
 	title?: string,
 	students?: Array<UserType>,
 	teachers?: Array<TeacherType>,
+	viewerIsTeacher?: boolean,
 	maps?: Array<MapType>,
 }
 

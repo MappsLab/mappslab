@@ -53,8 +53,7 @@ const mutation = /* GraphQL */ `
 
 const getVariables = () => ({
 	uid: classroom.uid,
-	title: 'great new title, thank you',
-	description: 'new description',
+	description: 'a new description',
 })
 
 describe('[updateClassroom]', () => {

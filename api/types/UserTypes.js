@@ -46,13 +46,12 @@ export type UpdateUserData = {
 export type NewUserData = {
 	name: string,
 	email?: string,
-	temporaryPassword?: string,
-	roles: Array<Role>,
+	temporaryPassword: string,
+	addToClassrooms: Array<string>,
 }
 
 export type NewUserInput = {
 	userData: NewUserData,
-	addToClassrooms?: Array<string>,
 }
 
 export type GetUserInput = {

@@ -27,13 +27,6 @@ export const classrooms = async (
 	const where = loadedUser.roles.includes('teacher')
 		? { classroomHasTeacher: { eq: loadedUser.uid } }
 		: { classroomHasStudent: { eq: loadedUser.uid } }
-
 	const userClassrooms = await ctx.models.Classroom.getClassrooms({ where }, ctx.viewer)
 	return assemblePage(userClassrooms, input)
-
-	// const method = loadedUser.roles.includes('teacher')
-	// 	? ctx.models.Classroom.getTeacherClassrooms
-	// 	: ctx.models.Classroom.getStudentClassrooms
-	// const fetchedClassrooms = await method(loadedUser.uid /* input */)
-	// return assemblePage(fetchedClassrooms, input)
 }

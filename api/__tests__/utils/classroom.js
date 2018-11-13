@@ -57,7 +57,6 @@ export const createClassroom = async (
 	const context = { viewer }
 	const variables = { input }
 	const result = await request(createClassroomMutation, { variables, context })
-	console.log(result)
 	return result.data.createClassroom
 }
 
