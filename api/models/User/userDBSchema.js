@@ -86,7 +86,7 @@ const hashPassword = (key: 'password' | 'temporaryPassword') => (obj) =>
 		})
 	})
 
-export const clean = async <T>(userData: T): Promise<T> =>
+export const clean = async <T>(x: T): Promise<T> =>
 	promisePipe(
 		// Filter out 'undefined' values
 		// filterNullAndUndefined,
@@ -94,4 +94,4 @@ export const clean = async <T>(userData: T): Promise<T> =>
 		when(prop('password'), hashPassword('password')),
 		when(prop('temporaryPassword'), hashPassword('temporaryPassword')),
 		assoc('updatedAt', new Date()),
-	)(userData)
+	)(x)

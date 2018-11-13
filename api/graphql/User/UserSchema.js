@@ -11,10 +11,6 @@ const User = /* GraphQL */ `
 		email: String
 	}
 
-	input UserInput {
-		title: String!
-	}
-
 	type Token {
 		token: String!
 		expires: Int!
@@ -107,6 +103,14 @@ const User = /* GraphQL */ `
 		temporaryPassword: String
 	}
 
+	input UpdateUserInput {
+		uid: String
+		name: String
+		email: String
+		addToClassrooms: [String!]
+		removeFromClassrooms: [String!]
+	}
+
 	# Queries & Mutations
 
 	extend type Query {
@@ -120,7 +124,7 @@ const User = /* GraphQL */ `
 		createStudent(input: NewStudentData!): User!
 		createTeacher(input: NewTeacherData!): User!
 		createAdmin(input: NewAdminData!): User!
-		updateUser(input: UserInput!): User!
+		updateUser(input: UpdateUserInput!): User!
 		# deleteUser(uid: String!): Boolean!
 		requestPasswordReset(input: GetUserInput): Success!
 		resetPassword(input: UpdatePasswordInput!): LoginResult!

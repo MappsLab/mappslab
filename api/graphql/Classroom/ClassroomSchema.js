@@ -40,11 +40,6 @@ const Classroom = /* GraphQL */ `
 		where: ClassroomFilterParameter
 	}
 
-	input AssignUserInput {
-		classroomUid: String!
-		userUid: String!
-	}
-
 	type ClassroomEdge implements Edge {
 		cursor: String!
 		node: Classroom
@@ -66,7 +61,6 @@ const Classroom = /* GraphQL */ `
 		createClassroom(input: NewClassroomInput!, assignTeachers: [String]): Classroom!
 		updateClassroom(input: UpdateClassroomInput!): Classroom!
 		removeClassroom(uid: String!): Boolean!
-		assignUserToClassroom(input: AssignUserInput!): User!
 	}
 `
 

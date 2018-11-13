@@ -39,8 +39,11 @@ export type AdminType = TeacherType & {
 }
 
 export type UpdateUserData = {
+	uid: string,
 	name?: string,
 	email?: string,
+	addToClassrooms?: Array<string>,
+	removeFromClassrooms?: Array<string>,
 }
 
 export type NewUserData = {

@@ -65,8 +65,8 @@ export const createClassroom = async (
  */
 
 const assignUserMutation = /* GraphQL */ `
-	mutation AssignUser($input: AssignUserInput!) {
-		assignUserToClassroom(input: $input) {
+	mutation AssignUser($input: UpdateUserInput!) {
+		updateUser(input: $input) {
 			uid
 			name
 			classrooms {
@@ -82,11 +82,15 @@ const assignUserMutation = /* GraphQL */ `
 `
 
 export const assignUser = async (
-	{ input }: { input: { classroomUid: string, userUid: string } },
+	{ input }: { input: { addToClassrooms: Array<string>, uid: string } },
 	{ viewer }: { viewer: UserType } = {},
 ): Promise<boolean> => {
 	const context = { viewer }
 	const variables = { input }
 	const result = await request(assignUserMutation, { variables, context })
-	return result.data.assignUserToClassroom
+	console.log(result)
+	console.log(result)
+	console.log(result)
+	console.log(result)
+	return result.data.updateUser
 }

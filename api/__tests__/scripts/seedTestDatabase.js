@@ -62,7 +62,7 @@ const seedDatabase = async () => {
 		students.map((student, index) => async () => {
 			const classroomIndex = index % classrooms.length
 			const classroom = classrooms[classroomIndex]
-			return assignUser({ input: { classroomUid: classroom.uid, userUid: student.uid } }, { viewer: classroom.teacher })
+			return assignUser({ input: { addToClassrooms: [classroom.uid], uid: student.uid } }, { viewer: classroom.teacher })
 		}),
 	)
 	debug(`🏫  Assigned ${students.length} students to ${classrooms.length} classrooms.`)
