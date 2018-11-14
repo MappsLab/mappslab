@@ -32,13 +32,13 @@ module.exports = {
 	settings: {
 		'import/resolver': {
 			alias: [
-				['GraphQL', path.resolve(__dirname, 'graphql')],
-				['Models', path.resolve(__dirname, 'models')],
-				['Utils', path.resolve(__dirname, 'utils')],
-				['Database', path.resolve(__dirname, 'database')],
-				['Config', path.resolve(__dirname, 'config')],
-				['Errors', path.resolve(__dirname, 'errorTypes')],
-				['Types', path.resolve(__dirname, 'types')],
+				['GraphQL', path.resolve(__dirname, 'src', 'graphql')],
+				['Models', path.resolve(__dirname, 'src', 'models')],
+				['Utils', path.resolve(__dirname, 'src', 'utils')],
+				['Database', path.resolve(__dirname, 'src', 'database')],
+				['Config', path.resolve(__dirname, 'src', 'config')],
+				['Errors', path.resolve(__dirname, 'src', 'errorTypes')],
+				['Types', path.resolve(__dirname, 'src', 'types')],
 			],
 		},
 	},

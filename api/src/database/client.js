@@ -2,19 +2,9 @@
 
 const dgraph = require('dgraph-js')
 const grpc = require('grpc')
-const dotenv = require('dotenv')
+const config = require('../config')
 
-dotenv.config()
-
-const address =
-	process.env.ENV === 'production'
-		? // Local Development
-		  'TBD'
-		: process.env.ENV === 'staging'
-			? // Staging Database
-			  '167.99.175.140:9080'
-			: // Local
-			  'localhost:9099'
+const { address } = config.database
 
 const clientStub = new dgraph.DgraphClientStub(
 	// addr: optional, default: "localhost:9080"

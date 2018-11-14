@@ -4,7 +4,7 @@
 		"ENV": "staging",
 		"DEBUG": "api"
 	},
-	"dotenv": ".env.staging",
+	"dotenv": "./dist/.env",
 	"engines": {
 		"node": "10.x.x"
 	},

@@ -6,13 +6,13 @@
 	"author": "Joseph Thomas | Good Idea Studio",
 	"license": "ISC",
 	"scripts": {
-		"start": "node ./server.js",
-		"build:api": "cross-env ENV=production babel ./src -d ./build",
+		"start": "cross-env DEBUG=api node ./dist/server.js",
+		"build": "cross-env NODE_ENV=production cross-env ENV=production babel ./src -d ./dist",
 		"dev": "cross-env ENV=development cross-env DEBUG=api nodemon --watch ./src ./src/server.js --exec babel-node",
 		"test": "cross-env ENV=development cross-env DEBUG=test cross-env TEST_DB=true jest --coverage",
 		"test:watch": "cross-env ENV=development cross-env DEBUG=test cross-env TEST_DB=true jest --watch",
 		"db:test:seed": "cross-env TEST_DB=true cross-env DEBUG=seed babel-node ./src/__tests__/scripts/seedTestDatabase.js",
-		"db:staging:seed": "cross-env ENV=staging cross-env DEBUG=seed babel-node ./src/__tests__/scripts/testDatabase/seedTestDatabase.js"
+		"db:staging:seed": "cross-env ENV=staging cross-env DEBUG=seed babel-node ./dist/__tests__/scripts/seedTestDatabase.js"
 	},
 	"dependencies": {
 		"bcrypt": "^3.0.2",

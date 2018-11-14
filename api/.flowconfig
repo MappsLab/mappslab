@@ -39,13 +39,13 @@ module.file_ext=.web.js
 module.name_mapper='^[./a-zA-Z0-9$_-]+\.\(bmp\|gif\|jpg\|jpeg\|png\|psd\|svg\|webp\|m4v\|mov\|mp4\|mpeg\|mpg\|webm\|aac\|aiff\|caf\|m4a\|mp3\|wav\|html\|pdf\)$' -> 'RelativeImageStub'
 
 ; Mirror the babel & webpack aliases
-module.name_mapper='^GraphQL' -> '<PROJECT_ROOT>/graphql'
-module.name_mapper='^Models' -> '<PROJECT_ROOT>/models'
-module.name_mapper='^Utils' -> '<PROJECT_ROOT>/utils'
-module.name_mapper='^Database' -> '<PROJECT_ROOT>/database'
-module.name_mapper='^Errors' -> '<PROJECT_ROOT>/errorTypes'
-module.name_mapper='^Config' -> '<PROJECT_ROOT>/config'
-module.name_mapper='^Types' -> '<PROJECT_ROOT>/types'
+module.name_mapper='^GraphQL' -> '<PROJECT_ROOT>/src/graphql'
+module.name_mapper='^Models' -> '<PROJECT_ROOT>/src/models'
+module.name_mapper='^Utils' -> '<PROJECT_ROOT>/src/utils'
+module.name_mapper='^Database' -> '<PROJECT_ROOT>/src/database'
+module.name_mapper='^Errors' -> '<PROJECT_ROOT>/src/errorTypes'
+module.name_mapper='^Config' -> '<PROJECT_ROOT>/src/config'
+module.name_mapper='^Types' -> '<PROJECT_ROOT>/src/types'
 
 
 suppress_type=$FlowIssue
