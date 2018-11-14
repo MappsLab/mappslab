@@ -116,6 +116,7 @@ class InspectorProviderBase extends React.Component<Props, State> {
 						viewer={viewer}
 						uid={uid}
 						type={type}
+						title={title}
 						inspectorHistory={inspectorHistory}
 						inspectItem={this.inspectItem}
 						goBackTo={this.goBackTo}

@@ -48,8 +48,9 @@ export const unwindEdges = <T>(o: T): T => {
 	)(o)
 }
 
-export const getNetworkStatus = (num: number): LoadingState => {
+export const getNetworkStatus = (num: number | void): LoadingState => {
 	switch (num) {
+		case undefined:
 		case 1:
 			return 'loading'
 		case 4:

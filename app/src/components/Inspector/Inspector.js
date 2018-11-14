@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import Pane from 'Components/Pane'
 import { Centered } from 'Components/Layout'
 import type { ViewerType } from 'Types'
-import { UserQuery, MapQuery, ClassroomQuery } from 'Queries'
+import { UserQuery, MapQuery, ClassroomQuery, UpdateClassroomMutation } from 'Queries'
 import { UserInspector, ClassroomInspector, MapInspector } from './Inspectors'
 import type { InspectItem, InspectorItem } from './InspectorProvider'
 import Breadcrumbs from './Breadcrumbs'
@@ -45,86 +45,123 @@ InspectorPane.defaultProps = {
  */
 
 type Props = {
+	// for the Pane
 	type: string,
 	uid: string,
+	title: string,
 	inspectItem: InspectItem,
+	viewer: null | ViewerType,
+	// for the breadcrumb
 	goBackTo: (InspectorItem) => void,
 	inspectorHistory: Array<InspectorItem>,
-	viewer: null | ViewerType,
 }
 
 const Loader = (props: Props) => {
-	const { type, uid, goBackTo, inspectorHistory, ...inspectorProps } = props
+	const { type, uid, title, goBackTo, inspectorHistory, viewer, inspectItem } = props
 	if (!type || !uid) return null
 	const breadcrumbProps = {
 		goBackTo,
 		inspectorHistory,
 	}
 
-	switch (type) {
-		case 'user':
-			return (
-				<UserQuery variables={{ uid }} LoadingComponent={false}>
-					{({ data, loading }) => {
-						const { user } = data
-						const inspectorPaneProps = loading
-							? { title: ' ' }
-							: {
-									title: user.name,
-									icon: user.emoji || '👤',
-									subtitle: user.roles.includes('admin') ? 'admin' : user.roles.includes('teacher') ? 'teacher' : 'student',
-							  }
-						return (
-							<InspectorPane {...breadcrumbProps} {...inspectorPaneProps}>
-								{loading ? <InspectorSkeleton /> : <UserInspector user={user} {...inspectorProps} />}
-							</InspectorPane>
-						)
-					}}
-				</UserQuery>
-			)
-		case 'classroom':
-			return (
-				<ClassroomQuery variables={{ uid }} LoadingComponent={false}>
-					{({ data, loading }) => {
-						const { classroom } = data
-						const inspectorPaneProps = loading
-							? { title: ' ' }
-							: {
-									title: classroom.title,
-									icon: classroom.emoji || '🎓',
-							  }
-						return (
-							<InspectorPane {...breadcrumbProps} {...inspectorPaneProps}>
-								{loading ? <InspectorSkeleton /> : <ClassroomInspector classroom={classroom} {...inspectorProps} />}
-							</InspectorPane>
-						)
-					}}
-				</ClassroomQuery>
-			)
+	const renderInner = () => {
+		switch (type) {
+			case 'user':
+				return (
+					<UserQuery variables={{ uid }} LoadingComponent={false}>
+						{({ data, loading }) => {
+							const { user } = data
+							const inspectorPaneProps = loading
+								? { title: ' ' }
+								: {
+										title: user.name,
+										icon: user.emoji || '👤',
+										subtitle: user.roles.includes('admin') ? 'admin' : user.roles.includes('teacher') ? 'teacher' : 'student',
+								  }
+							return (
+								<InspectorPane {...breadcrumbProps} {...inspectorPaneProps}>
+									{loading ? <InspectorSkeleton /> : <UserInspector viewer={viewer} user={user} inspectItem={inspectItem} />}
+								</InspectorPane>
+							)
+						}}
+					</UserQuery>
+				)
+			case 'classroom':
+				return <ClassroomInspector viewer={viewer} uid={uid} paneTitle={title} inspectItem={inspectItem} />
+			// return <ClassroomInspector viewer={viewer} uid={uid} inspectItem={inspectItem} />
+			// <UpdateClassroomMutation>
+			// 	{(updateClassroom) => (
+			// 		<ClassroomQuery variables={{ uid }} LoadingComponent={false}>
+			// 			{({ data, loading }) => {
+			// 				const { classroom } = data
 
-		case 'map':
-			return (
-				<MapQuery variables={{ uid }} LoadingComponent={false}>
-					{({ data, loading }) => {
-						const { map } = data
-						const inspectorPaneProps = loading
-							? { title: ' ' }
-							: {
-									title: map.title,
-									icon: map.emoji || '🗺',
-							  }
-						return (
-							<InspectorPane {...breadcrumbProps} {...inspectorPaneProps}>
-								{loading ? <InspectorSkeleton /> : <MapInspector map={map} {...inspectorProps} />}
-							</InspectorPane>
-						)
-					}}
-				</MapQuery>
-			)
-		// return <MapInspector {...inspectorProps} uid={uid} />
-		default:
-			throw new Error(`There is no inspector for type "${type}"`)
+			// 				const updateTitle = async ({ title }) => {
+			// 					const variables = {
+			// 						uid: classroom.uid,
+			// 						title,
+			// 					}
+			// 					await updateClassroom({ variables })
+			// 				}
+			// 				const teacherUids = classroom.teachers.map((t) => t.uid)
+			// 				const viewerCanEdit = Boolean(viewer && teacherUids.includes(viewer.uid))
+
+			// 				const inspectorPaneProps = loading
+			// 					? { title: ' ' }
+			// 					: {
+			// 							title: classroom.title,
+			// 							icon: classroom.emoji || '🎓',
+			// 							titleUpdateFn: viewerCanEdit ? updateTitle : undefined,
+			// 							viewerCanEdit,
+			// 					  }
+
+			// 				return (
+			// 					<InspectorPane {...breadcrumbProps} {...inspectorPaneProps}>
+			// 						{loading ? (
+			// 							<InspectorSkeleton />
+			// 						) : (
+			// 							<ClassroomInspector viewer={viewer} classroom={classroom} {...inspectorProps} />
+			// 						)}
+			// 					</InspectorPane>
+			// 				)
+			// 			}}
+			// 		</ClassroomQuery>
+			// 	)}
+			// </UpdateClassroomMutation>
+
+			case 'map':
+				return (
+					<MapQuery variables={{ uid }} LoadingComponent={false}>
+						{({ data, loading }) => {
+							const { map } = data
+							const inspectorPaneProps = loading
+								? { title: ' ' }
+								: {
+										title: map.title,
+										icon: map.emoji || '🗺',
+								  }
+							return (
+								<InspectorPane {...breadcrumbProps} {...inspectorPaneProps}>
+									{loading ? <InspectorSkeleton /> : <MapInspector viewer={viewer} map={map} inspectItem={inspectItem} />}
+								</InspectorPane>
+							)
+						}}
+					</MapQuery>
+				)
+			// return <MapInspector {...inspectorProps} uid={uid} />
+			default:
+				throw new Error(`There is no inspector for type "${type}"`)
+		}
 	}
+
+	return (
+		<Centered>
+			<Outer>
+				<Breadcrumbs goBackTo={goBackTo} inspectorHistory={inspectorHistory} />
+
+				{renderInner()}
+			</Outer>
+		</Centered>
+	)
 
 	// return (
 	// 	<Centered>

@@ -146,7 +146,7 @@ class MapProviderClass extends React.Component<Props, State> {
 												...value,
 												viewer,
 												subscribeToMore,
-												mapData: mapQueryData.map,
+												mapData: mapQueryData ? mapQueryData.map : undefined,
 												createPin,
 											}}
 										>

@@ -11,6 +11,7 @@ export const query = gql/* GraphQL */ `
 			description
 			uid
 			slug
+			viewerIsTeacher
 			teachers {
 				edges {
 					node {

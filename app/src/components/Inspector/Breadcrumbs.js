@@ -27,6 +27,7 @@ type Props = {
 const Breadcrumbs = (props: Props) => {
 	const { goBackTo, inspectorHistory } = props
 	if (inspectorHistory.length < 2) return null
+	console.log(inspectorHistory)
 	const previousItem = inspectorHistory[inspectorHistory.length - 2]
 
 	const goBackToItem = (item: InspectorItem) => () => {

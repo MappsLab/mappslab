@@ -1,29 +1,53 @@
 // @flow
 import * as React from 'react'
+import { adopt } from 'react-adopt'
 import type { ViewerType, ClassroomType, UserType } from 'Types'
-import type { MutationFunction } from 'react-apollo'
-import { UpdateClassroomMutation } from 'Queries/Classroom'
+import type { Mutation } from 'Types/GraphQL'
+import { UpdateClassroomMutation, ClassroomQuery } from 'Queries'
+import Pane from 'Components/Pane'
 import type { InspectItem } from '../InspectorProvider'
-import List from './List'
 import type { ListItemType } from './List'
 import EditableText from '../EditableText'
+import List from './List'
 
 /**
  * ClassroomInspector
  */
 
-type BaseProps = {
-	classroom: ClassroomType,
-	viewer: null | ViewerType,
+type Props = {
 	inspectItem: InspectItem,
-}
-
-type Props = BaseProps & {
-	updateClassroom: MutationFunction<{ updateClassroom: ClassroomType }>,
+	updateClassroom: Mutation,
+	paneTitle: string,
+	classroomQuery: {
+		loading: boolean,
+		data: { classroom?: ClassroomType },
+	},
 }
 
 const ClassroomInspector = (props: Props) => {
-	const { classroom, inspectItem, viewer, updateClassroom } = props
+	const {
+		paneTitle,
+		updateClassroom,
+		inspectItem,
+		classroomQuery: {
+			loading,
+			data: { classroom },
+		},
+	} = props
+
+	if (loading || !classroom) {
+		return (
+			<Pane size="full" title={paneTitle}>
+				Loading...
+			</Pane>
+		)
+	}
+
+	const update = async (fieldData) => {
+		const variables = { uid: classroom.uid, ...fieldData }
+		console.log(fieldData)
+		await updateClassroom({ variables })
+	}
 
 	const userToItem = (u: UserType): ListItemType => ({
 		key: u.uid,
@@ -46,22 +70,10 @@ const ClassroomInspector = (props: Props) => {
 	const students = classroom.students.map(userToItem)
 	const teachers = classroom.teachers.map(userToItem)
 
-	const teacherUids = classroom.teachers.map((t) => t.uid)
-	const viewerCanEdit = Boolean(viewer && teacherUids.includes(viewer.uid))
-
-	console.log(viewerCanEdit)
-
-	const update = async (fieldData) => {
-		// console.log(a)
-		const variables = {
-			uid: classroom.uid,
-			...fieldData,
-		}
-		await updateClassroom({ variables })
-	}
+	const viewerCanEdit = classroom.viewerIsTeacher
 
 	return (
-		<React.Fragment>
+		<Pane size="full" title={classroom.title} viewerCanEdit={viewerCanEdit} updateTitle={update}>
 			<EditableText
 				initialValue={classroom.description}
 				name="description"
@@ -74,12 +86,30 @@ const ClassroomInspector = (props: Props) => {
 			<List title="Maps" type="map" items={maps} />
 			<List title="Students" type="user" items={students} />
 			<List title="Teachers" type="user" items={teachers} />
-		</React.Fragment>
+		</Pane>
 	)
 }
 
-export default (props: BaseProps) => (
-	<UpdateClassroomMutation>
-		{(updateClassroom) => <ClassroomInspector {...props} updateClassroom={updateClassroom} />}
-	</UpdateClassroomMutation>
+/**
+ * Load in the required queries & mutations
+ */
+
+type BaseProps = {
+	inspectItem: InspectItem,
+	viewer: null | ViewerType,
+	uid: string,
+}
+
+const Composed = adopt({
+	classroomQuery: ({ uid, render }) => (
+		<ClassroomQuery LoadingComponent={false} variables={{ uid }}>
+			{render}
+		</ClassroomQuery>
+	),
+	updateClassroom: <UpdateClassroomMutation />,
+})
+
+
+export default ({ uid, ...baseProps }: BaseProps) => (
+	<Composed uid={uid}>{(composedProps) => <ClassroomInspector {...baseProps} {...composedProps} />}</Composed>
 )

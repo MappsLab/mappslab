@@ -23,7 +23,7 @@ const textComponentsMap = {
  */
 
 type Props = {
-	label: string,
+	label?: string,
 	textSize?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'p',
 	viewerCanEdit?: boolean,
 	updateFn?: ({ [key: string]: any }) => Promise<void>,
@@ -44,6 +44,7 @@ class EditableText extends React.Component<Props, State> {
 		initialValue: '',
 		textSize: 'p',
 		placeholder: 'Untitled',
+		label: undefined,
 		updateFn: undefined,
 		viewerCanEdit: false,
 		updateVariables: {},
@@ -58,6 +59,11 @@ class EditableText extends React.Component<Props, State> {
 		rows: 1,
 	}
 
+	componentDidMount() {
+		const { value } = this.state
+		this.handleChange({ target: { value } })
+	}
+
 	componentWillUnmount() {
 		this.submitChange()
 		// const inputRef = this.inputRef ? this.inputRef.current : undefined
@@ -68,7 +74,9 @@ class EditableText extends React.Component<Props, State> {
 		this.setState(({ rows }) => {
 			const { multiline } = this.props
 			const inputRef = this.inputRef ? this.inputRef.current : undefined
-			const newRows = multiline && inputRef ? Math.max(0, Math.floor(inputRef.scrollHeight / 18)) : rows
+			const newRows = multiline && inputRef ? Math.max(0, Math.floor(inputRef.scrollHeight / 14)) : rows
+			const height = multiline && inputRef ? inputRef.scrollHeight : 'auto'
+			console.log(newRows, height)
 			return { value, rows: newRows }
 		})
 	}
@@ -81,18 +89,19 @@ class EditableText extends React.Component<Props, State> {
 
 	render() {
 		const { viewerCanEdit, textSize, placeholder, multiline, label, autoFocus } = this.props
-		const { value, rows } = this.state
+		const { value, rows, height } = this.state
 		const Text = textComponentsMap[textSize || 'p'] || textComponentsMap.p
 		return viewerCanEdit ? (
 			<React.Fragment>
-				<Label>{label}</Label>
+				{label && <Label>{label}</Label>}
 				<Text
 					onBlur={this.submitChange}
 					as={multiline ? TextArea : Input}
 					autoFocus={autoFocus}
 					onChange={this.handleChange}
 					value={value}
-					rows={multiline ? rows : undefined}
+					// style={{ minHeight: `${height}px` }}
+					// rows={multiline ? rows : undefined}
 					ref={this.inputRef}
 					placeholder={placeholder}
 				/>

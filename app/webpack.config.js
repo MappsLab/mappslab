@@ -17,7 +17,7 @@ const common = merge([
 		resolve: {
 			symlinks: false,
 			alias: {
-				deepmerge$: path.resolve(__dirname, 'node_modules/deepmerge/dist/umd.js'),
+				// deepmerge$: path.resolve(__dirname, 'node_modules/deepmerge/dist/umd.js'),
 				Constants: path.resolve(__dirname, 'src', 'constants'),
 				Components: path.resolve(__dirname, 'src', 'components'),
 				Views: path.resolve(__dirname, 'src', 'views'),

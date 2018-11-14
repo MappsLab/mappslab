@@ -3,7 +3,6 @@ import { render } from 'react-dom'
 import { AppContainer } from 'react-hot-loader'
 import { BrowserRouter } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components'
-import EntityProvider from 'Components/EntityBrowser/Provider'
 import ApolloWrapper from './services/Apollo'
 import theme from './theme'
 import MappsLab from './views/MappsLab'
@@ -19,10 +18,10 @@ const renderApp = (Component) => {
 			<ApolloWrapper>
 				<BrowserRouter>
 					<ThemeProvider theme={theme}>
-						<EntityProvider>
+						<React.Fragment>
 							<GlobalStyle />
 							<Component />
-						</EntityProvider>
+						</React.Fragment>
 					</ThemeProvider>
 				</BrowserRouter>
 			</ApolloWrapper>

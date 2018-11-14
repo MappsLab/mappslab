@@ -55,21 +55,28 @@ const TitleIcon = styled(Header1)`
 type Props = {
 	title?: string,
 	viewerCanEdit?: boolean,
-	titleUpdateFn?: ({ [key: string]: any }) => Promise<void>,
+	updateTitle?: ({ [key: string]: any }) => Promise<void>,
 	subtitle?: string,
 	icon?: string,
 	children: React.Node,
-	size?: 'small' | 'normal' | 'full',
+	titleFieldName?: string,
+	size: 'small' | 'normal' | 'full',
 }
 
-const Pane = ({ title, subtitle, children, icon, size }: Props) => {
+const Pane = ({ title, subtitle, titleFieldName, children, icon, size, viewerCanEdit, updateTitle }: Props) => {
 	return (
 		<Wrapper size={size}>
 			{title && (
 				<Title size={size}>
 					{icon && <TitleIcon>{icon}</TitleIcon>}
 					<TitleText>
-						<EditableText size="h1" initialValue={title} viewerCanEdit={viewerCanEdit} updateFn={titleUpdateFn} />
+						<EditableText
+							name={titleFieldName || 'title'}
+							size="h1"
+							initialValue={title}
+							viewerCanEdit={viewerCanEdit}
+							updateFn={updateTitle}
+						/>
 						{subtitle && <Header5 color="middleGray">{subtitle}</Header5>}
 					</TitleText>
 				</Title>
@@ -83,11 +90,11 @@ const Pane = ({ title, subtitle, children, icon, size }: Props) => {
 
 Pane.defaultProps = {
 	title: undefined,
+	titleFieldName: 'title',
 	subtitle: undefined,
 	icon: undefined,
-	size: 'normal',
 	viewerCanEdit: false,
-	titleUpdateFn: undefined,
+	updateTitle: undefined,
 }
 
 export default Pane
