@@ -15,8 +15,10 @@ const getCurrentViewer = async (req: express$Request, res: express$Response, nex
 		const viewer = await verifyJWT(token)
 		req.viewer = viewer
 	} catch (e) {
-		debug('JWT Validation Error:')
-		debug(e)
+		if (e.message !== 'jwt expired') {
+			debug('JWT Validation Error:')
+			debug(e)
+		}
 	}
 	next()
 }

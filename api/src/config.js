@@ -6,12 +6,10 @@ require('dotenv').config({
 	path: path.resolve(__dirname, '.env'),
 })
 
-const { PORT, JWT_KEY, DATABASE_ADDRESS } = process.env
+const { PORT: _PORT, JWT_KEY: _JWT_KEY, DATABASE_ADDRESS } = process.env
 
-module.exports = {
-	PORT: PORT || 3000,
-	JWT_KEY: JWT_KEY || 'xyz',
-	database: {
-		address: DATABASE_ADDRESS,
-	},
+export const PORT = _PORT || 3000
+export const JWT_KEY = _JWT_KEY || 'xyz'
+export const database = {
+	address: DATABASE_ADDRESS,
 }
