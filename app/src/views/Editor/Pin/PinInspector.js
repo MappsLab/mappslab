@@ -46,7 +46,7 @@ const PinInspector = (props: PinInspectorProps) => {
 				name="title"
 				label="Title"
 				updateFn={submitUpdate}
-				textSize="h1"
+				fontSize="h1"
 				placeholder="Untitled Pin"
 				initialValue={pin.title}
 				viewerCanEdit={viewerIsOwner}
@@ -58,7 +58,7 @@ const PinInspector = (props: PinInspectorProps) => {
 				updateFn={submitUpdate}
 				multiline
 				placeholder="Describe your pin"
-				textSize="p"
+				fontSize="p"
 				initialValue={pin.description}
 				viewerCanEdit={viewerIsOwner}
 			/>

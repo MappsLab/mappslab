@@ -1,12 +1,40 @@
 // @flow
 import * as React from 'react'
 import styled from 'styled-components'
+import { FaPencilAlt } from 'react-icons/fa'
+import NativeListener from 'react-native-listener'
 import { Header1, Header2, Header3, Header4, Header5, P, TextArea, Input } from 'Components/Text'
+import ToolTip from 'Components/ToolTip'
 
-const Label = styled(Header5)`
+const StyledInput = styled(Input)`
+	${({ theme, fontSize }) => `
+		font-size: ${theme.font.size[fontSize] || theme.font.size.p};
+		max-width: 100%;
+		min-height: 1.3em;
+		width: 100%;
+	`}
+`
+
+const Wrapper = styled.div`
+	${({ theme, focused }) => `
+		padding-left: ${theme.layout.spacing.double};
+		margin-bottom: ${theme.layout.spacing.single};
+		position: relative;
+		outline: ${focused ? `1px solid ${theme.color.primary.normal}` : ''};
+		&:hover {
+			color: ${focused ? 'inherit' : theme.color.primary.normal}
+		}
+	`}
+`
+
+const IconWrapper = styled.div`
 	${({ theme }) => `
+		position: absolute;
+		top: 2px;
+		left: 0px;
+		font-size: ${theme.font.size.h3};
 		color: ${theme.color.middleGray};
-`}
+	`}
 `
 
 const textComponentsMap = {
@@ -23,8 +51,7 @@ const textComponentsMap = {
  */
 
 type Props = {
-	label?: string,
-	textSize?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'p',
+	fontSize?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'p',
 	viewerCanEdit?: boolean,
 	updateFn?: ({ [key: string]: any }) => Promise<void>,
 	name: string,
@@ -32,17 +59,18 @@ type Props = {
 	initialValue?: string,
 	placeholder?: string,
 	multiline?: boolean,
+	toolTip?: string,
 }
 
 type State = {
 	value: string,
-	rows: number,
+	focused: boolean,
 }
 
 class EditableText extends React.Component<Props, State> {
 	static defaultProps = {
 		initialValue: '',
-		textSize: 'p',
+		fontSize: 'p',
 		placeholder: 'Untitled',
 		label: undefined,
 		updateFn: undefined,
@@ -50,13 +78,16 @@ class EditableText extends React.Component<Props, State> {
 		updateVariables: {},
 		autoFocus: true,
 		multiline: false,
+		toolTip: 'Click to edit',
 	}
 
-	inputRef = React.createRef()
-
 	state = {
+		focused: false,
 		value: this.props.initialValue || '',
-		rows: 1,
+	}
+
+	componentDidMount() {
+		this.autoSize()
 	}
 
 	componentWillUnmount() {
@@ -64,51 +95,79 @@ class EditableText extends React.Component<Props, State> {
 		// const inputRef = this.inputRef ? this.inputRef.current : undefined
 	}
 
-	handleChange = (e: SyntheticInputEvent<HTMLInputElement>) => {
-		const { value } = e.target
-		this.setState(({ rows }) => {
-			const { multiline } = this.props
-			const inputRef = this.inputRef ? this.inputRef.current : undefined
-			const newRows = multiline && inputRef ? Math.max(0, Math.floor(inputRef.scrollHeight / 14)) : rows
-			const height = multiline && inputRef ? inputRef.scrollHeight : 'auto'
-			console.log(newRows, height)
-			return { value, rows: newRows }
-		})
+	inputRef = React.createRef()
+
+	autoSize = () => {
+		const field = this.inputRef.current
+		if (!this.props.multiline || !field) return
+		// Reset field height
+		field.style.height = '0px'
+		// Get the computed styles for the element
+		const computed = window.getComputedStyle(field)
+		// Calculate the height
+		const height =
+			parseInt(computed.getPropertyValue('border-top-width'), 10) +
+			parseInt(computed.getPropertyValue('padding-top'), 10) +
+			field.scrollHeight +
+			parseInt(computed.getPropertyValue('padding-bottom'), 10) +
+			parseInt(computed.getPropertyValue('border-bottom-width'), 10)
+		field.style.height = `${height}px`
 	}
 
-	submitChange = () => {
+	handleChange = async (e: SyntheticInputEvent<HTMLInputElement>) => {
+		const { value } = e.target
+		await this.setState({ value })
+		this.autoSize()
+	}
+
+	focus = async () => {
+		await this.setState({ focused: true })
+		this.autoSize()
+	}
+
+	submitChange = async () => {
+		await this.setState({ focused: false })
 		const { updateFn, name, initialValue } = this.props
 		const { value } = this.state
-		if (updateFn && initialValue !== value) updateFn({ [name]: value })
+		if (updateFn && initialValue !== value) updateFn({ [name]: value || '' })
 	}
 
 	render() {
-		const { viewerCanEdit, textSize, placeholder, multiline, label, autoFocus } = this.props
-		const { value, rows, height } = this.state
-		const Text = textComponentsMap[textSize || 'p'] || textComponentsMap.p
-		return viewerCanEdit ? (
-			<React.Fragment>
-				{label && <Label>{label}</Label>}
-				<Text
-					onBlur={this.submitChange}
-					as={multiline ? TextArea : Input}
-					autoFocus={autoFocus}
-					onChange={this.handleChange}
-					value={value}
-					// style={{ minHeight: `${height}px` }}
-					// rows={multiline ? rows : undefined}
-					ref={this.inputRef}
-					placeholder={placeholder}
-				/>
-			</React.Fragment>
-		) : (
-			<React.Fragment>
-				<Label>{label}</Label>
+		const { viewerCanEdit, fontSize, placeholder, multiline, autoFocus, toolTip } = this.props
+		const { value, focused } = this.state
+		const Text = textComponentsMap[fontSize || 'p'] || textComponentsMap.p
+		if (!viewerCanEdit) {
+			return <Text>{value}</Text>
+		}
+		const StatusIcon = FaPencilAlt
+		return (
+			<Wrapper focused={focused}>
+				<IconWrapper>
+					<StatusIcon />
+				</IconWrapper>
 
-				<Text>{value}</Text>
-			</React.Fragment>
+				<ToolTip active={!focused} message={toolTip || 'Click to edit'}>
+					<NativeListener onClick={this.focus}>
+						<StyledInput
+							onBlur={this.submitChange}
+							fontSize={fontSize}
+							as={multiline ? TextArea : undefined}
+							autoFocus={autoFocus}
+							onChange={this.handleChange}
+							value={value}
+							// style={{ minHeight: `${height}px` }}
+							// rows={multiline ? rows : undefined}
+							ref={this.inputRef}
+							placeholder={placeholder}
+						/>
+					</NativeListener>
+				</ToolTip>
+			</Wrapper>
 		)
 	}
 }
+// ) : (
+// 			<Text color={value === '' ? 'middleGray' : ''}>{value || placeholder}</Text>
+// )}
 
 export default EditableText

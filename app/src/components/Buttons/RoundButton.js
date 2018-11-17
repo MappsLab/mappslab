@@ -1,6 +1,7 @@
 // @flow
 import React from 'react'
 import styled from 'styled-components'
+import ToolTip from 'Components/ToolTip'
 
 const Wrapper = styled.button`
 	border: 2px solid ${({ active }) => (active ? 'red' : 'green')};
@@ -30,16 +31,16 @@ const Wrapper = styled.button`
  * RoundButton
  */
 
-type Props = {
+type BaseProps = {
 	onClick: () => void,
-	isActive?: boolean,
-	disabled?: boolean,
+	isActive: boolean,
+	disabled: boolean,
 	label: string,
 	icon: string,
-	size?: 'normal' | 'large',
+	size: 'normal' | 'large',
 }
 
-const RoundButton = ({ onClick, isActive, label, disabled, icon, size }: Props) => (
+const RoundButtonBase = ({ onClick, isActive, label, disabled, icon, size }: BaseProps) => (
 	<Wrapper size={size} onClick={onClick} active={isActive} disabled={disabled}>
 		<span role="img" aria-label={label}>
 			{icon}
@@ -47,10 +48,30 @@ const RoundButton = ({ onClick, isActive, label, disabled, icon, size }: Props) 
 	</Wrapper>
 )
 
+type Props = {
+	onClick: () => void,
+	isActive?: boolean,
+	disabled?: boolean,
+	label: string,
+	icon: string,
+	size?: 'normal' | 'large',
+	toolTip?: string,
+}
+
+const RoundButton = ({ toolTip, ...rest }: Props) =>
+	toolTip && toolTip.length ? (
+		<ToolTip message={toolTip}>
+			<RoundButtonBase {...rest} />
+		</ToolTip>
+	) : (
+		<RoundButtonBase {...rest} />
+	)
+
 RoundButton.defaultProps = {
 	isActive: false,
 	disabled: false,
 	size: 'normal',
+	toolTip: undefined,
 }
 
 export default RoundButton

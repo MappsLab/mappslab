@@ -13,7 +13,7 @@ type Props = {
 
 const NewPinButton = ({ onClick }: Props) => (
 	<State is="Lesson*">
-		<RoundButton onClick={onClick} label="Add a new Pin" icon="📍" size="large" />
+		<RoundButton toolTip="Add a New Pin" onClick={onClick} label="Add a new Pin" icon="📍" size="large" />
 	</State>
 )
 

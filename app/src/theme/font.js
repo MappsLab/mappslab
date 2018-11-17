@@ -4,6 +4,10 @@
  * Text
  */
 
+export const family = {
+	sans: "'Work Sans', 'Helvetica Neue', helvetica, sans-serif",
+}
+
 export const size = {
 	h1: '25px',
 	h2: '20px',

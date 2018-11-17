@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components'
 
 const commonTextStyles = css`
 	${({ theme, align, weight, color }) => `
+		font-family: ${theme.font.family.sans};
 		font-weight: ${theme.font.weight[weight] || theme.font.weight.semi};
 		text-align: ${align || 'left'};
 		color: ${theme.color[color] || 'inherit'};

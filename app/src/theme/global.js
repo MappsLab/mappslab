@@ -7,67 +7,74 @@ import normalized from './normalized'
 const GlobalStyle = createGlobalStyle`
 	${normalized}
 	@import url('https://fonts.googleapis.com/css?family=Work+Sans:400,500,600');
-	
-	html {
-		font-size: 10px;
-		font-family: 'Work Sans', 'Helvetica Neue', helvetica, sans-serif;
-		font-weight: 300;
-	}
 
-	body {
-		background-color: #e2e2e2;
-	}
+	${({ theme }) => `
+		html {
+			font-size: 10px;
+			font-family: ${theme.font.family.sans};
+			font-weight: 300;
+		}
 
-	form {
-		margin: 0;
-	}
+		body {
+			background-color: #e2e2e2;
+		}
 
-	button, input, select, option, textarea {
-		background: white;
-		font-family: 'Work Sans', 'Helvetica Neue', helvetica, sans-serif;
-		font-weight: 300;
-		border: none;
-		outline: none;
-		line-height: normal;
-		padding: 0;
-		border-radius: 0;
-		color: #454545;
-	}
+		form {
+			margin: 0;
+		}
 
-	button {
-		cursor: pointer;
-	}
+		button, input, select, option, textarea {
+			background: white;
+			font-family: ${theme.font.family.sans};
+			font-weight: 300;
+			border: none;
+			outline: none;
+			line-height: normal;
+			padding: 0;
+			border-radius: 0;
+			color: #454545;
+		}
 
-	h1, h2, h3, h4, h5, h6, p, li, ol {
-		font-weight: 300;
-		margin: 0;
-	}
+		input, textarea {
+			max-width: 100%;
+		}
 
-	a {
-		text-decoration: none;
-		color: inherit;
-	}
+		button {
+			cursor: pointer;
+		}
 
-	* {
-		box-sizing: border-box;
-	}
+		h1, h2, h3, h4, h5, h6, p, li, ol {
+			font-weight: 300;
+			margin: 0;
+		}
 
-	body {
-		padding: 0;
-	}
+		a {
+			text-decoration: none;
+			color: inherit;
+		}
 
-	#root,
-	#reactRoot {
-		height: 100%;
-	}
+		* {
+			box-sizing: border-box;
+		}
 
-	figure {
-		margin 0;
-	}
+		body {
+			padding: 0;
+		}
 
-	img {
-		max-width: 100%;
-	}
+		#root,
+		#reactRoot {
+			height: 100%;
+		}
+
+		figure {
+			margin 0;
+		}
+
+		img {
+			max-width: 100%;
+		}
+	`}
+
 `
 
 export default GlobalStyle

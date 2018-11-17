@@ -47,12 +47,14 @@ const Message = styled(Header6)`
 `
 
 const Wrapper = styled.div`
-	position: relative;
+	${({ active }) => `
+		position: relative;
 
-	&:hover ${Message} {
-		opacity: 1;
-		transform: translateX(-50%);
-	}
+		&:hover ${Message} {
+			opacity: ${active ? '1' : '0'};
+			transform: ${active ? 'translateX(-50%)' : 'translateX(-50%) translateY(2px)'};
+		}
+	`}
 `
 
 /**
@@ -62,15 +64,18 @@ const Wrapper = styled.div`
 type Props = {
 	children: React.Node,
 	message: string,
+	active?: boolean,
 }
 
-const ToolTip = ({ children, message }: Props) => {
-	return (
-		<Wrapper>
-			<Message>{message}</Message>
-			{children}
-		</Wrapper>
-	)
+const ToolTip = ({ children, message, active }: Props) => (
+	<Wrapper active={active}>
+		<Message>{message}</Message>
+		{children}
+	</Wrapper>
+)
+
+ToolTip.defaultProps = {
+	active: true,
 }
 
 export default ToolTip
