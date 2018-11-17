@@ -21,7 +21,9 @@ export const pinSchema = (isNew: boolean = true) =>
 						.max(35),
 			lat: isNew ? Joi.number().required() : Joi.number(),
 			lng: isNew ? Joi.number().required() : Joi.number(),
-			description: Joi.string().max(400),
+			description: Joi.string()
+				.max(400)
+				.allow(''),
 			createdAt: isNew ? Joi.date().required() : Joi.any().forbidden(),
 			updatedAt: Joi.date().required(),
 			type: Joi.any().only('pin'),
