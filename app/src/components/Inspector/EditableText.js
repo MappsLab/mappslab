@@ -11,6 +11,8 @@ const StyledInput = styled(Input)`
 		font-size: ${theme.font.size[fontSize] || theme.font.size.p};
 		max-width: 100%;
 		min-height: 1.3em;
+		background-color: inherit;
+		cursor: inherit;
 		width: 100%;
 	`}
 `
@@ -20,9 +22,11 @@ const Wrapper = styled.div`
 		padding-left: ${theme.layout.spacing.double};
 		margin-bottom: ${theme.layout.spacing.single};
 		position: relative;
-		outline: ${focused ? `1px solid ${theme.color.primary.normal}` : ''};
+		background-color: ${focused ? `${theme.color.xLightGray}` : ''};
+		cursor: ${focused ? 'initial' : 'pointer'};
+		color: ${focused ? theme.color.primary.normal : 'inherit'};
 		&:hover {
-			color: ${focused ? 'inherit' : theme.color.primary.normal}
+			background-color: ${theme.color.xLightGray};
 		}
 	`}
 `
@@ -142,11 +146,11 @@ class EditableText extends React.Component<Props, State> {
 		const StatusIcon = FaPencilAlt
 		return (
 			<Wrapper focused={focused}>
-				<IconWrapper>
-					<StatusIcon />
-				</IconWrapper>
+				<ToolTip active={!focused} relative={false} message={toolTip || 'Click to edit'}>
+					<IconWrapper>
+						<StatusIcon />
+					</IconWrapper>
 
-				<ToolTip active={!focused} message={toolTip || 'Click to edit'}>
 					<NativeListener onClick={this.focus}>
 						<StyledInput
 							onBlur={this.submitChange}

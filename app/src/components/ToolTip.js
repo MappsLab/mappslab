@@ -13,7 +13,7 @@ const Message = styled(Header6)`
 		padding: ${theme.layout.spacing.third};
 		bottom: calc(100% + 5px);
 		left: 50%;
-		transform: translateX(-50%) translateY(2px);
+		transform: translate3d(-50%, 2px, 0);
 		pointer-events: none;
 		transition: 0.2s;
 
@@ -27,7 +27,7 @@ const Message = styled(Header6)`
 			z-index: -2;
 			background-color: white;
 			transform: rotate(45deg);
-			box-shadow: 2px 2px 1px rgba(0, 0, 0, 0.5);
+			box-shadow: 2px 2px 1px rgba(0, 0, 0, 0.25);
 		}
 
 		&:after {
@@ -47,15 +47,15 @@ const Message = styled(Header6)`
 `
 
 const Wrapper = styled.div`
-	${({ active }) => `
-		position: relative;
+	${({ active, relative }) => `
+		position: ${relative ? 'relative' : 'static'};
 
 		&:hover ${Message} {
 			opacity: ${active ? '1' : '0'};
-			transform: ${active ? 'translateX(-50%)' : 'translateX(-50%) translateY(2px)'};
 		}
 	`}
 `
+// transform: ${active ? 'translateX(-50%) translateY(-1px)' : 'translateX(-50%) translateY(2px)'};
 
 /**
  * ToolTip
@@ -65,10 +65,11 @@ type Props = {
 	children: React.Node,
 	message: string,
 	active?: boolean,
+	relative?: boolean,
 }
 
-const ToolTip = ({ children, message, active }: Props) => (
-	<Wrapper active={active}>
+const ToolTip = ({ children, message, active, relative }: Props) => (
+	<Wrapper active={active} relative={relative}>
 		<Message>{message}</Message>
 		{children}
 	</Wrapper>
@@ -76,6 +77,7 @@ const ToolTip = ({ children, message, active }: Props) => (
 
 ToolTip.defaultProps = {
 	active: true,
+	relative: false,
 }
 
 export default ToolTip
