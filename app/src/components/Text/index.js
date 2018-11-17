@@ -52,9 +52,16 @@ export const Header5 = styled.h5`
 	`};
 `
 
-export const Input = styled.input`
+export const Header6 = styled.h6`
 	${commonTextStyles};
 	${({ theme }) => `
+		font-size: ${theme.font.size.h6};
+	`};
+`
+
+export const Input = styled.input`
+	${commonTextStyles};
+	${() => `
 		display: block;
 		border: 0;
 		padding: 0;

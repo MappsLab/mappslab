@@ -11,6 +11,7 @@ export const size = {
 	p: '16px',
 	h4: '14px',
 	h5: '13px',
+	h6: '10px',
 }
 
 export const weight = {

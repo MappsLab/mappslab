@@ -1,6 +1,7 @@
 // @flow
 import React from 'react'
 import { State } from 'react-automata'
+import ToolTip from 'Components/ToolTip'
 import type { ProviderProps } from '../Provider'
 import NewPinButton from './NewPinButton'
 import ZoomButton from './ZoomButton'
@@ -18,7 +19,9 @@ const Tools = (props: ProviderProps) => {
 	return (
 		<State is="Lesson*">
 			<Toolbar>
-				<NewPinButton onClick={onNewPinClick} />
+				<ToolTip message="Add a New Pin">
+					<NewPinButton onClick={onNewPinClick} />
+				</ToolTip>
 			</Toolbar>
 			<Toolbar align="right">
 				<ZoomButton direction="in" onClick={() => zoomIn()} />
