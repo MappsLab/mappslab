@@ -59,11 +59,6 @@ class EditableText extends React.Component<Props, State> {
 		rows: 1,
 	}
 
-	componentDidMount() {
-		const { value } = this.state
-		this.handleChange({ target: { value } })
-	}
-
 	componentWillUnmount() {
 		this.submitChange()
 		// const inputRef = this.inputRef ? this.inputRef.current : undefined
@@ -82,9 +77,9 @@ class EditableText extends React.Component<Props, State> {
 	}
 
 	submitChange = () => {
-		const { updateFn, name } = this.props
+		const { updateFn, name, initialValue } = this.props
 		const { value } = this.state
-		if (updateFn) updateFn({ [name]: value })
+		if (updateFn && initialValue !== value) updateFn({ [name]: value })
 	}
 
 	render() {

@@ -48,6 +48,12 @@ class Pin extends React.Component<PinProps, PinState> {
 		}
 	}
 
+	closeInspector = () => {
+		const { transition } = this.props
+		console.log('!', transition)
+		transition('close')
+	}
+
 	getPinEventHandlers = () =>
 		pinEventNames.reduce(
 			(acc, name) => ({
@@ -86,7 +92,7 @@ class Pin extends React.Component<PinProps, PinState> {
 							{isInspected ? (
 								<State is="Lesson.Inspect">
 									<CustomPopup anchor={anchor}>
-										<PinInspector pin={pin} />
+										<PinInspector pin={pin} closeInspector={this.closeInspector} />
 									</CustomPopup>
 								</State>
 							) : null}

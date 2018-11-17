@@ -2,15 +2,15 @@
 import * as React from 'react'
 import * as R from 'ramda'
 import { adopt } from 'react-adopt'
+import NativeListener from 'react-native-listener'
 import type { PinType, ViewerType } from 'Types'
 import type { Mutation } from 'Types/GraphQL'
 import { CurrentViewerQuery } from 'Queries/Viewer'
 import { UpdatePinMutation } from 'Queries/Pin'
-import { Column } from 'Components/Layout'
 import { EditableText } from 'Components/Inspector'
 import { UserChip } from 'Components/User'
 import Pane from 'Components/Pane'
-
+import { Button } from 'Components/Buttons'
 /**
  * PinInspector
  */
@@ -22,10 +22,12 @@ type BaseProps = {
 type PinInspectorProps = BaseProps & {
 	viewer?: ViewerType,
 	updatePin: Mutation,
+	closeInspector: () => void,
 }
 
 const PinInspector = (props: PinInspectorProps) => {
-	const { pin, viewer, updatePin } = props
+	console.log(props)
+	const { pin, viewer, updatePin, closeInspector } = props
 	const viewerIsOwner = Boolean(viewer && pin.owner.uid === viewer.uid)
 	const submitUpdate = async (args) => {
 		if (!viewerIsOwner) return
@@ -37,6 +39,9 @@ const PinInspector = (props: PinInspectorProps) => {
 	}
 	return (
 		<Pane size="small">
+			<NativeListener onClick={closeInspector}>
+				<Button level="tertiary">close</Button>
+			</NativeListener>
 			<EditableText
 				name="title"
 				label="Title"

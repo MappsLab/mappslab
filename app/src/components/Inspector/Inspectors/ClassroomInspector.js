@@ -109,7 +109,6 @@ const Composed = adopt({
 	updateClassroom: <UpdateClassroomMutation />,
 })
 
-
 export default ({ uid, ...baseProps }: BaseProps) => (
 	<Composed uid={uid}>{(composedProps) => <ClassroomInspector {...baseProps} {...composedProps} />}</Composed>
 )
