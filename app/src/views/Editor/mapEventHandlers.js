@@ -40,7 +40,7 @@ const mapEvents = {
 				},
 				onClick: (e, props) => {
 					const { transition } = props
-					transition('close')
+					transition('close', { inspectedItem: null })
 				},
 			},
 		},

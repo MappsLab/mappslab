@@ -56,6 +56,7 @@ const PinInspector = (props: PinInspectorProps) => {
 				viewerCanEdit={viewerIsOwner}
 				autoFocus
 			/>
+			<UserChip size="small" user={pin.owner} />
 			<EditableText
 				label="Description"
 				name="description"
@@ -66,7 +67,6 @@ const PinInspector = (props: PinInspectorProps) => {
 				initialValue={pin.description}
 				viewerCanEdit={viewerIsOwner}
 			/>
-			pinned by <UserChip size="small" user={pin.owner} />
 		</Pane>
 	)
 }

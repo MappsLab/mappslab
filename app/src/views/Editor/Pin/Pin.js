@@ -1,6 +1,5 @@
 // @flow
 import React from 'react'
-import * as R from 'ramda'
 import { Marker, CustomPopup, pinEventNames } from 'mapp'
 import { State } from 'react-automata'
 import type { PinType } from 'Types'
@@ -50,8 +49,7 @@ class Pin extends React.Component<PinProps, PinState> {
 
 	closeInspector = () => {
 		const { transition } = this.props
-		console.log('!', transition)
-		transition('close')
+		transition('close', { inspectedItem: null })
 	}
 
 	getPinEventHandlers = () =>
@@ -82,7 +80,7 @@ class Pin extends React.Component<PinProps, PinState> {
 				render={({ anchor }) =>
 					anchor ? (
 						<React.Fragment>
-							{mouseOver ? (
+							{!isInspected && mouseOver ? (
 								<CustomPopup anchor={anchor}>
 									<PopupWrapper>
 										<p>{pin.title}</p>

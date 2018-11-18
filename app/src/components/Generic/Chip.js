@@ -4,15 +4,15 @@ import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 
 const Wrapper = styled.div`
-	${({ theme, size, active }) => `
+	${({ theme, size, active, borders }) => `
 		height: ${theme.sizes.chip[size].height};
 		display: inline-flex;
 		justify-content: flex-start;
 		align-items: center;	
 		margin: ${size === 'large' ? theme.layout.spacing.half : theme.layout.spacing.half} 0;
-		padding: 0 ${size === 'large' ? theme.layout.spacing.single : theme.layout.spacing.half};
+		padding: ${borders ? `0 ${size === 'large' ? theme.layout.spacing.single : theme.layout.spacing.half}` : ``};
 		background-color: ${active ? theme.color.primary.muted : 'white'};
-		border: 1px solid ${theme.color.primary.normal};
+		border: ${borders ? `1px solid ${theme.color.primary.normal}` : ''};
 		border-radius: 2px;
 	`};
 `
@@ -83,13 +83,14 @@ const Chip = ({ image, title, subtitle, size, active, to, onClick }: Props) => {
 		? // if 'to', use a Link
 		  Link
 		: // else, if 'onClick', use a button
-		  onClick
-			? 'button'
-			: undefined
+		onClick
+		? 'button'
+		: undefined
 	return (
 		<Wrapper
 			size={size}
 			active={active || undefined}
+			borders={to || onClick}
 			as={as}
 			type={as === 'button' ? 'button' : undefined}
 			to={to}
