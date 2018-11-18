@@ -11,6 +11,9 @@ import { EditableText } from 'Components/Inspector'
 import { UserChip } from 'Components/User'
 import Pane from 'Components/Pane'
 import { Button } from 'Components/Buttons'
+import { NotificationsConsumer } from 'Components/Notifications'
+import type { NewNotification } from 'Components/Notifications'
+
 /**
  * PinInspector
  */
@@ -23,11 +26,11 @@ type PinInspectorProps = BaseProps & {
 	viewer?: ViewerType,
 	updatePin: Mutation,
 	closeInspector: () => void,
+	sendNotification: (NewNotification) => void,
 }
 
 const PinInspector = (props: PinInspectorProps) => {
-	console.log(props)
-	const { pin, viewer, updatePin, closeInspector } = props
+	const { pin, viewer, updatePin, closeInspector, sendNotification } = props
 	const viewerIsOwner = Boolean(viewer && pin.owner.uid === viewer.uid)
 	const submitUpdate = async (args) => {
 		if (!viewerIsOwner) return
@@ -36,6 +39,7 @@ const PinInspector = (props: PinInspectorProps) => {
 			...args,
 		}
 		await updatePin({ variables })
+		sendNotification({ message: `Updated pin ${pin.title}` })
 	}
 	return (
 		<Pane size="small">
@@ -71,9 +75,12 @@ const Composed = adopt(
 	{
 		currentViewerQuery: <CurrentViewerQuery />,
 		updatePin: <UpdatePinMutation />,
+		// $FlowFixMe
+		notificationContext: <NotificationsConsumer />,
 	},
-	({ currentViewerQuery, ...rest }) => ({
+	({ currentViewerQuery, notificationContext, ...rest }) => ({
 		viewer: R.path(['data', 'currentViewer', 'viewer'], currentViewerQuery),
+		sendNotification: notificationContext.sendNotification,
 		...rest,
 	}),
 )

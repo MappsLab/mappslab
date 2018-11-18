@@ -3,15 +3,17 @@ import * as React from 'react'
 import styled from 'styled-components'
 
 const Wrapper = styled.div`
-	position: absolute;
-	z-index: 100;
-	bottom: 20px;
-	display: flex;
-	pointer-events: none;
+	${({ theme }) => `
+		position: absolute;
+		z-index: ${theme.layout.z.mapTool};
+		bottom: ${theme.layout.spacing.double};
+		display: flex;
+		pointer-events: none;
 
-	& button {
-		pointer-events: initial;
-	}
+		& button {
+			pointer-events: initial;
+		}
+	`}
 	${({ align }) => {
 		switch (align) {
 			case 'left':

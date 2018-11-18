@@ -5,15 +5,14 @@ import { State } from 'react-automata'
 import type { Subscription } from 'Types/GraphQL'
 import { startSubscription } from 'Queries/startSubscription'
 import { pinAddedToMap, pinDeleted, pinUpdated } from 'Queries/Map/mapSubscriptions'
+import { NotificationsProvider } from 'Components/Notifications'
 import Pin from './Pin'
 import Tools from './Tools'
-// import withEditorModes from './editorModes'
 import { MapConsumer } from './Provider'
 import type { ProviderProps } from './Provider'
 import WelcomeDialog from './WelcomeDialog'
+import MapNotifications from './MapNotifications'
 import { getHandlersForState } from './mapEventHandlers'
-
-// const debug = require('debug')('app')
 
 type EditorProps = ProviderProps & {
 	mapUid: null | string,
@@ -121,13 +120,14 @@ class MapEditor extends React.Component<EditorProps> {
 		const { mapData, transition } = this.props
 		if (!mapData) return null
 		return (
-			<React.Fragment>
+			<NotificationsProvider>
 				<State is="Welcome">
 					<WelcomeDialog map={mapData} transition={transition} />
 				</State>
 				<Tools {...this.props} />
+				<MapNotifications />
 				{this.renderMapData()}
-			</React.Fragment>
+			</NotificationsProvider>
 		)
 	}
 }
