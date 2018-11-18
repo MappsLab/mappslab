@@ -23,7 +23,7 @@ const MyComponent = ({ map, transition }: Props) => {
 	const { title, description, classroom } = map
 	return (
 		<Centered>
-			<Pane icon="🗺" title={title} subtitle={classroom.title}>
+			<Pane icon="🗺" size="normal" title={title} subtitle={classroom.title}>
 				{description && <P>{description}</P>}
 				<Header2 align="center">Let’s get started!</Header2>
 				<Button onClick={enterLesson()}>Free Play</Button>

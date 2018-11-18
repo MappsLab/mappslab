@@ -5,6 +5,19 @@ import type { EditorProps } from './MapEditor'
 const debug = require('debug')('app')
 
 const mapEvents = {
+	Welcome: {
+		handlers: {
+			keyup: (e, props: EditorProps) => {
+				switch (e.key) {
+					case 'Enter':
+						props.transition('enterLesson')
+						break
+					default:
+						break
+				}
+			},
+		},
+	},
 	Lesson: {
 		handlers: {
 			onClick: () => {

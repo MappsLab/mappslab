@@ -20,13 +20,15 @@ export type EditorProps = ProviderProps & {
 	sendNotification: (NewNotification) => void,
 }
 
+const domEventNames = ['keyup']
+
 class MapEditor extends React.Component<EditorProps> {
 	static defaultProps = {
 		viewer: null,
 		mapData: null,
 	}
 
-	listeners: {} = {}
+	mapListeners: {} = {}
 
 	componentDidMount() {
 		const { mapUid, setMap } = this.props
@@ -68,22 +70,38 @@ class MapEditor extends React.Component<EditorProps> {
 		if (handlers[eventName]) handlers[eventName](payload, this.props)
 	}
 
+	domListeners: { [key: string]: { remove: () => void } }
+
 	addEventListeners() {
 		const { addEventListeners } = this.props
-		this.listeners = mapEventNames.reduce(
+		this.mapListeners = mapEventNames.reduce(
 			(acc, name) => ({
 				...acc,
 				[name]: this.handleEvent(name),
 			}),
 			{},
 		)
-		addEventListeners(this.listeners)
+		this.domListeners = domEventNames.reduce((acc, name) => {
+			const handler = this.handleEvent(name)
+			window.addEventListener(name, handler)
+			const listener = {
+				remove: () => window.removeEventListener(name, handler),
+			}
+			return {
+				...acc,
+				[name]: listener,
+			}
+		}, {})
+
+		addEventListeners(this.mapListeners)
 	}
 
 	removeEventListeners() {
 		const { removeEventListeners } = this.props
-		removeEventListeners(this.listeners)
-		this.listeners = {}
+		removeEventListeners(this.mapListeners)
+		this.mapListeners = {}
+		// $FlowFixMe
+		Object.values(this.domListeners).forEach((l) => l.remove && l.remove())
 	}
 
 	startSubscriptions() {

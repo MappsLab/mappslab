@@ -6,7 +6,7 @@ const statechart = {
 		Lesson: {
 			id: 'Lesson',
 			states: {
-				Browse: { id: 'Browse', states: {}, on: { clickedDropPin: '#DropPin', clickedItem: '#Inspect' } },
+				Browse: { id: 'Browse', states: {}, on: { clickedItem: '#Inspect' } },
 				DropPin: {
 					id: 'DropPin',
 					states: {
@@ -29,7 +29,7 @@ const statechart = {
 				Inspect: { id: 'Inspect', states: {}, on: { close: '#Lesson' } },
 			},
 			initial: 'Browse',
-			on: {},
+			on: { clickedDropPin: '#DropPin' },
 		},
 		CaptureView: { id: 'CaptureView', states: {} },
 	},
