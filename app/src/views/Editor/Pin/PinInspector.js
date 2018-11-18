@@ -30,55 +30,74 @@ type PinInspectorProps = BaseProps & {
 	sendNotification: (NewNotification) => void,
 }
 
-const PinInspector = (props: PinInspectorProps) => {
-	const { pin, viewer, updatePin, deletePin, closeInspector, sendNotification } = props
-	// TODO: add a 'viewerOwnsPin' field to the GraphQL API
-	const viewerIsOwner = Boolean(viewer && pin.owner.uid === viewer.uid)
+class PinInspector extends React.Component<PinInspectorProps> {
+	componentWillUnmount() {
+		const { pin } = this.props
+		// TODO: Build smarter Form context
+		// this setTimeout is hacky and only there to allow
+		// child EditableTexts to submit changes.
+		// Make them stateless and handle submitting & form state in context
+		if (pin.draft) setTimeout(() => this.removePin(), 100)
+	}
 
-	const submitUpdate = async (args) => {
+	submitUpdate = async (args) => {
+		const { pin, viewer, updatePin, sendNotification } = this.props
+		// TODO: add a 'viewerOwnsPin' field to the GraphQL API
+		const viewerIsOwner = Boolean(viewer && pin.owner.uid === viewer.uid)
+
 		if (!viewerIsOwner) return
 		const variables = {
 			uid: pin.uid,
 			...args,
 		}
-		console.log('pinInspect submitUpdate', variables)
 		await updatePin({ variables })
 		sendNotification({ message: `Updated pin ${pin.title}` })
 	}
 
-	const removePin = () => deletePin({ variables: { uid: pin.uid } })
+	removePin = () => {
+		const { pin, deletePin } = this.props
+		// TODO: add a 'viewerOwnsPin' field to the GraphQL API
 
-	return (
-		<Pane size="small">
-			<NativeListener onClick={closeInspector}>
-				<Button level="tertiary">close</Button>
-			</NativeListener>
-			<EditableText
-				name="title"
-				label="Title"
-				updateFn={submitUpdate}
-				fontSize="h1"
-				placeholder="Untitled Pin"
-				initialValue={pin.title}
-				viewerCanEdit={viewerIsOwner}
-				autoFocus
-			/>
-			<UserChip size="small" user={pin.owner} />
-			<EditableText
-				label="Description"
-				name="description"
-				updateFn={submitUpdate}
-				multiline
-				placeholder="Describe your pin"
-				fontSize="p"
-				initialValue={pin.description}
-				viewerCanEdit={viewerIsOwner}
-			/>
-			<NativeListener onClick={removePin}>
-				<Button level="tertiary">{pin.draft ? 'Cancel' : 'Delete'}</Button>
-			</NativeListener>
-		</Pane>
-	)
+		deletePin({ variables: { uid: pin.uid } })
+	}
+
+	render() {
+		const { pin, viewer, closeInspector } = this.props
+		// TODO: add a 'viewerOwnsPin' field to the GraphQL API
+		const viewerIsOwner = Boolean(viewer && pin.owner.uid === viewer.uid)
+
+		return (
+			<Pane size="small">
+				<NativeListener onClick={closeInspector}>
+					<Button level="tertiary">close</Button>
+				</NativeListener>
+				<EditableText
+					name="title"
+					label="Title"
+					updateFn={this.submitUpdate}
+					fontSize="h1"
+					placeholder="Untitled Pin"
+					initialValue={pin.title}
+					viewerCanEdit={viewerIsOwner}
+					autoFocus
+				/>
+				<UserChip size="small" user={pin.owner} />
+				<EditableText
+					label="Description"
+					name="description"
+					updateFn={this.submitUpdate}
+					multiline
+					placeholder="Describe your pin"
+					fontSize="p"
+					initialValue={pin.description}
+					viewerCanEdit={viewerIsOwner}
+				/>
+				<NativeListener onClick={this.removePin}>
+					<Button level="tertiary">{pin.draft ? 'Cancel' : 'Delete'}</Button>
+				</NativeListener>
+			</Pane>
+		)
+	}
 }
 
 const Composed = adopt(

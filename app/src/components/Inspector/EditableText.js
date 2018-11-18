@@ -129,8 +129,12 @@ class EditableText extends React.Component<Props, State> {
 		this.autoSize()
 	}
 
-	submitChange = async () => {
+	blur = async () => {
 		await this.setState({ focused: false })
+		this.submitChange()
+	}
+
+	submitChange = async () => {
 		const { updateFn, name, initialValue } = this.props
 		// Use an empty string if initialValue is falsy
 		const parsedInitialValue = initialValue || ''

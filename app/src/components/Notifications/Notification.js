@@ -33,7 +33,6 @@ const enter = keyframes`
 const Message = styled(Header4)`
 	${({ theme, visible }) => css`
 		transition: 0.3s;
-		pointer-events: initial;
 		animation: ${visible ? css`0.5s ${enter} 1 forwards` : css`0.5s ${hide} 1 forwards`};
 		background-color: white;
 		transform-origin: 50% 100%;

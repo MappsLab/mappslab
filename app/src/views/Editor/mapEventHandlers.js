@@ -26,6 +26,9 @@ const mapEvents = {
 				}
 			},
 		},
+		Browse: {
+			handlers: {},
+		},
 		DropPin: {
 			DropMode: {
 				handlers: {
@@ -62,7 +65,7 @@ const mapEvents = {
 			handlers: {
 				keyup: (e, props: EditorProps) => {
 					if (e.key === 'Escape') {
-						props.transition('enterLesson')
+						props.transition('close', { inspectedItem: null })
 					}
 				},
 				onEntry: (e, props) => {
