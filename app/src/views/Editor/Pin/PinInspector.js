@@ -6,7 +6,7 @@ import NativeListener from 'react-native-listener'
 import type { PinType, ViewerType } from 'Types'
 import type { Mutation } from 'Types/GraphQL'
 import { CurrentViewerQuery } from 'Queries/Viewer'
-import { UpdatePinMutation } from 'Queries/Pin'
+import { UpdatePinMutation, DeletePinMutation } from 'Queries/Pin'
 import { EditableText } from 'Components/Inspector'
 import { UserChip } from 'Components/User'
 import Pane from 'Components/Pane'
@@ -25,22 +25,29 @@ type BaseProps = {
 type PinInspectorProps = BaseProps & {
 	viewer?: ViewerType,
 	updatePin: Mutation,
+	deletePin: Mutation,
 	closeInspector: () => void,
 	sendNotification: (NewNotification) => void,
 }
 
 const PinInspector = (props: PinInspectorProps) => {
-	const { pin, viewer, updatePin, closeInspector, sendNotification } = props
+	const { pin, viewer, updatePin, deletePin, closeInspector, sendNotification } = props
+	// TODO: add a 'viewerOwnsPin' field to the GraphQL API
 	const viewerIsOwner = Boolean(viewer && pin.owner.uid === viewer.uid)
+
 	const submitUpdate = async (args) => {
 		if (!viewerIsOwner) return
 		const variables = {
 			uid: pin.uid,
 			...args,
 		}
+		console.log('pinInspect submitUpdate', variables)
 		await updatePin({ variables })
 		sendNotification({ message: `Updated pin ${pin.title}` })
 	}
+
+	const removePin = () => deletePin({ variables: { uid: pin.uid } })
+
 	return (
 		<Pane size="small">
 			<NativeListener onClick={closeInspector}>
@@ -67,6 +74,9 @@ const PinInspector = (props: PinInspectorProps) => {
 				initialValue={pin.description}
 				viewerCanEdit={viewerIsOwner}
 			/>
+			<NativeListener onClick={removePin}>
+				<Button level="tertiary">{pin.draft ? 'Cancel' : 'Delete'}</Button>
+			</NativeListener>
 		</Pane>
 	)
 }
@@ -75,6 +85,7 @@ const Composed = adopt(
 	{
 		currentViewerQuery: <CurrentViewerQuery />,
 		updatePin: <UpdatePinMutation />,
+		deletePin: <DeletePinMutation />,
 		// $FlowFixMe
 		notificationContext: <NotificationsConsumer />,
 	},

@@ -90,6 +90,8 @@ class EditableText extends React.Component<Props, State> {
 		value: this.props.initialValue || '',
 	}
 
+	inputRef = React.createRef()
+
 	componentDidMount() {
 		this.autoSize()
 	}
@@ -98,8 +100,6 @@ class EditableText extends React.Component<Props, State> {
 		this.submitChange()
 		// const inputRef = this.inputRef ? this.inputRef.current : undefined
 	}
-
-	inputRef = React.createRef()
 
 	autoSize = () => {
 		const field = this.inputRef.current
@@ -132,8 +132,12 @@ class EditableText extends React.Component<Props, State> {
 	submitChange = async () => {
 		await this.setState({ focused: false })
 		const { updateFn, name, initialValue } = this.props
+		// Use an empty string if initialValue is falsy
+		const parsedInitialValue = initialValue || ''
 		const { value } = this.state
-		if (updateFn && initialValue !== value) updateFn({ [name]: value || '' })
+		if (updateFn && parsedInitialValue !== value) {
+			updateFn({ [name]: value || '' })
+		}
 	}
 
 	render() {
@@ -150,7 +154,6 @@ class EditableText extends React.Component<Props, State> {
 					<IconWrapper>
 						<StatusIcon />
 					</IconWrapper>
-
 					<NativeListener onClick={this.focus}>
 						<StyledInput
 							onBlur={this.submitChange}
@@ -159,8 +162,6 @@ class EditableText extends React.Component<Props, State> {
 							autoFocus={autoFocus}
 							onChange={this.handleChange}
 							value={value}
-							// style={{ minHeight: `${height}px` }}
-							// rows={multiline ? rows : undefined}
 							ref={this.inputRef}
 							placeholder={placeholder}
 						/>
@@ -170,8 +171,5 @@ class EditableText extends React.Component<Props, State> {
 		)
 	}
 }
-// ) : (
-// 			<Text color={value === '' ? 'middleGray' : ''}>{value || placeholder}</Text>
-// )}
 
 export default EditableText
