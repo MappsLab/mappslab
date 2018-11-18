@@ -1,5 +1,6 @@
 // @flow
 import { createObjectSearchByState } from './utils'
+import type { EditorProps } from './MapEditor'
 
 const debug = require('debug')('app')
 
@@ -13,8 +14,14 @@ const mapEvents = {
 		DropPin: {
 			DropMode: {
 				handlers: {
+					onEntry: (e, props: EditorProps) => {
+						const { sendNotification } = props
+
+						sendNotification({ message: 'Click to drop a new pin' })
+					},
 					onClick: async (e, props) => {
 						const { createPin, mapUid, lessonUid, transition } = props
+
 						const result = await createPin({
 							variables: {
 								lat: e.latLng.lat(),

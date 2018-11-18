@@ -12,32 +12,11 @@ import statechart from './statechart'
 
 const debug = require('debug')('app')
 
-const defaults = {
-	mapUid: null,
-	notifications: [],
-	viewer: undefined,
-	mapData: undefined,
-	setMap: () => {},
-	createPin: async () => {},
-	transition: () => {},
-	sendNotification: () => {},
-	subscribeToMore: () => () => {},
-	machineState: 'none',
-}
-
-const { Provider, Consumer } = React.createContext(defaults)
-export const MapConsumer = Consumer
-
 /**
  * Provider
  */
 
 export type View = 'normal' | 'street'
-
-type Notification = {
-	text: string,
-	title: string,
-}
 
 type Props = MappRenderProps & {
 	initialView?: View,
@@ -61,23 +40,34 @@ type Props = MappRenderProps & {
 
 type State = {
 	mapUid: string | null,
-	notifications: Array<Notification>,
 }
 
 type Utils = $PropertyType<MappRenderProps, 'utils'>
 
 export type ProviderProps = Utils & {
 	mapUid: string | null,
-	notifications: Array<Notification>,
 	viewer?: ViewerType,
 	setMap: (string) => void,
 	mapData?: MapType,
-	sendNotification: (Notification) => void,
 	transition: (string, ?{}) => void,
 	createPin: Mutation,
 	subscribeToMore: (SubscriptionConfig) => () => void,
 	machineState: MachineState,
 }
+
+const defaults = {
+	mapUid: null,
+	viewer: undefined,
+	mapData: undefined,
+	setMap: () => {},
+	createPin: async () => {},
+	transition: () => {},
+	subscribeToMore: () => () => {},
+	machineState: 'none',
+}
+
+const { Provider, Consumer } = React.createContext<ProviderProps>(defaults)
+export const MapConsumer = Consumer
 
 class MapProviderClass extends React.Component<Props, State> {
 	static defaultProps = {
@@ -88,7 +78,6 @@ class MapProviderClass extends React.Component<Props, State> {
 
 	state = {
 		mapUid: this.props.initialMapUid || null,
-		notifications: [],
 	}
 
 	componentDidMount() {
@@ -97,7 +86,6 @@ class MapProviderClass extends React.Component<Props, State> {
 
 	getEditorUtils = () => ({
 		setMap: this.setMap,
-		sendNotification: this.sendNotification,
 	})
 
 	updateOptions = (props: Props = this.props) => {
@@ -115,18 +103,11 @@ class MapProviderClass extends React.Component<Props, State> {
 		this.setState({ mapUid })
 	}
 
-	sendNotification = (notification: Notification) => {
-		this.setState(({ notifications }) => ({
-			notifications: [...notifications, notification],
-		}))
-	}
-
 	render() {
 		const { children, utils, transition, machineState, inspectedItem } = this.props
-		const { mapUid, notifications } = this.state
+		const { mapUid } = this.state
 		const value = {
 			inspectedItem,
-			notifications,
 			transition,
 			machineState,
 			...utils,

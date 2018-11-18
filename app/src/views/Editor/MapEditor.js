@@ -5,7 +5,8 @@ import { State } from 'react-automata'
 import type { Subscription } from 'Types/GraphQL'
 import { startSubscription } from 'Queries/startSubscription'
 import { pinAddedToMap, pinDeleted, pinUpdated } from 'Queries/Map/mapSubscriptions'
-import { NotificationsProvider } from 'Components/Notifications'
+import { NotificationsConsumer } from 'Components/Notifications'
+import type { NewNotification } from 'Components/Notifications'
 import Pin from './Pin'
 import Tools from './Tools'
 import { MapConsumer } from './Provider'
@@ -14,8 +15,9 @@ import WelcomeDialog from './WelcomeDialog'
 import MapNotifications from './MapNotifications'
 import { getHandlersForState } from './mapEventHandlers'
 
-type EditorProps = ProviderProps & {
+export type EditorProps = ProviderProps & {
 	mapUid: null | string,
+	sendNotification: (NewNotification) => void,
 }
 
 class MapEditor extends React.Component<EditorProps> {
@@ -44,9 +46,9 @@ class MapEditor extends React.Component<EditorProps> {
 	}
 
 	componentDidUpdate(prevProps) {
-		this.handleEvent('onEntry')()
-		// if (prevProps.machineState.value !== this.props.machineState.value) {
-		// }
+		if (prevProps.machineState.value !== this.props.machineState.value) {
+			this.handleEvent('onEntry')()
+		}
 	}
 
 	componentWillUnmount() {
@@ -120,14 +122,14 @@ class MapEditor extends React.Component<EditorProps> {
 		const { mapData, transition } = this.props
 		if (!mapData) return null
 		return (
-			<NotificationsProvider>
+			<React.Fragment>
 				<State is="Welcome">
 					<WelcomeDialog map={mapData} transition={transition} />
 				</State>
 				<Tools {...this.props} />
 				<MapNotifications />
 				{this.renderMapData()}
-			</NotificationsProvider>
+			</React.Fragment>
 		)
 	}
 }
@@ -141,7 +143,13 @@ type WrapperProps = {
 }
 
 const Wrapper = ({ mapUid }: WrapperProps) => (
-	<MapConsumer>{(contextValue) => <MapEditor mapUid={mapUid || null} {...contextValue} />}</MapConsumer>
+	<NotificationsConsumer>
+		{({ sendNotification }) => (
+			<MapConsumer>
+				{(contextValue) => <MapEditor mapUid={mapUid || null} sendNotification={sendNotification} {...contextValue} />}
+			</MapConsumer>
+		)}
+	</NotificationsConsumer>
 )
 
 Wrapper.defaultProps = {
