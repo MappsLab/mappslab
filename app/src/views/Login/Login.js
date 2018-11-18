@@ -64,7 +64,7 @@ class Login extends React.Component<Props, State> {
 		const childProps = this.props
 		return (
 			<Centered>
-				<Pane title="Welcome to Mappslab!">
+				<Pane size="normal" title="Welcome to Mappslab!">
 					<State is={WELCOME}>
 						<Button onClick={this.transitionEvent(SELECTED_STUDENT_FLOW)}>Find Your Classroom →</Button>
 					</State>

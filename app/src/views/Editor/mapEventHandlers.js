@@ -20,13 +20,21 @@ const mapEvents = {
 	},
 	Lesson: {
 		handlers: {
-			onClick: () => {
-				// console.log('lesson onClick')
+			keyup: (e, props: EditorProps) => {
+				if (e.key === ' ') {
+					props.transition('clickedDropPin')
+				}
 			},
 		},
 		DropPin: {
 			DropMode: {
 				handlers: {
+					keyup: (e, props: EditorProps) => {
+						if (e.key === 'Escape' || e.key === ' ') {
+							// Exit Drop Pin mode
+							props.transition('enterLesson')
+						}
+					},
 					onEntry: (e, props: EditorProps) => {
 						const { sendNotification } = props
 
@@ -52,6 +60,11 @@ const mapEvents = {
 		},
 		Inspect: {
 			handlers: {
+				keyup: (e, props: EditorProps) => {
+					if (e.key === 'Escape') {
+						props.transition('enterLesson')
+					}
+				},
 				onEntry: (e, props) => {
 					const { panTo, inspectedItem } = props
 					debug('panning to', inspectedItem)
