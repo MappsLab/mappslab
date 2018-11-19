@@ -12,13 +12,10 @@ import { parseSingularFields } from 'Utils/parsing'
 export const pinSchema = (isNew: boolean = true) =>
 	Joi.object()
 		.keys({
-			title: isNew
-				? Joi.string()
-						.min(3)
-						.max(35)
-				: Joi.string()
-						.min(3)
-						.max(35),
+			title: Joi.string()
+				.min(1)
+				.max(35)
+				.allow(''),
 			lat: isNew ? Joi.number().required() : Joi.number(),
 			lng: isNew ? Joi.number().required() : Joi.number(),
 			description: Joi.string()
