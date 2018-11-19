@@ -19,7 +19,6 @@ export const createUser = async (args: NewUserDataWithRoles): Promise<UserType> 
 		debug(err._object)
 		throw new ValidationError(err)
 	})
-	// $FlowFixMe TODO
 	const edges = []
 	const pred =
 		args.roles && args.roles.includes('teacher')
@@ -30,5 +29,6 @@ export const createUser = async (args: NewUserDataWithRoles): Promise<UserType> 
 	if (addToClassrooms && pred) edges.push(...addToClassrooms.map((toUid) => [{ pred, toUid }, {}]))
 	const newUser: UserType = await createNodeWithEdges(validatedUserData, edges)
 	const fetched = await getUser({ uid: newUser.uid })
-	return newUser
+	if (!fetched) throw new Error('There was a problem creating this user')
+	return fetched
 }

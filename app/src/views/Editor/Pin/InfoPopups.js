@@ -1,7 +1,7 @@
 // @flow
 import styled from 'styled-components'
 
-// TODO: This 'visible' check shouldn't be necessary.
+// @todo This 'visible' check shouldn't be necessary.
 // This forces us to render all popup wrappers.
 // But there's a weird problem with unmounting.
 // To test: try rendering popup wrappers based on `visible`

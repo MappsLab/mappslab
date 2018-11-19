@@ -35,7 +35,7 @@ const apiLink = split(
 	uploadLink,
 )
 
-// TODO Return IDs from more objects for better caching
+// @todo Return IDs from more objects for better caching
 const cache = new InMemoryCache({
 	addTypename: true,
 	fragmentMatcher,

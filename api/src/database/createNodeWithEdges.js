@@ -14,11 +14,10 @@ const debug = require('debug')('api')
  *
  */
 
-// TODO: Define FlowType to allow for an empty EdgeConfig,
+// @todo Define FlowType to allow for an empty EdgeConfig,
 // Or create a wrapper function to apply a default
 type NewRelationship = [PartialEdge, EdgeConfig]
 
-// TODO: Allow for a single relationship. Do some arrayifying or something
 type NewRelationships = Array<NewRelationship>
 
 const createNodeWithEdges = async (nodeData: Object, relationships: NewRelationships, existingTxn?: Txn): Promise<Object> => {

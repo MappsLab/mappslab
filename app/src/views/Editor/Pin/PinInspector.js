@@ -33,7 +33,7 @@ type PinInspectorProps = BaseProps & {
 class PinInspector extends React.Component<PinInspectorProps> {
 	componentWillUnmount() {
 		const { pin } = this.props
-		// TODO: Build smarter Form context
+		// @todo Build smarter Form context
 		// this setTimeout is hacky and only there to allow
 		// child EditableTexts to submit changes.
 		// Make them stateless and handle submitting & form state in context
@@ -42,7 +42,7 @@ class PinInspector extends React.Component<PinInspectorProps> {
 
 	submitUpdate = async (args) => {
 		const { pin, viewer, updatePin, sendNotification } = this.props
-		// TODO: add a 'viewerOwnsPin' field to the GraphQL API
+		// @todo add a 'viewerOwnsPin' field to the GraphQL API
 		const viewerIsOwner = Boolean(viewer && pin.owner.uid === viewer.uid)
 
 		if (!viewerIsOwner) return
@@ -56,14 +56,12 @@ class PinInspector extends React.Component<PinInspectorProps> {
 
 	removePin = () => {
 		const { pin, deletePin } = this.props
-		// TODO: add a 'viewerOwnsPin' field to the GraphQL API
 
 		deletePin({ variables: { uid: pin.uid } })
 	}
 
 	render() {
 		const { pin, viewer, closeInspector } = this.props
-		// TODO: add a 'viewerOwnsPin' field to the GraphQL API
 		const viewerIsOwner = Boolean(viewer && pin.owner.uid === viewer.uid)
 
 		return (

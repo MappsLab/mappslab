@@ -72,7 +72,7 @@ export const clean = async <T>(pinData: T): Promise<T> =>
  */
 
 const parse = pipe(
-	// $FlowFixMe -- TODO
+	// $FlowFixMe
 	parseSingularFields(singleFields),
 	when(propEq('description', undefined), assoc('description', '')),
 	when(propEq('draft', undefined), assoc('draft', false)),

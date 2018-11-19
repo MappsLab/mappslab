@@ -55,7 +55,7 @@ export const clean = <T: UpdateRouteData | NewRouteData>(routeData: T): Promise<
  */
 
 const parse = pipe(
-	// $FlowFixMe -- TODO
+	// $FlowFixMe
 	// parseSingularFields(singleFields),
 	// when(propEq('description', undefined), assoc('description', '')),
 	(o) => o,

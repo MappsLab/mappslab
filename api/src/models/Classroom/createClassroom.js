@@ -18,7 +18,7 @@ export const createClassroom = async (classroomData: NewClassroomData): Promise<
 		debug(err._object)
 		throw new ValidationError(err)
 	})
-	// $FlowFixMe -- TODO: How to type a generic function to return a specific type?
+	// $FlowFixMe --
 	return createNode(validatedClassroomData)
 }
 

@@ -48,7 +48,7 @@ export const clean = async (mapData: UpdateMapData = {}): Promise<UpdateMapData>
 
 const singleFields = []
 const parse = pipe(
-	// $FlowFixMe -- TODO
+	// $FlowFixMe
 	parseSingularFields(singleFields),
 	when(propEq('description', undefined), assoc('description', '')),
 )

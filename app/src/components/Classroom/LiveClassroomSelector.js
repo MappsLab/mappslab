@@ -13,7 +13,7 @@ type Props = {
 	onSelect: ({ value: string }) => void,
 }
 
-// TODO: Abstract the query implementation into LiveSelector
+// @todo Abstract the query implementation into LiveSelector
 
 const LiveClassroomSelector = ({ disabled, delayQuery, onSelect }: Props) => (
 	<ClassroomsQuery variables={{ first: 25 }} delayQuery={delayQuery} LoadingComponent={false}>

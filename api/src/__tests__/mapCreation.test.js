@@ -70,16 +70,6 @@ describe('[createMap]', () => {
 		expect(result.errors).toMatchSnapshot()
 	})
 
-	// it('should return an error if the classroom does not exist', async () => {
-	// TODO: Figure out how to handle this
-	// 	const vars = {
-	// 		...variables,
-	// 		classroomUid: '0x123abc666xyz',
-	// 	}
-	// 	const result = await request(q, { variables: vars, context })
-	// 	expect(result.errors).toMatchSnapshot()
-	// })
-
 	it('Should add a new map', async () => {
 		const vars = {
 			...variables,

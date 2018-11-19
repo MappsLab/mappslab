@@ -22,7 +22,6 @@ export const getClassroomUsers = (userType: string): Function => async (
 	classroomUid: string,
 	/* args: PaginationFilterArgs, */
 ): Promise<Array<UserType>> => {
-	// TODO: build filter into `teaches` relationship
 	const relationship = userType === 'teachers' ? '~teaches_in' : '~learns_in'
 	const q = `query getTeachers($username: string) {
 		classroom(func: uid(${classroomUid})) {
