@@ -22,6 +22,7 @@ const statechart = {
 					},
 					initial: 'DropMode',
 					on: {
+						clickedDropPin: '#Browse',
 						droppedPin: '#Inspect',
 						enterConnect: '#Connect',
 					},
