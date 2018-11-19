@@ -2,7 +2,7 @@ const path = require('path')
 
 module.exports = function(api) {
 	const env = api.env()
-	const projectRoot = env === 'development' ? path.resolve(__dirname, 'src') : path.resolve(__dirname, 'dist')
+	const projectRoot = env === 'production' ? path.resolve(__dirname, 'dist') : path.resolve(__dirname, 'src')
 	api.cache(env === 'development')
 	return {
 		presets: [
