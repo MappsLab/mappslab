@@ -5,8 +5,10 @@ import type { MapType } from 'Types/MapTypes'
 import type { UserType } from 'Types/UserTypes'
 import { assemblePage } from 'Utils/graphql'
 
-// @todo remove User.getClassroomStudents and User.getClassroomTeachers
-// @body use filters insteadl
+/**
+ * @todo remove User.getClassroomStudents and User.getClassroomTeachers
+ * @body use filters instead
+ */
 
 export const classroomStudents = async (
 	fetchedClassroom: ClassroomType,

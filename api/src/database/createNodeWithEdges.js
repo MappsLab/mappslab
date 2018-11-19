@@ -14,8 +14,10 @@ const debug = require('debug')('api')
  *
  */
 
-// @todo Define FlowType to allow for an empty EdgeConfig,
-// Or create a wrapper function to apply a default
+/*
+ * @todo Define FlowType to allow for an empty EdgeConfig
+ * @body Or create a wrapper function to apply a default
+ */
 type NewRelationship = [PartialEdge, EdgeConfig]
 
 type NewRelationships = Array<NewRelationship>

@@ -49,8 +49,8 @@ const mutateNode = async (uid: string, data: DBNode, existingTxn?: Txn): Promise
 		if (!existingTxn) await txn.commit()
 		debug(`Mutated node with uid ${uid}:`)
 		debug({ uid, ...flattened })
-		// @todo add polymorphic input type to mutateNode
-		// $FlowFixMse
+		/* @todo add polymorphic input type to mutateNode */
+		// $FlowFixMe
 		return {
 			uid,
 			...data,
