@@ -114,10 +114,14 @@ class MapEditor extends React.Component<EditorProps> {
 			startSubscription({
 				subscribeToMore,
 				variables: { mapUid },
-				// callback: this.logSubscriptionUpdate(s.name),
+				callback: this.logSubscriptionUpdate(s.name),
 				...s,
 			}),
 		)
+	}
+
+	logSubscriptionUpdate = (previous, updated) => {
+		console.log(previous, updated)
 	}
 
 	subscriptions: Array<Subscription>

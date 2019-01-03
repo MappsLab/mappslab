@@ -32,12 +32,13 @@ type PinInspectorProps = BaseProps & {
 
 class PinInspector extends React.Component<PinInspectorProps> {
 	componentWillUnmount() {
-		const { pin } = this.props
+		const { pin, viewer } = this.props
 		// @todo Build smarter Form context
 		// this setTimeout is hacky and only there to allow
 		// child EditableTexts to submit changes.
 		// Make them stateless and handle submitting & form state in context
-		if (pin.draft) setTimeout(() => this.removePin(), 100)
+		const viewerIsOwner = Boolean(viewer && pin.owner.uid === viewer.uid)
+		if (pin.draft && viewerIsOwner) setTimeout(() => this.removePin(), 100)
 	}
 
 	submitUpdate = async (args) => {
@@ -50,8 +51,9 @@ class PinInspector extends React.Component<PinInspectorProps> {
 			uid: pin.uid,
 			...args,
 		}
-		await updatePin({ variables })
-		sendNotification({ message: `Updated pin ${pin.title}` })
+		const update = await updatePin({ variables })
+		const updatedPin = update.data.updatePin
+		sendNotification({ message: `Updated pin ${updatedPin.title}` })
 	}
 
 	removePin = () => {
@@ -90,9 +92,11 @@ class PinInspector extends React.Component<PinInspectorProps> {
 					initialValue={pin.description}
 					viewerCanEdit={viewerIsOwner}
 				/>
-				<NativeListener onClick={this.removePin}>
-					<Button level="tertiary">{pin.draft ? 'Cancel' : 'Delete'}</Button>
-				</NativeListener>
+				{viewerIsOwner ? (
+					<NativeListener onClick={this.removePin}>
+						<Button level="tertiary">{pin.draft ? 'Cancel' : 'Delete'}</Button>
+					</NativeListener>
+				) : null}
 			</Pane>
 		)
 	}
