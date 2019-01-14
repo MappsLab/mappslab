@@ -78,7 +78,7 @@
     "eslint-plugin-jest": "^22.0.0",
     "eslint-plugin-jsx-a11y": "^6.1.2",
     "eslint-plugin-react": "^7.11.1",
-    "flow-bin": "^0.86.0",
+    "flow-bin": "^0.90.0",
     "flow-typed": "^2.5.1",
     "jest": "^23.6.0",
     "jest-dom": "^2.1.1",
