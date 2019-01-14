@@ -36,6 +36,14 @@ const Pin = /* GraphQL */ `
 		deleted: Boolean
 		addToMaps: [String]!
 		lessonUids: [String]
+		addToRoute: AddPinToRouteInput
+	}
+
+	input AddPinToRouteInput {
+		# if no routeUid is supplied, a new route will be created
+		routeUid: String
+		# if no afterPin is supplied, this new pin will be placed at the beginning
+		afterPin: String
 	}
 
 	input GetPinInput {
@@ -50,6 +58,7 @@ const Pin = /* GraphQL */ `
 		description: String
 		addToMaps: [String]
 		lessonUids: [String]
+		addToRoute: AddPinToRouteInput
 	}
 
 	input PinSortParameter {

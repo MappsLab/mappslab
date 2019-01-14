@@ -45,30 +45,6 @@ describe('[map]', () => {
 							}
 						}
 					}
-					routes {
-						edges {
-							cursor
-							node {
-								maps {
-									edges {
-										cursor
-									}
-								}
-								pins {
-									edges {
-										node {
-											uid
-											maps {
-												edges {
-													cursor
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
 				}
 			}
 		`
@@ -76,13 +52,5 @@ describe('[map]', () => {
 		const result = await request(query, { variables })
 		expect(result.data.map.title).toBe(maps[5].title)
 		expect(result.data.map.pins.edges.length).toBeGreaterThan(0)
-		// console.log(result.data.map.routes.edges)
-		// console.log(result.data.map.routes.edges)
-		result.data.map.routes.edges.map((route) => {
-			route.node.pins.edges.map((pin) => {
-				const mapUids = pin.node.maps.edges.map((map) => map.cursor)
-				expect(mapUids.includes(maps[5].uid)).toBe(true)
-			})
-		})
 	})
 })

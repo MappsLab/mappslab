@@ -1,13 +1,14 @@
 // @flow
 import { getRoute, getRoutes } from './readRoute'
-import { updateRoute } from './updateRoute'
+import { updateRoute, addPin } from './updateRoute'
 import { createRoute } from './createRoute'
 import { deleteRoute } from './deleteRoute'
 
-export default  {
+export default {
 	getRoute,
 	getRoutes,
 	updateRoute,
 	createRoute,
 	deleteRoute,
+	addPin,
 }

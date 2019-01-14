@@ -31,7 +31,7 @@ export const deletePin = async ({ uid }: RemovePinInput, viewer: UserType): Prom
 	const pin = result.getPin[0]
 	const cleaned = await clean({ uid, deleted: true })
 	const validatedPinData = await validateUpdate(cleaned)
-	const mutationResult = await mutateNode(pin.uid, { uid: pin.uid, ...validatedPinData })
+	const mutationResult = await mutateNode(pin.uid, { data: { uid: pin.uid, ...validatedPinData } })
 
 	return {
 		success: mutationResult !== null,

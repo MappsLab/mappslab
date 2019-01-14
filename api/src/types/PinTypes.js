@@ -25,6 +25,10 @@ export type NewPinData = {
 	lng: number,
 	addToMaps?: Array<string>,
 	addToLessons?: Array<string>,
+	addToRoute?: {
+		routeUid?: string,
+		afterPin?: string,
+	},
 }
 
 export type RemovePinInput = {
@@ -38,5 +42,9 @@ export type UpdatePinData = {
 	lng?: number,
 	addToMaps?: Array<string>,
 	addToLessons?: Array<string>,
+	addToRoute?: {
+		routeUid: string,
+		afterPin?: string,
+	},
 	deleted: boolean,
 }

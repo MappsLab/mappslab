@@ -1,13 +1,46 @@
 // @flow
 
 import * as R from 'ramda'
-import type { Filter, PaginationFilterArgs } from 'Types/sharedTypes'
+import type { Facet } from 'Types/database'
+import type { PaginationFilterArgs } from 'Types/sharedTypes'
 import makeFilterString from './makeFilterString'
+
+/**
+ * Format facets { key: 'value' } => (key=value)
+ */
+
+const isValidDate = (date): boolean =>
+	typeof date === 'object' && Object.prototype.toString.call(date) === '[object Date]' && !Number.isNaN(date)
+
+const toString = (val: mixed) => {
+	switch (typeof val) {
+		case 'string':
+			return val
+		case 'boolean':
+		case 'number':
+			return val.toString()
+		case 'object':
+			// $FlowFixMe
+			if (isValidDate(val)) return val.toISOString()
+			throw new Error('Facet value must be a string, boolean, number, or Date')
+		default:
+			throw new Error('Facet value must be a string, boolean, number, or Date')
+	}
+}
+
+export const serializeFacets = (facets: Array<Facet> = []): string =>
+	Object.entries(facets).length
+		? Object.entries(facets)
+				.map(([key, value]) => `${key}=${toString(value)}`)
+				.join(', ')
+				.replace(/(.*)/, '($1)')
+		: ''
 
 /**
  * Properly formats incoming variables with '$' for dgraph
  */
 
+// $FlowFixMe
 export const createVariables = R.pipe(
 	R.toPairs,
 	R.reduce(

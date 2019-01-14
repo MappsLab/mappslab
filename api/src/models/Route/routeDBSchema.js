@@ -1,6 +1,6 @@
 // @flow
 import Joi from 'joi'
-import { pipe, head, assoc, dissoc, merge, when, propEq, map } from 'ramda'
+import { when, dissoc, prop, pipe, head, merge, map } from 'ramda'
 import type { NewRouteData, UpdateRouteData, RouteType } from 'Types/RouteTypes'
 import { promisePipe, filterNullAndUndefined } from 'Utils'
 import { parseSingularFields } from 'Utils/parsing'
@@ -10,24 +10,20 @@ import { parseSingularFields } from 'Utils/parsing'
  */
 
 export const routeSchema = (isNew: boolean = true) =>
-	Joi.object().keys({
-		title: isNew
-			? Joi.string()
-					.min(3)
-					.max(35)
-					.required()
-					.default('Untitled Route')
-			: Joi.string()
-					.min(3)
-					.max(35),
-		createdAt: isNew
-			? Joi.date().default(new Date())
-			: // .required()
-			  Joi.any().forbidden(),
-		updatedAt: Joi.date().required(),
-		deleted: isNew ? Joi.boolean().default(false) : Joi.boolean(),
-		type: Joi.any().only('route'),
-	})
+	Joi.object()
+		.keys({
+			title: Joi.string()
+				.min(3)
+				.max(35)
+				.default('Untitled Route'),
+			createdAt: isNew
+				? Joi.date().default(new Date()) // .required()
+				: Joi.any().forbidden(),
+			updatedAt: Joi.date().required(),
+			deleted: isNew ? Joi.boolean().default(false) : Joi.boolean(),
+			type: Joi.any().only('route'),
+		})
+		.options({ stripUnknown: true })
 
 export const defaultValues = {
 	type: 'route',
@@ -37,8 +33,21 @@ export const defaultValues = {
 export const validateNew = (routeData: NewRouteData) => Joi.validate(routeData, routeSchema(true))
 export const validateUpdate = (routeData: UpdateRouteData) => Joi.validate(routeData, routeSchema(false))
 
-export const publicFields = ['uid', 'title', 'updatedAt'].join('\n')
-// const singleFields = ['owner']
+export const publicFields = [
+	//
+	'uid',
+	'title',
+	'updatedAt',
+	`pins: includes_pin @facets(order) {
+		uid
+		title
+	}`,
+	`owner: ~owns_route {
+		uid
+		username
+	}`,
+].join('\n')
+const singleFields = ['owner']
 /**
  * Clean
  */
@@ -54,10 +63,20 @@ export const clean = <T: UpdateRouteData | NewRouteData>(routeData: T): Promise<
  * Parse
  */
 
+const sortPins = (obj) => {
+	const { pins } = obj
+	const sortedPins = [...pins].sort((a, b) => (a['pins|order'] < b['pins|order'] ? -1 : 1))
+	return {
+		...obj,
+		pins: sortedPins,
+	}
+}
+
 const parse = pipe(
 	// $FlowFixMe
-	// parseSingularFields(singleFields),
+	parseSingularFields(singleFields),
 	// when(propEq('description', undefined), assoc('description', '')),
+	when(prop('pins'), sortPins),
 	(o) => o,
 )
 

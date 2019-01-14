@@ -7,6 +7,6 @@ export const updateClassroom = async (args: UpdateClassroomInput): Promise<Class
 	const { uid, ...classroomData } = args
 	const cleaned = await clean(classroomData)
 	const validatedClassroomData = await validateUpdate(cleaned)
-	const updatedClassroom: ClassroomType = await mutateNode(uid, validatedClassroomData)
+	const updatedClassroom: ClassroomType = await mutateNode(uid, { data: validatedClassroomData })
 	return updatedClassroom
 }

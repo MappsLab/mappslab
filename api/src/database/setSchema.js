@@ -29,6 +29,8 @@ export const setSchema = async () => {
 		'learns_in: uid @reverse @count . ',
 		/* <user> <pinned> <pin> */
 		'pinned: uid @reverse @count . ',
+		/* <user> <owns_route> <route> */
+		'owns_route: uid @reverse . ',
 
 		/**
 		 * Classroom Indices

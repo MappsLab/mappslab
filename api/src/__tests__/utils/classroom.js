@@ -88,9 +88,5 @@ export const assignUser = async (
 	const context = { viewer }
 	const variables = { input }
 	const result = await request(assignUserMutation, { variables, context })
-	console.log(result)
-	console.log(result)
-	console.log(result)
-	console.log(result)
 	return result.data.updateUser
 }

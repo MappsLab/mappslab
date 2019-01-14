@@ -48,7 +48,7 @@ export const createResetToken = async (userUid: string): Promise<PasswordReset> 
 	const passwordReset = { token, expires }
 	const cleaned = await clean({ passwordReset })
 	const validated = await validateUpdate(cleaned)
-	await mutateNode(userUid, validated)
+	await mutateNode(userUid, { data: validated })
 	return passwordReset
 }
 
@@ -77,7 +77,7 @@ export const resetPassword = async (credentials: PasswordResetInput): Promise<Us
 	}
 	const cleaned = await clean({ password, passwordReset, temporaryPassword: null, temporaryPasswordExpires: null })
 	const validated = await validateUpdate(cleaned)
-	await mutateNode(user.uid, validated)
+	await mutateNode(user.uid, { data: validated })
 	return user
 }
 
@@ -98,7 +98,7 @@ export const setTemporaryPassword = async (input: SetTemporaryPasswordInput, vie
 	const temporaryPasswordExpires = new Date(Date.now() + 3600000)
 	const cleaned = await clean({ temporaryPassword, temporaryPasswordExpires })
 	const validated = await validateUpdate(cleaned)
-	await mutateNode(user.uid, validated)
+	await mutateNode(user.uid, { data: validated })
 	return {
 		success: true,
 		messages: [],

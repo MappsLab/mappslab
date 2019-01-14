@@ -2,20 +2,19 @@
 
 import type { UserType } from 'Types/UserTypes'
 import type { MapType } from 'Types/MapTypes'
+import type { PinType } from 'Types/PinTypes'
 
 export type RouteType = {
 	uid: string,
 	title?: string,
-	lat: number,
-	lng: number,
-	owner?: UserType,
+	owner: UserType,
 	maps?: Array<MapType>,
+	pins: Array<?PinType>,
 }
 
 export type NewRouteData = {
 	title?: string,
-	addPins?: Array<string>,
-	addPin?: string,
+	pins: Array<string>,
 }
 
 export type UpdateRouteData = NewRouteData & {

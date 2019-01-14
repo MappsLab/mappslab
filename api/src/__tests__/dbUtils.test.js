@@ -1,4 +1,4 @@
-import { createQueryStrings } from 'Database/utils'
+import { createQueryStrings, serializeFacets } from 'Database/utils'
 
 // describe('[makePaginationString]', () => {
 // 	it('should return a "first" that is +1 from the supplied "first"', async () => {
@@ -8,6 +8,56 @@ import { createQueryStrings } from 'Database/utils'
 // })
 
 const stripNsandTs = (str) => str.replace(/\n|\t|/g, ' ').replace(/\s+/g, ' ')
+
+describe.only('[serializeFacets]', () => {
+	it('should properly format dates', () => {
+		const facets = { date: new Date('2000') }
+		const serialized = serializeFacets(facets)
+		expect(serialized).toBe('(date=2000-01-01T00:00:00.000Z)')
+	})
+
+	it('should properly format booleans', () => {
+		const facets = { happy: true }
+		const serialized = serializeFacets(facets)
+		expect(serialized).toBe('(happy=true)')
+	})
+
+	it('should properly format integers', () => {
+		const facets = { age: 33 }
+		const serialized = serializeFacets(facets)
+		expect(serialized).toBe('(age=33)')
+	})
+
+	it('should properly format floats', () => {
+		const facets = { gpa: 3.5 }
+		const serialized = serializeFacets(facets)
+		expect(serialized).toBe('(gpa=3.5)')
+	})
+
+	it('should properly format strings', () => {
+		const facets = { name: 'joseph' }
+		const serialized = serializeFacets(facets)
+		expect(serialized).toBe('(name=joseph)')
+	})
+
+	it('should properly format multiple facets', () => {
+		const facets = { name: 'joseph', age: 33, gpa: 3.5 }
+		const serialized = serializeFacets(facets)
+		expect(serialized).toBe('(name=joseph, age=33, gpa=3.5)')
+	})
+
+	it('should return an empty string if no values are provided', () => {
+		const facets = {}
+		const serialized = serializeFacets(facets)
+		expect(serialized).toBe('')
+	})
+
+	it('should throw an error if unsupported data types are used', async () => {
+		const facets = { dogs: ['frank', 'ursa'] }
+		const serialize = () => serializeFacets(facets)
+		expect(serialize).toThrow('Facet value must be a string, boolean, number, or Date')
+	})
+})
 
 describe('[makeFilterString]', () => {
 	const assertFilters = (filters) =>
@@ -26,7 +76,6 @@ describe('[makeFilterString]', () => {
 					},
 				},
 				expected: {
-					// Received   "@filter((eq(deleted, false)) AND (regexp(title, /word/i)))"
 					filterString: '@filter((eq(deleted, false)) AND (regexp(title, /word/i)))',
 				},
 			},
@@ -75,12 +124,6 @@ describe('[makeFilterString]', () => {
 		]
 
 		assertFilters(filters)
-		/* Arrange */
-		// const { container, getByTestId } = render( ... )
-		/* Act */
-
-		/* Assert */
-		// expect(...)
 	})
 
 	it('should properly format number operators', async () => {

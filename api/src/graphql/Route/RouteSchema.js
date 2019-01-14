@@ -12,14 +12,14 @@ const Route = /* GraphQL */ `
 	input NewRouteInput {
 		title: String
 		addPin: String
-		addPins: [String]
+		pins: [String]
 	}
 
 	input UpdateRouteInput {
 		title: String
 		addPin: String
 		removePin: String
-		addPins: [String]
+		pins: [String]
 		removePins: [String]
 	}
 
@@ -59,6 +59,7 @@ const Route = /* GraphQL */ `
 
 	extend type Mutation {
 		createRoute(input: NewRouteInput!): Route!
+		addPinToRoute(input: AddPinToRouteInput!): Route!
 		updateRoute(input: UpdateRouteInput!): Route!
 		deleteRoute(uid: String!): Boolean!
 	}

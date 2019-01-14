@@ -30,5 +30,6 @@ export const getRoutes = async (args?: PaginationFilterArgs = {}): Promise<Array
 	`
 	const result = await query(q)
 	if (!result || !result.getRoutes) return []
-	return parseRouteResults(result.getRoutes)
+	const parsed = await parseRouteResults(result.getRoutes)
+	return parsed
 }

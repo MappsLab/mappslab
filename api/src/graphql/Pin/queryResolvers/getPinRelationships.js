@@ -2,6 +2,7 @@
 import type { UserType } from 'Types/UserTypes'
 import type { MapType } from 'Types/MapTypes'
 import type { PinType, GetPinArgs } from 'Types/PinTypes'
+import type { RouteType } from 'Types/RouteTypes'
 import type { GraphQLContext, PageType, PaginationInput } from 'Types/sharedTypes'
 import { assemblePage } from 'Utils/graphql'
 
@@ -24,4 +25,15 @@ export const maps = async (
 	const fetchedMaps = await ctx.models.Map.getMaps(filter /* input */)
 	if (!fetchedMaps) return null
 	return assemblePage(fetchedMaps, input)
+}
+
+export const routes = async (
+	fetchedPin: PinType,
+	{ input }: PaginationInput,
+	ctx: GraphQLContext,
+): Promise<PageType<RouteType> | null> => {
+	const filter = { where: { routeContainsPin: { eq: fetchedPin.uid } } }
+	const fetchedRoutes = await ctx.models.Route.getRoutes(filter)
+	if (!fetchedRoutes) return null
+	return assemblePage(fetchedRoutes, input)
 }

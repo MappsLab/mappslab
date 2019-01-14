@@ -1,5 +1,5 @@
 const deepMerge = require('deepmerge')
-const baseConfig = require('../.eslintrc')
+const baseConfig = require('../../.eslintrc')
 
 const config = deepMerge(
 	{

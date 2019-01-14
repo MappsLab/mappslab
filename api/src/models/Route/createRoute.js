@@ -3,20 +3,20 @@ import type { RouteType, NewRouteData } from 'Types/RouteTypes'
 import { createNodeWithEdges } from 'Database'
 import { clean, validateNew } from './routeDBSchema'
 
-export const createRoute = async ({ addPin, addPins, ...rest }: NewRouteData, ownerUid: string): Promise<RouteType> => {
-	const newPin = addPin || undefined
-	const newPins = addPins || []
-	const pins = [newPin, ...newPins].filter(Boolean)
-
-	const cleaned = await clean({ ...rest })
+export const createRoute = async (args: NewRouteData, ownerUid: string): Promise<RouteType> => {
+	const { pins } = args
+	const cleaned = await clean(args)
 	const validated = await validateNew(cleaned)
 
 	const edges = [
 		[{ fromUid: ownerUid, pred: 'owns_route' }, {}],
-		...pins.map((pinUid) => [
+		...pins.map((pinUid, order) => [
 			{
 				toUid: pinUid,
 				pred: 'includes_pin',
+				facets: {
+					order,
+				},
 			},
 			{},
 		]),

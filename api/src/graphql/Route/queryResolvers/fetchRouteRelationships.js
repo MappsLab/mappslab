@@ -1,5 +1,4 @@
 // @flow
-import deepMerge from 'deepmerge'
 import type { PinType } from 'Types/PinTypes'
 import type { RouteType } from 'Types/RouteTypes'
 import type { GraphQLContext, PageType, PaginationInput } from 'Types/sharedTypes'
@@ -10,14 +9,12 @@ export const pins = async (
 	{ input }: PaginationInput,
 	ctx: GraphQLContext,
 ): Promise<PageType<PinType>> => {
-	const mapFilter = {
-		where: {
-			pinWithinRoute: {
-				eq: fetchedRoute.uid,
-			},
-		},
-	}
-	const mergedInput = deepMerge(input || {}, mapFilter)
-	const fetchedPins = await ctx.models.Pin.getPins(mergedInput)
+	/* This one works a little differently from other relationship resolvers.
+	 *
+	 * Others will generate a filter to pass to the target item's model.
+	 * In this scenario, we already have an array of [pins] provided by the GetRoute model
+	 * So, we just use that pin data (containing only UIDs) to fetch the full pin data
+	 */
+	const fetchedPins = await Promise.all(fetchedRoute.pins.map((pin) => ctx.models.Pin.getPin(pin.uid)))
 	return assemblePage(fetchedPins, input)
 }

@@ -1,6 +1,5 @@
 // @flow
-import { pick } from 'ramda'
-import type { PartialEdge, EdgeConfig, Txn } from 'Types/database'
+import type { EdgeInput, Txn } from 'Types/database'
 import dbClient from './client'
 import createEdge from './createEdge'
 
@@ -18,11 +17,10 @@ const debug = require('debug')('api')
  * @todo Define FlowType to allow for an empty EdgeConfig
  * @body Or create a wrapper function to apply a default
  */
-type NewRelationship = [PartialEdge, EdgeConfig]
 
-type NewRelationships = Array<NewRelationship>
+type NewEdges = Array<EdgeInput>
 
-const createNodeWithEdges = async (nodeData: Object, relationships: NewRelationships, existingTxn?: Txn): Promise<Object> => {
+const createNodeWithEdges = async (nodeData: Object, edges: NewEdges, existingTxn?: Txn): Promise<Object> => {
 	const txn = existingTxn || dbClient.newTxn()
 	try {
 		// create the new node
@@ -34,18 +32,19 @@ const createNodeWithEdges = async (nodeData: Object, relationships: NewRelations
 		debug(newNodeUid)
 
 		const newEdges = await Promise.all(
-			relationships.map(async ([partialEdge, edgeConfig]) => {
-				const { toUid, fromUid, pred } = pick(['toUid', 'fromUid', 'pred'], partialEdge)
+			edges.map(async ([partialEdge, edgeConfig]) => {
+				const { toUid, fromUid, pred, facets } = partialEdge
 				if ((toUid && fromUid) || (!toUid && !fromUid))
 					throw new Error('To create a new edge, supply either a toUid or a fromUid, not both')
-				const newRelationship = toUid
+				const newEdge = toUid
 					? // If a toUid exists set the new node as the 'from' uid
-					  { toUid, pred, fromUid: newNodeUid }
+					  { toUid, pred, fromUid: newNodeUid, facets }
 					: // Otherwise, set the new node as the 'to' uid
-					  { toUid: newNodeUid, pred, fromUid }
-				debug(newRelationship)
-				await createEdge(newRelationship, edgeConfig, txn)
-				return newRelationship
+					  { toUid: newNodeUid, pred, fromUid, facets }
+				debug(newEdge)
+				// $FlowFixMe
+				await createEdge(newEdge, edgeConfig, txn)
+				return newEdge
 			}),
 		)
 		debug(`Created new node with uid ${newNodeUid} with ${newEdges.length} edges`)
