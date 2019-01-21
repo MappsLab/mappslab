@@ -1,12 +1,16 @@
 // @flow
 
-import { pins } from './fetchRouteRelationships'
+import { pins, owner } from './fetchRouteRelationships'
+import { route, routes } from './getRoutes'
 
 export default {
 	Query: {
-		// route // route by ID
+		route,
+		routes,
 	},
 	Route: {
 		pins,
+		owner,
+		// maps
 	},
 }

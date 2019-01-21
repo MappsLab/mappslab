@@ -8,6 +8,7 @@ const User = /* GraphQL */ `
 		maps: MapConnection
 		roles: [String]
 		pins(input: PaginationInput): PinConnection
+		routes(input: PaginationInput): RouteConnection
 		email: String
 	}
 

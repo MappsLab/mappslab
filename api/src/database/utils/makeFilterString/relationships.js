@@ -32,6 +32,7 @@ const relationshipStringCreators = {
 	userTeachesIn: genericRelationship('teaches_in'),
 	userLearnsIn: genericRelationship('learns_in'),
 	userOwnsPin: genericRelationship('pinned'),
+	userOwnsRoute: genericRelationship('owns_route'),
 
 	// Classroom-first relationships
 	classroomHasStudent: genericRelationship('~learns_in'),

@@ -12,6 +12,10 @@ export type RouteType = {
 	pins: Array<?PinType>,
 }
 
+export type GetRouteArgs = {
+	uid: string,
+}
+
 export type NewRouteData = {
 	title?: string,
 	pins: Array<string>,

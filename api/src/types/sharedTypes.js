@@ -27,13 +27,9 @@ export type PaginationInput = {
 	input?: PaginationFilterArgs,
 }
 
-export type GetNodeArgs =
-	| {
-			uid: string,
-	  }
-	| {
-			slug: string,
-	  }
+export type GetNodeArgs = {
+	uid: string,
+}
 
 export type GetNodeInput = {
 	input: GetNodeArgs,

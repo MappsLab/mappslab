@@ -45,6 +45,8 @@ export const setSchema = async () => {
 		'has_goal: uid @reverse @count . ',
 		/* <map> <has_pin> <pin> */
 		'has_pin: uid @reverse @count . ',
+		/* <map> <has_pin> <pin> */
+		'has_pin: uid @reverse @count . ',
 
 		/**
 		 * Route Indices
