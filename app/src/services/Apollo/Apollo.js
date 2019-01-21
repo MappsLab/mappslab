@@ -5,13 +5,12 @@ import { ApolloProvider } from 'react-apollo'
 import { ApolloLink, split } from 'apollo-link'
 import { WebSocketLink } from 'apollo-link-ws'
 import { ApolloClient } from 'apollo-client'
-import { onError } from 'apollo-link-error'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { createUploadLink } from 'apollo-upload-client'
 import { getMainDefinition } from 'apollo-utilities'
-import { getCookie, VIEWER_COOKIE_TOKEN } from 'Utils/storage'
 import config from '../../config'
 import fragmentMatcher from './fragmentMatcher'
+import { setAuthHeader, logQueries, logErrors } from './middleware'
 
 const debug = require('debug')('app')
 
@@ -47,45 +46,6 @@ const cache = new InMemoryCache({
 				return object.uid || null
 		}
 	},
-})
-
-const setAuthHeader = new ApolloLink((operation, forward) => {
-	const authCookie = getCookie(VIEWER_COOKIE_TOKEN)
-	if (authCookie) {
-		operation.setContext({
-			headers: { Authorization: authCookie },
-		})
-	}
-	return forward(operation)
-})
-
-const logQueries = new ApolloLink((operation, forward) => {
-	const labelStyle = 'color: deepskyblue; font-weight: 800'
-	const messageStyle = 'color: gray'
-	if (process.env.NODE_ENV === 'development') {
-		const type = operation.query.definitions[0].operation
-		debug(`%c[GraphQL Logger] %c(link) Called ${type} ${operation.operationName}`, labelStyle, messageStyle)
-		if (operation.variables) debug(' variables ⤑ ', operation.variables)
-	}
-	return forward(operation).map((result) => {
-		if (process.env.NODE_ENV === 'development') {
-			debug(`%c[GraphQL Logger]%c (link) received result from ${operation.operationName}:`, labelStyle, messageStyle)
-			debug('           ⤑ ', result.data)
-		}
-		return result
-	})
-})
-
-const logErrors = onError(({ graphQLErrors, networkError }) => {
-	if (graphQLErrors) {
-		graphQLErrors.map(({ message, locations, path }) => {
-			debug(`[GraphQL Error] Message: ${message}, Location: ${locations}, Path: ${path}`)
-			debug('           ⤑ ', message)
-			debug('           ⤑ ', locations)
-			return false
-		})
-	}
-	if (networkError) debug(`[Network Error] ${networkError}`, networkError)
 })
 
 const link = ApolloLink.from([setAuthHeader, logQueries, logErrors, apiLink])

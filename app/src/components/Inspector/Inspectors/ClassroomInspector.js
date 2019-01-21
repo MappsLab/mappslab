@@ -45,7 +45,6 @@ const ClassroomInspector = (props: Props) => {
 
 	const update = async (fieldData) => {
 		const variables = { uid: classroom.uid, ...fieldData }
-		console.log(fieldData)
 		await updateClassroom({ variables })
 	}
 

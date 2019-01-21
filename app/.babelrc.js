@@ -45,6 +45,7 @@ module.exports = {
 					Styles: './src/theme',
 					Test: './src/__tests__',
 					Jest: './jest',
+					Shared: path.resolve(__dirname, '..', 'shared'),
 				},
 			},
 		],
