@@ -25,7 +25,6 @@ const NewPinButton = ({ onClick }: Props) => (
 	<State
 		is="Lesson.DropPin.*"
 		render={(dropMode) => {
-			console.log(dropMode)
 			return (
 				<Wrapper active={dropMode}>
 					<RoundButton

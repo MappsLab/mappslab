@@ -1,6 +1,6 @@
 // @flow
 import React from 'react'
-import { Marker, CustomPopup, pinEventNames } from 'mapp'
+import { Marker, CustomPopup, markerEventNames } from 'mapp'
 import { State } from 'react-automata'
 import type { PinType } from 'Types'
 import { MapConsumer } from '../Provider'
@@ -20,6 +20,7 @@ type PinProps = BaseProps & ProviderProps
 
 type PinState = {
 	mouseOver: boolean,
+	events: {},
 }
 
 class Pin extends React.Component<PinProps, PinState> {
@@ -29,6 +30,11 @@ class Pin extends React.Component<PinProps, PinState> {
 
 	state = {
 		mouseOver: false,
+		events: {},
+	}
+
+	componentDidMount() {
+		this.setState({ events: this.getPinEventHandlers() })
 	}
 
 	/**
@@ -53,7 +59,7 @@ class Pin extends React.Component<PinProps, PinState> {
 	}
 
 	getPinEventHandlers = () =>
-		pinEventNames.reduce(
+		markerEventNames.reduce(
 			(acc, name) => ({
 				...acc,
 				[name]: this.handleEvent(name),
@@ -63,7 +69,7 @@ class Pin extends React.Component<PinProps, PinState> {
 
 	render() {
 		const { pin, inspectedItem } = this.props
-		const { mouseOver } = this.state
+		const { mouseOver, events } = this.state
 		const { lat, lng } = pin
 		const isInspected = inspectedItem && inspectedItem.uid === pin.uid
 		const options = {
@@ -72,7 +78,6 @@ class Pin extends React.Component<PinProps, PinState> {
 				lng,
 			},
 		}
-
 		return (
 			<Marker
 				events={this.getPinEventHandlers()}

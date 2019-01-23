@@ -11,10 +11,6 @@ import { LiveClassroomSelector } from 'Components/Classroom'
  */
 
 const MyComponent = (props: Props) => {
-	const onSelect = (a, b) => {
-		console.log('!!!')
-		console.log(a, b)
-	}
 	return <LiveClassroomSelector onSelect={onSelect} />
 }
 
