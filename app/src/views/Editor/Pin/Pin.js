@@ -6,9 +6,9 @@ import type { PinType } from 'Types'
 import { eventsReducer } from 'Utils/data'
 import { MapConsumer } from '../Provider'
 import type { ProviderProps } from '../Provider'
-import { PopupWrapper } from './InfoPopups'
 import PinInspector from './PinInspector'
 import { pinEvents } from './pinEventHandlers'
+import PinHoverPopup from './PinHoverPopup'
 
 /**
  * Pin
@@ -51,7 +51,8 @@ class Pin extends React.Component<PinProps, PinState> {
 		const handler = eventsReducer(pinEvents, machineState.value, eventName)
 		if (handler) {
 			const result = handler({ payload, props: this.props })
-			const { state } = result
+			const { state, transition } = result
+			if (transition) transition()
 			if (state) this.setState(state)
 		}
 	}
@@ -72,7 +73,7 @@ class Pin extends React.Component<PinProps, PinState> {
 
 	render() {
 		const { pin, inspectedItem } = this.props
-		const { mouseOver, events } = this.state
+		const { mouseOver } = this.state
 		const { lat, lng } = pin
 		const isInspected = inspectedItem && inspectedItem.uid === pin.uid
 		const options = {
@@ -83,16 +84,15 @@ class Pin extends React.Component<PinProps, PinState> {
 		}
 		return (
 			<Marker
-				events={events}
+				// TODO: get all of these ahead of time
+				events={this.getPinEventHandlers()}
 				options={options}
 				render={({ anchor }) =>
 					anchor ? (
 						<React.Fragment>
 							{!isInspected && mouseOver ? (
 								<CustomPopup anchor={anchor}>
-									<PopupWrapper>
-										<p>{pin.title}</p>
-									</PopupWrapper>
+									<PinHoverPopup pin={pin} />
 								</CustomPopup>
 							) : null}
 							{isInspected ? (

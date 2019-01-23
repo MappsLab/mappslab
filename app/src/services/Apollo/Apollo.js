@@ -12,7 +12,7 @@ import config from '../../config'
 import fragmentMatcher from './fragmentMatcher'
 import { setAuthHeader, logQueries, logErrors } from './middleware'
 
-const debug = require('debug')('app')
+const debug = require('debug')('_app')
 
 debug(`Using API endpoint: ${config.apiRoot}`)
 

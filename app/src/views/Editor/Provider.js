@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react'
-import type { MappRenderProps, MappUtils } from 'mapp'
+import type { MappRenderProps, MappUtils, LatLng } from 'mapp'
 import { withStateMachine } from 'react-automata'
 import type { MachineState } from 'react-automata'
 import { CurrentViewerQuery, MapQuery } from 'Queries'
@@ -40,6 +40,7 @@ type Props = MappRenderProps & {
 
 type State = {
 	mapUid: string | null,
+	userLatLng: LatLng | null,
 }
 
 type Utils = $PropertyType<MappRenderProps, 'utils'>
@@ -50,7 +51,10 @@ export type ProviderProps = Utils & {
 	setMap: (string) => void,
 	mapData?: MapType,
 	transition: (string, ?{}) => void,
+	updateMapState: (string, $Shape<State>) => void,
 	createPin: Mutation,
+	connectAfter?: PinType,
+	userLatLng?: LatLng,
 	subscribeToMore: (SubscriptionConfig) => () => void,
 	machineState: MachineState,
 }
@@ -61,6 +65,7 @@ const defaults = {
 	mapData: undefined,
 	setMap: () => {},
 	createPin: async () => {},
+	updateMapState: () => {},
 	transition: () => {},
 	subscribeToMore: () => () => {},
 	machineState: 'none',
@@ -78,6 +83,7 @@ class MapProviderClass extends React.Component<Props, State> {
 
 	state = {
 		mapUid: this.props.initialMapUid || null,
+		userLatLng: null,
 	}
 
 	componentDidMount() {
@@ -86,6 +92,7 @@ class MapProviderClass extends React.Component<Props, State> {
 
 	getEditorUtils = () => ({
 		setMap: this.setMap,
+		updateMapState: this.updateMapState,
 	})
 
 	updateOptions = (props: Props = this.props) => {
@@ -103,13 +110,19 @@ class MapProviderClass extends React.Component<Props, State> {
 		this.setState({ mapUid })
 	}
 
+	updateMapState = (newState) => {
+		this.setState(newState)
+	}
+
 	render() {
-		const { children, utils, transition, machineState, inspectedItem } = this.props
-		const { mapUid } = this.state
+		const { children, utils, transition, machineState, inspectedItem, connectAfter } = this.props
+		const { mapUid, userLatLng } = this.state
 		const value = {
 			inspectedItem,
 			transition,
 			machineState,
+			connectAfter,
+			userLatLng,
 			...utils,
 			...this.getEditorUtils(),
 		}

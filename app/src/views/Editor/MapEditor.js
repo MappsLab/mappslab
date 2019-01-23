@@ -9,6 +9,7 @@ import { NotificationsConsumer } from 'Components/Notifications'
 import type { NewNotification } from 'Components/Notifications'
 import Pin from './Pin'
 import Route from './Route'
+import NewRoute from './Route/NewRoute'
 import Tools from './Tools'
 import { MapConsumer } from './Provider'
 import type { ProviderProps } from './Provider'
@@ -27,6 +28,7 @@ class MapEditor extends React.Component<EditorProps> {
 	static defaultProps = {
 		viewer: null,
 		mapData: null,
+		connectAfter: null,
 	}
 
 	mapListeners: {} = {}
@@ -135,13 +137,18 @@ class MapEditor extends React.Component<EditorProps> {
 	}
 
 	renderMapData() {
-		const { mapData } = this.props
+		const { mapData, connectAfter, userLatLng } = this.props
 		if (!mapData) return null
 		const { pins, routes } = mapData
 		return (
 			<React.Fragment>
 				{pins && pins.map((p) => <Pin key={p.uid} pin={p} />)}
 				{routes && routes.map((r) => <Route key={r.uid} route={r} />)}
+				{connectAfter && userLatLng && (
+					<State is="Lesson.DropPin.DropMode.Connect">
+						<NewRoute connectAfter={connectAfter} userLatLng={userLatLng} />
+					</State>
+				)}
 			</React.Fragment>
 		)
 	}

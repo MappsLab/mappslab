@@ -25,9 +25,9 @@ import { createObjectSearchByState } from '../utils'
 
 export const pinEvents = {
 	Lesson: {
-		onClick: (payload, props) => {
+		onClick: ({ payload, props }) => {
 			const transition = () => props.transition('clickedItem', { inspectedItem: props.pin })
-			return { props, transition, state: { mouseOver: false } }
+			return { transition, state: { mouseOver: false } }
 		},
 		onMouseOver: () => ({
 			state: { mouseOver: true },
@@ -36,14 +36,10 @@ export const pinEvents = {
 			state: { mouseOver: false },
 		}),
 		DropPin: {
-			onMouseOver: ({ state }) => {
-				console.log('HERE')
-				return { state: { ...state, something: 'nothing' } }
-			},
 			onClick: ({ state, props }) => {
-				// override the previos 'transition'
-				const transition = () => props.transition('enterConnect')
-				return { state, transition, props }
+				// override the previous transition
+				const transition = () => props.transition('enterConnect', { connectAfter: props.pin })
+				return { state, props, transition }
 			},
 		},
 		// Browse: {

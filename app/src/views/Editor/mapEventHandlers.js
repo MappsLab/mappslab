@@ -48,15 +48,50 @@ const mapEvents = {
 
 						const result = await createPin({
 							variables: {
-								lat: e.latLng.lat(),
-								lng: e.latLng.lng(),
-								draft: true,
-								addToMaps: [mapUid],
-								addToLesson: [lessonUid],
+								input: {
+									lat: e.latLng.lat(),
+									lng: e.latLng.lng(),
+									draft: true,
+									addToMaps: [mapUid],
+									lessonUids: [lessonUid],
+								},
 							},
 						})
 						const newPin = result.data.createPin
 						transition('droppedPin', { inspectedItem: newPin })
+					},
+				},
+				Connect: {
+					handlers: {
+						onMouseMove: (e, props: EditorProps) => {
+							props.updateMapState({
+								userLatLng: {
+									lat: e.latLng.lat(),
+									lng: e.latLng.lng(),
+								},
+							})
+						},
+						onClick: async (e, props: EditorProps) => {
+							console.log(props)
+							const { createPin, mapUid, lessonUid, transition, connectAfter } = props
+
+							const result = await createPin({
+								variables: {
+									input: {
+										lat: e.latLng.lat(),
+										lng: e.latLng.lng(),
+										draft: true,
+										addToMaps: [mapUid],
+										lessonUids: [lessonUid],
+										addToRoute: {
+											afterPin: connectAfter.uid,
+										},
+									},
+								},
+							})
+							const newPin = result.data.createPin
+							transition('droppedPin', { inspectedItem: newPin })
+						},
 					},
 				},
 			},
