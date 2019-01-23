@@ -45,8 +45,8 @@ export const getStateString = (value: MachineValue): string =>
 				.reduce((acc, [key, val]: [string, MachineValue]) => [...acc, key, getStateString(val)], [])
 				.join('.')
 
-export const traceObject = (object: any, path: string = '', searchKey: string) => {
-	const [prop, nextPath] = path.split(/\.(.*)/)
+export const traceObject = (object: any, path: MachineValue | string = '', searchKey: string) => {
+	const [prop, nextPath] = getStateString(path).split(/\.(.*)/)
 	const value = searchKey in object ? object[searchKey] : undefined
 	const nextLevel = prop in object ? traceObject(object[prop], nextPath, searchKey) : []
 	return [value, ...nextLevel].filter(Boolean)

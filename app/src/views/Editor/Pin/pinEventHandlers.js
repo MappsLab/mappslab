@@ -23,19 +23,28 @@ import { createObjectSearchByState } from '../utils'
 // 	onVisibleChanged
 // 	onZIndexChanged
 
-const pinEvents = {
+export const pinEvents = {
 	Lesson: {
-		handlers: {
-			onClick: (payload, props) => {
-				props.transition('clickedItem', { inspectedItem: props.pin })
-				return { mouseOver: false }
+		onClick: (payload, props) => {
+			const transition = () => props.transition('clickedItem', { inspectedItem: props.pin })
+			return { props, transition, state: { mouseOver: false } }
+		},
+		onMouseOver: () => ({
+			state: { mouseOver: true },
+		}),
+		onMouseOut: () => ({
+			state: { mouseOver: false },
+		}),
+		DropPin: {
+			onMouseOver: ({ state }) => {
+				console.log('HERE')
+				return { state: { ...state, something: 'nothing' } }
 			},
-			onMouseOver: () => ({
-				mouseOver: true,
-			}),
-			onMouseOut: () => ({
-				mouseOver: false,
-			}),
+			onClick: ({ state, props }) => {
+				// override the previos 'transition'
+				const transition = () => props.transition('enterConnect')
+				return { state, transition, props }
+			},
 		},
 		// Browse: {
 		// },
@@ -49,8 +58,3 @@ const pinEvents = {
 		// },
 	},
 }
-
-export const getHandlersForState = createObjectSearchByState({
-	chart: pinEvents,
-	searchKey: 'handlers',
-})

@@ -3,11 +3,13 @@ import React from 'react'
 import { Marker, CustomPopup, markerEventNames } from 'mapp'
 import { State } from 'react-automata'
 import type { PinType } from 'Types'
+import { eventsReducer } from 'Utils/data'
 import { MapConsumer } from '../Provider'
 import type { ProviderProps } from '../Provider'
-import { getHandlersForState } from './pinEventHandlers'
 import { PopupWrapper } from './InfoPopups'
 import PinInspector from './PinInspector'
+import { pinEvents } from './pinEventHandlers'
+
 /**
  * Pin
  */
@@ -46,10 +48,11 @@ class Pin extends React.Component<PinProps, PinState> {
 
 	handleEvent = (eventName: string) => (payload) => {
 		const { machineState } = this.props
-		const handlers = getHandlersForState(machineState.value)
-		if (handlers[eventName]) {
-			const newState = handlers[eventName](payload, this.props)
-			if (newState) this.setState(newState)
+		const handler = eventsReducer(pinEvents, machineState.value, eventName)
+		if (handler) {
+			const result = handler({ payload, props: this.props })
+			const { state } = result
+			if (state) this.setState(state)
 		}
 	}
 
@@ -80,7 +83,7 @@ class Pin extends React.Component<PinProps, PinState> {
 		}
 		return (
 			<Marker
-				events={this.getPinEventHandlers()}
+				events={events}
 				options={options}
 				render={({ anchor }) =>
 					anchor ? (
