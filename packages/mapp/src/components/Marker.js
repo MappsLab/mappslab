@@ -4,17 +4,21 @@ import { MappConsumer } from '../Mapp'
 import { addListeners, removeListeners } from '../utils/listeners'
 import { markerEvents } from '../eventNames'
 import type { Marker as MarkerType, MarkerOptions } from '../types/overlayTypes'
-import type { Map } from '../types/mapTypes'
+import type { Map, MapsEventListener } from '../types/mapTypes'
 import type { MapContextType as MapContext } from '../Mapp'
 
 /**
  * Marker
  */
 
+type Handlers = {
+	[key: string]: (...args: any[]) => void,
+}
+
 type MarkerProps = {
 	render?: ({ anchor: MarkerType }) => null | React.Node,
-	events?: {},
-	options?: MarkerOptions,
+	events?: Handlers,
+	options: MarkerOptions,
 	map: Map,
 }
 
@@ -24,7 +28,6 @@ type State = {
 
 class Marker extends React.Component<MarkerProps, State> {
 	static defaultProps = {
-		options: {},
 		events: {},
 		render: () => null,
 	}
@@ -34,7 +37,7 @@ class Marker extends React.Component<MarkerProps, State> {
 		const { events, map, options } = props
 		// const { options } = separateOptionsAndEvents(this.props, markerEventNames)
 		this.entity = new window.google.maps.Marker({ map, ...options })
-		this.listeners = addListeners(this.entity, markerEvents, events)
+		this.listeners = events ? addListeners(this.entity, markerEvents, events) : []
 	}
 
 	componentWillUnmount() {
@@ -45,11 +48,11 @@ class Marker extends React.Component<MarkerProps, State> {
 
 	entity: null | MarkerType = null
 
-	listeners: Array<{}> = []
+	listeners: Array<MapsEventListener> = []
 
 	render() {
 		const { render } = this.props
-		if (!this.entity) return null
+		if (!this.entity || !render) return null
 		return render({ anchor: this.entity })
 	}
 }
