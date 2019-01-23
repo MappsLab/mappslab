@@ -2,33 +2,10 @@
 import * as React from 'react'
 import { MappConsumer } from '../Mapp'
 import { addListeners, removeListeners } from '../utils/listeners'
-import { getNewValues, separateOptionsAndEvents } from '../utils/data'
-import type { Marker as MarkerType, MarkerOptions } from '../types'
+import { markerEvents } from '../eventNames'
+import type { Marker as MarkerType, MarkerOptions } from '../types/overlayTypes'
+import type { Map } from '../types/mapTypes'
 import type { MapContextType as MapContext } from '../Mapp'
-
-const markerEventNames = {
-	onAnimationChanged: 'animation_changed',
-	onClick: 'click',
-	onClickableChanged: 'clickable_changed',
-	onCursorChanged: 'cursor_changed',
-	onDblClick: 'dblclick',
-	onDrag: 'drag',
-	onDragEnd: 'dragend',
-	onDraggableChanged: 'draggable_changed',
-	onDragStart: 'dragstart',
-	onFlatChanged: 'flat_changed',
-	onIconChanged: 'icon_changed',
-	onMouseDown: 'mousedown',
-	onMouseOut: 'mouseout',
-	onMouseOver: 'mouseover',
-	onMouseUp: 'mouseup',
-	onPositionChanged: 'position_changed',
-	onRightClick: 'rightclick',
-	onShapeChanged: 'shape_changed',
-	onTitleChanged: 'title_changed',
-	onVisibleChanged: 'visible_changed',
-	onZindexChanged: 'zindex_changed',
-}
 
 /**
  * Marker
@@ -38,6 +15,7 @@ type MarkerProps = {
 	render?: ({ anchor: MarkerType }) => null | React.Node,
 	events?: {},
 	options?: MarkerOptions,
+	map: Map,
 }
 
 type State = {
@@ -48,34 +26,16 @@ class Marker extends React.Component<MarkerProps, State> {
 	static defaultProps = {
 		options: {},
 		events: {},
-		render: ({ anchor: MarkerType }) => null,
+		render: () => null,
 	}
 
-	entity: null | MarkerType = null
-
-	listeners: Array<{}> = []
-
-	state = {
-		ready: false,
+	constructor(props: MarkerProps) {
+		super(props)
+		const { events, map, options } = props
+		// const { options } = separateOptionsAndEvents(this.props, markerEventNames)
+		this.entity = new window.google.maps.Marker({ map, ...options })
+		this.listeners = addListeners(this.entity, markerEvents, events)
 	}
-
-	componentDidMount() {
-		const { events } = this.props
-		const { options } = separateOptionsAndEvents(this.props, markerEventNames)
-		this.entity = new window.google.maps.Marker(options)
-		if (this.entity && events) this.listeners = addListeners(this.entity, markerEventNames, events)
-		this.setState({ ready: true })
-	}
-
-	// componentWillReceiveProps(nextProps) {
-	// 	const newProps = getNewValues(this.props, nextProps)
-	// 	if (newProps) {
-	// 		const { options, events } = this.props
-	// 		if (!this.entity) return
-	// 		if (options) this.entity.setOptions(options)
-	// 		if (events) this.listeners = addListeners(this.entity, markerEventNames, events)
-	// 	}
-	// }
 
 	componentWillUnmount() {
 		if (this.entity) this.entity.setMap(null)
@@ -83,11 +43,19 @@ class Marker extends React.Component<MarkerProps, State> {
 		this.entity = null
 	}
 
+	entity: null | MarkerType = null
+
+	listeners: Array<{}> = []
+
 	render() {
 		const { render } = this.props
-		const { ready } = this.state
-		return !ready || this.entity === null ? null : render({ anchor: this.entity })
+		if (!this.entity) return null
+		return render({ anchor: this.entity })
 	}
+}
+
+type BaseProps = {
+	map: Map,
 }
 
 const MarkerWithContext = (props: BaseProps): React.Node => (

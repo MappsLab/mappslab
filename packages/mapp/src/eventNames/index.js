@@ -1,5 +1,20 @@
 // @flow
 
+export const polylineEvents = {
+	onClick: 'click',
+	onDblClick: 'dblclick',
+	onDrag: 'drag',
+	onDragEnd: 'dragend',
+	onDragStart: 'dragstart',
+	onMouseDown: 'mousedown',
+	onMouseOut: 'mouseout',
+	onMouseOver: 'mouseover',
+	onMouseUp: 'mouseup',
+	onRightClick: 'rightclick',
+}
+
+export const polylineEventNames: Array<string> = Object.keys(polylineEvents)
+
 export const mappedMapEventNames = {
 	onBoundsChanged: 'bounds_changed',
 	onCenterChanged: 'center_changed',
@@ -24,7 +39,7 @@ export const mappedMapEventNames = {
 
 export const mapEventNames: Array<string> = Object.keys(mappedMapEventNames)
 
-export const mappedMarkerEventNames = {
+export const markerEvents = {
 	onAnimationChanged: 'animation_changed',
 	onClick: 'click',
 	onClickableChanged: 'clickable_changed',
@@ -48,4 +63,4 @@ export const mappedMarkerEventNames = {
 	onZIndexChanged: 'zindex_changed',
 }
 
-export const pinEventNames: Array<string> = Object.keys(mappedMarkerEventNames)
+export const markerEventNames: Array<string> = Object.keys(markerEvents)

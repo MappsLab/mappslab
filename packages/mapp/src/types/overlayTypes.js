@@ -397,23 +397,23 @@ export type Polyline = MVCObject & {
 	setVisible(visible: boolean): void,
 }
 
-export interface PolylineOptions {
+export type PolylineOptions = {
 	/**
 	 * Indicates whether this Polyline handles mouse events. Defaults to true.
 	 */
-	clickable?: boolean;
+	clickable?: boolean,
 
 	/**
 	 * If set to true, the user can drag this shape over the map.
 	 * The geodesic property defines the mode of dragging. Defaults to false.
 	 */
-	draggable?: boolean;
+	draggable?: boolean,
 
 	/**
 	 * If set to true, the user can edit this shape by dragging the control points shown at the vertices and on
 	 * each segment. Defaults to false.
 	 */
-	editable?: boolean;
+	editable?: boolean,
 
 	/**
 	 * When true, edges of the polygon are interpreted as geodesic and will follow the curvature of the Earth.
@@ -421,17 +421,17 @@ export interface PolylineOptions {
 	 geodesic polygon may appear to change when dragged, as the dimensions are maintained relative to the
 	surface of the earth. Defaults to false.
 	*/
-	geodesic?: boolean;
+	geodesic?: boolean,
 
 	/**
 	 * The icons to be rendered along the polyline.
 	 */
-	icons?: IconSequence[];
+	icons?: IconSequence[],
 
 	/**
 	 * Map on which to display Polyline.
 	 */
-	map?: Map;
+	map?: Map,
 
 	/**
 	 * The ordered sequence of coordinates of the Polyline.
@@ -439,32 +439,32 @@ export interface PolylineOptions {
 	 Note that if you pass a simple array, it will be converted to an MVCArray Inserting or removing LatLngs
 	in the MVCArray will automatically update the polyline on the map.
 	*/
-	path?: MVCArray<LatLng> | LatLng[] | LatLngLiteral[];
+	path?: MVCArray<LatLng> | LatLng[] | LatLngLiteral[],
 
 	/**
 	 * The stroke color. All CSS3 colors are supported except for extended named colors.
 	 */
-	strokeColor?: string;
+	strokeColor?: string,
 
 	/**
 	 * The stroke opacity between 0.0 and 1.0.
 	 */
-	strokeOpacity?: number;
+	strokeOpacity?: number,
 
 	/**
 	 * The stroke width in pixels.
 	 */
-	strokeWeight?: number;
+	strokeWeight?: number,
 
 	/**
 	 * Whether this polyline is visible on the map. Defaults to true.
 	 */
-	visible?: boolean;
+	visible?: boolean,
 
 	/**
 	 * The zIndex compared to other polys.
 	 */
-	zIndex?: number;
+	zIndex?: number,
 }
 
 export interface IconSequence {
