@@ -16,7 +16,7 @@ import {
 	startEndAlphaNum,
 	validUsername,
 	mustBeUrl,
-} from '../Forms/validators'
+} from 'Components/Forms/validators'
 
 describe('Validator: required', () => {
 	it('Validates required fields', () => {

@@ -17,6 +17,7 @@ module.exports = {
 					['Queries', path.resolve(__dirname, 'src', 'queries')],
 					['Types', path.resolve(__dirname, 'src', 'types')],
 					['Styles', path.resolve(__dirname, 'src', 'theme')],
+					['Jest', path.resolve(__dirname, 'jest')],
 					['mapp', path.resolve(__dirname, '..', 'packages', 'mapp', 'src')],
 				],
 				extensions: ['.js', '.jsx'],

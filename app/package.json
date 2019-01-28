@@ -11,7 +11,8 @@
     "dev": "cross-env ENV=development DEBUG=api webpack-dev-server --colors --env development --config webpack.config.js",
     "test": "cross-env ENV=development cross-env DEBUG=test cross-env TEST_DB=true jest ",
     "test:watch": "cross-env ENV=development cross-env DEBUG=test cross-env TEST_DB=true jest --watch",
-    "deploy": "yarn build && cd public && now && now alias"
+    "deploy": "yarn build && cd public && now && now alias",
+    "update-mock-schema": "graphql get-schema mappslab"
   },
   "dependencies": {
     "apollo-cache-inmemory": "^1.3.9",
@@ -82,6 +83,7 @@
     "flow-bin": "^0.90.0",
     "flow-typed": "^2.5.1",
     "graphql-tools": "^4.0.3",
+    "graphql-cli": "^2.16.5",
     "jest": "^23.6.0",
     "jest-dom": "^2.1.1",
     "jest-styled-components": "^6.3.1",
