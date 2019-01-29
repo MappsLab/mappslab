@@ -61,7 +61,7 @@ const addMutation = /* GraphQL */ `
 `
 
 describe('[addPin]', () => {
-	it('should create new routes if addToRoute.afterPin is specified', async () => {
+	it('should create new routes if addToRoute.connectToPin is specified', async () => {
 		const users = await getDBUsers()
 		const maps = await getDBMaps()
 
@@ -92,7 +92,7 @@ describe('[addPin]', () => {
 			lng: 112.333,
 			addToMaps: [maps[0].uid],
 			addToRoute: {
-				afterPin: pin1.uid,
+				connectToPin: pin1.uid,
 			},
 		}
 		const pin2result = await request(addMutation, { context, variables: { input: pin2input } })
@@ -117,7 +117,7 @@ describe('[addPin]', () => {
 			lng: 112.444,
 			addToMaps: [maps[0].uid],
 			addToRoute: {
-				afterPin: pin1.uid,
+				connectToPin: pin1.uid,
 				routeUid: route.uid,
 			},
 		}

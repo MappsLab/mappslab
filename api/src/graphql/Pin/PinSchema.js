@@ -42,8 +42,8 @@ const Pin = /* GraphQL */ `
 	input AddPinToRouteInput {
 		# if no routeUid is supplied, a new route will be created
 		routeUid: String
-		# if no afterPin is supplied, this new pin will be placed at the beginning
-		afterPin: String
+		# if no connectToPin is supplied, this new pin will be placed at the beginning
+		connectToPin: String
 	}
 
 	input GetPinInput {

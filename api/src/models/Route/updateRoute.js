@@ -38,10 +38,10 @@ export const updateRoute = async (args: UpdatePinArgs, ownerUid: string) => {
 type AddPinArgs = {
 	routeUid: string,
 	pinUid: string,
-	afterPin?: string,
+	connectToPin?: string,
 }
 
-export const addPin = async ({ routeUid, pinUid, afterPin }: AddPinArgs, ownerUid: string): Promise<RouteType> => {
+export const addPin = async ({ routeUid, pinUid, connectToPin }: AddPinArgs, ownerUid: string): Promise<RouteType> => {
 	const route = await getRoute(routeUid)
 	if (!route) throw new Error(`No route with a uid of ${routeUid} was found`)
 	const originalPins = route.pins || []
@@ -50,8 +50,8 @@ export const addPin = async ({ routeUid, pinUid, afterPin }: AddPinArgs, ownerUi
 		.map((pin) => pin.uid) // Get the original UIDs
 		.reduce(
 			(acc, pin) =>
-				pin === afterPin
-					? // If the current pin in the reducer is the `afterPin`, insert the new `pinUid`
+				pin === connectToPin
+					? // If the current pin in the reducer is the `connectToPin`, insert the new `pinUid`
 					  [...acc, pin, pinUid]
 					: // otherwise, return only the current pin
 					  [...acc, pin],

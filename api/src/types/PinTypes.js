@@ -27,7 +27,7 @@ export type NewPinData = {
 	addToLessons?: Array<string>,
 	addToRoute?: {
 		routeUid?: string,
-		afterPin?: string,
+		connectToPin?: string,
 	},
 }
 
@@ -44,7 +44,7 @@ export type UpdatePinData = {
 	addToLessons?: Array<string>,
 	addToRoute?: {
 		routeUid: string,
-		afterPin?: string,
+		connectToPin?: string,
 	},
 	deleted: boolean,
 }
