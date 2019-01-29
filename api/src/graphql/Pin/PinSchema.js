@@ -85,6 +85,10 @@ const Pin = /* GraphQL */ `
 		mapUid: String!
 	}
 
+	type PinSubscription {
+		pin: Pin!
+	}
+
 	# Queries & Mutations
 
 	extend type Query {
@@ -99,9 +103,9 @@ const Pin = /* GraphQL */ `
 	}
 
 	extend type Subscription {
-		pinAddedToMap(input: PinSubscriptionInput!): Pin!
-		pinUpdated(input: PinSubscriptionInput!): Pin!
-		pinDeleted(input: PinSubscriptionInput!): Pin!
+		pinAddedToMap(input: PinSubscriptionInput!): PinSubscription!
+		pinUpdated(input: PinSubscriptionInput!): PinSubscription!
+		pinDeleted(input: PinSubscriptionInput!): PinSubscription!
 	}
 `
 

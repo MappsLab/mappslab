@@ -9,7 +9,7 @@ export type RouteType = {
 	title?: string,
 	owner: UserType,
 	maps?: Array<MapType>,
-	pins: Array<?PinType>,
+	pins: Array<PinType>,
 }
 
 export type GetRouteArgs = {

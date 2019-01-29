@@ -11,7 +11,7 @@ export const createPin = async (_: Object, { input }: { input: NewPinData }, ctx
 	const pin = await ctx.models.Pin.getPin(newPin.uid)
 	if (!pin) throw new Error('There was an error creating a new pin')
 	if (input.addToMaps) {
-		pubsub.publish(MAP_RECEIVED_PIN, { [MAP_RECEIVED_PIN]: pin })
+		pubsub.publish(MAP_RECEIVED_PIN, { [MAP_RECEIVED_PIN]: { pin } })
 	}
 	return pin
 }
