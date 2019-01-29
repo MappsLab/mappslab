@@ -8,6 +8,13 @@ export const pinFragment = gql`
 		lat
 		lng
 		draft
+		routes {
+			edges {
+				node {
+					uid
+				}
+			}
+		}
 		owner {
 			uid
 			name

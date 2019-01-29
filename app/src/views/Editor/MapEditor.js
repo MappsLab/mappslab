@@ -110,8 +110,8 @@ class MapEditor extends React.Component<EditorProps> {
 	startSubscriptions() {
 		const { subscribeToMore, mapUid } = this.props
 		if (!mapUid) this.stopSubscriptions()
-		// const subscriptions = [pinAddedToMap, pinDeleted, pinUpdated]
-		const subscriptions = [pinAddedToMap, pinUpdated, pinDeleted]
+		// const subscriptions = [pinAddedToMap, pinUpdated, pinDeleted]
+		const subscriptions = [pinAddedToMap]
 
 		this.subscriptions = subscriptions.map((s) =>
 			startSubscription({

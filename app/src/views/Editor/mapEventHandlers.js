@@ -72,8 +72,8 @@ const mapEvents = {
 							})
 						},
 						onClick: async (e, props: EditorProps) => {
-							console.log(props)
 							const { createPin, mapUid, lessonUid, transition, connectAfter } = props
+							console.log(connectAfter)
 
 							const result = await createPin({
 								variables: {
@@ -84,11 +84,13 @@ const mapEvents = {
 										addToMaps: [mapUid],
 										lessonUids: [lessonUid],
 										addToRoute: {
+											routeUid: connectAfter.routes ? connectAfter.routes[0].uid : null,
 											afterPin: connectAfter.uid,
 										},
 									},
 								},
 							})
+
 							const newPin = result.data.createPin
 							transition('droppedPin', { inspectedItem: newPin })
 						},

@@ -1,32 +1,28 @@
 // @flow
 import gql from 'graphql-tag'
 import * as R from 'ramda'
+import type { PinType } from 'Types/Pin'
 import type { SubscriptionCallback, SubscriptionConfig } from 'Types/GraphQL'
+import { pinFragment } from 'Queries/Pin/fragments'
 
-const pinFields = /* GraphQL */ `
-	uid
-	title
-	lat
-	lng
-	description
-	draft
-	owner {
-		uid
-		name
-	}
-`
+type PinSubscriptionResponse = {
+	pinAddedToMap: { pin: PinType },
+}
 
-export const pinAddedToMap: SubscriptionConfig = {
+export const pinAddedToMap: SubscriptionConfig<PinSubscriptionResponse> = {
 	name: 'pinAddedToMap',
 	document: gql`
 		subscription pinAddedToMap($mapUid: String!) {
 			pinAddedToMap(input: { mapUid: $mapUid }) {
-				${pinFields}
+				pin {
+					...PinFragment
+				}
 			}
 		}
+		${pinFragment}
 	`,
 	updateQuery: (callback: SubscriptionCallback | false = false) => (previous, { subscriptionData }) => {
-		const newPin = subscriptionData.data.pinAddedToMap
+		const newPin = subscriptionData.data.pinAddedToMap.pin
 		const { edges } = previous.map.pins
 
 		// Create an updated array of edges
@@ -41,29 +37,31 @@ export const pinAddedToMap: SubscriptionConfig = {
 	},
 }
 
-export const pinUpdated: SubscriptionConfig = {
+export const pinUpdated: SubscriptionConfig<PinSubscriptionResponse> = {
 	name: 'pinUpdated',
 	document: gql`
 		subscription pinUpdated($mapUid: String!) {
 			pinUpdated(input: { mapUid: $mapUid }) {
-				${pinFields}
+				pin {
+					...PinFragment
+				}
 			}
 		}
+		${pinFragment}
 	`,
 	updateQuery: (callback: SubscriptionCallback | false = false) => (previous, { subscriptionData }) => {
 		const updatedPin = subscriptionData.data.pinUpdated
 		const { edges } = previous.map.pins
-		const updatedEdges = edges.map(
-			(e) =>
-				e.node.uid === updatedPin.uid
-					? {
-							node: {
-								...e.node,
-								...updatedPin,
-							},
-							...e,
-					  }
-					: e,
+		const updatedEdges = edges.map((e) =>
+			e.node.uid === updatedPin.uid
+				? {
+						node: {
+							...e.node,
+							...updatedPin,
+						},
+						...e,
+				  }
+				: e,
 		)
 		const map = R.assocPath(['pins', 'edges'], updatedEdges)(previous.map)
 
@@ -75,17 +73,20 @@ export const pinUpdated: SubscriptionConfig = {
 	},
 }
 
-export const pinDeleted: SubscriptionConfig = {
+export const pinDeleted: SubscriptionConfig<PinSubscriptionResponse> = {
 	name: 'pinDeleted',
 	document: gql`
 		subscription pinDeleted($mapUid: String!) {
 			pinDeleted(input: { mapUid: $mapUid }) {
-				${pinFields}
+				pin {
+					...PinFragment
+				}
 			}
 		}
+		${pinFragment}
 	`,
 	updateQuery: (callback: SubscriptionCallback | false = false) => (previous, { subscriptionData }) => {
-		const deletedPin = subscriptionData.data.pinDeleted
+		const deletedPin = subscriptionData.data.pinDeleted.pin
 		const { edges } = previous.map.pins
 		const updatedEdges = edges.filter((edge) => edge.node.uid !== deletedPin.uid)
 
