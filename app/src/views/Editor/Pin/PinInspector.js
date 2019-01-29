@@ -38,7 +38,10 @@ class PinInspector extends React.Component<PinInspectorProps> {
 		// child EditableTexts to submit changes.
 		// Make them stateless and handle submitting & form state in context
 		const viewerIsOwner = Boolean(viewer && pin.owner.uid === viewer.uid)
-		if (pin.draft && viewerIsOwner) setTimeout(() => this.removePin(), 100)
+		if (pin.draft && viewerIsOwner) {
+			console.log('removing pin')
+			// setTimeout(() => this.removePin(), 100)
+		}
 	}
 
 	submitUpdate = async (args) => {

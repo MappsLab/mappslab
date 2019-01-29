@@ -28,7 +28,7 @@ class MapEditor extends React.Component<EditorProps> {
 	static defaultProps = {
 		viewer: null,
 		mapData: null,
-		connectAfter: null,
+		connectToPin: null,
 	}
 
 	mapListeners: {} = {}
@@ -137,16 +137,16 @@ class MapEditor extends React.Component<EditorProps> {
 	}
 
 	renderMapData() {
-		const { mapData, connectAfter, userLatLng } = this.props
+		const { mapData, connectToPin, userLatLng } = this.props
 		if (!mapData) return null
 		const { pins, routes } = mapData
 		return (
 			<React.Fragment>
 				{pins && pins.map((p) => <Pin key={p.uid} pin={p} />)}
 				{routes && routes.map((r) => <Route key={r.uid} route={r} />)}
-				{connectAfter && userLatLng && (
+				{connectToPin && userLatLng && (
 					<State is="Lesson.DropPin.DropMode.Connect">
-						<NewRoute connectAfter={connectAfter} userLatLng={userLatLng} />
+						<NewRoute connectToPin={connectToPin} userLatLng={userLatLng} />
 					</State>
 				)}
 			</React.Fragment>

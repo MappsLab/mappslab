@@ -9,16 +9,16 @@ import Route from './Route'
  */
 
 type NewRouteProps = {
-	connectAfter: PinType,
+	connectToPin: string,
 	userLatLng: LatLng,
 }
 
-const NewRoute = ({ connectAfter, userLatLng }: NewRouteProps) => {
+const NewRoute = ({ connectToPin, userLatLng }: NewRouteProps) => {
 	const route: {
 		pins: Array<PinType | LatLng>,
 	} = {
 		uid: '__in-progress__',
-		pins: [connectAfter, userLatLng],
+		pins: [connectToPin, userLatLng],
 	}
 	return <Route route={route} active clickable={false} />
 }

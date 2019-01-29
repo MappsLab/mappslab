@@ -44,7 +44,7 @@ const mapEvents = {
 						sendNotification({ message: 'Click to drop a new pin' })
 					},
 					onClick: async (e, props) => {
-						const { createPin, mapUid, lessonUid, transition } = props
+						const { createPin, mapUid, lessonUid, transition, connectToPin } = props
 
 						const result = await createPin({
 							variables: {
@@ -54,9 +54,16 @@ const mapEvents = {
 									draft: true,
 									addToMaps: [mapUid],
 									lessonUids: [lessonUid],
+									addToRoute: connectToPin
+										? {
+												routeUid: connectToPin.routes ? connectToPin.routes[0].uid : null,
+												connectToPin: connectToPin.uid,
+										  }
+										: undefined,
 								},
 							},
 						})
+
 						const newPin = result.data.createPin
 						transition('droppedPin', { inspectedItem: newPin })
 					},
@@ -70,29 +77,6 @@ const mapEvents = {
 									lng: e.latLng.lng(),
 								},
 							})
-						},
-						onClick: async (e, props: EditorProps) => {
-							const { createPin, mapUid, lessonUid, transition, connectAfter } = props
-							console.log(connectAfter)
-
-							const result = await createPin({
-								variables: {
-									input: {
-										lat: e.latLng.lat(),
-										lng: e.latLng.lng(),
-										draft: true,
-										addToMaps: [mapUid],
-										lessonUids: [lessonUid],
-										addToRoute: {
-											routeUid: connectAfter.routes ? connectAfter.routes[0].uid : null,
-											afterPin: connectAfter.uid,
-										},
-									},
-								},
-							})
-
-							const newPin = result.data.createPin
-							transition('droppedPin', { inspectedItem: newPin })
 						},
 					},
 				},

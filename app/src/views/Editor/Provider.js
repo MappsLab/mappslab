@@ -53,7 +53,7 @@ export type ProviderProps = Utils & {
 	transition: (string, ?{}) => void,
 	updateMapState: (string, $Shape<State>) => void,
 	createPin: Mutation,
-	connectAfter?: PinType,
+	connectToPin?: string,
 	userLatLng?: LatLng,
 	subscribeToMore: (SubscriptionConfig) => () => void,
 	machineState: MachineState,
@@ -115,13 +115,13 @@ class MapProviderClass extends React.Component<Props, State> {
 	}
 
 	render() {
-		const { children, utils, transition, machineState, inspectedItem, connectAfter } = this.props
+		const { children, utils, transition, machineState, inspectedItem, connectToPin } = this.props
 		const { mapUid, userLatLng } = this.state
 		const value = {
 			inspectedItem,
 			transition,
 			machineState,
-			connectAfter,
+			connectToPin,
 			userLatLng,
 			...utils,
 			...this.getEditorUtils(),

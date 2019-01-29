@@ -1,5 +1,4 @@
 // @flow
-import { createObjectSearchByState } from '../utils'
 
 // 	onAnimationChanged
 // 	onClick
@@ -38,7 +37,7 @@ export const pinEvents = {
 		DropPin: {
 			onClick: ({ state, props }) => {
 				// override the previous transition
-				const transition = () => props.transition('enterConnect', { connectAfter: props.pin })
+				const transition = () => props.transition('enterConnect', { connectToPin: props.pin.uid })
 				return { state, props, transition }
 			},
 		},
