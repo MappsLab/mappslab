@@ -7,6 +7,7 @@ import { startSubscription } from 'Queries/startSubscription'
 import { pinAddedToMap, pinDeleted, pinUpdated } from 'Queries/Map/mapSubscriptions'
 import { NotificationsConsumer } from 'Components/Notifications'
 import type { NewNotification } from 'Components/Notifications'
+import { eventsReducer, isFunc } from 'Utils/data'
 import Pin from './Pin'
 import Route from './Route'
 import NewRoute from './Route/NewRoute'
@@ -15,7 +16,7 @@ import { MapConsumer } from './Provider'
 import type { ProviderProps } from './Provider'
 import WelcomeDialog from './WelcomeDialog'
 import MapNotifications from './MapNotifications'
-import { getHandlersForState } from './mapEventHandlers'
+import { mapEvents } from './mapEventHandlers'
 
 export type EditorProps = ProviderProps & {
 	mapUid: null | string,
@@ -69,11 +70,23 @@ class MapEditor extends React.Component<EditorProps> {
 	 */
 	handleEvent = (eventName: string) => (payload) => {
 		const { machineState } = this.props
-		const handlers = getHandlersForState(machineState.value)
-		if (handlers[eventName]) handlers[eventName](payload, this.props)
+		const handler = eventsReducer(mapEvents, machineState.value, eventName)
+		if (handler) {
+			const result = handler({ payload, props: this.props })
+			const { state, actions } = result
+			if (actions) {
+				Object.keys(actions).forEach((key) => {
+					const action = actions[key]
+					if (isFunc(action)) action()
+				})
+			}
+			if (state) this.setState(state)
+		}
 	}
 
-	domListeners: { [key: string]: { remove: () => void } }
+	logSubscriptionUpdate = (previous, updated) => {
+		console.log(previous, updated)
+	}
 
 	addEventListeners() {
 		const { addEventListeners } = this.props
@@ -110,8 +123,7 @@ class MapEditor extends React.Component<EditorProps> {
 	startSubscriptions() {
 		const { subscribeToMore, mapUid } = this.props
 		if (!mapUid) this.stopSubscriptions()
-		// const subscriptions = [pinAddedToMap, pinUpdated, pinDeleted]
-		const subscriptions = [pinAddedToMap]
+		const subscriptions = [pinAddedToMap, pinUpdated, pinDeleted]
 
 		this.subscriptions = subscriptions.map((s) =>
 			startSubscription({
@@ -123,9 +135,7 @@ class MapEditor extends React.Component<EditorProps> {
 		)
 	}
 
-	logSubscriptionUpdate = (previous, updated) => {
-		console.log(previous, updated)
-	}
+	domListeners: { [key: string]: { remove: () => void } }
 
 	subscriptions: Array<Subscription>
 

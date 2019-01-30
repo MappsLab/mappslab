@@ -1,111 +1,136 @@
 // @flow
-import { createObjectSearchByState } from './utils'
 import type { EditorProps } from './MapEditor'
 
 const debug = require('debug')('app')
 
-const mapEvents = {
+type MapEvent<EventType> = {
+	payload: EventType,
+	props: EditorProps,
+	actions: {
+		[key: string]: (any) => void,
+	},
+}
+
+export const mapEvents = {
 	Welcome: {
-		handlers: {
-			keyup: (e, props: EditorProps) => {
-				switch (e.key) {
-					case 'Enter':
-						props.transition('enterLesson')
-						break
-					default:
-						break
-				}
-			},
+		keyup: ({ payload, props }: MapEvent<KeyboardEvent>) => {
+			const transition = payload.key === 'Enter' ? () => props.transition('enterLesson') : null
+			return {
+				actions: {
+					transition,
+				},
+			}
 		},
 	},
 	Lesson: {
-		handlers: {
-			keyup: (e, props: EditorProps) => {
-				if (e.key === ' ') {
-					props.transition('clickedDropPin')
-				}
-			},
+		keyup: ({ payload, props }: MapEvent<KeyboardEvent>) => {
+			const transition = payload.key === ' ' ? () => props.transition('clickedDropPin') : null
+			return transition
+				? {
+						actions: {
+							transition,
+						},
+				  }
+				: null
 		},
 		Browse: {
 			handlers: {},
 		},
 		DropPin: {
 			DropMode: {
-				handlers: {
-					keyup: (e, props: EditorProps) => {
-						if (e.key === 'Escape' || e.key === ' ') {
-							// Exit Drop Pin mode
-							props.transition('enterLesson')
-						}
-					},
-					onEntry: (e, props: EditorProps) => {
-						const { sendNotification } = props
+				keyup: ({ payload, props }: MapEvent<KeyboardEvent>) => {
+					const transition = payload.key === 'Escape' || payload.key === ' ' ? () => props.transition('enterLesson') : null
+					return transition
+						? {
+								actions: {
+									transition,
+								},
+						  }
+						: null
+				},
+				onEntry: ({ props }: MapEvent<null>) => {
+					const { sendNotification } = props
 
-						sendNotification({ message: 'Click to drop a new pin' })
-					},
-					onClick: async (e, props) => {
-						const { createPin, mapUid, lessonUid, transition, connectToPin } = props
-
+					return {
+						actions: {
+							sendNotification: () => sendNotification({ message: 'Click to drop a new pin' }),
+						},
+					}
+				},
+				onClick: ({ payload, props }: MapEvent<MouseEvent>) => {
+					const { createPin, mapUid, lessonUid, transition, connectToPin } = props
+					console.log('!')
+					const createNewPin = async () => {
 						const result = await createPin({
 							variables: {
 								input: {
-									lat: e.latLng.lat(),
-									lng: e.latLng.lng(),
+									lat: payload.latLng.lat(),
+									lng: payload.latLng.lng(),
 									draft: true,
 									addToMaps: [mapUid],
 									lessonUids: [lessonUid],
 									addToRoute: connectToPin
 										? {
-												routeUid: connectToPin.routes ? connectToPin.routes[0].uid : null,
 												connectToPin: connectToPin.uid,
 										  }
 										: undefined,
 								},
 							},
 						})
-
 						const newPin = result.data.createPin
 						transition('droppedPin', { inspectedItem: newPin })
-					},
+					}
+
+					const actions = {
+						createNewPin,
+					}
+					return { actions }
 				},
 				Connect: {
-					handlers: {
-						onMouseMove: (e, props: EditorProps) => {
+					onMouseMove: ({ payload, props }: MapEvent<KeyboardEvent>) => {
+						const updateMapState = () => {
 							props.updateMapState({
 								userLatLng: {
-									lat: e.latLng.lat(),
-									lng: e.latLng.lng(),
+									lat: payload.latLng.lat(),
+									lng: payload.latLng.lng(),
 								},
 							})
-						},
+						}
+						return {
+							actions: { updateMapState },
+						}
 					},
 				},
 			},
 		},
 		Inspect: {
-			handlers: {
-				keyup: (e, props: EditorProps) => {
-					if (e.key === 'Escape') {
-						props.transition('close', { inspectedItem: null })
-					}
-				},
-				onEntry: (e, props) => {
-					const { panTo, inspectedItem } = props
+			keyup: ({ payload, props }: MapEvent<KeyboardEvent>) => {
+				const transition = payload.key === 'Escape' ? () => props.transition('close', { inspectedItem: null }) : null
+				return {
+					actions: {
+						transition,
+					},
+				}
+			},
+			onEntry: ({ props }: MapEvent<null>) => {
+				const { panTo, inspectedItem } = props
+				const pan = () => {
 					debug('panning to', inspectedItem)
 					const yOffset = window.innerHeight / 2 - 150
 					panTo(inspectedItem, { x: 0, y: -yOffset })
-				},
-				onClick: (e, props) => {
-					const { transition } = props
-					transition('close', { inspectedItem: null })
-				},
+				}
+				return {
+					actions: { pan },
+				}
+			},
+			onClick: ({ props }: MapEvent<MouseEvent>) => {
+				const transition = () => props.transition('close', { inspectedItem: null })
+				return {
+					actions: { transition },
+				}
 			},
 		},
 	},
 }
 
-export const getHandlersForState = createObjectSearchByState({
-	chart: mapEvents,
-	searchKey: 'handlers',
-})
 // export const mapEvents

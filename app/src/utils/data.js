@@ -52,14 +52,19 @@ export const traceObject = (object: any, path: MachineValue | string = '', searc
 	return [value, ...nextLevel].filter(Boolean)
 }
 
+export const isFunc = (fn: any): boolean => Boolean(fn instanceof Function)
+
 const fnReducer = (fns: Array<Function>) => (val = {}) =>
 	fns.reduce(
-		(acc, fn) => ({
-			...acc,
-			/* Apply each function to the accumulated value,
+		(acc, fn) => {
+			if (fn.then && isFunc(fn.then)) throw new Error('Actions must not be promises')
+			return {
+				...acc,
+				/* Apply each function to the accumulated value,
 				merging over the accumulator */
-			...fn(acc),
-		}),
+				...fn(acc),
+			}
+		},
 		/* starting with an initial value */
 		val,
 	)

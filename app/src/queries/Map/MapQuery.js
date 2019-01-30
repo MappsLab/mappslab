@@ -63,7 +63,7 @@ export const query = gql/* GraphQL */ `
 	${pinFragment}
 `
 
-type MapResponse = {
+export type MapResponse = {
 	map: MapType,
 }
 

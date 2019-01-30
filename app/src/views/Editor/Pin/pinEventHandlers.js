@@ -24,9 +24,9 @@
 
 export const pinEvents = {
 	Lesson: {
-		onClick: ({ payload, props }) => {
+		onClick: ({ props }) => {
 			const transition = () => props.transition('clickedItem', { inspectedItem: props.pin })
-			return { transition, state: { mouseOver: false } }
+			return { actions: { transition }, state: { mouseOver: false } }
 		},
 		onMouseOver: () => ({
 			state: { mouseOver: true },
@@ -37,19 +37,9 @@ export const pinEvents = {
 		DropPin: {
 			onClick: ({ state, props }) => {
 				// override the previous transition
-				const transition = () => props.transition('enterConnect', { connectToPin: props.pin.uid })
-				return { state, props, transition }
+				const transition = () => props.transition('enterConnect', { connectToPin: { pin: props.pin, position: 'AFTER' } })
+				return { state, props, actions: { transition } }
 			},
 		},
-		// Browse: {
-		// },
-		// Inspect: {
-		// 	handlers: {
-		// 		onClick: (payload, props) => {
-		// 			props.transition('clickedItem', { inspectedItem: props.pin })
-		// 			return { mouseOver: false }
-		// 		},
-		// 	},
-		// },
 	},
 }

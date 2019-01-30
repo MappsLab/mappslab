@@ -2,14 +2,15 @@
 import gql from 'graphql-tag'
 import * as R from 'ramda'
 import type { PinType } from 'Types/Pin'
+import type { MapResponse } from 'Queries/Map/MapQuery'
 import type { SubscriptionCallback, SubscriptionConfig } from 'Types/GraphQL'
 import { pinFragment } from 'Queries/Pin/fragments'
 
-type PinSubscriptionResponse = {
-	pinAddedToMap: { pin: PinType },
+type PinSubscriptionResponse<key> = {
+	[key]: { pin: PinType },
 }
 
-export const pinAddedToMap: SubscriptionConfig<PinSubscriptionResponse> = {
+export const pinAddedToMap: SubscriptionConfig<MapResponse, PinSubscriptionResponse<'pinAddedToMap'>> = {
 	name: 'pinAddedToMap',
 	document: gql`
 		subscription pinAddedToMap($mapUid: String!) {
@@ -37,7 +38,7 @@ export const pinAddedToMap: SubscriptionConfig<PinSubscriptionResponse> = {
 	},
 }
 
-export const pinUpdated: SubscriptionConfig<PinSubscriptionResponse> = {
+export const pinUpdated: SubscriptionConfig<MapResponse, PinSubscriptionResponse<'pinUpdated'>> = {
 	name: 'pinUpdated',
 	document: gql`
 		subscription pinUpdated($mapUid: String!) {
@@ -73,7 +74,7 @@ export const pinUpdated: SubscriptionConfig<PinSubscriptionResponse> = {
 	},
 }
 
-export const pinDeleted: SubscriptionConfig<PinSubscriptionResponse> = {
+export const pinDeleted: SubscriptionConfig<MapResponse, PinSubscriptionResponse<'pinDeleted'>> = {
 	name: 'pinDeleted',
 	document: gql`
 		subscription pinDeleted($mapUid: String!) {
