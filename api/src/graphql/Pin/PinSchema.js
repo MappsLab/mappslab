@@ -9,8 +9,17 @@ const Pin = /* GraphQL */ `
 		description: String
 		owner: User
 		maps: MapConnection
+		route: PinInRoute
 		routes: RouteConnection
 		draft: Boolean
+	}
+
+	type PinInRoute {
+		route: Route!
+		nextPin: Pin
+		prevPin: Pin
+		isFirst: Boolean!
+		isLast: Boolean!
 	}
 
 	# Relationships
@@ -39,11 +48,16 @@ const Pin = /* GraphQL */ `
 		addToRoute: AddPinToRouteInput
 	}
 
+	enum Position {
+		BEFORE
+		AFTER
+	}
+
 	input AddPinToRouteInput {
-		# if no routeUid is supplied, a new route will be created
-		routeUid: String
-		# if no connectToPin is supplied, this new pin will be placed at the beginning
-		connectToPin: String
+		# if no connectToPin is supplied, a new route will be created
+		connectToPin: String!
+		# if no position is supplied, defaults to 'AFTER'
+		position: Position
 	}
 
 	input GetPinInput {

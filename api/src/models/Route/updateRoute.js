@@ -6,7 +6,7 @@ import { clean, validateUpdate } from './routeDBSchema'
 
 type UpdatePinArgs = {
 	routeUid: string,
-	pins: Array<string>,
+	pins: Array<string>, // pin UIDs
 	description?: string,
 	title?: string,
 }
@@ -30,8 +30,12 @@ export const updateRoute = async (args: UpdatePinArgs, ownerUid: string) => {
 		},
 		{},
 	])
+	// edges.map(([e]) => {
+	// 	console.log(e.toUid, e.facets)
+	// })
 
 	const mutated = await mutateNode(routeUid, { data: validatedRouteData, edges })
+	// console.log(mutated)
 	return mutated
 }
 
@@ -39,23 +43,38 @@ type AddPinArgs = {
 	routeUid: string,
 	pinUid: string,
 	connectToPin?: string,
+	position?: 'BEFORE' | 'AFTER',
 }
 
-export const addPin = async ({ routeUid, pinUid, connectToPin }: AddPinArgs, ownerUid: string): Promise<RouteType> => {
+export const addPin = async ({ routeUid, pinUid, connectToPin, position }: AddPinArgs, ownerUid: string): Promise<RouteType> => {
 	const route = await getRoute(routeUid)
 	if (!route) throw new Error(`No route with a uid of ${routeUid} was found`)
-	const originalPins = route.pins || []
+	const originalPins = route.pins ? route.pins.map((p) => p.uid) : []
 	// Create an updated array of edges with the proper sort order
-	const pins = originalPins
-		.map((pin) => pin.uid) // Get the original UIDs
-		.reduce(
-			(acc, pin) =>
-				pin === connectToPin
-					? // If the current pin in the reducer is the `connectToPin`, insert the new `pinUid`
-					  [...acc, pin, pinUid]
-					: // otherwise, return only the current pin
-					  [...acc, pin],
-			[],
-		)
+	const connectedPinIndex = originalPins.findIndex((p) => p === connectToPin)
+	const sliceIndex = position === 'BEFORE' ? connectedPinIndex : connectedPinIndex + 1
+	// console.log('****')
+	// console.log(position, connectToPin, connectedPinIndex, originalPins.map((p) => p.uid))
+	// console.log()
+	// console.log()
+	// console.log()
+
+	const pins = [...originalPins.slice(0, sliceIndex), pinUid, ...originalPins.slice(sliceIndex)]
+	// const pins = originalPins
+	// 	.map((pin) => pin.uid) // Get the original UIDs
+	// 	.reduce(
+	// 		(acc, pin) =>
+	// 			pin === connectToPin
+	// 				? // If the current pin in the reducer is the `connectToPin`, insert the new `pinUid`
+	// 				  [...acc, pin, pinUid]
+	// 				: // otherwise, return only the current pin
+	// 				  [...acc, pin],
+	// 		[],
+	// 	)
+	// console.log('***')
+	// console.log(position, connectToPin, 'insert', pinUid, 'into', originalPins)
+	// console.log(pins)
+	// console.log()
+	// console.log()
 	return updateRoute({ routeUid, pins }, ownerUid)
 }

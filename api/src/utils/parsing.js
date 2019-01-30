@@ -1,18 +1,30 @@
 // @flow
-import { mapObjIndexed, head } from 'ramda'
+import { head, lensPath, path, over } from 'ramda'
 
-const debug = require('debug')('api')
+const makeSingle = (obj: any) =>
+	Array.isArray(obj)
+		? // if this is an array, return [0]
+		  head(obj)
+		: // otherwise, return as-is
+		  obj
 
-export const parseSingularFields = (singularFields: Array<string>) =>
-	mapObjIndexed((value, key) => {
-		if (singularFields.includes(key) && Array.isArray(value)) {
-			if (!Array.isArray(value)) {
-				debug(`Field '${key}' is not an array`)
-				return value
-			}
-			if (value.length > 1)
-				debug(`Field '${key}' has multiple entries but should be one. Your database might have unused entries.`)
-			return head(value)
-		}
-		return value
-	})
+const makeFieldSingle = (fieldPath: Array<string | number>, obj: any) =>
+	// $FlowFixMe
+	path(fieldPath, obj)
+		? // if a prop exists at this path, apply the lens
+		  over(
+				lensPath(fieldPath), // identify which field we want to get & set
+				makeSingle, // apply the fn
+				obj, // to the source object
+		  )
+		: // otherwise, return as-is. (This prevents the reation of { prop: { prop: undefined }})
+		  obj
+
+export const parseSingularFields = (singularFields: Array<string>) => (obj: any): any =>
+	singularFields.reduce(
+		(acc, fieldPath) =>
+			// apply the lens fn to each field path
+			// $FlowFixMe ramda is annoying
+			makeFieldSingle(fieldPath.split('.'), acc),
+		obj,
+	)

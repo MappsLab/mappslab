@@ -39,18 +39,15 @@ const addMutation = /* GraphQL */ `
 		createPin(input: $input) {
 			uid
 			title
-			routes {
-				edges {
-					cursor
-					node {
-						uid
-						pins {
-							edges {
-								cursor
-								node {
-									uid
-									title
-								}
+			route {
+				route {
+					uid
+					pins {
+						edges {
+							cursor
+							node {
+								uid
+								title
 							}
 						}
 					}
@@ -61,7 +58,7 @@ const addMutation = /* GraphQL */ `
 `
 
 describe('[addPin]', () => {
-	it('should create new routes if addToRoute.connectToPin is specified', async () => {
+	it.only('should create a new route if no routeUid is specified', async () => {
 		const users = await getDBUsers()
 		const maps = await getDBMaps()
 
@@ -70,11 +67,13 @@ describe('[addPin]', () => {
 			viewer,
 		}
 
+		const pinRouteNames = (pin) => pin.route.route.pins.edges.map((e) => e.node.title)
+
 		/**
 		 Create the first pin.
 		 */
 		const firstPinInput = {
-			title: 'pin A',
+			title: 'A',
 			lat: 145.123,
 			lng: 111.333,
 			addToMaps: [maps[0].uid],
@@ -84,10 +83,10 @@ describe('[addPin]', () => {
 		pinsToRemove.push(pin1)
 
 		/**
-			Create the second pin, in a new route after the first pin
+			Create the second pin, in a new route after the first pin => [A, B]
 		 */
 		const pin2input = {
-			title: 'pin B',
+			title: 'B',
 			lat: 146.123,
 			lng: 112.333,
 			addToMaps: [maps[0].uid],
@@ -96,43 +95,56 @@ describe('[addPin]', () => {
 			},
 		}
 		const pin2result = await request(addMutation, { context, variables: { input: pin2input } })
-
 		const pin2 = pin2result.data.createPin
 		pinsToRemove.push(pin2)
-
-		expect(pin2.routes.edges).toHaveLength(1)
-		const route = pin2.routes.edges[0].node
-		routesToRemove.push(route)
-		expect(route.pins.edges).toHaveLength(2)
-		expect(route.pins.edges[0].node.uid).toBe(pin1.uid)
-		expect(route.pins.edges[1].node.uid).toBe(pin2.uid)
+		routesToRemove.push(pin2.route)
+		expect(pin2.route.route.pins.edges).toHaveLength(2)
+		expect(pinRouteNames(pin2)).toEqual(['A', 'B'])
 
 		/**
-		 * Create the third pin, in the existing route, after the first pin
+		 * Create the third pin, in the existing route, after the first pin => [A, C, B]
 		 */
 
 		const pin3input = {
-			title: 'pin C',
+			title: 'C',
 			lat: 146.126,
 			lng: 112.444,
 			addToMaps: [maps[0].uid],
 			addToRoute: {
 				connectToPin: pin1.uid,
-				routeUid: route.uid,
 			},
 		}
 		const pin3result = await request(addMutation, { context, variables: { input: pin3input } })
 		const pin3 = pin3result.data.createPin
 		pinsToRemove.push(pin2)
+		expect(pin3.route.route.pins.edges).toHaveLength(3)
+		// expect(pinNames(pin3.route.route.pins)).toEqual(['A', 'C', 'B'])
+		expect(pinRouteNames(pin3)).toEqual(['A', 'C', 'B'])
 
-		expect(pin3.routes.edges).toHaveLength(1)
-		const updatedRoute = pin3.routes.edges[0].node
-		expect(updatedRoute.pins.edges).toHaveLength(3)
 		/**
-		 * The route should now be [A, C, B]
+		 *  Create the fourth pin, *before* pin B => [A, C, D, B]
 		 */
-		expect(updatedRoute.pins.edges[0].node.uid).toBe(pin1.uid)
-		expect(updatedRoute.pins.edges[1].node.uid).toBe(pin3.uid)
-		expect(updatedRoute.pins.edges[2].node.uid).toBe(pin2.uid)
+		const pin4input = {
+			title: 'D',
+			lat: 146.126,
+			lng: 112.444,
+			addToMaps: [maps[0].uid],
+			addToRoute: {
+				connectToPin: pin2.uid,
+				position: 'BEFORE',
+			},
+		}
+
+		const pin4result = await request(addMutation, { context, variables: { input: pin4input } })
+		const pin4 = pin4result.data.createPin
+		expect(pin4.route.route.pins.edges).toHaveLength(4)
+
+		pinsToRemove.push(pin2)
+
+		/**
+		 * The route should now be [A, C, D, B]
+		 */
+
+		expect(pinRouteNames(pin4)).toEqual(['A', 'C', 'D', 'B'])
 	})
 })

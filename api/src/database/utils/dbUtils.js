@@ -28,7 +28,7 @@ const toString = (val: mixed) => {
 	}
 }
 
-export const serializeFacets = (facets: Array<Facet> = []): string =>
+export const serializeFacets = (facets: Facet = {}): string =>
 	Object.entries(facets).length
 		? Object.entries(facets)
 				.map(([key, value]) => `${key}=${toString(value)}`)

@@ -2,6 +2,8 @@
 import type { PinType, NewPinData } from 'Types/PinTypes'
 import type { RouteType } from 'Types/RouteTypes'
 import { createNodeWithEdges } from 'Database'
+import { getPin } from './readPin'
+import { getRoute } from '../Route/readRoute'
 import Route from '../Route'
 import { clean, defaultValues, validateNew } from './pinDBSchema'
 
@@ -11,13 +13,21 @@ type AddToRouteArgs = $PropertyType<NewPinData, 'addToRoute'>
 
 const addPinToRoute = async (pin: PinType, addToRoute: AddToRouteArgs, ownerUid: string): Promise<RouteType> => {
 	if (!addToRoute) throw new Error('You did not supply an `addToRoute` to the arguments')
-	const { routeUid, connectToPin } = addToRoute
+	const { connectToPin, position: suppliedPosition } = addToRoute
+	const position = suppliedPosition || 'AFTER'
 	/* If `connectToPin` was supplied, add it to the array of pins in the route. Only used when createing a route */
-	const pins = [connectToPin, pin.uid].filter(Boolean)
-	const newRoute = routeUid
-		? await Route.addPin({ routeUid, pinUid: pin.uid, connectToPin }, ownerUid)
-		: await Route.createRoute({ pins }, ownerUid)
-	return newRoute
+	// const pins = [connectToPin, pin.uid].filter(Boolean)
+	const siblingPin = await getPin(connectToPin)
+	if (!siblingPin) throw new Error(`A pin with the id ${connectToPin} was not found`)
+	const existingRoute = siblingPin && siblingPin.route ? await getRoute(siblingPin.route.route.uid) : false
+	if (existingRoute && existingRoute.owner.uid !== ownerUid) throw new Error('You can only add to a route that you own')
+	const route = existingRoute
+		? await Route.addPin({ routeUid: existingRoute.uid, pinUid: pin.uid, connectToPin, position }, ownerUid)
+		: await Route.createRoute({ pins: position === 'BEFORE' ? [pin.uid, connectToPin] : [connectToPin, pin.uid] }, ownerUid)
+	// const newRoute = routeUid
+	// 	? await Route.addPin({ routeUid, pinUid: pin.uid, connectToPin }, ownerUid)
+	// 	: await Route.createRoute({ pins }, ownerUid)
+	return route
 }
 
 export const createPin = async (args: NewPinData, ownerUid: string): Promise<PinType> => {

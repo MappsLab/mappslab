@@ -18,6 +18,22 @@ export const getRoute = async (uid: string): Promise<RouteType | null> => {
 	return parseRouteResult(result.getRoute)
 }
 
+// query getRoute {
+// 	getRoute(func: uid(undefined)) @filter(eq(type, "route") ANDeq(deleted, false)) {
+// 		uid
+// 		title
+// 		updatedAt
+// 		pins: includes_pin @facets(order) {
+// 			uid
+// 			title
+// 		}
+// 		owner: ~owns_route {
+// 			uid
+// 			username
+// 		}
+// 	}
+// }
+
 export const getRoutes = async (args?: PaginationFilterArgs = {}): Promise<Array<RouteType>> => {
 	const { varBlocks, filterString, paginationString } = createQueryStrings(args)
 	const q = /* GraphQL */ `

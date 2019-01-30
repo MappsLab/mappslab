@@ -53,9 +53,12 @@ export const publicFields = [
 		uid
 		username
 	}`,
+	`route.route: ~includes_pin {
+		uid
+	}`,
 ].join('\n')
 
-const singleFields = ['owner']
+const singleFields = ['owner', 'route.route']
 
 export const validateNew = (pinData: NewPinData): Promise<NewPinData> => Joi.validate(pinData, pinSchema(true))
 export const validateUpdate = (pinData: UpdatePinData): Promise<UpdatePinData> => Joi.validate(pinData, pinSchema(false))

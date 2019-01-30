@@ -1,6 +1,6 @@
 // @flow
 import Joi from 'joi'
-import { when, dissoc, prop, pipe, head, merge, map } from 'ramda'
+import { when, prop, pipe, head, merge, map } from 'ramda'
 import type { NewRouteData, UpdateRouteData, RouteType } from 'Types/RouteTypes'
 import { promisePipe, filterNullAndUndefined } from 'Utils'
 import { parseSingularFields } from 'Utils/parsing'

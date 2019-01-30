@@ -29,7 +29,6 @@ export const routes = async (
 		userHasroute: { eq: loadedUser.uid },
 	}
 	const userRoutes = await ctx.models.Route.getRoutes({ where })
-	console.log(userRoutes)
 	return assemblePage(userRoutes, input)
 }
 

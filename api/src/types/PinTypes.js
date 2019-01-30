@@ -17,6 +17,13 @@ export type PinType = {
 	deleted: Boolean,
 	maps?: Array<MapType>,
 	routes?: Array<RouteType>,
+	route?: {
+		route: RouteType,
+		nextPin?: PinType,
+		prevPin?: PinType,
+		isFirst: boolean,
+		isLast: boolean,
+	},
 }
 
 export type NewPinData = {
@@ -26,8 +33,8 @@ export type NewPinData = {
 	addToMaps?: Array<string>,
 	addToLessons?: Array<string>,
 	addToRoute?: {
-		routeUid?: string,
-		connectToPin?: string,
+		connectToPin: string,
+		position?: 'BEFORE' | 'AFTER',
 	},
 }
 

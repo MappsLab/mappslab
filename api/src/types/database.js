@@ -18,12 +18,12 @@ export type PartialEdge =
 	| {
 			fromUid: string,
 			pred: string,
-			facets?: Array<Facet>,
+			facets?: Facet,
 	  }
 	| {
 			toUid: string,
 			pred: string,
-			facets?: Array<Facet>,
+			facets?: Facet,
 	  }
 
 export type EdgeConfig = {

@@ -3,7 +3,6 @@ import type { PinType } from 'Types/PinTypes'
 import type { RouteType } from 'Types/RouteTypes'
 import type { UserType } from 'Types/UserTypes'
 import type { GraphQLContext, PageType, PaginationInput } from 'Types/sharedTypes'
-import deepMerge from 'deepmerge'
 import { assemblePage } from 'Utils/graphql'
 
 export const pins = async (
@@ -11,16 +10,8 @@ export const pins = async (
 	{ input }: PaginationInput,
 	ctx: GraphQLContext,
 ): Promise<PageType<PinType>> => {
-	const pinFilter = {
-		where: {
-			pinWithinRoute: {
-				eq: fetchedRoute.uid,
-			},
-		},
-	}
-	/* merge the default filter with any supplied filter */
-	const mergedFilter = deepMerge(input || {}, pinFilter)
-	const fetchedPins = await ctx.models.Pin.getPins(mergedFilter)
+	// TODO this doesn't look very performant. Find a way to do this with Pin.getPins instead
+	const fetchedPins = await Promise.all(fetchedRoute.pins.map((pin) => ctx.models.Pin.getPin(pin.uid)))
 	return assemblePage(fetchedPins, input)
 }
 
