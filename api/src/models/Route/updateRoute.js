@@ -30,12 +30,8 @@ export const updateRoute = async (args: UpdatePinArgs, ownerUid: string) => {
 		},
 		{},
 	])
-	// edges.map(([e]) => {
-	// 	console.log(e.toUid, e.facets)
-	// })
 
 	const mutated = await mutateNode(routeUid, { data: validatedRouteData, edges })
-	// console.log(mutated)
 	return mutated
 }
 
@@ -53,28 +49,7 @@ export const addPin = async ({ routeUid, pinUid, connectToPin, position }: AddPi
 	// Create an updated array of edges with the proper sort order
 	const connectedPinIndex = originalPins.findIndex((p) => p === connectToPin)
 	const sliceIndex = position === 'BEFORE' ? connectedPinIndex : connectedPinIndex + 1
-	// console.log('****')
-	// console.log(position, connectToPin, connectedPinIndex, originalPins.map((p) => p.uid))
-	// console.log()
-	// console.log()
-	// console.log()
 
 	const pins = [...originalPins.slice(0, sliceIndex), pinUid, ...originalPins.slice(sliceIndex)]
-	// const pins = originalPins
-	// 	.map((pin) => pin.uid) // Get the original UIDs
-	// 	.reduce(
-	// 		(acc, pin) =>
-	// 			pin === connectToPin
-	// 				? // If the current pin in the reducer is the `connectToPin`, insert the new `pinUid`
-	// 				  [...acc, pin, pinUid]
-	// 				: // otherwise, return only the current pin
-	// 				  [...acc, pin],
-	// 		[],
-	// 	)
-	// console.log('***')
-	// console.log(position, connectToPin, 'insert', pinUid, 'into', originalPins)
-	// console.log(pins)
-	// console.log()
-	// console.log()
 	return updateRoute({ routeUid, pins }, ownerUid)
 }

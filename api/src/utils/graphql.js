@@ -29,11 +29,12 @@ const defaultPaginationArgs = {
 	after: null,
 }
 
-export const assemblePage = <T: DBNode>(items?: Array<T> = [], pArgs?: PaginationFilterArgs = {}): PageType<T> => {
+export const assemblePage = <T: DBNode>(sourceItems?: Array<?T> = [], pArgs?: PaginationFilterArgs = {}): PageType<T> => {
 	const { first, after } = {
 		...defaultPaginationArgs,
 		...pArgs,
 	}
+	const items = sourceItems.filter(Boolean)
 	// The database will return +1 item from the 'first' argument. We'll use that to determine if there is
 	// a next page. Here, we'll trim it from `items` so this extra item does not appear in the edges array.
 	const edges = items && items.length ? items.slice(0, first).map(itemToEdge) : []
