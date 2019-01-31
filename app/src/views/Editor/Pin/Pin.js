@@ -3,7 +3,7 @@ import React from 'react'
 import { Marker, CustomPopup, markerEventNames } from 'mapp'
 import { State } from 'react-automata'
 import type { PinType } from 'Types'
-import { eventsReducer } from 'Utils/data'
+import { eventsReducer, isFunc } from 'Utils/data'
 import { MapConsumer } from '../Provider'
 import type { ProviderProps } from '../Provider'
 import PinInspector from './PinInspector'
@@ -51,8 +51,13 @@ class Pin extends React.Component<PinProps, PinState> {
 		const handler = eventsReducer(pinEvents, machineState.value, eventName)
 		if (handler) {
 			const result = handler({ payload, props: this.props })
-			const { state, transition } = result
-			if (transition) transition()
+			const { state, actions } = result
+			if (actions) {
+				Object.keys(actions).forEach((key) => {
+					const action = actions[key]
+					if (isFunc(action)) action()
+				})
+			}
 			if (state) this.setState(state)
 		}
 	}
@@ -72,7 +77,7 @@ class Pin extends React.Component<PinProps, PinState> {
 		)
 
 	render() {
-		const { pin, inspectedItem } = this.props
+		const { pin, inspectedItem, mapData } = this.props
 		const { mouseOver } = this.state
 		const { lat, lng } = pin
 		const isInspected = inspectedItem && inspectedItem.uid === pin.uid
@@ -98,7 +103,7 @@ class Pin extends React.Component<PinProps, PinState> {
 							{isInspected ? (
 								<State is="Lesson.Inspect">
 									<CustomPopup anchor={anchor}>
-										<PinInspector pin={pin} closeInspector={this.closeInspector} />
+										<PinInspector pin={pin} mapUid={mapData.uid} closeInspector={this.closeInspector} />
 									</CustomPopup>
 								</State>
 							) : null}

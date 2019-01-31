@@ -13,6 +13,7 @@ import Pane from 'Components/Pane'
 import { Button } from 'Components/Buttons'
 import { NotificationsConsumer } from 'Components/Notifications'
 import type { NewNotification } from 'Components/Notifications'
+import { query as mapQuery } from 'Queries/Map/MapQuery'
 
 /**
  * PinInspector
@@ -26,6 +27,7 @@ type PinInspectorProps = BaseProps & {
 	viewer?: ViewerType,
 	updatePin: Mutation,
 	deletePin: Mutation,
+	mapUid: string,
 	closeInspector: () => void,
 	sendNotification: (NewNotification) => void,
 }
@@ -60,9 +62,12 @@ class PinInspector extends React.Component<PinInspectorProps> {
 	}
 
 	removePin = () => {
-		const { pin, deletePin } = this.props
+		const { pin, deletePin, mapUid } = this.props
 
-		deletePin({ variables: { uid: pin.uid } })
+		deletePin({
+			variables: { uid: pin.uid },
+			refetchQueries: [{ query: mapQuery, variables: { uid: mapUid } }],
+		})
 	}
 
 	render() {

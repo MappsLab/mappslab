@@ -53,7 +53,10 @@ export type ProviderProps = Utils & {
 	transition: (string, ?{}) => void,
 	updateMapState: (string, $Shape<State>) => void,
 	createPin: Mutation,
-	connectToPin?: string,
+	connectToPin?: {
+		pin: PinType,
+		position?: 'BEFORE' | 'AFTER',
+	},
 	userLatLng?: LatLng,
 	subscribeToMore: (SubscriptionConfig) => () => void,
 	machineState: MachineState,

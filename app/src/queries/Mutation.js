@@ -5,10 +5,14 @@ import type { FetchResult, ApolloError, DataProxy, MutationResult, MutationFunct
 import { Mutation as ApolloMutation } from 'react-apollo'
 import { unwindEdges } from './utils'
 
+type Variables = {
+	[key: string]: string | number | boolean,
+}
+
 type MutationProps<Response> = {
 	mutation: DocumentNode,
 	children: (MutationFunction<Response>, MutationResult<Response>) => React.Node,
-	variables?: {},
+	variables?: Variables,
 	update?: (DataProxy, FetchResult<any>) => void,
 	ignoreResults?: boolean,
 	optimisticResponse?: void | {},

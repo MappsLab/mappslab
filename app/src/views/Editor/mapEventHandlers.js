@@ -1,4 +1,5 @@
 // @flow
+import { query as mapQuery } from 'Queries/Map/MapQuery'
 import type { EditorProps } from './MapEditor'
 
 const debug = require('debug')('app')
@@ -59,23 +60,27 @@ export const mapEvents = {
 				},
 				onClick: ({ payload, props }: MapEvent<MouseEvent>) => {
 					const { createPin, mapUid, lessonUid, transition, connectToPin } = props
-					console.log('!')
 					const createNewPin = async () => {
-						const result = await createPin({
-							variables: {
-								input: {
-									lat: payload.latLng.lat(),
-									lng: payload.latLng.lng(),
-									draft: true,
-									addToMaps: [mapUid],
-									lessonUids: [lessonUid],
-									addToRoute: connectToPin
-										? {
-												connectToPin: connectToPin.uid,
-										  }
-										: undefined,
-								},
+						const addToRoute = connectToPin
+							? {
+									connectToPin: connectToPin.pin.uid,
+									position: connectToPin.position,
+							  }
+							: undefined
+
+						const variables = {
+							input: {
+								lat: payload.latLng.lat(),
+								lng: payload.latLng.lng(),
+								draft: true,
+								addToMaps: [mapUid],
+								lessonUids: [lessonUid],
+								addToRoute,
 							},
+						}
+						const result = await createPin({
+							variables,
+							refetchQueries: [{ query: mapQuery, variables: { uid: props.mapData.uid } }],
 						})
 						const newPin = result.data.createPin
 						transition('droppedPin', { inspectedItem: newPin })
