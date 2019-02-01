@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Alert Component Mounts Correctly 1`] = `
+<div>
+  <button
+    data-testid="button"
+    type="button"
+  >
+    click?
+  </button>
+</div>
+`;
