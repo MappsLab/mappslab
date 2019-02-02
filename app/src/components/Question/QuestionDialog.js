@@ -3,6 +3,7 @@ import * as React from 'react'
 import styled, { css } from 'styled-components'
 import Pane from 'Components/Pane'
 import { Button } from 'Components/Buttons'
+import { P } from 'Components/Text'
 import { QuestionConsumer } from './QuestionProvider'
 import type { QuestionContext } from './QuestionProvider'
 
@@ -30,6 +31,18 @@ const BackgroundCancelButton = styled.button`
 	opacity: 0;
 `
 
+const Buttons = styled.div`
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+`
+
+const Message = styled.div`
+	${({ theme }) => css`
+		margin: ${theme.layout.spacing.single} 0;
+	`}
+`
+
 /**
  * Ask
  */
@@ -53,12 +66,16 @@ const QuestionDialog = ({ currentQuestion, cancelQuestion }: QuestionDialogProps
 		<Background data-testid="alert">
 			<BackgroundCancelButton onClick={cancelQuestion} />
 			<Pane size="small" title={paneTitle}>
-				<p>{message}</p>
-				{questionOptions.map(({ title, answerQuestion, ...buttonConfig }) => (
-					<Button key={title} onClick={answerQuestion} {...buttonConfig}>
-						{title}
-					</Button>
-				))}
+				<Message>
+					<P align="center">{message}</P>
+				</Message>
+				<Buttons>
+					{questionOptions.map(({ title, answerQuestion, ...buttonConfig }) => (
+						<Button key={title} onClick={answerQuestion} {...buttonConfig}>
+							{title}
+						</Button>
+					))}
+				</Buttons>
 			</Pane>
 		</Background>
 	)

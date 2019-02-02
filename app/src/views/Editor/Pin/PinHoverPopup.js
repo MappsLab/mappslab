@@ -13,7 +13,7 @@ const PinHoverPopup = ({ pin }: Props) => {
 			<State is="Lesson.DropPin.*">
 				<p>Connect to:</p>
 			</State>
-			<p>{pin.title}</p>
+			<p>{pin.title && pin.title.length ? pin.title : 'Untitled Pin'}</p>
 		</PopupWrapper>
 	)
 }

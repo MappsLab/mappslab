@@ -10,6 +10,7 @@ const mutation = gql`
 			description
 			lat
 			lng
+			draft
 			owner {
 				uid
 				name

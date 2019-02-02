@@ -62,10 +62,13 @@ export const Header6 = styled.h6`
 
 export const Input = styled.input`
 	${commonTextStyles};
-	${() => `
+	${({ theme }) => css`
 		display: block;
 		border: 0;
 		padding: 0;
+		&::placeholder {
+			color: ${theme.color.middleGray};
+		}
 	`};
 `
 // font-size: ${theme.font.size.p};

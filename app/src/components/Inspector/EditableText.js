@@ -19,7 +19,6 @@ const StyledInput = styled(Input)`
 
 const Wrapper = styled.div`
 	${({ theme, focused }) => `
-		padding-left: ${theme.layout.spacing.double};
 		margin-bottom: ${theme.layout.spacing.single};
 		position: relative;
 		background-color: ${focused ? `${theme.color.xLightGray}` : ''};
@@ -34,9 +33,9 @@ const Wrapper = styled.div`
 const IconWrapper = styled.div`
 	${({ theme }) => `
 		position: absolute;
-		top: 2px;
-		left: 0px;
-		font-size: ${theme.font.size.h3};
+		top: 3px;
+		right: 3px;
+		font-size: ${theme.font.size.h4};
 		color: ${theme.color.middleGray};
 	`}
 `
@@ -160,7 +159,7 @@ class EditableText extends React.Component<Props, State> {
 					</IconWrapper>
 					<NativeListener onClick={this.focus}>
 						<StyledInput
-							onBlur={this.submitChange}
+							onBlur={this.blur}
 							fontSize={fontSize}
 							as={multiline ? TextArea : undefined}
 							autoFocus={autoFocus}

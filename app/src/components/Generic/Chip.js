@@ -17,25 +17,25 @@ const Wrapper = styled.div`
 	`};
 `
 
-const ImageWrapper = styled.figure`
-	${({ theme, size }) => {
-		const { height } = theme.sizes.chip[size]
-		const width = size === 'large' ? `${height} - 18px` : `${height} - 12px`
-		return `
-			width: calc(${width});
-			height: calc(${width});
-			margin-right: ${size === 'large' ? '5px' : '3px'};
-			border-radius: calc(${width} / 2);
-			overflow: hidden;
-		`
-	}};
+// const ImageWrapper = styled.figure`
+// 	${({ theme, size }) => {
+// 		const { height } = theme.sizes.chip[size]
+// 		const width = size === 'large' ? `${height} - 18px` : `${height} - 12px`
+// 		return `
+// 			width: calc(${width});
+// 			height: calc(${width});
+// 			margin-right: ${size === 'large' ? '5px' : '3px'};
+// 			border-radius: calc(${width} / 2);
+// 			overflow: hidden;
+// 		`
+// 	}};
 
-	> img {
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-	}
-`
+// 	> img {
+// 		width: 100%;
+// 		height: 100%;
+// 		object-fit: cover;
+// 	}
+// `
 
 const TitleWrapper = styled.div`
 	display: flex;
@@ -71,14 +71,14 @@ export type ChipProps = {
 type Props = {
 	size?: 'small' | 'large' | 'full',
 	active?: boolean,
-	image?: string | null,
+	// image?: string | null,
 	title: string,
 	subtitle?: string | null,
 	onClick?: null | (() => any | (() => Promise<any>)),
 	to?: null | string,
 }
 
-const Chip = ({ image, title, subtitle, size, active, to, onClick }: Props) => {
+const Chip = ({ title, subtitle, size, active, to, onClick }: Props) => {
 	const as = to
 		? // if 'to', use a Link
 		  Link
@@ -96,9 +96,6 @@ const Chip = ({ image, title, subtitle, size, active, to, onClick }: Props) => {
 			to={to}
 			onClick={onClick}
 		>
-			<ImageWrapper size={size}>
-				<img src="https://media0.giphy.com/media/1wnZQRxFfbKHnSIEIS/giphy.webp" />
-			</ImageWrapper>
 			<TitleWrapper>
 				<Title size={size}>{title}</Title>
 				<Subtitle size={size}>{subtitle}</Subtitle>
@@ -111,7 +108,7 @@ Chip.defaultProps = {
 	active: false,
 	to: null,
 	onClick: null,
-	image: null,
+	// image: null,
 	subtitle: null,
 }
 
