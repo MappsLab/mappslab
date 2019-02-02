@@ -1,6 +1,6 @@
 workflow "build, test and publish on release" {
   on = "push"
-  resolves = ["alias-app", "alias-api"]
+  resolves = ["release"]
 }
 
 action "develop-branch-filter" {
@@ -36,14 +36,17 @@ action "build-app" {
   needs = "test-app"
   uses = "actions/npm@1.0.0"
   runs = "yarn"
-  args = "workspace mappslab-app build"
+  args = [
+    "workspace @mappslab/map build",
+    "workspace mappslab-app build",
+  ]
 }
 
 action "build-api" {
   needs = "test-api"
   uses = "actions/npm@1.0.0"
   runs = "yarn"
-  args = "workspace mappslab-app build"
+  args = "workspace mappslab-api build"
 }
 
 # Deploy with Zeit
@@ -62,19 +65,13 @@ action "deploy-api" {
 }
 
 # Alias with Zeit
-action "alias-app" {
-  needs = ["deploy-app"]
+action "release" {
+  needs = ["deploy-app", "deploy-api"]
   uses = "actions/zeit-now@master"
-  args = "alias --local-config=./app/public/now.json `cat /github/home/deploy.txt` $GITHUB_SHA"
-  secrets = [
-    "ZEIT_TOKEN",
-  ]
-}
-
-action "alias-api" {
-  needs = ["deploy-api"]
-  uses = "actions/zeit-now@master"
-  args = "alias --local-config=./api/now.json `cat /github/home/deploy.txt` $GITHUB_SHA"
+  args = [
+    "alias --local-config=./app/public/now.json",
+    "alias --local-config=./api/now.json",
+  ]    
   secrets = [
     "ZEIT_TOKEN",
   ]
