@@ -29,12 +29,10 @@ action "test-api" {
   uses = "actions/npm@1.0.0"
   runs = "yarn"
   args = [
-    "npm run db:test:init",
-	  "sleep 5",
-	  "npm run db:test:start",
-	  "sleep 5",
-	  "npm run db:test:seed",
-	  "npm run test:api"
+    "db:test:init",
+    "db:test:start",
+    "db:test:seed",
+    "test:api"
   ]
 }
 
