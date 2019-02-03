@@ -28,7 +28,14 @@ action "test-api" {
   needs = "install"
   uses = "actions/npm@1.0.0"
   runs = "yarn"
-  args = "workspace mappslab-api test"
+  args = [
+    "npm run db:test:init",
+	  "sleep 5",
+	  "npm run db:test:start",
+	  "sleep 5",
+	  "npm run db:test:seed",
+	  "npm run test:api"
+  ]
 }
 
 # build with yarn
