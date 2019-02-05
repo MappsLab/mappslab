@@ -41,7 +41,8 @@
 		"api",
 		"app",
 		"packages/*",
-		"public"
+		"public",
+		"shared"
 	],
 	"private": true,
 	"husky": {
@@ -64,5 +65,8 @@
 		"flow-mono-cli": "^1.3.4",
 		"flow-typed": "^2.5.1",
 		"husky": "^1.1.2"
-	}
+	},
+	"resolutions": {
+		"graphql": "14.0.2"
+	} 
 }

@@ -1,0 +1,479 @@
+# source: http://localhost:3000
+# timestamp: Mon Feb 04 2019 19:48:02 GMT-0700 (Mountain Standard Time)
+
+input AddPinToRouteInput {
+  """if no connectToPin is supplied, a new route will be created"""
+  connectToPin: String!
+
+  """if no position is supplied, defaults to 'AFTER'"""
+  position: Position
+}
+
+input BooleanOperators {
+  eq: Boolean
+}
+
+type Classroom implements Node {
+  uid: String!
+  title: String
+  slug: String
+  description: String
+  students: UserConnection
+  teachers: UserConnection
+  viewerIsTeacher: Boolean!
+  maps: MapConnection
+}
+
+type ClassroomConnection implements Connection {
+  pageInfo: PageInfo!
+  edges: [ClassroomEdge]!
+}
+
+type ClassroomEdge implements Edge {
+  cursor: String!
+  node: Classroom
+}
+
+input ClassroomFilterParameter {
+  title: StringOperators
+}
+
+input ClassroomListOptions {
+  first: Int
+  after: String
+  sort: ClassroomSortParameter
+  where: ClassroomFilterParameter
+}
+
+input ClassroomSortParameter {
+  title: SortOrder
+}
+
+interface Connection {
+  pageInfo: PageInfo!
+}
+
+input CredentialsInput {
+  email: String
+  uid: String
+  password: String!
+}
+
+input DateOperators {
+  eq: DateTime
+  notEq: DateTime
+  before: DateTime
+  after: DateTime
+  between: DateRange
+}
+
+input DateRange {
+  start: DateTime!
+  end: DateTime!
+}
+
+scalar DateTime
+
+interface Edge {
+  cursor: String!
+}
+
+input GetMapInput {
+  uid: String!
+}
+
+input GetNodeInput {
+  uid: String
+  slug: String
+}
+
+input GetPinInput {
+  uid: String!
+}
+
+input GetRouteInput {
+  uid: String!
+}
+
+input GetUserInput {
+  uid: String
+  email: String
+}
+
+union LoginResult = LoginSuccess | RequiresReset
+
+type LoginSuccess {
+  jwt: Token
+  viewer: User
+}
+
+type Map implements Node {
+  uid: String!
+  title: String
+  slug: String
+  description: String
+  classroom: Classroom
+  pins: PinConnection
+  routes: RouteConnection
+}
+
+type MapConnection implements Connection {
+  pageInfo: PageInfo!
+  edges: [MapEdge]!
+}
+
+type MapEdge implements Edge {
+  cursor: String!
+  node: Map
+}
+
+input ModifyMapInput {
+  title: String
+  description: String
+}
+
+type Mutation {
+  dummy: String
+  createClassroom(input: NewClassroomInput!, assignTeachers: [String]): Classroom!
+  updateClassroom(input: UpdateClassroomInput!): Classroom!
+  removeClassroom(uid: String!): Boolean!
+  createMap(input: NewMapInput!): Map!
+  updateMap(input: ModifyMapInput!): Map!
+  deleteMap(input: GetMapInput!): Boolean!
+  createPin(input: NewPinInput!): Pin!
+  updatePin(input: UpdatePinInput!): Pin!
+  deletePin(input: GetPinInput!): Success!
+  createRoute(input: NewRouteInput!): Route!
+  addPinToRoute(input: AddPinToRouteInput!): Route!
+  updateRoute(input: UpdateRouteInput!): Route!
+  deleteRoute(uid: String!): Boolean!
+  loginViewer(input: CredentialsInput!): LoginResult!
+  createStudent(input: NewStudentData!): User!
+  createTeacher(input: NewTeacherData!): User!
+  createAdmin(input: NewAdminData!): User!
+  updateUser(input: UpdateUserInput!): User!
+
+  """deleteUser(uid: String!): Boolean!"""
+  requestPasswordReset(input: GetUserInput): Success!
+  resetPassword(input: UpdatePasswordInput!): LoginResult!
+  setTemporaryPassword(input: SetTemporaryPasswordInput!): Success!
+}
+
+input NewAdminData {
+  name: String!
+  email: String!
+  temporaryPassword: String
+}
+
+input NewClassroomInput {
+  title: String!
+  description: String
+}
+
+input NewMapInput {
+  title: String!
+  description: String
+  classroomUid: String!
+}
+
+input NewPinInput {
+  title: String
+  draft: Boolean
+  lat: Float!
+  lng: Float!
+  description: String
+  deleted: Boolean
+  addToMaps: [String]!
+  lessonUids: [String]
+  addToRoute: AddPinToRouteInput
+}
+
+input NewRouteInput {
+  title: String
+  addPin: String
+  pins: [String]
+}
+
+input NewStudentData {
+  name: String!
+  email: String
+  temporaryPassword: String!
+  addToClassrooms: [String!]
+}
+
+input NewTeacherData {
+  name: String!
+  email: String!
+  temporaryPassword: String
+  addToClassrooms: [String!]
+}
+
+interface Node {
+  uid: String!
+}
+
+input NumberOperators {
+  eq: Float
+  notEq: Float
+  lt: Float
+  lte: Float
+  gt: Float
+  gte: Float
+  between: NumberRange
+}
+
+input NumberRange {
+  start: Float!
+  end: Float!
+}
+
+"""Represents an arbitrary object."""
+scalar Object
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPrevPage: Boolean!
+  lastCursor: String
+}
+
+input PaginationInput {
+  first: Int
+  after: String!
+}
+
+type Pin implements Node {
+  uid: String!
+  title: String
+  lat: Float!
+  lng: Float!
+  description: String
+  owner: User
+  maps: MapConnection
+  route: PinInRoute
+  routes: RouteConnection
+  draft: Boolean
+}
+
+type PinConnection implements Connection {
+  pageInfo: PageInfo!
+  edges: [PinEdge]!
+}
+
+type PinEdge implements Edge {
+  cursor: String!
+  node: Pin
+}
+
+input PinFilterParameter {
+  title: StringOperators
+
+  """Pin-specific relationship filters"""
+  pinnedByUser: RelationshipOperators
+  pinnedInMap: RelationshipOperators
+}
+
+type PinInRoute {
+  route: Route!
+  nextPin: Pin
+  prevPin: Pin
+  isFirst: Boolean!
+  isLast: Boolean!
+}
+
+input PinListOptions {
+  first: Int
+  after: String
+  sort: PinSortParameter
+  where: PinFilterParameter
+}
+
+input PinSortParameter {
+  title: SortOrder
+  lat: SortOrder
+  lng: SortOrder
+}
+
+type PinSubscription {
+  pin: Pin!
+}
+
+input PinSubscriptionInput {
+  mapUid: String!
+}
+
+enum Position {
+  BEFORE
+  AFTER
+}
+
+type Query {
+  dummy: String
+  classroom(input: GetNodeInput): Classroom
+  classrooms(input: ClassroomListOptions): ClassroomConnection!
+  map(input: GetMapInput!): Map!
+  pin(input: GetPinInput!): Pin
+  pins(input: PinListOptions): PinConnection
+  route(input: GetRouteInput!): Route!
+  routes(input: RouteListOptions): RouteConnection!
+  user(input: GetUserInput): User
+  users(input: UsersListOptions): UserConnection!
+  teachers(input: UsersListOptions): UserConnection!
+  students(input: UsersListOptions): UserConnection!
+  currentViewer: LoginSuccess
+}
+
+input RelationshipOperators {
+  eq: String
+  notEq: String
+}
+
+type RequiresReset {
+  resetToken: String!
+  viewer: User
+}
+
+type Route implements Node {
+  uid: String!
+  title: String
+  owner: User!
+  pins: PinConnection
+  maps: MapConnection
+}
+
+type RouteConnection implements Connection {
+  pageInfo: PageInfo!
+  edges: [RouteEdge]!
+}
+
+type RouteEdge implements Edge {
+  cursor: String!
+  node: Route
+}
+
+input RouteFilterParameter {
+  routeContainsPin: RelationshipOperators
+  routeWithinMap: RelationshipOperators
+}
+
+input RouteListOptions {
+  first: Int
+  after: String
+  where: RouteFilterParameter
+}
+
+input SetTemporaryPasswordInput {
+  uid: String!
+  temporaryPassword: String!
+}
+
+enum SortOrder {
+  ASC
+  DESC
+}
+
+input StringOperators {
+  eq: String
+  notEq: String
+  contains: String
+}
+
+type Subscription {
+  dummy: String
+  pinAddedToMap(input: PinSubscriptionInput!): PinSubscription!
+  pinUpdated(input: PinSubscriptionInput!): PinSubscription!
+  pinDeleted(input: PinSubscriptionInput!): PinSubscription!
+}
+
+type Success {
+  success: Boolean!
+  messages: [String]!
+}
+
+type Token {
+  token: String!
+  expires: Int!
+}
+
+input UpdateClassroomInput {
+  uid: String!
+  title: String
+  description: String
+}
+
+input UpdatePasswordInput {
+  resetToken: String!
+  password: String!
+}
+
+input UpdatePinInput {
+  uid: String
+  title: String
+  lat: Float
+  lng: Float
+  description: String
+  addToMaps: [String]
+  lessonUids: [String]
+  addToRoute: AddPinToRouteInput
+}
+
+input UpdateRouteInput {
+  title: String
+  addPin: String
+  removePin: String
+  pins: [String]
+  removePins: [String]
+}
+
+input UpdateUserInput {
+  uid: String
+  name: String
+  email: String
+  addToClassrooms: [String!]
+  removeFromClassrooms: [String!]
+}
+
+"""
+The `Upload` scalar type represents a file upload promise that resolves an
+object containing `stream`, `filename`, `mimetype` and `encoding`.
+"""
+scalar Upload
+
+type User implements Node {
+  uid: String!
+  name: String!
+  classrooms: ClassroomConnection
+  maps: MapConnection
+  roles: [String]
+  pins(input: PaginationInput): PinConnection
+  routes(input: PaginationInput): RouteConnection
+  email: String
+}
+
+type UserConnection implements Connection {
+  pageInfo: PageInfo!
+  edges: [UserEdge]!
+}
+
+type UserEdge implements Edge {
+  cursor: String!
+  node: User
+}
+
+input UserFilterParameter {
+  name: StringOperators
+
+  """User-specific relationship filters"""
+  userTeachesIn: RelationshipOperators
+  userLearnsIn: RelationshipOperators
+}
+
+input UsersListOptions {
+  first: Int
+  after: String
+  sort: UserSortParameter
+  where: UserFilterParameter
+}
+
+input UserSortParameter {
+  name: SortOrder
+}
