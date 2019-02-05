@@ -1,6 +1,6 @@
 // @flow
 
-import { user, users, currentViewer } from './getUsers'
+import { user, users, teachers, students, currentViewer } from './getUsers'
 import { pins, classrooms } from './getUserConnections'
 
 export default {
@@ -8,6 +8,8 @@ export default {
 		user,
 		users,
 		currentViewer,
+		teachers,
+		students,
 	},
 	User: {
 		pins,

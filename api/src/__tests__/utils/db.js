@@ -27,7 +27,7 @@ export const createAdminUser = async () => {
 		name: 'Joseph Thomas',
 		roles: ['admin'],
 		email: 'joseph@good-idea.studio',
-		password: 'Password#1',
+		temporaryPassword: 'temporary',
 		disabled: false,
 	}
 	return models.User.createUser(joseph)

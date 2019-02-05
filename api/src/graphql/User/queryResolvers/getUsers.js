@@ -8,12 +8,30 @@ export const user = (_: Object, { input }: { input: GetUserInput }, ctx: GraphQL
 	ctx.models.User.getUser(input)
 
 export const users = async (_: Object, { input }: PaginationInput, ctx: GraphQLContext): Promise<PageType<UserType>> => {
-	const fetchedClassrooms = await ctx.models.User.getUsers(input).catch((err) => {
+	const fetchedUsers = await ctx.models.User.getUsers(input).catch((err) => {
 		throw err
 	})
-	const page = assemblePage(fetchedClassrooms, input)
+	const page = assemblePage(fetchedUsers, input)
 	return page
 }
+
+const getByRole = (role: string) => async (
+	_: Object,
+	{ input }: PaginationInput,
+	ctx: GraphQLContext,
+): Promise<PageType<UserType>> => {
+	const fetchedUsers = await ctx.models.User.getUsers({
+		where: {
+			roles: {
+				eq: role,
+			},
+		},
+	})
+	return assemblePage(fetchedUsers, input)
+}
+
+export const teachers = getByRole('teacher')
+export const students = getByRole('student')
 
 type CurrentViewer = {
 	viewer: UserType | null,

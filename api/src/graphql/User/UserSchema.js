@@ -117,6 +117,8 @@ const User = /* GraphQL */ `
 	extend type Query {
 		user(input: GetUserInput): User
 		users(input: UsersListOptions): UserConnection!
+		teachers(input: UsersListOptions): UserConnection!
+		students(input: UsersListOptions): UserConnection!
 		currentViewer: LoginSuccess
 	}
 
