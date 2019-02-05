@@ -17,8 +17,8 @@ type PinSubscriptionPayload = {
 	},
 }
 
-const pinIsInSubscribedMap = (payload: PinSubscriptionPayload, mapUid: string): boolean => {
-	const maps = path(['pinAddedToMap', 'pin', 'maps'], payload)
+const pinIsInSubscribedMap = (payload: PinSubscriptionPayload, mapUid: string, key: string): boolean => {
+	const maps = path([key, 'pin', 'maps'], payload)
 	if (!maps) return false
 	return maps && Boolean(maps.find((m) => m.uid === mapUid))
 }
@@ -30,7 +30,7 @@ export const pinAddedToMap = {
 			if (!payload.pinAddedToMap) return false
 			debug(`${MAP_RECEIVED_PIN} payload:`)
 			debug(payload.pinAddedToMap.maps)
-			return pinIsInSubscribedMap(payload, args.input.mapUid)
+			return pinIsInSubscribedMap(payload, args.input.mapUid, MAP_RECEIVED_PIN)
 		},
 	),
 }
@@ -42,7 +42,7 @@ export const pinUpdated = {
 			if (!payload.pinUpdated) return false
 			debug(`${PIN_UPDATED} payload:`)
 			debug(payload)
-			return pinIsInSubscribedMap(payload, args.input.mapUid)
+			return pinIsInSubscribedMap(payload, args.input.mapUid, PIN_UPDATED)
 		},
 	),
 }
@@ -54,7 +54,7 @@ export const pinDeleted = {
 			if (!payload.pinDeleted) return false
 			debug(`${PIN_DELETED} payload:`)
 			debug(payload)
-			return pinIsInSubscribedMap(payload, args.input.mapUid)
+			return pinIsInSubscribedMap(payload, args.input.mapUid, PIN_DELETED)
 		},
 	),
 }
