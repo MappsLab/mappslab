@@ -55,6 +55,7 @@ class InspectorProviderBase extends React.Component<Props, State> {
 	constructor(props: Props) {
 		super(props)
 		const { uid, type, title } = props
+		/* Initialize the history with the first item */
 		const inspectorHistory = uid && type && title ? [{ uid, type, title }] : []
 		this.state = {
 			inspectorHistory,
@@ -108,10 +109,10 @@ class InspectorProviderBase extends React.Component<Props, State> {
 		const value = {
 			inspectItem: this.inspectItem,
 		}
-
+		// console.log(uid, type, title)
 		return (
 			<Provider value={value}>
-				{uid && type && title && (
+				{type && (
 					<Inspector
 						viewer={viewer}
 						uid={uid}
@@ -137,6 +138,7 @@ export const InspectorProvider = (props: BaseProps) => (
 		render={({ location, history }) => {
 			const { inspect } = parseQueryString(decodeURI(location.search))
 			const [type, uid, title] = inspect ? inspect.split('-') : [undefined, undefined, undefined]
+
 			return (
 				<CurrentViewerQuery>
 					{({ data }) => (

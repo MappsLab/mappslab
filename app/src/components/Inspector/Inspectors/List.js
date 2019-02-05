@@ -2,7 +2,10 @@
 import * as React from 'react'
 import styled from 'styled-components'
 import { Header2, Header5 } from 'Components/Text'
+import type { ClassroomType, UserType, MapType } from 'Types'
 import ItemIcon from '../ItemIcon'
+import { InspectorConsumer } from '../InspectorProvider'
+import type { InspectorItem, InspectItem } from '../InspectorProvider'
 
 const ListTitle = styled(Header2)`
 	${({ theme }) => `
@@ -16,7 +19,7 @@ const ListWrapper = styled.div`
 	`}
 `
 
-const ListItem = styled.div`
+const ListItem = styled.button`
 	${({ theme }) => `
 		display: flex;
 		justify-content: space-between;
@@ -45,38 +48,58 @@ const ItemInfo = styled(Header5)`
 	`}
 `
 
+/**
+ * List
+ */
+
 export type ListItemType = {
 	key: string,
-	title: string,
-	info: Array<string>,
-	onClick: () => void,
+	itemTitle: string,
+	info?: Array<string>,
+	onClick: (InspectorItem) => void,
 }
 
-type Props = {
+type BaseProps = {
 	items: Array<ListItemType>,
 	title: string,
 	type: string,
 }
 
-/**
- * List
- */
+type Props = BaseProps & {
+	inspectItem: InspectItem,
+}
 
-const List = ({ items, title, type }: Props) => (
-	<ListWrapper>
-		<ListTitle>
-			<ItemIcon type={type} />
-			{title}
-		</ListTitle>
-		{items.map(({ key, title: itemTitle, info, onClick }) => (
-			<ListItem key={key} onClick={onClick}>
-				<ItemTitle>{itemTitle}</ItemTitle>
-				{info.map((i) => (
-					<ItemInfo key={i}>{i}</ItemInfo>
-				))}
-			</ListItem>
-		))}
-	</ListWrapper>
+const listItemFactory = (inspectItem: InspectItem) => (item: ClassroomType | UserType | MapType): ListItem => {
+	// $FlowFixMe TODO: make this detect types
+	const { uid, title, name, __typename } = item
+	return {
+		key: uid,
+		itemTitle: title || name,
+		onClick: () => inspectItem({ uid, type: __typename.toLowerCase(), title: title || name }),
+		info: [],
+	}
+}
+
+export const List = ({ items, title, type, inspectItem }: Props) => {
+	const itemToListItem = listItemFactory(inspectItem)
+	return (
+		<ListWrapper>
+			<ListTitle>
+				<ItemIcon type={type} />
+				{title}
+			</ListTitle>
+			{items.map(itemToListItem).map(({ key, itemTitle, info, onClick }) => (
+				<ListItem key={key} onClick={onClick}>
+					<ItemTitle>{itemTitle}</ItemTitle>
+					{info.map((i) => (
+						<ItemInfo key={i}>{i}</ItemInfo>
+					))}
+				</ListItem>
+			))}
+		</ListWrapper>
+	)
+}
+
+export default (baseProps: BaseProps) => (
+	<InspectorConsumer>{({ inspectItem }) => <List {...baseProps} inspectItem={inspectItem} />}</InspectorConsumer>
 )
-
-export default List

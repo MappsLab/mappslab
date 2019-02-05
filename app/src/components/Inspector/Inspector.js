@@ -4,8 +4,8 @@ import styled from 'styled-components'
 import Pane from 'Components/Pane'
 import { Centered } from 'Components/Layout'
 import type { ViewerType } from 'Types'
-import { UserQuery, MapQuery, ClassroomQuery, UpdateClassroomMutation } from 'Queries'
-import { UserInspector, ClassroomInspector, MapInspector } from './Inspectors'
+import { UserQuery, MapQuery } from 'Queries'
+import { UserInspector, ClassroomInspector, MapInspector, AdminInspector } from './Inspectors'
 import type { InspectItem, InspectorItem } from './InspectorProvider'
 import Breadcrumbs from './Breadcrumbs'
 import InspectorSkeleton from './InspectorSkeleton'
@@ -47,8 +47,8 @@ InspectorPane.defaultProps = {
 type Props = {
 	// for the Pane
 	type: string,
-	uid: string,
-	title: string,
+	uid?: string,
+	title?: string,
 	inspectItem: InspectItem,
 	viewer: null | ViewerType,
 	// for the breadcrumb
@@ -58,7 +58,7 @@ type Props = {
 
 const Loader = (props: Props) => {
 	const { type, uid, title, goBackTo, inspectorHistory, viewer, inspectItem } = props
-	if (!type || !uid) return null
+	if (!type) return null
 	const breadcrumbProps = {
 		goBackTo,
 		inspectorHistory,
@@ -66,6 +66,8 @@ const Loader = (props: Props) => {
 
 	const renderInner = () => {
 		switch (type) {
+			case 'admin':
+				return <AdminInspector viewer={viewer} inspectItem={inspectItem} />
 			case 'user':
 				return (
 					<UserQuery variables={{ uid }} LoadingComponent={false}>
@@ -88,45 +90,6 @@ const Loader = (props: Props) => {
 				)
 			case 'classroom':
 				return <ClassroomInspector viewer={viewer} uid={uid} paneTitle={title} inspectItem={inspectItem} />
-			// return <ClassroomInspector viewer={viewer} uid={uid} inspectItem={inspectItem} />
-			// <UpdateClassroomMutation>
-			// 	{(updateClassroom) => (
-			// 		<ClassroomQuery variables={{ uid }} LoadingComponent={false}>
-			// 			{({ data, loading }) => {
-			// 				const { classroom } = data
-
-			// 				const updateTitle = async ({ title }) => {
-			// 					const variables = {
-			// 						uid: classroom.uid,
-			// 						title,
-			// 					}
-			// 					await updateClassroom({ variables })
-			// 				}
-			// 				const teacherUids = classroom.teachers.map((t) => t.uid)
-			// 				const viewerCanEdit = Boolean(viewer && teacherUids.includes(viewer.uid))
-
-			// 				const inspectorPaneProps = loading
-			// 					? { title: ' ' }
-			// 					: {
-			// 							title: classroom.title,
-			// 							icon: classroom.emoji || '🎓',
-			// 							titleUpdateFn: viewerCanEdit ? updateTitle : undefined,
-			// 							viewerCanEdit,
-			// 					  }
-
-			// 				return (
-			// 					<InspectorPane {...breadcrumbProps} {...inspectorPaneProps}>
-			// 						{loading ? (
-			// 							<InspectorSkeleton />
-			// 						) : (
-			// 							<ClassroomInspector viewer={viewer} classroom={classroom} {...inspectorProps} />
-			// 						)}
-			// 					</InspectorPane>
-			// 				)
-			// 			}}
-			// 		</ClassroomQuery>
-			// 	)}
-			// </UpdateClassroomMutation>
 
 			case 'map':
 				return (
@@ -162,14 +125,11 @@ const Loader = (props: Props) => {
 			</Outer>
 		</Centered>
 	)
+}
 
-	// return (
-	// 	<Centered>
-	// 		<Pane title=>
-	// 			<InspectorInner>{renderInspector()}</InspectorInner>
-	// 		</Pane>
-	// 	</Centered>
-	// )
+Loader.defaultProps = {
+	uid: undefined,
+	title: undefined,
 }
 
 export default Loader

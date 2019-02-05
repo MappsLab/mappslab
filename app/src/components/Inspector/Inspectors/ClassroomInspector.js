@@ -66,8 +66,8 @@ const ClassroomInspector = (props: Props) => {
 		},
 	}))
 
-	const students = classroom.students.map(userToItem)
-	const teachers = classroom.teachers.map(userToItem)
+	const students = classroom.students ? classroom.students.map(userToItem) : []
+	const teachers = classroom.teachers ? classroom.teachers.map(userToItem) : []
 
 	const viewerCanEdit = classroom.viewerIsTeacher
 
