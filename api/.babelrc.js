@@ -29,6 +29,7 @@ module.exports = function(api) {
 						Config: path.resolve(projectRoot, 'config'),
 						Errors: path.resolve(projectRoot, 'errorTypes'),
 						Types: path.resolve(projectRoot, 'types'),
+						Shared: path.resolve(projectRoot, '..', '..', 'types'),
 					},
 					// cwd: 'babelrc',
 				},

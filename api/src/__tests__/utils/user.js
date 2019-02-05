@@ -3,6 +3,7 @@ import type { NewUserData, UserType } from 'Types/UserTypes'
 import faker from 'faker'
 import User from 'Models/User'
 import { query } from 'Database'
+import { generateUser } from 'Shared/mockGenerators'
 import { request } from './db'
 
 /**
@@ -89,41 +90,6 @@ const teacherFixtures = [
 		temporaryPassword: 'temporary',
 	},
 ]
-
-let studentCount = 0
-const studentFixtures = [
-	{ name: 'Alex Johnstone', temporaryPassword: 'temporary' },
-	{ name: 'Heidi Gaudet', temporaryPassword: 'temporary' },
-]
-
-const generateUser = (role: 'student' | 'teacher'): NewUserData => {
-	if (role === 'student') {
-		const student =
-			studentCount < studentFixtures.length
-				? studentFixtures[studentCount]
-				: {
-						name: faker.name.findName(),
-						temporaryPassword: 'temporary',
-				  }
-		studentCount += 1
-		return student
-	}
-	const name = faker.name.findName()
-
-	const teacher =
-		teacherCount < teacherFixtures.length
-			? teacherFixtures[teacherCount]
-			: {
-					name,
-					email: faker.internet
-						.email(name)
-						.toLowerCase()
-						.replace(/[.]+/, '.'),
-					temporaryPassword: 'temporary',
-			  }
-	teacherCount += 1
-	return teacher
-}
 
 const createTeacherMutation = /* GraphQL */ `
 	mutation CreateTeacher($input: NewTeacherData!) {

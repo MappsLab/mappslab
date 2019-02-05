@@ -46,6 +46,7 @@ module.name_mapper='^Database' -> '<PROJECT_ROOT>/src/database'
 module.name_mapper='^Errors' -> '<PROJECT_ROOT>/src/errorTypes'
 module.name_mapper='^Config' -> '<PROJECT_ROOT>/src/config'
 module.name_mapper='^Types' -> '<PROJECT_ROOT>/src/types'
+module.name_mapper='^Shared' -> '<PROJECT_ROOT>/../shared'
 
 
 suppress_type=$FlowIssue

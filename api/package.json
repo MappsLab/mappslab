@@ -12,7 +12,7 @@
     "test": "cross-env ENV=development cross-env DEBUG=test cross-env TEST_DB=true jest --coverage",
     "test:watch": "cross-env ENV=development cross-env DEBUG=test cross-env TEST_DB=true jest --watch",
     "db:test:seed": "cross-env TEST_DB=true cross-env DEBUG=seed babel-node ./src/__tests__/scripts/seedTestDatabase.js",
-    "db:staging:seed": "cross-env ENV=staging cross-env DEBUG=seed babel-node ./dist/__tests__/scripts/seedTestDatabase.js",
+    "db:staging:seed": "cross-env ENV=staging cross-env DEBUG=seed babel-node ./dist/__tests__/scripts/seedNewDatabase.js",
     "deploy": "yarn build && now && now alias"
   },
   "dependencies": {
@@ -22,7 +22,6 @@
     "deepmerge": "^2.2.1",
     "dgraph-js": "^1.2.1",
     "dotenv": "^6.1.0",
-    "faker": "^4.1.0",
     "flat": "^4.1.0",
     "graphql": "^14.0.2",
     "graphql-subscriptions": "^1.0.0",
@@ -68,5 +67,8 @@
     "flow-typed": "^2.5.1",
     "nodemon": "^1.18.6",
     "rimraf": "^2.6.2"
+  },
+  "resolutions": {
+    "graphql": "14.0.2"
   }
 }
