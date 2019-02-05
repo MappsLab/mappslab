@@ -24,12 +24,20 @@ type Props = BaseProps & {
 }
 
 const LoginSuccess = ({ viewer, transition }: Props) => {
-	if (!viewer.classrooms || !viewer.classrooms.length) return <Header4>Ask your teacher to add you to their classroom</Header4>
 	const logout = () => {
 		removeCookie(VIEWER_COOKIE_TOKEN)
 		transition(LOGOUT, { userUid: null })
 	}
 
+	if (!viewer.classrooms || !viewer.classrooms.length)
+		return (
+			<React.Fragment>
+				<Header4>Ask your teacher to add you to their classroom</Header4>
+				<Button level="tertiary" onClick={logout}>
+					Log in as someone else →
+				</Button>
+			</React.Fragment>
+		)
 	if (!viewer.classrooms || viewer.classrooms.length < 1) return null
 	const isTeacher = viewer.roles.includes('teacher')
 	const viewerMaps =
