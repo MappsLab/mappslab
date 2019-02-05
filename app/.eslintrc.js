@@ -18,6 +18,7 @@ module.exports = {
 					['Types', path.resolve(__dirname, 'src', 'types')],
 					['Styles', path.resolve(__dirname, 'src', 'theme')],
 					['Jest', path.resolve(__dirname, 'jest')],
+					['Shared', path.resolve(__dirname, 'shared')],
 					['mapp', path.resolve(__dirname, '..', 'packages', 'mapp', 'src')],
 				],
 				extensions: ['.js', '.jsx'],
