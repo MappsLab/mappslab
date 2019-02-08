@@ -46,7 +46,7 @@ InspectorPane.defaultProps = {
 
 type Props = {
 	// for the Pane
-	type: string,
+	__typename: string,
 	uid?: string,
 	title?: string,
 	inspectItem: InspectItem,
@@ -57,15 +57,15 @@ type Props = {
 }
 
 const Loader = (props: Props) => {
-	const { type, uid, title, goBackTo, inspectorHistory, viewer, inspectItem } = props
-	if (!type) return null
+	const { __typename, uid, title, goBackTo, inspectorHistory, viewer, inspectItem } = props
+	if (!__typename) return null
 	const breadcrumbProps = {
 		goBackTo,
 		inspectorHistory,
 	}
 
 	const renderInner = () => {
-		switch (type) {
+		switch (__typename.toLowerCase()) {
 			case 'admin':
 				return <AdminInspector viewer={viewer} inspectItem={inspectItem} />
 			case 'user':
@@ -112,7 +112,7 @@ const Loader = (props: Props) => {
 				)
 			// return <MapInspector {...inspectorProps} uid={uid} />
 			default:
-				throw new Error(`There is no inspector for type "${type}"`)
+				throw new Error(`There is no inspector for type "${__typename}"`)
 		}
 	}
 

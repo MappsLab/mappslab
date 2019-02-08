@@ -10,7 +10,7 @@ import Inspector from './Inspector'
 
 export type InspectorItem = {
 	uid: string,
-	type: string,
+	__typename: string,
 	title: string,
 }
 
@@ -35,7 +35,7 @@ type Props = {
 	history: RouterHistory,
 	location: LocationType,
 	uid?: string,
-	type?: string,
+	__typename?: string,
 	title?: string,
 	viewer?: ViewerType,
 }
@@ -48,24 +48,24 @@ class InspectorProviderBase extends React.Component<Props, State> {
 	static defaultProps = {
 		viewer: undefined,
 		uid: undefined,
-		type: undefined,
+		__typename: undefined,
 		title: undefined,
 	}
 
 	constructor(props: Props) {
 		super(props)
-		const { uid, type, title } = props
+		const { uid, __typename, title } = props
 		/* Initialize the history with the first item */
-		const inspectorHistory = uid && type && title ? [{ uid, type, title }] : []
+		const inspectorHistory = uid && __typename && title ? [{ uid, __typename, title }] : []
 		this.state = {
 			inspectorHistory,
 		}
 	}
 
-	pushToHistory = ({ uid, type, title }) => {
-		if (!uid || !type || !title) return
+	pushToHistory = ({ uid, __typename, title }) => {
+		if (!uid || !__typename || !title) return
 		this.setState(({ inspectorHistory }) => ({
-			inspectorHistory: [...inspectorHistory, { uid, type, title }],
+			inspectorHistory: [...inspectorHistory, { uid, __typename: __typename.toLowerCase(), title }],
 		}))
 	}
 
@@ -74,13 +74,13 @@ class InspectorProviderBase extends React.Component<Props, State> {
 		this.pushPath(item)
 	}
 
-	pushPath = (item) => {
+	pushPath = (item: InspectorItem) => {
 		const { history, location } = this.props
-		const { type, uid, title } = item
+		const { __typename, uid, title } = item
 		const { inspect, ...searchParams } = parseQueryString(location.search)
 
 		const newQueryString = buildQueryString({
-			inspect: `${type}-${uid}-${title}`,
+			inspect: `${__typename}-${uid}-${title}`,
 			...searchParams,
 		})
 
@@ -103,7 +103,8 @@ class InspectorProviderBase extends React.Component<Props, State> {
 	}
 
 	render() {
-		const { children, viewer, uid, type, title } = this.props
+		console.log(this.props)
+		const { children, viewer, uid, __typename, title } = this.props
 		const { inspectorHistory } = this.state
 
 		const value = {
@@ -112,11 +113,11 @@ class InspectorProviderBase extends React.Component<Props, State> {
 		// console.log(uid, type, title)
 		return (
 			<Provider value={value}>
-				{type && (
+				{__typename && (
 					<Inspector
 						viewer={viewer}
 						uid={uid}
-						type={type}
+						__typename={__typename}
 						title={title}
 						inspectorHistory={inspectorHistory}
 						inspectItem={this.inspectItem}
@@ -147,7 +148,7 @@ export const InspectorProvider = (props: BaseProps) => (
 							location={location}
 							uid={uid}
 							title={title}
-							type={type}
+							__typename={type}
 							viewer={data && data.currentViewer && data.currentViewer.viewer}
 							{...props}
 						/>
