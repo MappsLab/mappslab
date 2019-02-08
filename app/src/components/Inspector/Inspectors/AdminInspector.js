@@ -3,8 +3,8 @@ import * as React from 'react'
 import type { ViewerType, ClassroomType, UserType } from 'Types'
 import { AdminQuery } from 'Queries/Admin'
 import Pane from 'Components/Pane'
+import List from 'Components/List'
 import type { InspectItem } from '../InspectorProvider'
-import List from './List'
 
 /**
  * AdminInspector

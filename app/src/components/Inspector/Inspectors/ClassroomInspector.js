@@ -5,10 +5,9 @@ import type { ViewerType, ClassroomType, UserType } from 'Types'
 import type { Mutation } from 'Types/GraphQL'
 import { UpdateClassroomMutation, ClassroomQuery } from 'Queries'
 import Pane from 'Components/Pane'
+import List from 'Components/List'
 import type { InspectItem } from '../InspectorProvider'
-import type { ListItemType } from './List'
 import EditableText from '../EditableText'
-import List from './List'
 
 /**
  * ClassroomInspector
@@ -53,7 +52,7 @@ const ClassroomInspector = (props: Props) => {
 		title: u.name,
 		info: [],
 		onClick: () => {
-			inspectItem({ uid: u.uid, type: 'user', title: u.name })
+			inspectItem({ uid: u.uid, __typename: 'user', title: u.name })
 		},
 	})
 
@@ -62,7 +61,7 @@ const ClassroomInspector = (props: Props) => {
 		title: m.title,
 		info: [],
 		onClick: () => {
-			inspectItem({ uid: m.uid, type: 'map', title: m.title })
+			inspectItem({ uid: m.uid, __typename: 'map', title: m.title })
 		},
 	}))
 

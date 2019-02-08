@@ -38,12 +38,10 @@ const ListAddEntry = ({ addLabel, searchName, search, searchResults, onSearchRes
 		  )
 		: []
 
-	const runSearch = () => {
-		if (inputValue.length > 2) search(inputValue)
-	}
-
 	useEffect(() => {
-		if (inputValue.length) runSearch()
+		if (inputValue.length) {
+			search(inputValue)
+		}
 	})
 
 	const onInputChange = (e: SyntheticInputEvent<HTMLInputElement>) => {

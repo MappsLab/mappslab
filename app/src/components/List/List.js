@@ -3,9 +3,7 @@ import * as React from 'react'
 import styled from 'styled-components'
 import { Header2 } from 'Components/Text'
 import type { ClassroomType, UserType, MapType } from 'Types'
-import ItemIcon from '../../ItemIcon'
-import { InspectorConsumer } from '../../InspectorProvider'
-import type { InspectItem } from '../../InspectorProvider'
+import ItemIcon from 'Components/ItemIcon'
 import ListAddEntry from './ListAddEntry'
 import ListItem from './ListItem'
 import type { SearchForList, ListItemHandler } from './utils'
@@ -27,7 +25,7 @@ const ListWrapper = styled.div`
  * List
  */
 
-type BaseProps = {
+type Props = {
 	items: Array<ClassroomType | UserType | MapType>,
 	title: string,
 	type: string,
@@ -36,10 +34,7 @@ type BaseProps = {
 	search?: SearchForList,
 	onSearchResultClick?: ListItemHandler,
 	searchResults?: Array<ClassroomType | UserType | MapType>,
-}
-
-type Props = BaseProps & {
-	inspectItem: InspectItem,
+	onItemClick: ListItemHandler,
 }
 
 const defaultAddLabel = 'Add'
@@ -48,14 +43,14 @@ export const List = ({
 	items,
 	title,
 	type,
-	inspectItem,
+	onItemClick,
 	viewerCanAdd,
 	addLabel,
 	search,
 	onSearchResultClick,
 	searchResults,
 }: Props) => {
-	const itemToListItem = (node) => nodeToListItem(node, inspectItem)
+	const itemToListItem = (node) => nodeToListItem(node, onItemClick)
 	if (viewerCanAdd && (!search || !onSearchResultClick))
 		throw new Error('You must provide `search` and `onSearchResultClick` functions')
 	return (
@@ -88,6 +83,8 @@ List.defaultProps = {
 	searchResults: [],
 }
 
-export default (baseProps: BaseProps) => (
-	<InspectorConsumer>{({ inspectItem }) => <List {...baseProps} inspectItem={inspectItem} />}</InspectorConsumer>
-)
+export default List
+
+// export default (baseProps: BaseProps) => (
+// 	<InspectorConsumer>{({ inspectItem }) => <List {...baseProps} inspectItem={inspectItem} />}</InspectorConsumer>
+// )

@@ -3,7 +3,9 @@ import { render, mockServer } from 'Jest/utils'
 import { fireEvent, wait } from 'react-testing-library'
 import { act } from 'react-dom/test-utils'
 /* import the bare component so we can inject dependencies instead of dealing with context */
-import { List } from 'Components/Inspector/Inspectors/List/List'
+import List from 'Components/List'
+
+const { useState } = React
 
 const types = ['classrooms', 'teachers', 'students']
 
@@ -26,9 +28,9 @@ describe('List Component', () => {
 		it(`should list items [${type}]`, async () => {
 			const result = await getTypes()
 			const items = result[type]
-			const inspectItem = jest.fn()
+			const onItemClick = jest.fn()
 
-			const { queryByText } = render(<List inspectItem={inspectItem} title="My List" items={items} />)
+			const { queryByText } = render(<List onItemClick={onItemClick} title="My List" items={items} />)
 			items.forEach((item) => {
 				const text = item.title || item.name
 				expect(queryByText(text)).toBeTruthy()
@@ -37,11 +39,11 @@ describe('List Component', () => {
 	})
 
 	types.forEach((type) => {
-		it(`should call inspectItem with their info when clicked [${type}]`, async () => {
+		it(`should call onItemClick with their info when clicked [${type}]`, async () => {
 			const result = await getTypes()
 			const items = result[type]
-			const inspectItem = jest.fn()
-			const { getByText } = render(<List inspectItem={inspectItem} type={type} title="My List" items={items} />)
+			const onItemClick = jest.fn()
+			const { getByText } = render(<List onItemClick={onItemClick} type={type} title="My List" items={items} />)
 
 			/* click on each item */
 			items.forEach((item) => {
@@ -50,18 +52,18 @@ describe('List Component', () => {
 				const itemButton = getByText(itemTitle)
 				fireEvent.click(itemButton)
 				if (__typename === 'User') {
-					expect(inspectItem).toHaveBeenCalledWith({ uid, name: itemTitle, __typename })
+					expect(onItemClick).toHaveBeenCalledWith({ uid, name: itemTitle, __typename })
 				} else {
-					expect(inspectItem).toHaveBeenCalledWith({ uid, title: itemTitle, __typename })
+					expect(onItemClick).toHaveBeenCalledWith({ uid, title: itemTitle, __typename })
 				}
 			})
 		})
 	})
 
 	it('should by default not display the + Add button', async () => {
-		const inspectItem = jest.fn()
+		const onItemClick = jest.fn()
 		const { classrooms } = await getTypes()
-		const { queryByText } = render(<List inspectItem={inspectItem} type="Classrooms" title="My Classrooms" items={classrooms} />)
+		const { queryByText } = render(<List onItemClick={onItemClick} type="Classrooms" title="My Classrooms" items={classrooms} />)
 		expect(queryByText('+ Add')).toBeFalsy()
 	})
 
@@ -69,7 +71,7 @@ describe('List Component', () => {
 		const { classrooms } = await getTypes()
 		const { getByText } = render(
 			<List
-				inspectItem={noop}
+				onItemClick={noop}
 				type="Classrooms"
 				search={noop}
 				onSearchResultClick={noop}
@@ -85,7 +87,7 @@ describe('List Component', () => {
 		const { classrooms } = await getTypes()
 		const { getByText } = render(
 			<List
-				inspectItem={noop}
+				onItemClick={noop}
 				type="Classrooms"
 				title="My Classrooms"
 				viewerCanAdd
@@ -101,19 +103,32 @@ describe('List Component', () => {
 	it('should search for items, display them, and call the `addNew()` function', async () => {
 		const { classrooms } = await getTypes()
 		const [class1, class2, ...otherClassrooms] = classrooms
-		const search = jest.fn(async () => [class1, class2])
+		const mockSearch = jest.fn(async () => [class1, class2])
 		const onSearchResultClick = jest.fn()
-		const { container, getByText, queryByText } = render(
-			<List
-				inspectItem={noop}
-				type="Classrooms"
-				title="My Classrooms"
-				viewerCanAdd
-				search={search}
-				onSearchResultClick={onSearchResultClick}
-				items={otherClassrooms}
-			/>,
-		)
+		/* eslint-disable-next-line react/prop-types */
+		const SampleList = ({ search }) => {
+			const [searchResults, setSearchResults] = useState([])
+
+			const doSearch = async (searchValue) => {
+				const results = await search(searchValue)
+				setSearchResults(results)
+			}
+
+			return (
+				<List
+					onItemClick={noop}
+					type="Classrooms"
+					title="My Classrooms"
+					viewerCanAdd
+					search={doSearch}
+					onSearchResultClick={onSearchResultClick}
+					searchResults={searchResults}
+					items={otherClassrooms}
+				/>
+			)
+		}
+		const { container, getByText, queryByText } = render(<SampleList search={mockSearch} />)
+
 		let addButton = getByText('+ Add')
 		/* expect a search input to appear after clicking the add button */
 		fireEvent.click(addButton)
@@ -122,12 +137,12 @@ describe('List Component', () => {
 
 		await wait()
 		act(() => {
-			fireEvent.change(searchInput, { target: { value: 'So' } })
+			fireEvent.change(searchInput, { target: { value: 'Ab' } })
 		})
 
 		/* expect the search fn to be called after the input changes */
-		expect(search.mock.calls[0][0]).toEqual('So')
-		const val1 = await search.mock.results[0].value
+		expect(mockSearch.mock.calls[0][0]).toEqual('Ab')
+		const val1 = await mockSearch.mock.results[0].value
 		expect(val1).toEqual([class1, class2])
 
 		await wait()
@@ -158,7 +173,7 @@ describe('List Component', () => {
 		expect(() => {
 			render(
 				<List
-					inspectItem={noop}
+					onItemClick={noop}
 					type="Classrooms"
 					title="My Classrooms"
 					viewerCanAdd
@@ -169,13 +184,13 @@ describe('List Component', () => {
 		}).toThrowErrorMatchingSnapshot()
 
 		expect(() => {
-			render(<List inspectItem={noop} type="Classrooms" title="My Classrooms" viewerCanAdd search={noop} items={classrooms} />)
+			render(<List onItemClick={noop} type="Classrooms" title="My Classrooms" viewerCanAdd search={noop} items={classrooms} />)
 		}).toThrowErrorMatchingSnapshot()
 
 		/* This should not throw */
 		render(
 			<List
-				inspectItem={noop}
+				onItemClick={noop}
 				type="Classrooms"
 				title="My Classrooms"
 				viewerCanAdd

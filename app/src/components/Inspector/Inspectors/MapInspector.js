@@ -2,8 +2,8 @@
 import * as React from 'react'
 import type { ViewerType, MapType } from 'Types'
 import { Button } from 'Components/Buttons'
+import List from 'Components/List'
 import type { InspectItem } from '../InspectorProvider'
-import List from './List'
 import EditableText from '../EditableText'
 
 /**

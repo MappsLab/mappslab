@@ -3,7 +3,7 @@ import * as React from 'react'
 import styled from 'styled-components'
 import { Button } from 'Components/Buttons'
 import type { InspectorItem } from './InspectorProvider'
-import ItemIcon from './ItemIcon'
+import ItemIcon from 'Components/ItemIcon'
 
 const Wrapper = styled.div`
 	${({ theme }) => `

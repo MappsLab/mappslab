@@ -103,7 +103,6 @@ class InspectorProviderBase extends React.Component<Props, State> {
 	}
 
 	render() {
-		console.log(this.props)
 		const { children, viewer, uid, __typename, title } = this.props
 		const { inspectorHistory } = this.state
 

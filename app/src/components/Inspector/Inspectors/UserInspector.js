@@ -5,7 +5,8 @@ import type { Mutation } from 'Types/GraphQL'
 import { ClassroomsQuery } from 'Queries/Classroom'
 import { UpdateUserMutation } from 'Queries/User'
 import { query as userQuery } from 'Queries/User/UserQuery'
-import List from './List'
+import List from 'Components/List'
+import type { InspectItem } from '../InspectorProvider'
 
 /**
  * UserInspector
@@ -14,6 +15,7 @@ import List from './List'
 type BaseProps = {
 	user: UserType,
 	viewer: null | ViewerType,
+	inspectItem: InspectItem,
 }
 
 type Props = BaseProps & {
@@ -22,7 +24,7 @@ type Props = BaseProps & {
 	updateUser: Mutation,
 }
 
-const UserInspector = ({ user, searchResults, viewer, queryClassrooms, updateUser }: Props) => {
+const UserInspector = ({ user, searchResults, viewer, queryClassrooms, updateUser, inspectItem }: Props) => {
 	const search = (searchValue: string) => {
 		queryClassrooms({
 			where: {
@@ -54,6 +56,7 @@ const UserInspector = ({ user, searchResults, viewer, queryClassrooms, updateUse
 					viewerCanAdd={viewerCanAdd}
 					type="classroom"
 					items={user.classrooms}
+					onItemClick={inspectItem}
 				/>
 			)}
 		</React.Fragment>
