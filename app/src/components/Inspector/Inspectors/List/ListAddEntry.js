@@ -1,47 +1,45 @@
 // @flow
 import * as React from 'react'
 import { Button } from 'Components/Buttons'
-import type { SearchForList, ListItemHandler, ListItem as ListItemType } from './utils'
+import type { ClassroomType, UserType, MapType } from 'Types'
+import type { SearchForList, ListItemHandler } from './utils'
 import { nodeToListItem } from './utils'
 import ListItem from './ListItem'
 
 const { useState, useEffect } = React
 
 /**
- * ListAddField
+ * ListAddEntry
  */
 
 type Props = {
 	addLabel: string,
 	searchName: string,
 	search: SearchForList,
+	searchResults?: Array<ClassroomType | UserType | MapType>,
 	onSearchResultClick: ListItemHandler,
 }
 
-const ListAddField = ({ addLabel, searchName, search, onSearchResultClick }: Props) => {
+const ListAddEntry = ({ addLabel, searchName, search, searchResults, onSearchResultClick }: Props) => {
 	const [isOpen, setIsOpen] = useState(false)
 	const [inputValue, setInputValue] = useState('')
-	const [searchResults, setSearchResults] = useState([])
 
 	const reset = () => {
 		setIsOpen(false)
 		setInputValue('')
-		setSearchResults([])
 	}
 
-	// const handleSearchResultClick = (item: ListItemType)
-
-	const runSearch = async () => {
-		if (inputValue.length) {
-			const results = await search(inputValue)
-			const items = results.map((node) =>
+	const searchResultItems = searchResults
+		? searchResults.map((node) =>
 				nodeToListItem(node, () => {
 					onSearchResultClick(node)
 					reset()
 				}),
-			)
-			if (items) setSearchResults(items)
-		}
+		  )
+		: []
+
+	const runSearch = () => {
+		if (inputValue.length > 2) search(inputValue)
 	}
 
 	useEffect(() => {
@@ -59,14 +57,18 @@ const ListAddField = ({ addLabel, searchName, search, onSearchResultClick }: Pro
 			</Button>
 		)
 	return (
-		<>
+		<React.Fragment>
 			<label htmlFor="searchInput">
 				Search for a new {searchName}
 				<input id="searchInput" name="searchInput" value={inputValue} onChange={onInputChange} />
 			</label>
-			{searchResults && searchResults.map((item) => <ListItem key={item.key} {...item} />)}
-		</>
+			{searchResultItems && searchResultItems.map((item) => <ListItem key={item.key} {...item} />)}
+		</React.Fragment>
 	)
 }
 
-export default ListAddField
+ListAddEntry.defaultProps = {
+	searchResults: [],
+}
+
+export default ListAddEntry

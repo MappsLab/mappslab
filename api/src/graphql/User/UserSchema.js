@@ -105,7 +105,7 @@ const User = /* GraphQL */ `
 	}
 
 	input UpdateUserInput {
-		uid: String
+		uid: String!
 		name: String
 		email: String
 		addToClassrooms: [String!]

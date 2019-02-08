@@ -35,6 +35,7 @@ type BaseProps = {
 	addLabel?: string,
 	search?: SearchForList,
 	onSearchResultClick?: ListItemHandler,
+	searchResults?: Array<ClassroomType | UserType | MapType>,
 }
 
 type Props = BaseProps & {
@@ -43,7 +44,17 @@ type Props = BaseProps & {
 
 const defaultAddLabel = 'Add'
 
-export const List = ({ items, title, type, inspectItem, viewerCanAdd, addLabel, search, onSearchResultClick }: Props) => {
+export const List = ({
+	items,
+	title,
+	type,
+	inspectItem,
+	viewerCanAdd,
+	addLabel,
+	search,
+	onSearchResultClick,
+	searchResults,
+}: Props) => {
 	const itemToListItem = (node) => nodeToListItem(node, inspectItem)
 	if (viewerCanAdd && (!search || !onSearchResultClick))
 		throw new Error('You must provide `search` and `onSearchResultClick` functions')
@@ -54,11 +65,12 @@ export const List = ({ items, title, type, inspectItem, viewerCanAdd, addLabel, 
 				{title}
 			</ListTitle>
 			{items.map(itemToListItem).map((item) => (
-				<ListItem key={item.key} {...item} />
+				<ListItem key={item.node.uid} {...item} />
 			))}
 			{viewerCanAdd && search && onSearchResultClick && (
 				<ListAddEntry
 					search={search}
+					searchResults={searchResults}
 					onSearchResultClick={onSearchResultClick}
 					searchName={type.replace(/s$/, '')}
 					addLabel={addLabel || defaultAddLabel}
@@ -73,6 +85,7 @@ List.defaultProps = {
 	addLabel: defaultAddLabel,
 	search: undefined,
 	onSearchResultClick: undefined,
+	searchResults: [],
 }
 
 export default (baseProps: BaseProps) => (

@@ -1,33 +1,80 @@
 // @flow
 import * as React from 'react'
-import type { ViewerType, UserType } from 'Types'
-import type { InspectItem } from '../InspectorProvider'
+import type { ViewerType, UserType, ClassroomType } from 'Types'
+import type { Mutation } from 'Types/GraphQL'
+import { ClassroomsQuery } from 'Queries/Classroom'
+import { UpdateUserMutation } from 'Queries/User'
+import { query as userQuery } from 'Queries/User/UserQuery'
 import List from './List'
 
 /**
  * UserInspector
  */
 
-type Props = {
+type BaseProps = {
 	user: UserType,
 	viewer: null | ViewerType,
-	inspectItem: InspectItem,
 }
 
-const UserInspector = (props: Props) => {
-	const { user, inspectItem } = props
+type Props = BaseProps & {
+	queryClassrooms: (any) => Promise<Array<ClassroomType>>,
+	searchResults: Array<ClassroomType>,
+	updateUser: Mutation,
+}
 
-	const classrooms = user.classrooms
-		? user.classrooms.map((c) => ({
-				key: c.uid,
-				title: c.title,
-				info: [],
-				onClick: () => {
-					inspectItem({ uid: c.uid, type: 'classroom', title: c.title })
+const UserInspector = ({ user, searchResults, viewer, queryClassrooms, updateUser }: Props) => {
+	const search = (searchValue: string) => {
+		queryClassrooms({
+			where: {
+				title: {
+					contains: searchValue,
 				},
-		  }))
-		: []
-	return <List title="Classrooms" type="classroom" items={classrooms} />
+			},
+		})
+	}
+	const viewerCanAdd = Boolean(viewer && viewer.uid === user.uid)
+	const onSearchResultClick = (classroom) => {
+		const variables = {
+			input: {
+				uid: user.uid,
+				addToClassrooms: [classroom.uid],
+			},
+		}
+		updateUser({ variables, refetchQueries: [{ query: userQuery, variables: { uid: user.uid } }] })
+	}
+
+	return (
+		<React.Fragment>
+			{user.classrooms && (
+				<List
+					title="Classrooms"
+					search={search}
+					searchResults={searchResults}
+					onSearchResultClick={onSearchResultClick}
+					viewerCanAdd={viewerCanAdd}
+					type="classroom"
+					items={user.classrooms}
+				/>
+			)}
+		</React.Fragment>
+	)
 }
 
-export default UserInspector
+const Wrapper = (baseProps: BaseProps) => (
+	<UpdateUserMutation>
+		{(updateUser) => (
+			<ClassroomsQuery delayQuery>
+				{({ data, loadQuery }) => (
+					<UserInspector
+						queryClassrooms={loadQuery}
+						updateUser={updateUser}
+						searchResults={(data && data.classrooms) || []}
+						{...baseProps}
+					/>
+				)}
+			</ClassroomsQuery>
+		)}
+	</UpdateUserMutation>
+)
+
+export default Wrapper

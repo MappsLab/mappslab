@@ -7,11 +7,9 @@ import 'react-testing-library/cleanup-after-each'
 
 // Mock JSDom console for cleaner error reporting
 console.error = (err) => {
-	// console.log(err.message)
-	// console.log(err.message)
-	// console.log(err)
 	// throw new Error(err)
 }
+
 // console.warn = (warning) => {
 // 	throw new Error(warning)
 // }

@@ -26,15 +26,18 @@ type Props = {
 
 const TeacherLogin = ({ teacherEmail, transition }: Props) => (
 	<UserQuery delayQuery variables={{ email: teacherEmail }}>
-		{({ loadQuery }) => {
+		{({ loadQuery, data }) => {
 			const handleSubmit = async ({ email }) => {
 				// transition(SUBMIT, {})
 				transition(SUBMIT)
-				const r = await loadQuery({ email })
-				if (r && r.data && r.data.user) {
-					transition(FETCHED_TEACHER, { userUid: r.data.user.uid })
-				}
+				await loadQuery({ email })
 			}
+
+			if (data && data.user) {
+				transition(FETCHED_TEACHER, { userUid: data.user.uid })
+				return null
+			}
+			// console.log(data)
 
 			return (
 				<State is={[FIND_TEACHER]}>

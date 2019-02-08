@@ -1,10 +1,13 @@
 // @flow
 import * as React from 'react'
+import merge from 'deepmerge'
 import type { DocumentNode } from 'graphql'
 import type { QueryRenderProps } from 'react-apollo'
 import { Query as ApolloQuery } from 'react-apollo'
 import { Loading, FetchError } from './Network'
 import { getNetworkStatus, unwindEdges } from './utils'
+
+const { useState } = React
 
 export type LoadingState = 'loading' | 'refetching' | 'passivelyRefetching' | 'fetchingMore' | 'ready' | 'errors'
 
@@ -41,26 +44,38 @@ type QueryProps<T> = QueryConfig<T> & {
 }
 
 const Query = <T: GenericResponse>(props: QueryProps<T>) => {
+	const [loadDelayed, setLoadDelayed] = useState(false)
+	const [loadDelayedVariables, setLoadDelayedVariables] = useState({})
 	// A few more query props are available:
 	// https://www.apollographql.com/docs/react/essentials/queries.html#props
-	const { children, skip, delayQuery, ...queryProps } = props
+	const { children, skip, delayQuery, variables, ...queryProps } = props
 	if (!queryProps.query) throw new Error('No query was supplied.')
+	const mergedVariables = merge(variables, loadDelayedVariables)
+	const shouldSkip = loadDelayed ? false : skip || delayQuery
 	return (
-		<ApolloQuery {...queryProps} skip={skip || delayQuery}>
+		<ApolloQuery {...queryProps} variables={mergedVariables} skip={shouldSkip}>
 			{(response: QueryRenderProps<T>) => {
 				const { networkStatus, error, client } = response
 				// if `delay === true`, pass in a 'load' function to manually fire the query
 				// and return the results
-				const loadQuery = async (variables) => {
-					const result = await client.query({
-						query: queryProps.query,
-						variables,
-					})
-					const { data } = result
-					return {
-						...result,
-						data: data ? unwindEdges(data) : data,
+				const loadQuery = (delayedVariables) => {
+					if (!loadDelayed) {
+						setLoadDelayed(true)
+						setLoadDelayedVariables(delayedVariables)
 					}
+					// // console.log('v', variables)
+					// const result = await client.query({
+					// 	query: queryProps.query,
+					// 	variables,
+					// })
+					// const { data } = result
+					// // console.log(result)
+					// console.log('called')
+					// client.writeQuery({ query: queryProps.query, data: data || null })
+					// return {
+					// 	...result,
+					// 	data: data ? unwindEdges(data) : data,
+					// }
 				}
 				const status = getNetworkStatus(networkStatus)
 				const { LoadingComponent, ErrorComponent } = props
