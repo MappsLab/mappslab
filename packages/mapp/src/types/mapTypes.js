@@ -63,6 +63,10 @@ export type MapsEventListener = {
 	remove(): void,
 }
 
+export type NamedEventListeners = {
+	[key: string]: MapsEventListener,
+}
+
 export type MapTypeId =
 	/** This map type displays a transparent layer of major streets on satellite images. */
 	| 'HYBRID'

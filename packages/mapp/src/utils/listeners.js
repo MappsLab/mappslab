@@ -1,13 +1,9 @@
 // @flow
 
 import type { MVCObject } from '../types/coreTypes'
-import type { MapsEventListener } from '../types/mapTypes'
+import type { MapsEventListener, NamedEventListeners } from '../types/mapTypes'
 
-type Handlers = {
-	[key: string]: (...args: any[]) => void,
-}
-
-export const addListeners = (entity: MVCObject, events: Object, handlers: Handlers): Array<MapsEventListener> =>
+export const addListeners = (entity: MVCObject, events: Object, handlers: NamedEventListeners): Array<MapsEventListener> =>
 	Object.keys(handlers)
 		.map((eventName) => {
 			const googleEvent = events[eventName]

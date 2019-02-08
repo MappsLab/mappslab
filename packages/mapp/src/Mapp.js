@@ -4,22 +4,21 @@
 
 import * as React from 'react'
 import loadGoogleMaps from './services/googleMaps'
-// import { getNewValues, separateOptionsAndEvents } from './utils/data'
 import { addListeners, removeListeners } from './utils/listeners'
-import type { Map, OverlayView, LatLng } from './types'
+import type { LatLng } from './types/latLngTypes'
+import type { OverlayView } from './types/overlayTypes'
+import type { Map, MapsEventListener, NamedEventListeners } from './types/mapTypes'
 import { mappedMapEventNames } from './eventNames'
 /**
  * Context Setup
  */
 
-const MappContext = React.createContext()
-export const MappConsumer = MappContext.Consumer
-
 export type MapContextType = {
-	map: Map,
+	map?: Map,
 }
 
-type EventHandlers = {}
+const MappContext = React.createContext<MapContextType>({})
+export const MappConsumer = MappContext.Consumer
 
 declare var google: any
 
@@ -33,15 +32,19 @@ export type MappUtils = {
 	zoomIn: () => void,
 	zoomOut: () => void,
 	panTo: (LatLng, Offset) => void,
-	addEventListeners: (eventHandlers: EventHandlers) => void,
-	removeEventListeners: (eventHandlers: EventHandlers) => void,
+	addEventListeners: (eventHandlers: NamedEventListeners) => void,
+	removeEventListeners: (eventHandlers: NamedEventListeners) => void,
 }
 
-export type MappRenderProps = {
-	googleMap: Map,
-	overlay: OverlayView,
-	utils: MappUtils,
-}
+export type MappRenderProps =
+	| {
+			googleMap: Map,
+			overlay: OverlayView,
+			utils: MappUtils,
+	  }
+	| {
+			errored: boolean,
+	  }
 
 /**
  * Events
@@ -60,6 +63,7 @@ type Props = {
 
 type State = {
 	ready: boolean,
+	errored: boolean,
 }
 
 const defaultStyle = { width: '100%', height: '100%', position: 'absolute' }
@@ -68,11 +72,9 @@ class Mapp extends React.Component<Props, State> {
 	// static Marker = Marker
 	// static InfoWindow = InfoWindow
 	// static CustomPopup = CustomPopup
-	listeners: Array<{}> = []
 
 	static defaultProps = {
 		initialOptions: {},
-		pins: [],
 		style: defaultStyle,
 	}
 
@@ -81,13 +83,29 @@ class Mapp extends React.Component<Props, State> {
 		this.mapRef = React.createRef()
 		this.state = {
 			ready: false,
+			errored: false,
 		}
 	}
+
+	overlay: OverlayView
+
+	map: Map
+
+	mapRef: { current: any }
 
 	async componentDidMount() {
 		const { APIKey, initialOptions } = this.props
 		// TODO not sure if this will work with  multiple rapid calls.. figure it out
-		await loadGoogleMaps(APIKey)
+		try {
+			await loadGoogleMaps(APIKey)
+		} catch (e) {
+			// eslint-disable-next-line no-console
+			console.warn(e)
+			this.setState({
+				errored: true,
+			})
+			return
+		}
 
 		// $FlowFixMe
 		this.map = new google.maps.Map(this.mapRef.current, initialOptions) // eslint-disable-line no-undef
@@ -101,7 +119,9 @@ class Mapp extends React.Component<Props, State> {
 		this.overlay.setMap(this.map)
 	}
 
-	getUtils = () => {
+	listeners: Array<MapsEventListener> = []
+
+	getUtils = (): MappUtils => {
 		// const pixelToLatLng = (x: number, y: number) =>
 		// 	this.overlay.getProjection().fromContainerPixelToLatLng(new google.maps.Point(x, y))
 
@@ -151,26 +171,24 @@ class Mapp extends React.Component<Props, State> {
 		removeListeners(this.listeners)
 	}
 
-	addEventListeners = (eventHandlers: EventHandlers) => {
+	addEventListeners = (eventHandlers: NamedEventListeners) => {
 		this.listeners = addListeners(this.map, mappedMapEventNames, eventHandlers)
 	}
 
-	overlay: OverlayView
-
-	map: Object
-
-	mapRef: { current: any }
-
 	render() {
 		const { style, render } = this.props
-		const { ready } = this.state
+		const { ready, errored } = this.state
 		const value = {
 			map: this.map,
 		}
 		return (
 			<MappContext.Provider value={value}>
 				<div style={style} ref={this.mapRef} />
-				{ready
+				{errored
+					? render({
+							errored,
+					  })
+					: ready
 					? render({
 							overlay: this.overlay,
 							googleMap: this.map,

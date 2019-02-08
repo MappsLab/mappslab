@@ -11,7 +11,7 @@ const scriptExists = (): boolean => {
 	return scripts.length > 0
 }
 
-const appendScript = (src: string, onSuccess: () => void, onFailure: () => void): void => {
+const appendScript = (src: string, onSuccess: () => void, onFailure: (string) => void): void => {
 	if (!element.src) {
 		element.src = src
 		element.async = true
@@ -28,23 +28,26 @@ const appendScript = (src: string, onSuccess: () => void, onFailure: () => void)
 	}
 	element.onerror = () => {
 		scriptLoaded = false
-		onFailure()
+		onFailure('Unable to load Google Maps SDK')
 	}
 	if (!scriptExists()) {
 		document.getElementsByTagName('head')[0].appendChild(element)
 	}
 }
 
-const createSrc = (params: Object): string =>
+type Params = {
+	[key: string]: string | number,
+}
+
+const createSrc = (params: Params): string =>
 	[
 		API_BASE_URL,
-		Object.entries(params)
-			// $FlowFixMe - how to type an object whose values can only be strings?
-			.map(([key, value]) => `${key}=${value}`)
+		Object.keys(params)
+			.map((key) => `${key}=${params[key]}`)
 			.join('&'),
 	].join('')
 
-const loadGoogleMaps = (APIKey: string, params: Object = {}): Promise<void | Error> =>
+const loadGoogleMaps = (APIKey: string, params: Params = {}): Promise<void | Error> =>
 	new Promise(async (resolve, reject) => {
 		if (scriptLoaded || scriptExists()) resolve()
 		if (!APIKey || APIKey.length === 0) {
