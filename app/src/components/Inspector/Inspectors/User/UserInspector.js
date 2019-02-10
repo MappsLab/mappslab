@@ -6,7 +6,7 @@ import { ClassroomsQuery } from 'Queries/Classroom'
 import { UpdateUserMutation } from 'Queries/User'
 import { query as userQuery } from 'Queries/User/UserQuery'
 import List from 'Components/List'
-import type { InspectItem } from '../InspectorProvider'
+import type { InspectItem } from '../../InspectorProvider'
 
 /**
  * UserInspector

@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react'
-import type { MappRenderProps, MappUtils, LatLng } from 'mapp'
+import type { MappRenderProps, LatLng } from 'mapp'
 import { withStateMachine } from 'react-automata'
 import type { MachineState } from 'react-automata'
 import { CurrentViewerQuery, MapQuery } from 'Queries'
@@ -90,7 +90,7 @@ class MapProviderClass extends React.Component<Props, State> {
 	}
 
 	componentDidMount() {
-		this.updateOptions()
+		if (!this.props.errored) this.updateOptions()
 	}
 
 	getEditorUtils = () => ({
