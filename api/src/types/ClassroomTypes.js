@@ -22,6 +22,9 @@ export type UpdateClassroomInput = {
 	uid: string,
 	title?: string,
 	description?: string,
+	addStudents?: Array<string>,
+	addTeachers?: Array<string>,
+	addMaps?: Array<string>,
 }
 
 export type NewClassroomArgs = {
