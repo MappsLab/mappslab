@@ -1,5 +1,6 @@
 // @flow
-import type { Node, Variables } from 'Types'
+import type { Node } from 'Types'
+import type { Variables } from 'Types/GraphQL'
 // import type { InspectorItem } from '../../InspectorProvider'
 
 // type NodeArray = Array<ClassroomType | UserType | MapType>

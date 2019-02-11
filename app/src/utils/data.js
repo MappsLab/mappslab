@@ -1,7 +1,6 @@
 // @flow
 import * as R from 'ramda'
 import type { NestedArray } from 'ramda'
-import type { MachineValue } from 'Types'
 
 export const findLastIndex = <T>(array: Array<T>, fn: (T) => boolean): number => {
 	const reverseIndex = [...array].reverse().findIndex(fn)
@@ -37,6 +36,10 @@ export const compose = (...funcs: Array<Function>) => funcs.reduce((a, b) => (..
  * Turn a statechart value object into a string:
  * { foo: { bar: 'baz' } } => 'foo.bar.baz'
  */
+
+type MachineValue = {
+	[key: string]: string | MachineValue,
+}
 export const getStateString = (value: MachineValue): string =>
 	typeof value === 'string'
 		? value

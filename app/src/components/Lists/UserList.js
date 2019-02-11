@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react'
-import type { UserType } from 'Types'
+import type { UserType } from 'Types/User'
 import { UsersQuery } from 'Queries/User'
 import List from './List'
 import type { ListOfTypeProps, ListOfTypeBaseProps } from './utils'
@@ -11,9 +11,10 @@ import type { ListOfTypeProps, ListOfTypeBaseProps } from './utils'
 
 const UserList = ({ title, searchQuery, searchResults, items, viewerCanAdd, update, onItemClick }: ListOfTypeProps<UserType>) => {
 	const search = (searchValue: string) => {
+		if (searchValue.length < 3) return
 		searchQuery({
 			where: {
-				title: {
+				name: {
 					contains: searchValue,
 				},
 			},

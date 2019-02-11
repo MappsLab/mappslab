@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react'
-import type { MapType } from 'Types'
+import type { MapType } from 'Types/Map'
 import { MapsQuery } from 'Queries/Map'
 import List from './List'
 import type { ListOfTypeProps, ListOfTypeBaseProps } from './utils'

@@ -2,7 +2,7 @@
 import * as React from 'react'
 import styled from 'styled-components'
 import { Centered } from 'Components/Layout'
-import type { ViewerType } from 'Types'
+import type { ViewerType } from 'Types/User'
 import Pane from 'Components/Pane'
 import { UserInspector, ClassroomInspector, MapInspector, AdminInspector } from './Inspectors'
 import type { InspectItem, InspectorItem } from './InspectorProvider'

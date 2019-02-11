@@ -1,12 +1,12 @@
 // @flow
 import gql from 'graphql-tag'
-import type { MapType } from 'Types'
+import type { MapType } from 'Types/Map'
 import { withDefaultMutation } from '../Mutation'
 import type { MutationWrapper } from '../Mutation'
 
 const mutation = gql`
-	mutation UpdateMap($uid: String!, $title: String, $description: String) {
-		updateMap(input: { uid: $uid, title: $title, description: $description }) {
+	mutation UpdateMap($input: UpdateMapInput!) {
+		updateMap(input: $input) {
 			title
 			uid
 			slug

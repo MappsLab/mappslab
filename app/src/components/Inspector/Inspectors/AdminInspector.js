@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react'
-import type { ViewerType, ClassroomType, UserType } from 'Types'
+import type { ClassroomType } from 'Types/Classroom'
+import type { ViewerType, UserType } from 'Types/User'
 import { AdminQuery } from 'Queries/Admin'
 import Pane from 'Components/Pane'
 import { List } from 'Components/Lists'

@@ -1,12 +1,12 @@
 // @flow
 import gql from 'graphql-tag'
-import type { ClassroomType } from 'Types'
+import type { ClassroomType } from 'Types/Classroom'
 import { withDefaultMutation } from '../Mutation'
 import type { MutationWrapper } from '../Mutation'
 
 const mutation = gql`
-	mutation UpdateClassroom($uid: String!, $title: String, $description: String) {
-		updateClassroom(input: { uid: $uid, title: $title, description: $description }) {
+	mutation UpdateClassroom($input: UpdateClassroomInput!) {
+		updateClassroom(input: $input) {
 			uid
 			description
 			teachers {

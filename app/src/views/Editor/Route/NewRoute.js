@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react'
 import type { LatLng } from 'mapp/types'
-import type { PinType } from 'Types'
+import type { PinType } from 'Types/Pin'
 import Route from './Route'
 
 /**

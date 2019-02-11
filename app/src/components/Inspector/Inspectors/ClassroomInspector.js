@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react'
-import type { ViewerType, ClassroomType } from 'Types'
+import type { ClassroomType } from 'Types/Classroom'
+import type { ViewerType } from 'Types/User'
 import type { Mutation, QueryConfig } from 'Types/GraphQL'
 import { UpdateClassroomMutation, ClassroomQuery } from 'Queries/Classroom'
 import { MapList, UserList } from 'Components/Lists'

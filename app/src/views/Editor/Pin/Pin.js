@@ -2,7 +2,7 @@
 import React from 'react'
 import { Marker, CustomPopup, markerEventNames } from 'mapp'
 import { State } from 'react-automata'
-import type { PinType } from 'Types'
+import type { PinType } from 'Types/Pin'
 import { eventsReducer, isFunc } from 'Utils/data'
 import { MapConsumer } from '../Provider'
 import type { ProviderProps } from '../Provider'

@@ -2,7 +2,7 @@
 import * as React from 'react'
 import { Route } from 'react-router-dom'
 import type { RouterHistory, Location as LocationType } from 'react-router-dom'
-import type { ViewerType } from 'Types'
+import type { ViewerType } from 'Types/User'
 import { parseQueryString, buildQueryString } from 'Utils/url'
 import { findLastIndex } from 'Utils/data'
 import { CurrentViewerQuery } from 'Queries/Viewer'

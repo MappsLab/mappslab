@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react'
-import type { ClassroomType } from 'Types'
+import type { ClassroomType } from 'Types/Classroom'
 import { ClassroomsQuery } from 'Queries/Classroom'
 import List from './List'
 import type { ListOfTypeProps, ListOfTypeBaseProps } from './utils'

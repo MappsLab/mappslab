@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react'
-import type { MapType } from 'Types'
+import type { MapType } from 'Types/Map'
 import type { Mutation, QueryConfig } from 'Types/GraphQL'
 import { MapQuery, UpdateMapMutation } from 'Queries/Map'
 import { Button } from 'Components/Buttons'

@@ -1,6 +1,7 @@
 // @flow
 import gql from 'graphql-tag'
-import type { ClassroomType, UserType } from 'Types'
+import type { ClassroomType } from 'Types/Classroom'
+import type { UserType } from 'Types/User'
 import { withDefaultQuery } from '../Query'
 import type { QueryWrapper } from '../Query'
 

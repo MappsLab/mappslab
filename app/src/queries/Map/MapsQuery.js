@@ -1,6 +1,6 @@
 // @flow
 import gql from 'graphql-tag'
-import type { MapType } from 'Types'
+import type { MapType } from 'Types/Map'
 import type { QueryWrapper } from '../Query'
 import { withDefaultQuery } from '../Query'
 
