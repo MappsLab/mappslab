@@ -25,11 +25,13 @@ const UserList = ({ title, searchQuery, searchResults, items, viewerCanAdd, upda
 			setShowResults(true)
 			const roleFilter = userType ? { roles: { includes: userType } } : {}
 			searchQuery({
-				where: {
-					name: {
-						contains: searchValue,
+				input: {
+					where: {
+						name: {
+							contains: searchValue,
+						},
+						...roleFilter,
 					},
-					...roleFilter,
 				},
 			})
 		}

@@ -5,26 +5,37 @@ import { MapsQuery } from 'Queries/Map'
 import List from './List'
 import type { ListOfTypeProps, ListOfTypeBaseProps } from './utils'
 
+const { useState } = React
+
 /**
  * MapList
  */
 
 const MapList = ({ title, searchQuery, searchResults, items, viewerCanAdd, update, onItemClick }: ListOfTypeProps<MapType>) => {
+	const [showResults, setShowResults] = useState(false)
+
 	const search = (searchValue: string) => {
-		searchQuery({
-			where: {
-				title: {
-					contains: searchValue,
+		if (searchValue.length < 3) {
+			setShowResults(false)
+		} else {
+			setShowResults(true)
+			searchQuery({
+				input: {
+					where: {
+						title: {
+							contains: searchValue,
+						},
+					},
 				},
-			},
-		})
+			})
+		}
 	}
 
 	return (
 		<List
 			title={title}
 			search={search}
-			searchResults={searchResults}
+			searchResults={showResults ? searchResults : []}
 			onSearchResultClick={update}
 			viewerCanAdd={viewerCanAdd}
 			type="Map"
@@ -36,7 +47,7 @@ const MapList = ({ title, searchQuery, searchResults, items, viewerCanAdd, updat
 
 const MapListWrapper = (baseProps: ListOfTypeBaseProps<MapType>) => (
 	<MapsQuery delayQuery>
-		{({ data, refetch }) => <MapList searchQuery={refetch} searchResults={data ? data.maps : []} {...baseProps} />}
+		{({ data, refetch }) => <MapList searchQuery={refetch} searchResults={data ? data.maps || [] : []} {...baseProps} />}
 	</MapsQuery>
 )
 

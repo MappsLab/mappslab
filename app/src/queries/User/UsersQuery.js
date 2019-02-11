@@ -5,8 +5,8 @@ import type { QueryWrapper } from '../Query'
 import { withDefaultQuery } from '../Query'
 
 const query = gql/* GraphQL */ `
-	query UsersQuery($first: Int, $after: String, $sort: UserSortParameter, $where: UserFilterParameter) {
-		users(input: { first: $first, after: $after, sort: $sort, where: $where }) {
+	query UsersQuery($input: UsersListOptions) {
+		users(input: $input) {
 			pageInfo {
 				hasNextPage
 				hasPrevPage
