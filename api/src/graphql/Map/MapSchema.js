@@ -40,10 +40,26 @@ const Map = /* GraphQL */ `
 		description: String
 	}
 
+	input MapSortParameter {
+		title: SortOrder
+	}
+
+	input MapFilterParameter {
+		title: StringOperators
+	}
+
+	input MapListOptions {
+		first: Int
+		after: String
+		sort: MapSortParameter
+		where: MapFilterParameter
+	}
+
 	# Queries & Mutations
 
 	extend type Query {
 		map(input: GetMapInput!): Map!
+		maps(input: MapListOptions): MapConnection!
 	}
 
 	extend type Mutation {

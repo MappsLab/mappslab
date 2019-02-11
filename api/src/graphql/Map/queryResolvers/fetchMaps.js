@@ -8,6 +8,6 @@ export const map = (_: Object, { input }: GetNodeInput, ctx: GraphQLContext): Pr
 	ctx.models.Map.getMap(input)
 
 export const maps = async (_: Object, { input }: PaginationInput, ctx: GraphQLContext): Promise<PageType<MapType> | null> => {
-	const fetchedMaps = await ctx.models.Map.getMaps(/* input */)
+	const fetchedMaps = await ctx.models.Map.getMaps(input)
 	return assemblePage(fetchedMaps, input)
 }
