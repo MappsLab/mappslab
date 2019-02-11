@@ -21,6 +21,9 @@ const Classroom = /* GraphQL */ `
 		uid: String!
 		title: String
 		description: String
+		addStudents: [String]
+		addTeachers: [String]
+		addMaps: [String]
 	}
 
 	# Relationships

@@ -44,9 +44,9 @@ const filterStringCreators = {
 	},
 	before: genericNumberOperator('le'),
 	after: genericNumberOperator('ge'),
-}
 
-const filterVarBlockCreators = {}
+	includes: (field: string, value: string) => `allofterms(${field}, "${value}")`,
+}
 
 const createOperatorFilter = (operator: string, field: string, value: any): FilterStrings => {
 	if (!filterStringCreators[operator]) throw new Error(`"${operator}" is not a valid operator`)

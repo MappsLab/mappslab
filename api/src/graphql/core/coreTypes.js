@@ -41,6 +41,10 @@ export const coreTypes = /* GraphQL */ `
 		end: Float!
 	}
 
+	input ListOperators {
+		includes: String
+	}
+
 	input StringOperators {
 		eq: String
 		notEq: String
