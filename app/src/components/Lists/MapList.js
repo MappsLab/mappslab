@@ -36,7 +36,7 @@ const MapList = ({ title, searchQuery, searchResults, items, viewerCanAdd, updat
 
 const MapListWrapper = (baseProps: ListOfTypeBaseProps<MapType>) => (
 	<MapsQuery delayQuery>
-		{({ data, loadQuery }) => <MapList searchQuery={loadQuery} searchResults={data ? data.maps : []} {...baseProps} />}
+		{({ data, refetch }) => <MapList searchQuery={refetch} searchResults={data ? data.maps : []} {...baseProps} />}
 	</MapsQuery>
 )
 

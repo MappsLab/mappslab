@@ -42,7 +42,7 @@ const ListAddEntry = ({ addLabel, searchName, search, searchResults, onSearchRes
 		if (inputValue.length) {
 			search(inputValue)
 		}
-	})
+	}, [inputValue])
 
 	const onInputChange = (e: SyntheticInputEvent<HTMLInputElement>) => {
 		setInputValue(e.target.value)

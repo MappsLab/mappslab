@@ -44,24 +44,23 @@ type QueryProps<T> = QueryConfig<T> & {
 }
 
 const Query = <T: GenericResponse>(props: QueryProps<T>) => {
-	const [loadDelayed, setLoadDelayed] = useState(false)
-	const [loadDelayedVariables, setLoadDelayedVariables] = useState({})
-	// A few more query props are available:
-	// https://www.apollographql.com/docs/react/essentials/queries.html#props
-	const { children, skip, delayQuery, variables, ...queryProps } = props
+	const [fetchedAfterSkip, setFetchAfterSkip] = useState(false)
+	const [fetchAfterSkipVariables, setFetchAfterSkipVariables] = useState(null)
+	const { children, skip, delayQuery, variables: originalVariables, ...queryProps } = props
 	if (!queryProps.query) throw new Error('No query was supplied.')
-	const mergedVariables = merge(variables, loadDelayedVariables)
-	const shouldSkip = loadDelayed ? false : skip || delayQuery
+	const variables = fetchAfterSkipVariables || originalVariables || {}
+
+	const shouldSkip = (skip === true || delayQuery === true) && fetchedAfterSkip === false
 	return (
-		<ApolloQuery {...queryProps} variables={mergedVariables} skip={shouldSkip}>
-			{(response: QueryRenderProps<T>) => {
-				const { networkStatus, error, client } = response
-				// if `delay === true`, pass in a 'load' function to manually fire the query
-				// and return the results
-				const loadQuery = (delayedVariables) => {
-					if (!loadDelayed) {
-						setLoadDelayed(true)
-						setLoadDelayedVariables(delayedVariables)
+		<ApolloQuery {...queryProps} variables={variables} skip={shouldSkip}>
+			{({ refetch, ...response }: QueryRenderProps<T>) => {
+				const { networkStatus, error } = response
+				const betterRefetch = (newVariables) => {
+					if (fetchedAfterSkip) {
+						refetch(newVariables)
+					} else {
+						setFetchAfterSkip(true)
+						setFetchAfterSkipVariables(newVariables)
 					}
 				}
 				const status = getNetworkStatus(networkStatus)
@@ -75,7 +74,7 @@ const Query = <T: GenericResponse>(props: QueryProps<T>) => {
 				const renderProps = {
 					...response,
 					data: data ? unwindEdges(data) : data,
-					loadQuery,
+					refetch: skip || delayQuery ? betterRefetch : refetch,
 					queryConfig: {
 						query: queryProps.query,
 						variables,

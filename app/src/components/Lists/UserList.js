@@ -12,7 +12,7 @@ const { useState } = React
  */
 
 type Props = ListOfTypeProps<UserType> & {
-	userType: 'teacher' | 'student' | undefined,
+	userType: 'teacher' | 'student' | void,
 }
 
 const UserList = ({ title, searchQuery, searchResults, items, viewerCanAdd, update, onItemClick, userType }: Props) => {
@@ -35,8 +35,6 @@ const UserList = ({ title, searchQuery, searchResults, items, viewerCanAdd, upda
 		}
 	}
 
-	console.log('?')
-
 	return (
 		<List
 			title={title}
@@ -51,17 +49,9 @@ const UserList = ({ title, searchQuery, searchResults, items, viewerCanAdd, upda
 	)
 }
 
-const defaultVariables = {
-	where: {
-		name: {
-			contains: '___',
-		},
-	},
-}
-
 const UserListWrapper = (baseProps: ListOfTypeBaseProps<UserType>) => (
-	<UsersQuery variables={defaultVariables}>
-		{({ data, loadQuery }) => <UserList searchQuery={loadQuery} searchResults={data ? data.users || [] : []} {...baseProps} />}
+	<UsersQuery delayQuery>
+		{({ data, refetch }) => <UserList searchQuery={refetch} searchResults={data ? data.users || [] : []} {...baseProps} />}
 	</UsersQuery>
 )
 

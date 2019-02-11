@@ -26,11 +26,11 @@ type Props = {
 
 const TeacherLogin = ({ teacherEmail, transition }: Props) => (
 	<UserQuery delayQuery variables={{ email: teacherEmail }}>
-		{({ loadQuery, data }) => {
+		{({ refetch, data }) => {
 			const handleSubmit = async ({ email }) => {
 				// transition(SUBMIT, {})
 				transition(SUBMIT)
-				await loadQuery({ email })
+				await refetch({ email })
 			}
 
 			if (data && data.user) {

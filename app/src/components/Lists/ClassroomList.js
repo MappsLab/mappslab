@@ -44,9 +44,7 @@ const ClassroomList = ({
 
 const ClassroomListWrapper = (baseProps: ListOfTypeBaseProps<ClassroomType>) => (
 	<ClassroomsQuery delayQuery>
-		{({ data, loadQuery }) => (
-			<ClassroomList searchQuery={loadQuery} searchResults={data ? data.classrooms : []} {...baseProps} />
-		)}
+		{({ data, refetch }) => <ClassroomList searchQuery={refetch} searchResults={data ? data.classrooms : []} {...baseProps} />}
 	</ClassroomsQuery>
 )
 
