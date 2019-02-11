@@ -50,7 +50,7 @@ const MockApolloProvider = createMockProvider(
 	{
 		Query: () => ({
 			user: () => mockViewer,
-			classrooms: mockClassrooms,
+			classrooms: () => mockClassrooms(),
 			currentViewer: () => ({
 				viewer: mockViewer,
 			}),
@@ -68,11 +68,6 @@ const MockApolloProvider = createMockProvider(
 		},
 	},
 )
-
-// beforeAll(async (done) => {
-// 	classrooms = await mockServer.getClassrooms()
-// 	done()
-// })
 
 describe('List [integration test]', () => {
 	it('Allows users to add new items', async () => {
@@ -92,6 +87,7 @@ describe('List [integration test]', () => {
 		expect(getByText('Math')).toBeTruthy()
 		expect(queryByText('Socialism 101')).toBeFalsy()
 
+		/* Act */
 		act(() => {
 			fireEvent.click(addButton)
 		})

@@ -3,7 +3,7 @@ import { render, mockServer } from 'Jest/utils'
 import { fireEvent, wait } from 'react-testing-library'
 import { act } from 'react-dom/test-utils'
 /* import the bare component so we can inject dependencies instead of dealing with context */
-import List from 'Components/List'
+import { List } from 'Components/Lists'
 
 const { useState } = React
 

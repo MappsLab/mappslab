@@ -62,11 +62,20 @@ export type StartSubscriptionOptions<PreviousResponse, ResponseData> = Subscript
 	callback?: SubscriptionCallback,
 }
 
-type MutationOptions = {
-	variables: {},
-	// refetchQueries:
-	// optimisticResponse:
-	// update:
+type Variable = string | number | boolean | Variable
+
+type Variables = {
+	[key: string]: Variable | Variables | Array<Variable>,
+}
+
+export type QueryConfig = {
+	query: DocumentNode,
+	variables: Variables,
+}
+
+export type MutationOptions = {
+	variables: Variables,
+	refetchQueries: Array<QueryConfig>,
 }
 
 export type Mutation = (options?: MutationOptions) => Promise<void>

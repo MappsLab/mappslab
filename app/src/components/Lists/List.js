@@ -2,7 +2,7 @@
 import * as React from 'react'
 import styled from 'styled-components'
 import { Header2 } from 'Components/Text'
-import type { ClassroomType, UserType, MapType } from 'Types'
+import type { Node } from 'Types'
 import ItemIcon from 'Components/ItemIcon'
 import ListAddEntry from './ListAddEntry'
 import ListItem from './ListItem'
@@ -26,30 +26,20 @@ const ListWrapper = styled.div`
  */
 
 type Props = {
-	items: Array<ClassroomType | UserType | MapType>,
+	items: Array<Node>,
 	title: string,
 	type: string,
 	viewerCanAdd?: boolean,
 	addLabel?: string,
 	search?: SearchForList,
 	onSearchResultClick?: ListItemHandler,
-	searchResults?: Array<ClassroomType | UserType | MapType>,
+	searchResults?: Array<Node>,
 	onItemClick: ListItemHandler,
 }
 
 const defaultAddLabel = 'Add'
 
-export const List = ({
-	items,
-	title,
-	type,
-	onItemClick,
-	viewerCanAdd,
-	addLabel,
-	search,
-	onSearchResultClick,
-	searchResults,
-}: Props) => {
+const List = ({ items, title, type, onItemClick, viewerCanAdd, addLabel, search, onSearchResultClick, searchResults }: Props) => {
 	const itemToListItem = (node) => nodeToListItem(node, onItemClick)
 	if (viewerCanAdd && (!search || !onSearchResultClick))
 		throw new Error('You must provide `search` and `onSearchResultClick` functions')
@@ -84,7 +74,3 @@ List.defaultProps = {
 }
 
 export default List
-
-// export default (baseProps: BaseProps) => (
-// 	<InspectorConsumer>{({ inspectItem }) => <List {...baseProps} inspectItem={inspectItem} />}</InspectorConsumer>
-// )

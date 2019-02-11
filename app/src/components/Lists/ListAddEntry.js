@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react'
 import { Button } from 'Components/Buttons'
-import type { ClassroomType, UserType, MapType } from 'Types'
+import type { Node } from 'Types'
 import type { SearchForList, ListItemHandler } from './utils'
 import { nodeToListItem } from './utils'
 import ListItem from './ListItem'
@@ -16,7 +16,7 @@ type Props = {
 	addLabel: string,
 	searchName: string,
 	search: SearchForList,
-	searchResults?: Array<ClassroomType | UserType | MapType>,
+	searchResults?: Array<Node>,
 	onSearchResultClick: ListItemHandler,
 }
 

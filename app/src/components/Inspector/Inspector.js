@@ -3,7 +3,6 @@ import * as React from 'react'
 import styled from 'styled-components'
 import { Centered } from 'Components/Layout'
 import type { ViewerType } from 'Types'
-import { MapQuery } from 'Queries'
 import Pane from 'Components/Pane'
 import { UserInspector, ClassroomInspector, MapInspector, AdminInspector } from './Inspectors'
 import type { InspectItem, InspectorItem } from './InspectorProvider'
@@ -22,7 +21,7 @@ const Outer = styled.div`
 type Props = {
 	// for the Pane
 	__typename: string,
-	uid?: string,
+	uid: string,
 	title?: string,
 	inspectItem: InspectItem,
 	viewer: null | ViewerType,
@@ -44,27 +43,8 @@ const Loader = (props: Props) => {
 				return <UserInspector uid={uid} viewer={viewer} inspectItem={inspectItem} />
 			case 'classroom':
 				return <ClassroomInspector viewer={viewer} uid={uid} paneTitle={title} inspectItem={inspectItem} />
-
 			case 'map':
-				return null
-			// return (
-			// 	<MapQuery variables={{ uid }} LoadingComponent={false}>
-			// 		{({ data, loading }) => {
-			// 			const { map } = data
-			// 			const inspectorPaneProps = loading
-			// 				? { title: ' ' }
-			// 				: {
-			// 						title: map.title,
-			// 						icon: map.emoji || '🗺',
-			// 				  }
-			// 			return (
-			// 				<InspectorPane {...breadcrumbProps} {...inspectorPaneProps}>
-			// 					{loading ? <InspectorSkeleton /> : <MapInspector viewer={viewer} map={map} inspectItem={inspectItem} />}
-			// 				</InspectorPane>
-			// 			)
-			// 		}}
-			// 	</MapQuery>
-			// )
+				return <MapInspector viewer={viewer} uid={uid} paneTitle={title} inspectItem={inspectItem} />
 			default:
 				throw new Error(`There is no inspector for type "${__typename}"`)
 		}
@@ -83,7 +63,6 @@ const Loader = (props: Props) => {
 }
 
 Loader.defaultProps = {
-	uid: undefined,
 	title: undefined,
 }
 

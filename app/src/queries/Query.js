@@ -63,19 +63,6 @@ const Query = <T: GenericResponse>(props: QueryProps<T>) => {
 						setLoadDelayed(true)
 						setLoadDelayedVariables(delayedVariables)
 					}
-					// // console.log('v', variables)
-					// const result = await client.query({
-					// 	query: queryProps.query,
-					// 	variables,
-					// })
-					// const { data } = result
-					// // console.log(result)
-					// console.log('called')
-					// client.writeQuery({ query: queryProps.query, data: data || null })
-					// return {
-					// 	...result,
-					// 	data: data ? unwindEdges(data) : data,
-					// }
 				}
 				const status = getNetworkStatus(networkStatus)
 				const { LoadingComponent, ErrorComponent } = props
@@ -89,6 +76,10 @@ const Query = <T: GenericResponse>(props: QueryProps<T>) => {
 					...response,
 					data: data ? unwindEdges(data) : data,
 					loadQuery,
+					queryConfig: {
+						query: queryProps.query,
+						variables,
+					},
 				}
 				return children(renderProps)
 			}}

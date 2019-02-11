@@ -2,8 +2,8 @@
 import * as React from 'react'
 import styled from 'styled-components'
 import { Button } from 'Components/Buttons'
-import type { InspectorItem } from './InspectorProvider'
 import ItemIcon from 'Components/ItemIcon'
+import type { InspectorItem } from './InspectorProvider'
 
 const Wrapper = styled.div`
 	${({ theme }) => `
@@ -36,7 +36,7 @@ const Breadcrumbs = (props: Props) => {
 	return (
 		<Wrapper>
 			<Button onClick={goBackToItem(previousItem)} level="tertiary">
-				← <ItemIcon type={previousItem.type} /> {previousItem.title}
+				← <ItemIcon type={previousItem.__typename} /> {previousItem.title}
 			</Button>
 		</Wrapper>
 	)

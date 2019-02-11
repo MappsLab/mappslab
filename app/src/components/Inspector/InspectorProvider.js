@@ -10,7 +10,7 @@ import Inspector from './Inspector'
 
 export type InspectorItem = {
 	uid: string,
-	__typename: string,
+	__typename: 'User' | 'Classroom' | 'Map' | 'Pin' | 'Route',
 	title: string,
 }
 

@@ -1,43 +1,67 @@
 // @flow
 import * as React from 'react'
-import type { ViewerType, MapType } from 'Types'
+import type { MapType } from 'Types'
+import type { Mutation, QueryConfig } from 'Types/GraphQL'
+import { MapQuery, UpdateMapMutation } from 'Queries/Map'
 import { Button } from 'Components/Buttons'
-import List from 'Components/List'
+import { ClassroomList } from 'Components/Lists'
 import type { InspectItem } from '../InspectorProvider'
 import EditableText from '../EditableText'
+import InspectorSkeleton from '../InspectorSkeleton'
 
 /**
  * MapInspector
  */
 
-type Props = {
-	map: MapType,
-	viewer: null | ViewerType,
+type BaseProps = {
+	// viewer: null | ViewerType,
 	inspectItem: InspectItem,
 }
 
-const MapInspector = (props: Props) => {
-	const { map, inspectItem } = props
-	const { classroom } = map
+type Props = BaseProps & {
+	map: MapType,
+	mapQueryConfig: QueryConfig,
+	updateMap: Mutation,
+}
 
-	const classrooms = [
-		{
-			key: classroom.uid,
-			title: classroom.title,
-			info: [],
-			onClick: () => {
-				inspectItem({ uid: classroom.uid, type: 'classroom', title: classroom.title })
+const MapInspector = ({ map, inspectItem, mapQueryConfig, updateMap }: Props) => {
+	const updateMapClassrooms = (classroom) => {
+		const variables = {
+			input: {
+				uid: map.uid,
+				addClassrooms: [classroom.uid],
 			},
-		},
-	]
+		}
+		updateMap({ variables, refetchQueries: [mapQueryConfig] })
+	}
 
 	return (
 		<React.Fragment>
 			<EditableText label="Description" name="description" initialValue={map.description} />
 			<Button to={`/maps/${map.uid}`}>Go to map →</Button>
-			<List title="Classrooms" type="classroom" items={classrooms} />
+			<ClassroomList
+				title="Classroom"
+				items={[map.classroom].filter(Boolean)}
+				update={updateMapClassrooms}
+				onItemClick={inspectItem}
+				viewerCanAdd={false}
+			/>
 		</React.Fragment>
 	)
 }
 
-export default MapInspector
+const Wrapper = ({ uid, ...baseProps }: BaseProps & { uid: string }) => (
+	<MapQuery LoadingComponent={false} variables={{ uid }}>
+		{({ data, loading, queryConfig }) =>
+			loading ? (
+				<InspectorSkeleton />
+			) : (
+				<UpdateMapMutation>
+					{(updateMap) => <MapInspector map={data.map} mapQueryConfig={queryConfig} updateMap={updateMap} {...baseProps} />}
+				</UpdateMapMutation>
+			)
+		}
+	</MapQuery>
+)
+
+export default Wrapper

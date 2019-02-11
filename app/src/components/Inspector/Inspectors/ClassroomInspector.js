@@ -1,112 +1,103 @@
 // @flow
 import * as React from 'react'
-import { adopt } from 'react-adopt'
-import type { ViewerType, ClassroomType, UserType } from 'Types'
-import type { Mutation } from 'Types/GraphQL'
-import { UpdateClassroomMutation, ClassroomQuery } from 'Queries'
-import Pane from 'Components/Pane'
-import List from 'Components/List'
+import type { ViewerType, ClassroomType } from 'Types'
+import type { Mutation, QueryConfig } from 'Types/GraphQL'
+import { UpdateClassroomMutation, ClassroomQuery } from 'Queries/Classroom'
+import { MapList, UserList } from 'Components/Lists'
 import type { InspectItem } from '../InspectorProvider'
-import EditableText from '../EditableText'
+import InspectorSkeleton from '../InspectorSkeleton'
 
 /**
  * ClassroomInspector
  */
 
-type Props = {
+type BaseProps = {
 	inspectItem: InspectItem,
-	updateClassroom: Mutation,
-	paneTitle: string,
-	classroomQuery: {
-		loading: boolean,
-		data: { classroom?: ClassroomType },
-	},
+	viewer: ViewerType | null,
 }
 
-const ClassroomInspector = (props: Props) => {
-	const {
-		paneTitle,
-		updateClassroom,
-		inspectItem,
-		classroomQuery: {
-			loading,
-			data: { classroom },
-		},
-	} = props
+type Props = BaseProps & {
+	classroom: ClassroomType,
+	classroomQueryConfig: QueryConfig,
+	updateClassroom: Mutation,
+}
 
-	if (loading || !classroom) {
-		return (
-			<Pane size="full" title={paneTitle}>
-				Loading...
-			</Pane>
-		)
+const ClassroomInspector = ({ viewer, classroom, updateClassroom, inspectItem, classroomQueryConfig }: Props) => {
+	const updateClassroomUsers = (user) => {
+		const addKey = user.roles.includes('teacher') ? 'addTeachers' : 'addStudents'
+		const variables = {
+			input: {
+				uid: classroom.uid,
+				[addKey]: [user.uid],
+			},
+		}
+		updateClassroom({ variables, refetchQueries: [classroomQueryConfig] })
 	}
 
-	const update = async (fieldData) => {
-		const variables = { uid: classroom.uid, ...fieldData }
-		await updateClassroom({ variables })
+	const updateClassroomMaps = (map) => {
+		const variables = {
+			input: {
+				uid: classroom.uid,
+				addMaps: [map.uid],
+			},
+		}
+		updateClassroom({ variables, refetchQueries: [classroomQueryConfig] })
 	}
 
-	const userToItem = (u: UserType): ListItemType => ({
-		key: u.uid,
-		title: u.name,
-		info: [],
-		onClick: () => {
-			inspectItem({ uid: u.uid, __typename: 'user', title: u.name })
-		},
-	})
-
-	const maps = classroom.maps.map((m) => ({
-		key: m.uid,
-		title: m.title,
-		info: [],
-		onClick: () => {
-			inspectItem({ uid: m.uid, __typename: 'map', title: m.title })
-		},
-	}))
-
-	const students = classroom.students ? classroom.students.map(userToItem) : []
-	const teachers = classroom.teachers ? classroom.teachers.map(userToItem) : []
-
-	const viewerCanEdit = classroom.viewerIsTeacher
+	const viewerCanAdd = Boolean(
+		viewer &&
+			(viewer.roles.includes('admin') ||
+				(viewer.roles.includes('teacher') || classroom.teachers.map((t) => t.uid).includes(viewer.uid))),
+	)
 
 	return (
-		<Pane size="full" title={classroom.title} viewerCanEdit={viewerCanEdit} updateTitle={update}>
-			<EditableText
-				initialValue={classroom.description}
-				name="description"
-				label="Description"
-				multiline
-				viewerCanEdit={viewerCanEdit}
-				updateFn={update}
-				placeholder="Give this classroom a descrpition.."
+		<React.Fragment>
+			<MapList
+				title="Maps in this Classroom"
+				items={classroom.maps || []}
+				viewer={viewer}
+				update={updateClassroomMaps}
+				onItemClick={inspectItem}
+				viewerCanAdd={viewerCanAdd}
 			/>
-			<List title="Maps" type="map" items={maps} />
-			<List title="Students" type="user" items={students} />
-			<List title="Teachers" type="user" items={teachers} />
-		</Pane>
+			<UserList
+				title="Students in this Classroom"
+				items={classroom.students || []}
+				viewer={viewer}
+				update={updateClassroomUsers}
+				onItemClick={inspectItem}
+				viewerCanAdd={viewerCanAdd}
+			/>
+			<UserList
+				title="Teachers in this Classroom"
+				items={classroom.teachers || []}
+				viewer={viewer}
+				update={updateClassroomUsers}
+				onItemClick={inspectItem}
+				viewerCanAdd={viewerCanAdd}
+			/>
+		</React.Fragment>
 	)
 }
 
-/**
- * Load in the required queries & mutations
- */
-
-type BaseProps = {
-	inspectItem: InspectItem,
-	viewer: null | ViewerType,
-	uid: string,
-}
-
-const Composed = adopt({
-	classroomQuery: ({ uid, render }) => (
-		<ClassroomQuery LoadingComponent={false} variables={{ uid }}>
-			{render}
-		</ClassroomQuery>
-	),
-	updateClassroom: <UpdateClassroomMutation />,
-})
-
-export default ({ uid, ...baseProps }: BaseProps) => (
-	<Composed uid={uid}>{(composedProps) => <ClassroomInspector {...baseProps} {...composedProps} />}</Composed>
+const Wrapper = ({ uid, ...baseProps }: BaseProps & { uid: string }) => (
+	<ClassroomQuery LoadingComponent={false} variables={{ uid }}>
+		{({ data, loading, queryConfig }) =>
+			loading ? (
+				<InspectorSkeleton />
+			) : (
+				<UpdateClassroomMutation>
+					{(updateClassroom) => (
+						<ClassroomInspector
+							classroom={data.classroom}
+							classroomQueryConfig={queryConfig}
+							updateClassroom={updateClassroom}
+							{...baseProps}
+						/>
+					)}
+				</UpdateClassroomMutation>
+			)
+		}
+	</ClassroomQuery>
 )
+export default Wrapper
