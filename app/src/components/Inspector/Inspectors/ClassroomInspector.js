@@ -63,6 +63,7 @@ const ClassroomInspector = ({ viewer, classroom, updateClassroom, inspectItem, c
 			/>
 			<UserList
 				title="Students in this Classroom"
+				userType="student"
 				items={classroom.students || []}
 				viewer={viewer}
 				update={updateClassroomUsers}
@@ -71,6 +72,7 @@ const ClassroomInspector = ({ viewer, classroom, updateClassroom, inspectItem, c
 			/>
 			<UserList
 				title="Teachers in this Classroom"
+				userType="teacher"
 				items={classroom.teachers || []}
 				viewer={viewer}
 				update={updateClassroomUsers}
