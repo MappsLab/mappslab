@@ -54,7 +54,7 @@ const LoginSuccess = ({ viewer, transition }: Props) => {
 				</React.Fragment>
 			) : null}
 			{isTeacher && (
-				<Button to={encodeURI(`/dashboard?inspect=user-${viewer.uid}-${viewer.name}`)} level="tertiary">
+				<Button to={encodeURI(`/dashboard?inspect=User-${viewer.uid}-${viewer.name}`)} level="tertiary">
 					Manage my classrooms
 				</Button>
 			)}

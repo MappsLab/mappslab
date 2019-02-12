@@ -20,18 +20,17 @@ const Outer = styled.div`
 
 type Props = {
 	// for the Pane
-	__typename: string,
-	uid: string,
-	title?: string,
 	inspectItem: InspectItem,
 	viewer: null | ViewerType,
 	// for the breadcrumb
 	goBackTo: (InspectorItem) => void,
 	inspectorHistory: Array<InspectorItem>,
+	currentItem: InspectorItem,
 }
 
 const Loader = (props: Props) => {
-	const { __typename, uid, title, goBackTo, inspectorHistory, viewer, inspectItem } = props
+	const { currentItem, goBackTo, inspectorHistory, viewer, inspectItem } = props
+	const { __typename, uid, title } = currentItem
 	if (!__typename) return null
 
 	const renderInner = () => {
@@ -50,6 +49,8 @@ const Loader = (props: Props) => {
 		}
 	}
 
+	console.log(title)
+
 	return (
 		<Centered>
 			<Outer>
@@ -60,10 +61,6 @@ const Loader = (props: Props) => {
 			</Outer>
 		</Centered>
 	)
-}
-
-Loader.defaultProps = {
-	title: undefined,
 }
 
 export default Loader

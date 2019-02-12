@@ -1,8 +1,7 @@
 // @flow
 import * as React from 'react'
-import { Route } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import type { RouterHistory, Location as LocationType } from 'react-router-dom'
-import type { ViewerType } from 'Types/User'
 import { parseQueryString, buildQueryString } from 'Utils/url'
 import { findLastIndex } from 'Utils/data'
 import { CurrentViewerQuery } from 'Queries/Viewer'
@@ -34,10 +33,6 @@ type Props = {
 	children: React.Node,
 	history: RouterHistory,
 	location: LocationType,
-	uid?: string,
-	__typename?: string,
-	title?: string,
-	viewer?: ViewerType,
 }
 
 type State = {
@@ -45,42 +40,46 @@ type State = {
 }
 
 class InspectorProviderBase extends React.Component<Props, State> {
-	static defaultProps = {
-		viewer: undefined,
-		uid: undefined,
-		__typename: undefined,
-		title: undefined,
-	}
-
 	constructor(props: Props) {
 		super(props)
-		const { uid, __typename, title } = props
+		const { location } = props
+		const { inspect } = parseQueryString(decodeURI(location.search))
+		const [__typename, uid, title] = inspect ? inspect.split('-') : [undefined, undefined, undefined]
+		const currentItem = {
+			__typename,
+			uid,
+			title,
+		}
+
 		/* Initialize the history with the first item */
-		const inspectorHistory = uid && __typename && title ? [{ uid, __typename, title }] : []
+		const inspectorHistory = [currentItem]
 		this.state = {
 			inspectorHistory,
 		}
 	}
 
-	pushToHistory = ({ uid, __typename, title }) => {
-		if (!uid || !__typename || !title) return
+	pushToHistory = (nextItem: InspectorItem) => {
 		this.setState(({ inspectorHistory }) => ({
-			inspectorHistory: [...inspectorHistory, { uid, __typename: __typename.toLowerCase(), title }],
+			inspectorHistory: [...inspectorHistory, nextItem],
 		}))
 	}
 
 	inspectItem = (item: InspectorItem) => {
-		this.pushToHistory(item)
-		this.pushPath(item)
+		const nextItem = {
+			...item,
+			title: item.title || item.name,
+		}
+		this.pushToHistory(nextItem)
+		this.pushPath(nextItem)
 	}
 
 	pushPath = (item: InspectorItem) => {
 		const { history, location } = this.props
-		const { __typename, uid, title } = item
+		const { __typename, uid, title, name } = item
 		const { inspect, ...searchParams } = parseQueryString(location.search)
 
 		const newQueryString = buildQueryString({
-			inspect: `${__typename}-${uid}-${title}`,
+			inspect: `${__typename}-${uid}-${title || name}`,
 			...searchParams,
 		})
 
@@ -103,57 +102,32 @@ class InspectorProviderBase extends React.Component<Props, State> {
 	}
 
 	render() {
-		const { children, viewer, uid, __typename, title } = this.props
+		const { children } = this.props
 		const { inspectorHistory } = this.state
+		const currentItem = inspectorHistory[inspectorHistory.length - 1]
 
 		const value = {
 			inspectItem: this.inspectItem,
 		}
-		// console.log(uid, type, title)
 		return (
-			<Provider value={value}>
-				{__typename && (
-					<Inspector
-						viewer={viewer}
-						uid={uid}
-						__typename={__typename}
-						title={title}
-						inspectorHistory={inspectorHistory}
-						inspectItem={this.inspectItem}
-						goBackTo={this.goBackTo}
-					/>
+			<CurrentViewerQuery>
+				{({ data }) => (
+					<Provider value={value}>
+						{currentItem && (
+							<Inspector
+								viewer={data && data.currentViewer && data.currentViewer.viewer}
+								currentItem={currentItem}
+								inspectorHistory={inspectorHistory}
+								inspectItem={this.inspectItem}
+								goBackTo={this.goBackTo}
+							/>
+						)}
+						{children}
+					</Provider>
 				)}
-				{children}
-			</Provider>
+			</CurrentViewerQuery>
 		)
 	}
 }
 
-type BaseProps = {
-	children: React.Node,
-}
-
-export const InspectorProvider = (props: BaseProps) => (
-	<Route
-		render={({ location, history }) => {
-			const { inspect } = parseQueryString(decodeURI(location.search))
-			const [type, uid, title] = inspect ? inspect.split('-') : [undefined, undefined, undefined]
-
-			return (
-				<CurrentViewerQuery>
-					{({ data }) => (
-						<InspectorProviderBase
-							history={history}
-							location={location}
-							uid={uid}
-							title={title}
-							__typename={type}
-							viewer={data && data.currentViewer && data.currentViewer.viewer}
-							{...props}
-						/>
-					)}
-				</CurrentViewerQuery>
-			)
-		}}
-	/>
-)
+export const InspectorProvider = withRouter(InspectorProviderBase)

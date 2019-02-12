@@ -95,6 +95,12 @@ class EditableText extends React.Component<Props, State> {
 		this.autoSize()
 	}
 
+	componentWillReceiveProps(nextProps: Props) {
+		if (nextProps.initialValue !== this.props.initialValue) {
+			this.setState({ value: nextProps.initialValue })
+		}
+	}
+
 	componentWillUnmount() {
 		this.submitChange()
 		// const inputRef = this.inputRef ? this.inputRef.current : undefined
