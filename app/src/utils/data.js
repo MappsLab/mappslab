@@ -2,6 +2,8 @@
 import * as R from 'ramda'
 import type { NestedArray } from 'ramda'
 
+export const objEquals = R.equals
+
 export const findLastIndex = <T>(array: Array<T>, fn: (T) => boolean): number => {
 	const reverseIndex = [...array].reverse().findIndex(fn)
 	return array.length - reverseIndex - 1

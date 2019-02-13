@@ -1,16 +1,17 @@
 // @flow
 import * as React from 'react'
-import { withRouter } from 'react-router-dom'
+import { Route } from 'react-router-dom'
 import type { RouterHistory, Location as LocationType } from 'react-router-dom'
 import { parseQueryString, buildQueryString } from 'Utils/url'
-import { findLastIndex } from 'Utils/data'
+import { findLastIndex, objEquals } from 'Utils/data'
 import { CurrentViewerQuery } from 'Queries/Viewer'
 import Inspector from './Inspector'
 
 export type InspectorItem = {
 	uid: string,
 	__typename: 'User' | 'Classroom' | 'Map' | 'Pin' | 'Route',
-	title: string,
+	title?: string,
+	name?: string,
 }
 
 export type InspectItem = (InspectorItem) => void
@@ -29,62 +30,54 @@ export const InspectorConsumer = Consumer
  * InspectorProvider
  */
 
-type Props = {
+type BaseProps = {
 	children: React.Node,
+}
+
+type Props = BaseProps & {
+	initialItem: null | InspectorItem,
+	location: {
+		pathname: string,
+		search: string,
+	},
 	history: RouterHistory,
-	location: LocationType,
 }
 
 type State = {
 	inspectorHistory: Array<InspectorItem>,
 }
 
+const getItemFromQueryString = (locationSearch: string): InspectorItem | null => {
+	if (!locationSearch.length) return null
+	const { inspect } = parseQueryString(decodeURI(locationSearch))
+	if (!inspect) return null
+	const [__typename, uid, title] = inspect.split('-')
+	return {
+		__typename,
+		uid,
+		title,
+	}
+}
+
 class InspectorProviderBase extends React.Component<Props, State> {
 	constructor(props: Props) {
 		super(props)
-		const { location } = props
-		const { inspect } = parseQueryString(decodeURI(location.search))
-		const [__typename, uid, title] = inspect ? inspect.split('-') : [undefined, undefined, undefined]
-		const currentItem = {
-			__typename,
-			uid,
-			title,
-		}
+		const { initialItem } = props
 
-		/* Initialize the history with the first item */
-		const inspectorHistory = [currentItem]
+		/* Initialize the history with the first item, filtering out a `null` inspectorItem */
 		this.state = {
-			inspectorHistory,
+			inspectorHistory: [initialItem].filter(Boolean),
 		}
 	}
 
-	pushToHistory = (nextItem: InspectorItem) => {
-		this.setState(({ inspectorHistory }) => ({
-			inspectorHistory: [...inspectorHistory, nextItem],
-		}))
-	}
-
-	inspectItem = (item: InspectorItem) => {
-		const nextItem = {
-			...item,
-			title: item.title || item.name,
-		}
-		this.pushToHistory(nextItem)
-		this.pushPath(nextItem)
-	}
-
-	pushPath = (item: InspectorItem) => {
-		const { history, location } = this.props
-		const { __typename, uid, title, name } = item
-		const { inspect, ...searchParams } = parseQueryString(location.search)
-
-		const newQueryString = buildQueryString({
-			inspect: `${__typename}-${uid}-${title || name}`,
-			...searchParams,
+	clearHistory = () => {
+		this.setState({
+			inspectorHistory: [],
 		})
+	}
 
-		const newPath = `${location.pathname}${newQueryString}`
-		history.push(newPath)
+	inspectItem = (nextItem: InspectorItem) => {
+		this.setState(({ inspectorHistory }) => ({ inspectorHistory: [...inspectorHistory, nextItem] }))
 	}
 
 	goBackTo = (item: InspectorItem) => {
@@ -95,9 +88,9 @@ class InspectorProviderBase extends React.Component<Props, State> {
 					inspectorHistory: inspectorHistory.slice(0, index + 1),
 				}
 			},
-			() => {
-				this.pushPath(item)
-			},
+			// () => {
+			// 	this.props.pushToBrowserHistory(item)
+			// },
 		)
 	}
 
@@ -130,4 +123,15 @@ class InspectorProviderBase extends React.Component<Props, State> {
 	}
 }
 
-export const InspectorProvider = withRouter(InspectorProviderBase)
+export const InspectorProvider = (baseProps: BaseProps) => (
+	<Route
+		render={({ location, history }) => (
+			<InspectorProviderBase
+				{...baseProps}
+				location={location}
+				history={history}
+				initialItem={getItemFromQueryString(location.search)}
+			/>
+		)}
+	/>
+)

@@ -30,8 +30,7 @@ type Props = {
 
 const Loader = (props: Props) => {
 	const { currentItem, goBackTo, inspectorHistory, viewer, inspectItem } = props
-	const { __typename, uid, title } = currentItem
-	if (!__typename) return null
+	const { __typename, uid, title, name } = currentItem
 
 	const renderInner = () => {
 		switch (__typename.toLowerCase()) {
@@ -49,13 +48,11 @@ const Loader = (props: Props) => {
 		}
 	}
 
-	console.log(title)
-
 	return (
 		<Centered>
 			<Outer>
 				<Breadcrumbs goBackTo={goBackTo} inspectorHistory={inspectorHistory} />
-				<Pane size="full" title={title}>
+				<Pane size="full" title={title || name}>
 					{renderInner()}
 				</Pane>
 			</Outer>
