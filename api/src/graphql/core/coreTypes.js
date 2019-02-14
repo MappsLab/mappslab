@@ -6,7 +6,6 @@ export const coreTypeResolvers = {
 }
 
 export const coreTypes = /* GraphQL */ `
-	scalar Upload
 	scalar DateTime
 
 	interface Node {
