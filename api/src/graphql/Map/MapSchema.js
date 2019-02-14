@@ -29,10 +29,10 @@ const Map = /* GraphQL */ `
 		uid: String!
 	}
 
-	input NewMapInput {
+	input CreateMapInput {
 		title: String!
 		description: String
-		classroomUid: String!
+		addToClassrooms: [String!]
 	}
 
 	input ModifyMapInput {
@@ -63,7 +63,7 @@ const Map = /* GraphQL */ `
 	}
 
 	extend type Mutation {
-		createMap(input: NewMapInput!): Map!
+		createMap(input: CreateMapInput!): Map!
 		updateMap(input: ModifyMapInput!): Map!
 		deleteMap(input: GetMapInput!): Boolean!
 		# moveMap(input: GetNodeInput!): Map!

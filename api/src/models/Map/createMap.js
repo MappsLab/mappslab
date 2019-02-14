@@ -7,7 +7,7 @@ import { clean, defaultValues, validateNew } from './mapDBSchema'
 const debug = require('debug')('api')
 
 export const createMap = async (input: NewMapData): Promise<MapType> => {
-	const { classroomUid, ...mapData } = input
+	const { addToClassrooms, ...mapData } = input
 	const cleaned = await clean({ ...defaultValues, ...mapData, createdAt: new Date() })
 	// $FlowFixMe
 	const validatedMapData = await validateNew(cleaned).catch((err) => {
@@ -16,7 +16,18 @@ export const createMap = async (input: NewMapData): Promise<MapType> => {
 		throw new ValidationError(err)
 	})
 
-	const newMap = await createNodeWithEdges(validatedMapData, [[{ fromUid: classroomUid, pred: 'has_map' }, {}]])
+	const classroomEdges =
+		addToClassrooms && addToClassrooms.length
+			? addToClassrooms.map((classroomUid) => [
+					{
+						fromUid: classroomUid,
+						pred: 'has_map',
+					},
+					{},
+			  ])
+			: []
+	console.log(validatedMapData, classroomEdges)
+	const newMap = await createNodeWithEdges(validatedMapData, [...classroomEdges])
 
 	return newMap
 }
