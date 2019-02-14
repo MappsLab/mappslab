@@ -22,7 +22,7 @@ export type ListOfTypeBaseProps<Type> = {
 	viewerCanAdd: boolean,
 	update: (Type) => void,
 	onItemClick: ListItemHandler,
-	create: (string) => Promise<void> | void,
+	create: (any) => Promise<void> | void,
 }
 
 export type ListOfTypeProps<Type> = ListOfTypeBaseProps<Type> & {

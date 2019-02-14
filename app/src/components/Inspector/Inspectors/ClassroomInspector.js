@@ -28,6 +28,12 @@ type Props = BaseProps & {
 	createMap: Mutation,
 }
 
+type CreateUserFnProps = {
+	name: string,
+	email?: string,
+	temporaryPassword: string,
+}
+
 const ClassroomInspector = ({
 	viewer,
 	classroom,
@@ -69,7 +75,11 @@ const ClassroomInspector = ({
 		await createMap({ variables, refetchQueries: [classroomQueryConfig] })
 	}
 
-	const createUserInClassroom = (role: 'student' | 'teacher') => async (name: string) => {
+	const createUserInClassroom = (role: 'student' | 'teacher') => async ({
+		name,
+		email,
+		temporaryPassword,
+	}: CreateUserFnProps) => {
 		const mutationByRole = {
 			student: createStudent,
 			teacher: createTeacher,
@@ -80,11 +90,12 @@ const ClassroomInspector = ({
 		const variables = {
 			input: {
 				name,
-				email: 'someone@somewhere.com',
-				temporaryPassword: 'temporary',
+				email,
+				temporaryPassword,
 				addToClassrooms: [classroom.uid],
 			},
 		}
+		console.log(variables)
 		await mutate({ variables, refetchQueries: [classroomQueryConfig] })
 	}
 

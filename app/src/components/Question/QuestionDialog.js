@@ -58,24 +58,30 @@ const defaultOptions = [
 	},
 ]
 
-const QuestionDialog = ({ currentQuestion, cancelQuestion }: QuestionDialogProps) => {
+const QuestionDialog = ({ currentQuestion, cancelQuestion, answer }: QuestionDialogProps) => {
 	if (!currentQuestion) return null
-	const { title: paneTitle, message, options } = currentQuestion
+	const { title: paneTitle, message, options, render } = currentQuestion
 	const questionOptions = options || defaultOptions
 	return (
 		<Background data-testid="alert">
 			<BackgroundCancelButton onClick={cancelQuestion} />
 			<Pane size="small" title={paneTitle}>
-				<Message>
-					<P align="center">{message}</P>
-				</Message>
-				<Buttons>
-					{questionOptions.map(({ title, answerQuestion, ...buttonConfig }) => (
-						<Button key={title} onClick={answerQuestion} {...buttonConfig}>
-							{title}
-						</Button>
-					))}
-				</Buttons>
+				{message.length && (
+					<Message>
+						<P align="center">{message}</P>
+					</Message>
+				)}
+				{render ? (
+					render(answer)
+				) : (
+					<Buttons>
+						{questionOptions.map(({ title, answerQuestion, ...buttonConfig }) => (
+							<Button key={title} onClick={answerQuestion} {...buttonConfig}>
+								{title}
+							</Button>
+						))}
+					</Buttons>
+				)}
 			</Pane>
 		</Background>
 	)

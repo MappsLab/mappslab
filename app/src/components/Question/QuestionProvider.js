@@ -3,7 +3,6 @@ import * as React from 'react'
 
 type OptionConfig = {
 	returnValue?: any,
-	answerWith?: (any) => any | Promise<any>,
 	[key: string]: any, // Allow for other props to be passed
 }
 
@@ -15,6 +14,7 @@ export type QuestionConfig = {
 
 export type PromisedQuestionConfig = {
 	message: string,
+	render?: () => React.Node,
 	/* Prettier doesn't jive */
 	/* eslint-disable-next-line flowtype/generic-spacing */
 	options?: Array<
@@ -27,6 +27,7 @@ export type PromisedQuestionConfig = {
 
 export type QuestionContext = {
 	ask: (QuestionConfig) => Promise<any>,
+	answer: (any) => void,
 	cancelQuestion: () => any,
 	currentQuestion?: PromisedQuestionConfig,
 	answered: boolean,
@@ -54,6 +55,7 @@ type State = {
 	currentQuestion?: PromisedQuestionConfig,
 	cancelQuestion: () => any,
 	answered: boolean,
+	answer: (any) => void,
 }
 
 const defaultOptions = [{ returnValue: true }]
@@ -65,26 +67,29 @@ export class QuestionProvider extends React.Component<Props, State> {
 		currentQuestion: undefined,
 		cancelQuestion: noop,
 		answered: false,
+		answer: noop,
 	}
 
 	ask = (newQuestion: QuestionConfig) =>
 		new Promise<any>((resolve) => {
-			const resolveQuestion = (value: any, answerWith) => async () => {
-				if (answerWith && typeof answerWith === 'function') await this.setState({ answered: true })
-				const answer = answerWith && typeof answerWith === 'function' ? await answerWith(value) : value
-				resolve(answer)
+			const resolveQuestion = (value: any) => async () => answer(value)
+
+			const answer = async (value: any) => {
+				resolve(value)
 				this.setState({ answered: true, currentQuestion: undefined, cancelQuestion: noop })
 			}
 
+			const answerHandler = (value: any) => () => answer(value)
+
 			/* create a cancelQuestion function that resolves the same as an answer would */
-			const cancelQuestion = resolveQuestion(newQuestion.returnOnCancel)
+			const cancelQuestion = answerHandler(newQuestion.returnOnCancel)
 
 			const { options: suppliedOptions, ...restOfQuestionConfig } = newQuestion
 			const options = suppliedOptions || defaultOptions
 			/* Add a promise to each question that resolves the `returnValue` */
 			const promisedOptions = options.map((option) => ({
 				...option,
-				answerQuestion: resolveQuestion(option.returnValue, option.answerWith || undefined),
+				answerQuestion: answerHandler(option.returnValue),
 			}))
 			this.setState({
 				currentQuestion: {
@@ -92,6 +97,7 @@ export class QuestionProvider extends React.Component<Props, State> {
 					options: promisedOptions,
 				},
 				cancelQuestion,
+				answer,
 			})
 		})
 

@@ -45,6 +45,7 @@ const MapInspector = ({ map, inspectItem, mapQueryConfig, updateMap }: Props) =>
 				update={updateMapClassrooms}
 				onItemClick={inspectItem}
 				viewerCanAdd={false}
+				create={() => {}}
 			/>
 		</React.Fragment>
 	)
