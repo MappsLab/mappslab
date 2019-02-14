@@ -3,9 +3,9 @@ import type { $Request } from 'express'
 
 import models from 'Models'
 
-const context = (ctx: { request: $Request }) => {
-	if (!ctx.request) return { ...ctx, models }
-	const { session, viewer } = ctx.request
+const context = (ctx: { req: $Request }) => {
+	const { session, viewer } = ctx.req
+	if (!ctx.req) return { ...ctx, models }
 	return {
 		session,
 		viewer,
