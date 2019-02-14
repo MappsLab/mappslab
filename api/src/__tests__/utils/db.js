@@ -22,15 +22,22 @@ import { typeDefs, resolvers } from '../../schema'
  *
  */
 
-export const createAdminUser = async () => {
+export const createAdminUsers = async () => {
 	const joseph = {
 		name: 'Joseph Thomas',
-		roles: ['admin'],
+		roles: ['admin', 'teacher'],
 		email: 'joseph@good-idea.studio',
 		temporaryPassword: 'temporary',
 		disabled: false,
 	}
-	return models.User.createUser(joseph)
+	const john = {
+		name: 'John Schaefer',
+		roles: ['teacher'],
+		email: 'john@cmwworld.com',
+		temporaryPassword: 'temporary',
+		disabled: false,
+	}
+	return Promise.all([models.User.createUser(joseph), models.User.createUser(john)])
 }
 
 /**

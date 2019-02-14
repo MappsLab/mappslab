@@ -2,7 +2,7 @@
 import faker from 'faker'
 import { setSchema } from 'Database/setSchema'
 import dbClient from 'Database/client'
-import { createAdminUser } from '../utils/db'
+import { createAdminUsers } from '../utils/db'
 
 const dgraph = require('dgraph-js')
 const debug = require('debug')('seed')
@@ -20,8 +20,8 @@ const seedDatabase = async () => {
 	debug('🌻 🌻 🌻 Seeding Test Database... 🌻 🌻 🌻 ')
 	await dropAll()
 	await setSchema()
-	debug('🤓  Creating admin user')
-	await createAdminUser()
+	debug('🤓  Creating admin users')
+	await createAdminUsers()
 
 	debug('🌻 🌻 🌻 Successfully seeded test database 🌻 🌻 🌻 ')
 }
