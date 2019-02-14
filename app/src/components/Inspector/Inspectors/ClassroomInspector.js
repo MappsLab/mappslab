@@ -4,6 +4,8 @@ import type { ClassroomType } from 'Types/Classroom'
 import type { ViewerType } from 'Types/User'
 import type { Mutation, QueryConfig } from 'Types/GraphQL'
 import { UpdateClassroomMutation, ClassroomQuery } from 'Queries/Classroom'
+import { CreateMapMutation } from 'Queries/Map'
+import { CreateStudentMutation, CreateTeacherMutation } from 'Queries/User'
 import { MapList, UserList } from 'Components/Lists'
 import type { InspectItem } from '../InspectorProvider'
 import InspectorSkeleton from '../InspectorSkeleton'
@@ -21,9 +23,21 @@ type Props = BaseProps & {
 	classroom: ClassroomType,
 	classroomQueryConfig: QueryConfig,
 	updateClassroom: Mutation,
+	createTeacher: Mutation,
+	createStudent: Mutation,
+	createMap: Mutation,
 }
 
-const ClassroomInspector = ({ viewer, classroom, updateClassroom, inspectItem, classroomQueryConfig }: Props) => {
+const ClassroomInspector = ({
+	viewer,
+	classroom,
+	updateClassroom,
+	inspectItem,
+	classroomQueryConfig,
+	createTeacher,
+	createStudent,
+	createMap,
+}: Props) => {
 	const updateClassroomUsers = (user) => {
 		const addKey = user.roles.includes('teacher') ? 'addTeachers' : 'addStudents'
 		const variables = {
@@ -45,6 +59,35 @@ const ClassroomInspector = ({ viewer, classroom, updateClassroom, inspectItem, c
 		updateClassroom({ variables, refetchQueries: [classroomQueryConfig] })
 	}
 
+	const createMapInClassroom = async (title: string) => {
+		const variables = {
+			input: {
+				title,
+				addToClassrooms: [classroom.uid],
+			},
+		}
+		await createMap({ variables, refetchQueries: [classroomQueryConfig] })
+	}
+
+	const createUserInClassroom = (role: 'student' | 'teacher') => async (name: string) => {
+		const mutationByRole = {
+			student: createStudent,
+			teacher: createTeacher,
+		}
+		const mutate = mutationByRole[role]
+		if (!mutate) throw new Error(`There is no mutation for creating a user with the role "${role}"`)
+		// const addKey = role === 'student' ? 'addStudents' | 'addTeacher'
+		const variables = {
+			input: {
+				name,
+				email: 'someone@somewhere.com',
+				temporaryPassword: 'temporary',
+				addToClassrooms: [classroom.uid],
+			},
+		}
+		await mutate({ variables, refetchQueries: [classroomQueryConfig] })
+	}
+
 	const viewerCanAdd = Boolean(
 		viewer &&
 			(viewer.roles.includes('admin') ||
@@ -60,6 +103,7 @@ const ClassroomInspector = ({ viewer, classroom, updateClassroom, inspectItem, c
 				update={updateClassroomMaps}
 				onItemClick={inspectItem}
 				viewerCanAdd={viewerCanAdd}
+				create={createMapInClassroom}
 			/>
 			<UserList
 				title="Students in this Classroom"
@@ -69,6 +113,7 @@ const ClassroomInspector = ({ viewer, classroom, updateClassroom, inspectItem, c
 				update={updateClassroomUsers}
 				onItemClick={inspectItem}
 				viewerCanAdd={viewerCanAdd}
+				create={createUserInClassroom('student')}
 			/>
 			<UserList
 				title="Teachers in this Classroom"
@@ -78,6 +123,7 @@ const ClassroomInspector = ({ viewer, classroom, updateClassroom, inspectItem, c
 				update={updateClassroomUsers}
 				onItemClick={inspectItem}
 				viewerCanAdd={viewerCanAdd}
+				create={createUserInClassroom('teacher')}
 			/>
 		</React.Fragment>
 	)
@@ -89,16 +135,31 @@ const Wrapper = ({ uid, ...baseProps }: BaseProps & { uid: string }) => (
 			loading ? (
 				<InspectorSkeleton />
 			) : (
-				<UpdateClassroomMutation>
-					{(updateClassroom) => (
-						<ClassroomInspector
-							classroom={data.classroom}
-							classroomQueryConfig={queryConfig}
-							updateClassroom={updateClassroom}
-							{...baseProps}
-						/>
+				<CreateMapMutation>
+					{(createMap) => (
+						<CreateTeacherMutation>
+							{(createTeacher) => (
+								<CreateStudentMutation>
+									{(createStudent) => (
+										<UpdateClassroomMutation>
+											{(updateClassroom) => (
+												<ClassroomInspector
+													classroom={data.classroom}
+													classroomQueryConfig={queryConfig}
+													updateClassroom={updateClassroom}
+													createStudent={createStudent}
+													createTeacher={createTeacher}
+													createMap={createMap}
+													{...baseProps}
+												/>
+											)}
+										</UpdateClassroomMutation>
+									)}
+								</CreateStudentMutation>
+							)}
+						</CreateTeacherMutation>
 					)}
-				</UpdateClassroomMutation>
+				</CreateMapMutation>
 			)
 		}
 	</ClassroomQuery>

@@ -15,7 +15,7 @@ type Props = ListOfTypeProps<UserType> & {
 	userType: 'teacher' | 'student' | void,
 }
 
-const UserList = ({ title, searchQuery, searchResults, items, viewerCanAdd, update, onItemClick, userType }: Props) => {
+const UserList = ({ title, searchQuery, searchResults, items, viewerCanAdd, update, onItemClick, userType, create }: Props) => {
 	const [showResults, setShowResults] = useState(false)
 
 	const search = (searchValue: string) => {
@@ -46,6 +46,7 @@ const UserList = ({ title, searchQuery, searchResults, items, viewerCanAdd, upda
 			viewerCanAdd={viewerCanAdd}
 			type="user"
 			items={items}
+			create={create}
 			onItemClick={onItemClick}
 		/>
 	)

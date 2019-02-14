@@ -1,5 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`List Component should throw an error if \`viewerCanAdd\` is supplied without a \`search\` function 1`] = `"You must provide \`search\` and \`onSearchResultClick\` functions"`;
+exports[`List Component should throw an error if \`viewerCanAdd\` is supplied without a \`search\` function 1`] = `"You must provide \`search\`, \`onSearchResultClick\`, and \`create\` functions"`;
 
-exports[`List Component should throw an error if \`viewerCanAdd\` is supplied without a \`search\` function 2`] = `"You must provide \`search\` and \`onSearchResultClick\` functions"`;
+exports[`List Component should throw an error if \`viewerCanAdd\` is supplied without a \`search\` function 2`] = `"You must provide \`search\`, \`onSearchResultClick\`, and \`create\` functions"`;

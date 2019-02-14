@@ -32,6 +32,7 @@ type Props = {
 	viewerCanAdd?: boolean,
 	addLabel?: string,
 	search?: SearchForList,
+	create?: CreateNewFn,
 	onSearchResultClick?: ListItemHandler,
 	searchResults?: Array<Node>,
 	onItemClick: ListItemHandler,
@@ -39,10 +40,21 @@ type Props = {
 
 const defaultAddLabel = 'Add'
 
-const List = ({ items, title, type, onItemClick, viewerCanAdd, addLabel, search, onSearchResultClick, searchResults }: Props) => {
+const List = ({
+	items,
+	title,
+	type,
+	onItemClick,
+	viewerCanAdd,
+	addLabel,
+	search,
+	create,
+	onSearchResultClick,
+	searchResults,
+}: Props) => {
 	const itemToListItem = (node) => nodeToListItem(node, onItemClick)
-	if (viewerCanAdd && (!search || !onSearchResultClick))
-		throw new Error('You must provide `search` and `onSearchResultClick` functions')
+	if (viewerCanAdd && (!search || !onSearchResultClick || !create))
+		throw new Error('You must provide `search`, `onSearchResultClick`, and `create` functions')
 	return (
 		<ListWrapper>
 			<ListTitle>
@@ -52,9 +64,11 @@ const List = ({ items, title, type, onItemClick, viewerCanAdd, addLabel, search,
 			{items.map(itemToListItem).map((item) => (
 				<ListItem key={item.node.uid} {...item} />
 			))}
-			{viewerCanAdd && search && onSearchResultClick && (
+			{viewerCanAdd && search && onSearchResultClick && create && (
 				<ListAddEntry
 					search={search}
+					type={type}
+					create={create}
 					searchResults={searchResults}
 					onSearchResultClick={onSearchResultClick}
 					searchName={type.replace(/s$/, '')}

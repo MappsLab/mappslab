@@ -9,6 +9,8 @@ export type SearchForList = (any) => Promise<void> | void
 
 export type ListItemHandler = (Node) => void
 
+export type CreateNewFn = (string) => void | Promise<void>
+
 export type ListItem = {
 	node: Node,
 	onClick: () => void,
@@ -20,6 +22,7 @@ export type ListOfTypeBaseProps<Type> = {
 	viewerCanAdd: boolean,
 	update: (Type) => void,
 	onItemClick: ListItemHandler,
+	create: (string) => Promise<void> | void,
 }
 
 export type ListOfTypeProps<Type> = ListOfTypeBaseProps<Type> & {

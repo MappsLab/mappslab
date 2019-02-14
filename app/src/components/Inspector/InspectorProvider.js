@@ -70,6 +70,16 @@ class InspectorProviderBase extends React.Component<Props, State> {
 		}
 	}
 
+	componentDidUpdate(prevProps: Props) {
+		if (this.props.initialItem && !prevProps.initialItem) {
+			/* This is OK because we're wrapping it in a condition */
+			/* eslint-disable-next-line react/no-did-update-set-state */
+			this.setState({
+				inspectorHistory: [this.props.initialItem],
+			})
+		}
+	}
+
 	clearHistory = () => {
 		this.setState({
 			inspectorHistory: [],
@@ -102,6 +112,7 @@ class InspectorProviderBase extends React.Component<Props, State> {
 		const value = {
 			inspectItem: this.inspectItem,
 		}
+
 		return (
 			<CurrentViewerQuery>
 				{({ data }) => (

@@ -2,7 +2,7 @@
 import * as React from 'react'
 import { Button } from 'Components/Buttons'
 import type { Node } from 'Types'
-import type { SearchForList, ListItemHandler } from './utils'
+import type { SearchForList, ListItemHandler, CreateNewFn } from './utils'
 import { nodeToListItem } from './utils'
 import ListItem from './ListItem'
 
@@ -14,13 +14,15 @@ const { useState, useEffect } = React
 
 type Props = {
 	addLabel: string,
+	type: string,
 	searchName: string,
 	search: SearchForList,
+	create: CreateNewFn,
 	searchResults?: Array<Node>,
 	onSearchResultClick: ListItemHandler,
 }
 
-const ListAddEntry = ({ addLabel, searchName, search, searchResults, onSearchResultClick }: Props) => {
+const ListAddEntry = ({ addLabel, searchName, search, type, searchResults, onSearchResultClick, create }: Props) => {
 	const [isOpen, setIsOpen] = useState(false)
 	const [inputValue, setInputValue] = useState('')
 
@@ -48,6 +50,11 @@ const ListAddEntry = ({ addLabel, searchName, search, searchResults, onSearchRes
 		setInputValue(e.target.value)
 	}
 
+	const onCreateClick = async () => {
+		await create(inputValue)
+		reset()
+	}
+
 	if (!isOpen)
 		return (
 			<Button level="tertiary" onClick={() => setIsOpen(true)}>
@@ -61,6 +68,7 @@ const ListAddEntry = ({ addLabel, searchName, search, searchResults, onSearchRes
 				<input id="searchInput" name="searchInput" value={inputValue} onChange={onInputChange} />
 			</label>
 			{searchResultItems && searchResultItems.map((item) => <ListItem key={item.key} {...item} />)}
+			{inputValue.length > 2 && <Button level="tertiary" onClick={onCreateClick}>{`Create new ${type} "${inputValue}"`}</Button>}
 		</React.Fragment>
 	)
 }

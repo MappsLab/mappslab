@@ -3,30 +3,33 @@ import gql from 'graphql-tag'
 import { withDefaultMutation } from '../Mutation'
 
 const mutation = gql`
-	mutation CreateClassroom($input: NewClassroomData!) {
+	mutation CreateClassroom($input: NewClassroomInput!) {
 		createClassroom(input: $input) {
-			classroom(input: { uid: $uid, slug: $slug }) {
-				title
-				uid
-				slug
-				students {
-					pageInfo {
-						lastCursor
-					}
-					edges {
-						node {
-							uid
-							name
-							roles
-						}
+			title
+			uid
+			slug
+			__typename
+			teachers {
+				pageInfo {
+					lastCursor
+				}
+				edges {
+					node {
+						uid
+						name
+						roles
 					}
 				}
-				maps {
-					edges {
-						node {
-							uid
-							name
-						}
+			}
+			students {
+				pageInfo {
+					lastCursor
+				}
+				edges {
+					node {
+						uid
+						name
+						roles
 					}
 				}
 			}

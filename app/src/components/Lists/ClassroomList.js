@@ -17,8 +17,10 @@ const ClassroomList = ({
 	viewerCanAdd,
 	update,
 	onItemClick,
+	create,
 }: ListOfTypeProps<ClassroomType>) => {
 	const search = (searchValue: string) => {
+		if (searchValue.length < 3) return
 		searchQuery({
 			where: {
 				title: {
@@ -37,6 +39,7 @@ const ClassroomList = ({
 			viewerCanAdd={viewerCanAdd}
 			type="classroom"
 			items={items}
+			create={create}
 			onItemClick={onItemClick}
 		/>
 	)
@@ -44,7 +47,9 @@ const ClassroomList = ({
 
 const ClassroomListWrapper = (baseProps: ListOfTypeBaseProps<ClassroomType>) => (
 	<ClassroomsQuery delayQuery>
-		{({ data, refetch }) => <ClassroomList searchQuery={refetch} searchResults={data ? data.classrooms : []} {...baseProps} />}
+		{({ data, refetch }) => (
+			<ClassroomList searchQuery={refetch} searchResults={data ? data.classrooms || [] : []} {...baseProps} />
+		)}
 	</ClassroomsQuery>
 )
 

@@ -3,6 +3,7 @@ import * as React from 'react'
 import type { ViewerType, UserType } from 'Types/User'
 import type { Mutation, QueryConfig } from 'Types/GraphQL'
 import { UpdateUserMutation, UserQuery } from 'Queries/User'
+import { CreateClassroomMutation } from 'Queries/Classroom'
 import { ClassroomList } from 'Components/Lists'
 import type { InspectItem } from '../InspectorProvider'
 import InspectorSkeleton from '../InspectorSkeleton'
@@ -20,9 +21,10 @@ type Props = BaseProps & {
 	userQueryConfig: QueryConfig,
 	user: UserType,
 	updateUser: Mutation,
+	createClassroom: Mutation,
 }
 
-const UserInspector = ({ user, viewer, updateUser, inspectItem, userQueryConfig }: Props) => {
+const UserInspector = ({ user, viewer, updateUser, inspectItem, userQueryConfig, createClassroom }: Props) => {
 	const updateUserClassrooms = (classroom) => {
 		const variables = {
 			input: {
@@ -31,6 +33,16 @@ const UserInspector = ({ user, viewer, updateUser, inspectItem, userQueryConfig 
 			},
 		}
 		updateUser({ variables, refetchQueries: [userQueryConfig] })
+	}
+
+	const createClassroomOnClick = async (inputValue) => {
+		const variables = {
+			input: {
+				title: inputValue,
+				addTeachers: [user.uid],
+			},
+		}
+		createClassroom({ variables, refetchQueries: [userQueryConfig] })
 	}
 
 	return (
@@ -42,25 +54,36 @@ const UserInspector = ({ user, viewer, updateUser, inspectItem, userQueryConfig 
 				viewerCanAdd={Boolean(viewer && user.uid === viewer.uid)}
 				update={updateUserClassrooms}
 				onItemClick={inspectItem}
+				create={createClassroomOnClick}
 			/>
 		</React.Fragment>
 	)
 }
 
 const Wrapper = ({ uid, ...baseProps }: BaseProps & { uid: string }) => (
-	<UpdateUserMutation>
-		{(updateUser) => (
-			<UserQuery variables={{ uid }}>
-				{({ data, loading, queryConfig }) =>
-					loading ? (
-						<InspectorSkeleton />
-					) : (
-						<UserInspector {...baseProps} userQueryConfig={queryConfig} user={data.user} updateUser={updateUser} />
-					)
-				}
-			</UserQuery>
+	<CreateClassroomMutation>
+		{(createClassroom) => (
+			<UpdateUserMutation>
+				{(updateUser) => (
+					<UserQuery variables={{ uid }}>
+						{({ data, loading, queryConfig }) =>
+							loading ? (
+								<InspectorSkeleton />
+							) : (
+								<UserInspector
+									{...baseProps}
+									userQueryConfig={queryConfig}
+									user={data.user}
+									updateUser={updateUser}
+									createClassroom={createClassroom}
+								/>
+							)
+						}
+					</UserQuery>
+				)}
+			</UpdateUserMutation>
 		)}
-	</UpdateUserMutation>
+	</CreateClassroomMutation>
 )
 
 export default Wrapper

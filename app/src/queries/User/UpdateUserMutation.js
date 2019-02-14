@@ -7,6 +7,7 @@ const mutation = gql`
 		updateUser(input: $input) {
 			uid
 			name
+			roles
 		}
 	}
 `

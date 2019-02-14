@@ -74,6 +74,7 @@ describe('List Component', () => {
 				onItemClick={noop}
 				type="Classrooms"
 				search={noop}
+				create={noop}
 				onSearchResultClick={noop}
 				title="My Classrooms"
 				viewerCanAdd
@@ -92,6 +93,7 @@ describe('List Component', () => {
 				title="My Classrooms"
 				viewerCanAdd
 				search={noop}
+				create={noop}
 				onSearchResultClick={noop}
 				addLabel="Add Classroom"
 				items={classrooms}
@@ -104,9 +106,10 @@ describe('List Component', () => {
 		const { classrooms } = await getTypes()
 		const [class1, class2, ...otherClassrooms] = classrooms
 		const mockSearch = jest.fn(async () => [class1, class2])
+		const mockCreate = jest.fn()
 		const onSearchResultClick = jest.fn()
 		/* eslint-disable-next-line react/prop-types */
-		const SampleList = ({ search }) => {
+		const SampleList = ({ search, create }) => {
 			const [searchResults, setSearchResults] = useState([])
 
 			const doSearch = async (searchValue) => {
@@ -114,34 +117,39 @@ describe('List Component', () => {
 				setSearchResults(results)
 			}
 
+			const doCreate = async (inputValue) => {
+				await create(inputValue)
+			}
+
 			return (
 				<List
 					onItemClick={noop}
-					type="Classrooms"
+					type="Classroom"
 					title="My Classrooms"
 					viewerCanAdd
 					search={doSearch}
+					create={doCreate}
 					onSearchResultClick={onSearchResultClick}
 					searchResults={searchResults}
 					items={otherClassrooms}
 				/>
 			)
 		}
-		const { container, getByText, queryByText } = render(<SampleList search={mockSearch} />)
+		const { container, getByText, queryByText } = render(<SampleList search={mockSearch} create={mockCreate} />)
 
 		let addButton = getByText('+ Add')
 		/* expect a search input to appear after clicking the add button */
 		fireEvent.click(addButton)
-		const searchInput = container.querySelector('input[id="searchInput"]')
+		let searchInput = container.querySelector('input[id="searchInput"]')
 		expect(searchInput).toBeTruthy()
 
 		await wait()
 		act(() => {
-			fireEvent.change(searchInput, { target: { value: 'Ab' } })
+			fireEvent.change(searchInput, { target: { value: 'Abc' } })
 		})
 
 		/* expect the search fn to be called after the input changes */
-		expect(mockSearch.mock.calls[0][0]).toEqual('Ab')
+		expect(mockSearch.mock.calls[0][0]).toEqual('Abc')
 		const val1 = await mockSearch.mock.results[0].value
 		expect(val1).toEqual([class1, class2])
 
@@ -153,6 +161,10 @@ describe('List Component', () => {
 		expect(class1Result).toBeTruthy()
 		expect(class2Result).toBeTruthy()
 
+		/* expect a "create new" button to be present */
+
+		expect(getByText('Create new Classroom "Abc"')).toBeTruthy()
+
 		act(() => {
 			fireEvent.click(class1Result)
 		})
@@ -160,6 +172,30 @@ describe('List Component', () => {
 		/* Expect the click handler to have been called */
 		const { uid, __typename, title } = class1
 		expect(onSearchResultClick.mock.calls[0][0]).toEqual({ uid, __typename, title })
+
+		/* Expect the form to have been reset */
+		addButton = getByText('+ Add')
+		expect(addButton).toBeTruthy()
+		expect(queryByText(class2.title)).toBeFalsy()
+
+		/* Now, test the `create` function */
+		act(() => {
+			fireEvent.click(addButton)
+		})
+		searchInput = container.querySelector('input[id="searchInput"]')
+
+		act(() => {
+			fireEvent.change(searchInput, { target: { value: 'Social Studies' } })
+		})
+
+		const createClassBtn = getByText('Create new Classroom "Social Studies"')
+		expect(createClassBtn).toBeTruthy()
+		act(() => {
+			fireEvent.click(createClassBtn)
+		})
+		await wait()
+
+		expect(mockCreate.mock.calls[0][0]).toEqual('Social Studies')
 
 		/* Expect the form to have been reset */
 		addButton = getByText('+ Add')
@@ -187,17 +223,19 @@ describe('List Component', () => {
 			render(<List onItemClick={noop} type="Classrooms" title="My Classrooms" viewerCanAdd search={noop} items={classrooms} />)
 		}).toThrowErrorMatchingSnapshot()
 
-		/* This should not throw */
-		render(
-			<List
-				onItemClick={noop}
-				type="Classrooms"
-				title="My Classrooms"
-				viewerCanAdd
-				search={noop}
-				onSearchResultClick={noop}
-				items={classrooms}
-			/>,
-		)
+		expect(() => {
+			render(
+				<List
+					onItemClick={noop}
+					type="Classrooms"
+					title="My Classrooms"
+					viewerCanAdd
+					search={noop}
+					create={noop}
+					onSearchResultClick={noop}
+					items={classrooms}
+				/>,
+			)
+		}).not.toThrow()
 	})
 })
