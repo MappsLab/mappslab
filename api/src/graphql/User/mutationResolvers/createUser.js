@@ -9,14 +9,16 @@ export const createStudent = async (
 	ctx: GraphQLContext,
 ): Promise<UserType> => {
 	if (!ctx.viewer || (!ctx.viewer.roles.includes('teacher') && !ctx.viewer.roles.includes('admin'))) {
-		throw new UserError('You must be an admin to add new teachers')
+		throw new UserError('You must be an admin or teacher to add new students')
 	}
 	const user = await ctx.models.User.createUser({ ...input, roles: ['student'] })
 	return user
 }
 
 export const createTeacher = async (_: mixed, args: { input: NewUserData }, ctx: GraphQLContext): Promise<UserType> => {
-	if (!ctx.viewer || !ctx.viewer.roles.includes('admin')) throw new UserError('You must be an admin to add new teachers')
+	if (!ctx.viewer || (!ctx.viewer.roles.includes('teacher') && !ctx.viewer.roles.includes('admin'))) {
+		throw new UserError('You must be an admin or teacher to add new teachers')
+	}
 	const { input } = args || {}
 	const user = await ctx.models.User.createUser({ ...input, roles: ['teacher'] })
 	return user
