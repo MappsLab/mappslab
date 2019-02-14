@@ -1,6 +1,7 @@
 // @flow
 import React from 'react'
 import { withStateMachine, State, Action } from 'react-automata'
+import styled from 'styled-components'
 // import { Link } from 'react-router-dom'
 import Pane from 'Components/Pane'
 import { Header1 } from 'Components/Text'
@@ -13,7 +14,6 @@ import TeacherLogin from './TeacherLogin'
 import UserLogin from './UserLogin'
 import LoginSuccess from './LoginSuccess'
 import SetNewPassword from './SetNewPassword'
-
 import {
 	// states
 	WELCOME,
@@ -32,6 +32,13 @@ import {
 	// CLEAR_USER,
 	statechart,
 } from './statechart'
+
+const Content = styled.div`
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+`
 
 /**
  * Login
@@ -65,42 +72,44 @@ class Login extends React.Component<Props, State> {
 		return (
 			<Centered>
 				<Pane size="normal" title="Welcome to Mappslab!">
-					<State is={WELCOME}>
-						<Button onClick={this.transitionEvent(SELECTED_STUDENT_FLOW)}>Find Your Classroom →</Button>
-					</State>
+					<Content>
+						<State is={WELCOME}>
+							<Button onClick={this.transitionEvent(SELECTED_STUDENT_FLOW)}>Find Your Classroom →</Button>
+						</State>
 
-					<Action is={SHOW_ERROR}>
-						<p>{this.props.error}</p>
-					</Action>
+						<Action is={SHOW_ERROR}>
+							<p>{this.props.error}</p>
+						</Action>
 
-					<State is={STUDENT_FLOW}>
-						<StudentLogin {...childProps} />
-					</State>
+						<State is={STUDENT_FLOW}>
+							<StudentLogin {...childProps} />
+						</State>
 
-					<State is={TEACHER_FLOW}>
-						<TeacherLogin {...childProps} />
-					</State>
+						<State is={TEACHER_FLOW}>
+							<TeacherLogin {...childProps} />
+						</State>
 
-					<State is={ENTER_PASSWORD}>{childProps.userUid !== null ? <UserLogin {...childProps} /> : null}</State>
+						<State is={ENTER_PASSWORD}>{childProps.userUid !== null ? <UserLogin {...childProps} /> : null}</State>
 
-					<State is={SET_NEW_PASSWORD}>
-						<SetNewPassword {...childProps} />
-					</State>
+						<State is={SET_NEW_PASSWORD}>
+							<SetNewPassword {...childProps} />
+						</State>
 
-					<State is={LOGIN_SUCCESS}>
-						<LoginSuccess {...childProps} />
-					</State>
+						<State is={LOGIN_SUCCESS}>
+							<LoginSuccess {...childProps} />
+						</State>
 
-					<State is={[WELCOME, STUDENT_FLOW]}>
-						<Button level="tertiary" onClick={this.transitionEvent(SELECTED_TEACHER_FLOW)}>
-							Login as a teacher
-						</Button>
-					</State>
-					<State is={[TEACHER_FLOW]}>
-						<Button level="tertiary" onClick={this.transitionEvent(SELECTED_STUDENT_FLOW)}>
-							Login as a student
-						</Button>
-					</State>
+						<State is={[WELCOME, STUDENT_FLOW]}>
+							<Button level="tertiary" onClick={this.transitionEvent(SELECTED_TEACHER_FLOW)}>
+								Login as a teacher
+							</Button>
+						</State>
+						<State is={[TEACHER_FLOW]}>
+							<Button level="tertiary" onClick={this.transitionEvent(SELECTED_STUDENT_FLOW)}>
+								Login as a student
+							</Button>
+						</State>
+					</Content>
 				</Pane>
 			</Centered>
 		)

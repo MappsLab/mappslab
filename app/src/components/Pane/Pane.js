@@ -11,6 +11,8 @@ const Wrapper = styled.div`
 		border-radius: 2px;
 		border: 1px solid ${theme.color.darkGray};
 		position: relative;
+		max-height: 95vh;
+		overflow: hidden;
 	`};
 `
 
