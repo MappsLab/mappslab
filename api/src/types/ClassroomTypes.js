@@ -15,7 +15,7 @@ export type ClassroomType = {
 export type NewClassroomInput = {
 	title: string,
 	description: string,
-	teacherUid?: string,
+	addTeachers?: Array<string>,
 }
 
 export type UpdateClassroomInput = {

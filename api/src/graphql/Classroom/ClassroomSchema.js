@@ -15,6 +15,7 @@ const Classroom = /* GraphQL */ `
 	input NewClassroomInput {
 		title: String!
 		description: String
+		addTeachers: [String]
 	}
 
 	input UpdateClassroomInput {
@@ -61,7 +62,7 @@ const Classroom = /* GraphQL */ `
 	}
 
 	extend type Mutation {
-		createClassroom(input: NewClassroomInput!, assignTeachers: [String]): Classroom!
+		createClassroom(input: NewClassroomInput!): Classroom!
 		updateClassroom(input: UpdateClassroomInput!): Classroom!
 		removeClassroom(uid: String!): Boolean!
 	}

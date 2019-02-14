@@ -34,8 +34,8 @@ const createNodeWithEdges = async (nodeData: Object, edges: NewEdges, existingTx
 		const newEdges = await Promise.all(
 			edges.map(async ([partialEdge, edgeConfig]) => {
 				const { toUid, fromUid, pred, facets } = partialEdge
-				if ((toUid && fromUid) || (!toUid && !fromUid))
-					throw new Error('To create a new edge, supply either a toUid or a fromUid, not both')
+				if (!toUid && !fromUid) throw new Error('You must supply either a `fromUid` or a `toUid`')
+				if (toUid && fromUid) throw new Error('To create a new edge, supply either a toUid or a fromUid, not both')
 				const newEdge = toUid
 					? // If a toUid exists set the new node as the 'from' uid
 					  { toUid, pred, fromUid: newNodeUid, facets }
