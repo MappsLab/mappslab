@@ -51,8 +51,8 @@ export const publicFields = [
 	'createdAt',
 	'updatedAt',
 	'type',
-	`vit as count(~teaches_in @filter(uid($viewerUid)))
-    viewerIsTeacher: math(vit == 1)`,
+	`teacherRooms as count(~teaches_in @filter(uid($viewerUid)))
+    viewerIsTeacher: math(teacherRooms == 1)`,
 ].join('\n')
 
 export const validateNew = (classroomData: ClassroomInput) => Joi.validate(classroomData, classroomSchema(true))

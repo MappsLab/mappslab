@@ -85,21 +85,21 @@ const User = /* GraphQL */ `
 
 	# User Creation
 
-	input NewStudentData {
+	input CreateStudentInput {
 		name: String!
 		email: String
 		temporaryPassword: String!
 		addToClassrooms: [String!]
 	}
 
-	input NewTeacherData {
+	input CreateTeacherInput {
 		name: String!
 		email: String!
 		temporaryPassword: String
 		addToClassrooms: [String!]
 	}
 
-	input NewAdminData {
+	input CreateAdminInput {
 		name: String!
 		email: String!
 		temporaryPassword: String
@@ -125,9 +125,9 @@ const User = /* GraphQL */ `
 
 	extend type Mutation {
 		loginViewer(input: CredentialsInput!): LoginResult!
-		createStudent(input: NewStudentData!): User!
-		createTeacher(input: NewTeacherData!): User!
-		createAdmin(input: NewAdminData!): User!
+		createStudent(input: CreateStudentInput!): User!
+		createTeacher(input: CreateTeacherInput!): User!
+		createAdmin(input: CreateAdminInput!): User!
 		updateUser(input: UpdateUserInput!): User!
 		# deleteUser(uid: String!): Boolean!
 		requestPasswordReset(input: GetUserInput): Success!
