@@ -2,10 +2,11 @@
 import styled, { css } from 'styled-components'
 
 const commonTextStyles = css`
-	${({ theme, align, weight, color }) => `
+	${({ theme, align, weight, color, fontStyle }) => `
 		font-family: ${theme.font.family.sans};
 		font-weight: ${theme.font.weight[weight] || theme.font.weight.semi};
 		text-align: ${align || 'left'};
+		font-style: ${fontStyle || 'normal'};
 		color: ${theme.color[color] || 'inherit'};
 	`};
 `

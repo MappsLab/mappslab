@@ -37,6 +37,8 @@ const Content = styled.div`
 		min-height: ${size === 'small' ? 'auto' : '300px'};
 		width: ${size === 'full' ? '650px' : size === 'small' ? '320px' : '425px'};
 		position: relative;
+		overflow-x: hidden;
+		overflow-y: scroll;
 	`};
 `
 

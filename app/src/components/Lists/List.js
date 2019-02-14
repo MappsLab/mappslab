@@ -1,25 +1,12 @@
 // @flow
 import * as React from 'react'
-import styled from 'styled-components'
-import { Header2 } from 'Components/Text'
 import type { Node } from 'Types'
 import ItemIcon from 'Components/ItemIcon'
 import ListAddEntry from './ListAddEntry'
 import ListItem from './ListItem'
+import { ListTitle, ListWrapper, ListItems } from './styled'
 import type { SearchForList, ListItemHandler } from './utils'
 import { nodeToListItem } from './utils'
-
-const ListTitle = styled(Header2)`
-	${({ theme }) => `
-		color: ${theme.color.primary.light}
-	`}
-`
-
-const ListWrapper = styled.div`
-	${({ theme }) => `
-		margin-top: ${theme.layout.spacing.quadruple};
-	`}
-`
 
 /**
  * List
@@ -61,9 +48,11 @@ const List = ({
 				<ItemIcon type={type} />
 				{title}
 			</ListTitle>
-			{items.map(itemToListItem).map((item) => (
-				<ListItem key={item.node.uid} {...item} />
-			))}
+			<ListItems>
+				{items.map(itemToListItem).map((item) => (
+					<ListItem key={item.node.uid} {...item} />
+				))}
+			</ListItems>
 			{viewerCanAdd && search && onSearchResultClick && create && (
 				<ListAddEntry
 					search={search}
