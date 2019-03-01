@@ -38,7 +38,7 @@ export const publicFields = [
 	'uid',
 	'title',
 	'updatedAt',
-	`pins: includes_pin @facets(order) {
+	`pins: includes_pin @facets(order) @filter((eq(deleted, false))) {
 		uid
 		title
 	}`,

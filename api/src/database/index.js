@@ -8,7 +8,7 @@ export { default as createEdge } from './createEdge'
 export { default as createNode } from './createNode'
 export { default as createNodeWithEdges } from './createNodeWithEdges'
 export { default as removeNode } from './removeNode'
-export { default as removeEdge } from './removeEdge'
+export { removeEdge, removeEdges } from './removeEdge'
 export { default as removeNodeWithEdges } from './removeNodeWithEdges'
 export { default as mutateNode } from './mutateNode'
 

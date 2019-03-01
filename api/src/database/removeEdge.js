@@ -12,7 +12,7 @@ type EdgeConfig = {
 
 export type Relationship = [DBEdge, EdgeConfig]
 
-const removeEdge = async ({ fromUid, pred, toUid }: DBEdge, existingTxn?: Txn): Promise<boolean> => {
+export const removeEdge = async ({ fromUid, pred, toUid }: DBEdge, existingTxn?: Txn): Promise<boolean> => {
 	const txn = existingTxn || dbClient.newTxn()
 	try {
 		debug({ fromUid, pred, toUid })
@@ -38,5 +38,3 @@ const removeEdge = async ({ fromUid, pred, toUid }: DBEdge, existingTxn?: Txn): 
 // Removes all existing edges
 export const removeEdges = ({ fromUid }: DBEdge, existingTxn?: Txn): Promise<boolean> =>
 	removeEdge({ fromUid, pred: '*', toUid: '*' }, existingTxn)
-
-export default removeEdge

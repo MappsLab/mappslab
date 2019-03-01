@@ -2,7 +2,7 @@
 import type { UserType } from 'Types/UserTypes'
 import type { Success } from 'Types/sharedTypes'
 import type { RemovePinInput } from 'Types/PinTypes'
-import { query, mutateNode } from 'Database'
+import { query, mutateNode, removeEdges } from 'Database'
 import { UserError } from 'Errors'
 import { clean, validateUpdate } from './pinDBSchema'
 
@@ -32,6 +32,7 @@ export const deletePin = async ({ uid }: RemovePinInput, viewer: UserType): Prom
 	const cleaned = await clean({ uid, deleted: true })
 	const validatedPinData = await validateUpdate(cleaned)
 	const mutationResult = await mutateNode(pin.uid, { data: { uid: pin.uid, ...validatedPinData } })
+	await removeEdges({ fromUid: pin.uid })
 
 	return {
 		success: mutationResult !== null,
