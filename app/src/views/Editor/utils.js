@@ -9,6 +9,12 @@ type SearchConfig = {
 	defaults?: NestedObject,
 }
 
+type MachineState =
+	| String
+	| {
+			[key: string]: MachineState,
+	  }
+
 export const createObjectSearchByState = ({ chart, searchKey, defaults }: SearchConfig) => (values: NestedObject) => {
 	const getByPath = (paths) => path([...paths, searchKey])(chart)
 

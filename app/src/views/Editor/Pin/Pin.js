@@ -3,7 +3,7 @@ import React from 'react'
 import { Marker, CustomPopup, markerEventNames } from 'mapp'
 import { State } from 'react-automata'
 import type { PinType } from 'Types/Pin'
-import { eventsReducer, isFunc } from 'Utils/data'
+import { eventsReducer, isFunc, getStateString } from 'Utils/data'
 import { MapConsumer } from '../Provider'
 import type { ProviderProps } from '../Provider'
 import PinInspector from './PinInspector'
@@ -77,15 +77,27 @@ class Pin extends React.Component<PinProps, PinState> {
 		)
 
 	render() {
-		const { pin, inspectedItem, mapData } = this.props
+		const { pin, inspectedItem, mapData, machineState } = this.props
 		const { mouseOver } = this.state
-		const { lat, lng } = pin
+		const { lat, lng, route } = pin
 		const isInspected = inspectedItem && inspectedItem.uid === pin.uid
+		const stateString = getStateString(machineState.value)
+		const clickable = !// If we are in drop mode
+		(
+			stateString === 'Lesson.DropPin.DropMode.Drop' &&
+			// And if the pin is within a route
+			route &&
+			// And the pin is neither first nor last
+			!route.isFirst &&
+			!route.isLast
+		)
 		const options = {
 			position: {
 				lat,
 				lng,
 			},
+			clickable,
+			opacity: clickable ? 1 : 0.3,
 		}
 		return (
 			<Marker

@@ -46,7 +46,7 @@ export const pinEvents = {
 				const { pin } = props
 				// Don't allow clicks on pins that are not in a route
 				if (!pin.route) return null
-				const { isFirst, isLast } = props.pin.route
+				const { isFirst, isLast } = pin.route
 				// Don't allow clicks on pins that are first or last in a route
 				if (!isFirst && !isLast) return null
 				const position = props.pin.route && props.pin.route.isFirst ? 'BEFORE' : 'AFTER'
