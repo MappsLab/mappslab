@@ -1,6 +1,7 @@
 // @flow
 
 import type { UserType } from './User'
+import type { RouteType } from './Route'
 
 export type PinType = {
 	uid: string,
@@ -10,4 +11,11 @@ export type PinType = {
 	draft: boolean,
 	title?: string,
 	description?: string,
+	route?: {
+		route: RouteType,
+		isFirst: boolean,
+		isLast: boolean,
+		nextPin?: PinType,
+		prevPin?: PinType,
+	},
 }

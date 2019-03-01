@@ -18,9 +18,9 @@ type BaseProps = {
 	pin: PinType,
 }
 
-type PinProps = BaseProps & ProviderProps
+export type PinProps = BaseProps & ProviderProps
 
-type PinState = {
+export type PinState = {
 	mouseOver: boolean,
 	events: {},
 }
