@@ -40,6 +40,11 @@ class Marker extends React.Component<MarkerProps, State> {
 		this.listeners = events ? addListeners(this.entity, markerEvents, events) : []
 	}
 
+	componentDidUpdate() {
+		const { options } = this.props
+		this.entity.setOptions(options)
+	}
+
 	componentWillUnmount() {
 		if (this.entity) this.entity.setMap(null)
 		removeListeners(this.listeners)
