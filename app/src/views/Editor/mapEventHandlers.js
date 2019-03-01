@@ -83,7 +83,7 @@ export const mapEvents = {
 							refetchQueries: [{ query: mapQuery, variables: { uid: props.mapData.uid } }],
 						})
 						const newPin = result.data.createPin
-						transition('droppedPin', { inspectedItem: newPin })
+						transition('droppedPin', { inspectedItem: newPin, connectToPin: null })
 					}
 
 					const actions = {

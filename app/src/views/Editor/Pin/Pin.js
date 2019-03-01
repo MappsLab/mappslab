@@ -82,22 +82,23 @@ class Pin extends React.Component<PinProps, PinState> {
 		const { lat, lng, route } = pin
 		const isInspected = inspectedItem && inspectedItem.uid === pin.uid
 		const stateString = getStateString(machineState.value)
-		const clickable = !// If we are in drop mode
-		(
-			stateString === 'Lesson.DropPin.DropMode.Drop' &&
-			// And if the pin is within a route
-			route &&
-			// And the pin is neither first nor last
-			!route.isFirst &&
-			!route.isLast
-		)
+		const disabled =
+			// If we are already connecting to a pin, disable
+			stateString === 'Lesson.DropPin.DropMode.Connect' ||
+			// Or, if we are in drop mode
+			(stateString === 'Lesson.DropPin.DropMode.Drop' &&
+				// And if the pin is within a route
+				route &&
+				// And the pin is neither first nor last
+				!route.isFirst &&
+				!route.isLast)
 		const options = {
 			position: {
 				lat,
 				lng,
 			},
-			clickable,
-			opacity: clickable ? 1 : 0.3,
+			clickable: !disabled,
+			opacity: disabled ? 0.3 : 1,
 		}
 		return (
 			<Marker
