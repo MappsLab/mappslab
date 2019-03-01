@@ -10,7 +10,6 @@ const Pin = /* GraphQL */ `
 		owner: User
 		maps: MapConnection
 		route: PinInRoute
-		routes: RouteConnection
 		draft: Boolean
 	}
 
