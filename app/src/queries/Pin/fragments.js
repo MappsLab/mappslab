@@ -5,6 +5,7 @@ export const pinFragment = gql`
 	fragment PinFragment on Pin {
 		uid
 		title
+		description
 		lat
 		lng
 		draft
