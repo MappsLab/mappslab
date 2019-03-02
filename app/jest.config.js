@@ -2,7 +2,7 @@
 const path = require('path')
 
 module.exports = {
-	setupTestFrameworkScriptFile: require.resolve('./jest/setup.js'),
+	setupFilesAfterEnv: [require.resolve('./jest/setup.js')],
 	testMatch: ['**/__tests__/**/*.test.js'],
 	coveragePathIgnorePatterns: ['node_modules', 'coverage', '/__.*__/'],
 	testEnvironment: 'jsdom',
