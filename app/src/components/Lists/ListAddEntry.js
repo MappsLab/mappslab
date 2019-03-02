@@ -33,10 +33,6 @@ const ListAddEntry = ({ addLabel, searchName, search, type, searchResults, onSea
 		setInputValue('')
 	}
 
-	const endSearch = () => {
-		setIsOpen(false)
-	}
-
 	const startSearch = () => {
 		setInputValue('')
 		setIsOpen(true)
@@ -45,7 +41,6 @@ const ListAddEntry = ({ addLabel, searchName, search, type, searchResults, onSea
 	const searchResultItems = searchResults
 		? searchResults.map((node) =>
 				nodeToListItem(node, async () => {
-					console.log('!')
 					await onSearchResultClick(node)
 					reset()
 				}),
@@ -67,15 +62,14 @@ const ListAddEntry = ({ addLabel, searchName, search, type, searchResults, onSea
 	}
 
 	const onCreateClick = async () => {
-		console.log('!')
 		await create(inputValue)
 		reset()
 	}
 
 	return !isOpen ? (
 		<LineWrapper>
-			<AddButton level="tertiary" onClick={startSearch}>
-				+ Add new {searchName}
+			<AddButton level="tertiary" onClick={startSearch} data-testid="list-addButton">
+				+ {addLabel || `Add new ${searchName}`}
 			</AddButton>
 		</LineWrapper>
 	) : (
@@ -109,7 +103,11 @@ const ListAddEntry = ({ addLabel, searchName, search, type, searchResults, onSea
 			)}
 			{inputValue.length > 2 && (
 				<LineWrapper align="center" visible={isOpen}>
-					<AddButton level="tertiary" onClick={onCreateClick}>{`+ Create new ${type} "${inputValue}"`}</AddButton>
+					<AddButton
+						data-testid="list-createButton"
+						level="tertiary"
+						onClick={onCreateClick}
+					>{`+ Create new ${type} "${inputValue}"`}</AddButton>
 				</LineWrapper>
 			)}
 		</React.Fragment>

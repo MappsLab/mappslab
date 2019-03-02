@@ -91,7 +91,7 @@ const MockApolloProvider = createMockProvider(
 describe('List [integration test]', () => {
 	it('Allows users to add new associations and new items', async () => {
 		/* Arrange */
-		const { container, getByText, queryByText, debug } = render(
+		const { container, getByText, queryByText, debug, getByTestId } = render(
 			<StaticRouter location="/?inspect=User-0x123-Joseph" context={{}}>
 				<MockApolloProvider>
 					<InspectorProvider />
@@ -123,7 +123,7 @@ describe('List [integration test]', () => {
 		await wait()
 
 		/* Assert */
-		expect(getByText('+ Add')).toBeTruthy()
+		expect(getByTestId('list-addButton')).toBeTruthy()
 		expect(getByText('History')).toBeTruthy()
 		expect(getByText('Ceramics')).toBeTruthy()
 		expect(getByText('Math')).toBeTruthy()
@@ -140,7 +140,7 @@ describe('List [integration test]', () => {
 			fireEvent.change(searchInput, { target: { value: 'English' } })
 		})
 		await wait()
-		const englishClassBtn = getByText('Create new classroom "English"')
+		const englishClassBtn = getByTestId('list-createButton')
 
 		act(() => {
 			fireEvent.click(englishClassBtn)
@@ -148,7 +148,7 @@ describe('List [integration test]', () => {
 		await wait()
 
 		/* Assert */
-		expect(getByText('+ Add')).toBeTruthy()
+		expect(getByTestId('list-addButton')).toBeTruthy()
 		expect(getByText('History')).toBeTruthy()
 		expect(getByText('Ceramics')).toBeTruthy()
 		expect(getByText('Math')).toBeTruthy()

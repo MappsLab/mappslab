@@ -86,7 +86,7 @@ describe('List Component', () => {
 
 	it('should display custom `addLabel` text', async () => {
 		const { classrooms } = await getTypes()
-		const { getByText } = render(
+		const { getByText, debug, getByTestId } = render(
 			<List
 				onItemClick={noop}
 				type="Classrooms"
@@ -135,9 +135,9 @@ describe('List Component', () => {
 				/>
 			)
 		}
-		const { container, getByText, queryByText } = render(<SampleList search={mockSearch} create={mockCreate} />)
+		const { container, getByText, queryByText, getByTestId } = render(<SampleList search={mockSearch} create={mockCreate} />)
 
-		let addButton = getByText('+ Add')
+		let addButton = getByTestId('list-addButton')
 		/* expect a search input to appear after clicking the add button */
 		fireEvent.click(addButton)
 		let searchInput = container.querySelector('input[id="searchInput"]')
@@ -163,18 +163,20 @@ describe('List Component', () => {
 
 		/* expect a "create new" button to be present */
 
-		expect(getByText('Create new Classroom "Abc"')).toBeTruthy()
+		expect(getByTestId('list-createButton')).toBeTruthy()
 
 		act(() => {
 			fireEvent.click(class1Result)
 		})
+
+		await wait()
 
 		/* Expect the click handler to have been called */
 		const { uid, __typename, title } = class1
 		expect(onSearchResultClick.mock.calls[0][0]).toEqual({ uid, __typename, title })
 
 		/* Expect the form to have been reset */
-		addButton = getByText('+ Add')
+		addButton = getByTestId('list-addButton')
 		expect(addButton).toBeTruthy()
 		expect(queryByText(class2.title)).toBeFalsy()
 
@@ -188,7 +190,7 @@ describe('List Component', () => {
 			fireEvent.change(searchInput, { target: { value: 'Social Studies' } })
 		})
 
-		const createClassBtn = getByText('Create new Classroom "Social Studies"')
+		const createClassBtn = getByTestId('list-createButton')
 		expect(createClassBtn).toBeTruthy()
 		act(() => {
 			fireEvent.click(createClassBtn)
@@ -198,7 +200,7 @@ describe('List Component', () => {
 		expect(mockCreate.mock.calls[0][0]).toEqual('Social Studies')
 
 		/* Expect the form to have been reset */
-		addButton = getByText('+ Add')
+		addButton = getByTestId('list-addButton')
 		expect(addButton).toBeTruthy()
 		expect(queryByText(class2.title)).toBeFalsy()
 	})
