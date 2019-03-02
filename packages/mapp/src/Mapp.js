@@ -5,7 +5,7 @@
 import * as React from 'react'
 import loadGoogleMaps from './services/googleMaps'
 import { addListeners, removeListeners } from './utils/listeners'
-import type { LatLng } from './types/latLngTypes'
+import type { LatLng, LatLngBoundsLiteral } from './types/latLngTypes'
 import type { OverlayView } from './types/overlayTypes'
 import type { Map, MapsEventListener, NamedEventListeners } from './types/mapTypes'
 import { mappedMapEventNames } from './eventNames'
@@ -32,6 +32,7 @@ export type MappUtils = {
 	zoomIn: () => void,
 	zoomOut: () => void,
 	panTo: (LatLng, Offset) => void,
+	fitBounds: (LatLngBoundsLiteral, number) => void,
 	addEventListeners: (eventHandlers: NamedEventListeners) => void,
 	removeEventListeners: (eventHandlers: NamedEventListeners) => void,
 }
@@ -107,7 +108,6 @@ class Mapp extends React.Component<Props, State> {
 			return
 		}
 
-		// $FlowFixMe
 		this.map = new google.maps.Map(this.mapRef.current, initialOptions) // eslint-disable-line no-undef
 		google.maps.event.addListenerOnce(this.map, 'projection_changed', () => {
 			this.setState({
@@ -152,6 +152,10 @@ class Mapp extends React.Component<Props, State> {
 			this.map.setZoom(newZoom)
 		}
 
+		const fitBounds = (bounds: LatLngBoundsLiteral, padding: number) => {
+			this.map.fitBounds(bounds, padding)
+		}
+
 		const zoomFactory = (diff: number) => () => zoom(diff)
 
 		const zoomIn = zoomFactory(1)
@@ -159,6 +163,7 @@ class Mapp extends React.Component<Props, State> {
 
 		return {
 			panTo,
+			fitBounds,
 			zoom,
 			zoomIn,
 			zoomOut,
