@@ -8,6 +8,7 @@ import { pinAddedToMap, pinDeleted, pinUpdated } from 'Queries/Map/mapSubscripti
 import { NotificationsConsumer } from 'Components/Notifications'
 import type { NewNotification } from 'Components/Notifications'
 import { eventsReducer, isFunc } from 'Utils/data'
+import { getMapBounds } from 'Utils/maps'
 import Pin from './Pin'
 import Route from './Route'
 import NewRoute from './Route/NewRoute'
@@ -39,6 +40,10 @@ class MapEditor extends React.Component<EditorProps> {
 		if (mapUid) {
 			setMap(mapUid)
 			this.startSubscriptions()
+		}
+		if (this.props.mapData && this.props.mapData.pins && this.props.mapData.pins.length > 0) {
+			const bounds = getMapBounds(this.props.mapData.pins)
+			this.props.fitBounds(bounds)
 		}
 		this.addEventListeners()
 	}

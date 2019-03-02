@@ -2,7 +2,7 @@
 // import React from 'react'
 // import { render } from 'react-testing-library'
 // import { _getOptionsForState } from '../Maps/mapOptions'
-import { createObjectSearchByState } from '../Editor/utils'
+import { createObjectSearchByState } from 'Utils/statecharts'
 
 const chart = {
 	One: {

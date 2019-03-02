@@ -1,5 +1,5 @@
 // @flow
-import { createObjectSearchByState } from './utils'
+import { createObjectSearchByState } from 'Utils/statecharts'
 
 const defaults = {
 	draggable: true,
