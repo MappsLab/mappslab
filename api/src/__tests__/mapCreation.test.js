@@ -4,8 +4,8 @@ import { getDBUsers } from './utils/user'
 import { getDBClassrooms } from './utils/classroom'
 
 const q = /* GraphQL */ `
-	mutation createMap($title: String!, $description: String, $classroomUid: String!) {
-		createMap(input: { title: $title, description: $description, classroomUid: $classroomUid }) {
+	mutation createMap($title: String!, $description: String, $addToClassrooms: [String!]) {
+		createMap(input: { title: $title, description: $description, addToClassrooms: $addToClassrooms }) {
 			uid
 			title
 			description
@@ -55,7 +55,7 @@ describe('[createMap]', () => {
 	it('should return an error if the viewer is not logged in', async () => {
 		const vars = {
 			...variables,
-			classroomUid: 'bad-arg',
+			addToClassrooms: ['bad-arg'],
 		}
 		const result = await request(q, { variables: vars })
 		expect(result.errors).toMatchSnapshot()
@@ -64,7 +64,7 @@ describe('[createMap]', () => {
 	it('should return an error if the supplied uid is malformed', async () => {
 		const vars = {
 			...variables,
-			classroomUid: 'bad-arg',
+			addToClassrooms: ['bad-arg'],
 		}
 		const result = await request(q, { variables: vars, context })
 		expect(result.errors).toMatchSnapshot()
@@ -73,7 +73,7 @@ describe('[createMap]', () => {
 	it('Should add a new map', async () => {
 		const vars = {
 			...variables,
-			classroomUid: classrooms[0].uid,
+			addToClassrooms: [classrooms[0].uid],
 		}
 		const result = await request(q, { variables: vars, context })
 		mapsToRemove.push(result.data.createMap)

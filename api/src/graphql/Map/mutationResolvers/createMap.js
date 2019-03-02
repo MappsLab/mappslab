@@ -10,6 +10,9 @@ export const createMap = async (_: Object, { input }: { input: NewMapData }, ctx
 	if (!viewer.roles.includes('admin') && !viewer.roles.includes('teacher'))
 		throw new Error('Only teachers and admins can create new maps')
 	const { addToClassrooms } = input
+	if (!addToClassrooms || addToClassrooms.length === 0) {
+		throw new Error('You must supply at least one classroom UID in `addToClassrooms`')
+	}
 	await Promise.all(
 		addToClassrooms.map(async (classroomUid) => {
 			/* Make sure the classroom exists */

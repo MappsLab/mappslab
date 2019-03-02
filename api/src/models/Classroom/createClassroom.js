@@ -30,7 +30,6 @@ export const createClassroom = async (args: NewClassroomInput): Promise<Classroo
 					{},
 			  ])
 			: []
-	console.log(addTeacherEdges)
 	// $FlowFixMe --
 	return createNodeWithEdges(validatedClassroomData, [...addTeacherEdges])
 }

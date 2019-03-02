@@ -32,9 +32,27 @@ export const createAdminUsers = async () => {
 	}
 	const john = {
 		name: 'John Schaefer',
-		roles: ['teacher'],
+		roles: ['admin', 'teacher'],
 		email: 'john@cmwworld.com',
 		temporaryPassword: 'temporary',
+		disabled: false,
+	}
+	return Promise.all([models.User.createUser(joseph), models.User.createUser(john)])
+}
+
+export const createTestAdminUsers = async () => {
+	const joseph = {
+		name: 'Joseph Thomas',
+		roles: ['admin', 'teacher'],
+		email: 'joseph@good-idea.studio',
+		password: 'Password#1',
+		disabled: false,
+	}
+	const john = {
+		name: 'John Schaefer',
+		roles: ['admin', 'teacher'],
+		email: 'john@cmwworld.com',
+		password: 'Password#1',
 		disabled: false,
 	}
 	return Promise.all([models.User.createUser(joseph), models.User.createUser(john)])

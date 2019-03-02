@@ -22,7 +22,7 @@ const generateMap = (): NewMapData => ({
 })
 
 const createMapMutation = /* GraphQL */ `
-	mutation createMap($input: NewMapInput!) {
+	mutation createMap($input: CreateMapInput!) {
 		createMap(input: $input) {
 			uid
 			title
@@ -41,5 +41,5 @@ export const createMap = async ({ input }: { input: NewMapData }, { viewer }: { 
 	return result.data.createMap
 }
 
-export const createGeneratedMap = (mapArgs: { classroomUid: string }, { viewer }: { viewer: UserType }) =>
+export const createGeneratedMap = (mapArgs: { addToClassrooms: Array<string> }, { viewer }: { viewer: UserType }) =>
 	createMap({ input: { ...generateMap(), ...mapArgs } }, { viewer })

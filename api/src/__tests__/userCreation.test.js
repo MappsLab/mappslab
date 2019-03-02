@@ -33,7 +33,7 @@ describe('[createUser]', () => {
 			email: 'frank@dogfoodismypassword.com',
 		}
 		const mu = /* GraphQL */ `
-			mutation CreateAdmin($input: NewAdminData!) {
+			mutation CreateAdmin($input: CreateAdminInput!) {
 				createAdmin(input: $input) {
 					uid
 					name
@@ -61,7 +61,7 @@ describe('[createUser]', () => {
 			addToClassrooms: [classrooms[0].uid],
 		}
 		const mu = /* GraphQL */ `
-			mutation CreateTeacher($input: NewTeacherData!) {
+			mutation CreateTeacher($input: CreateTeacherInput!) {
 				createTeacher(input: $input) {
 					uid
 					name
@@ -78,7 +78,7 @@ describe('[createUser]', () => {
 		`
 		const variables = { input: newTeacher }
 		const badResult = await request(mu, { variables })
-		expect(badResult.errors[0].message).toBe('You must be an admin to add new teachers')
+		expect(badResult.errors[0].message).toBe('You must be an admin or teacher to add new teachers')
 		/* Create a new admin, while logged in as an admin */
 		const context = { viewer: admin }
 		const goodResult = await request(mu, { variables, context })
@@ -98,7 +98,7 @@ describe('[createUser]', () => {
 			addToClassrooms: [classrooms[0].uid],
 		}
 		const mu = /* GraphQL */ `
-			mutation CreateStudent($input: NewStudentData!) {
+			mutation CreateStudent($input: CreateStudentInput!) {
 				createStudent(input: $input) {
 					uid
 					name
@@ -115,7 +115,7 @@ describe('[createUser]', () => {
 		`
 		const variables = { input: newStudentData }
 		const badResult = await request(mu, { variables })
-		expect(badResult.errors[0].message).toBe('You must be an admin to add new teachers')
+		expect(badResult.errors[0].message).toBe('You must be an admin or teacher to add new students')
 		/* Create a new admin, while logged in as an admin */
 		const context = { viewer: teacher }
 		const goodResult = await request(mu, { variables, context })

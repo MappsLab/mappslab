@@ -50,7 +50,7 @@ export type NewUserData = {
 	name: string,
 	email?: string,
 	temporaryPassword: string,
-	addToClassrooms: Array<string>,
+	addToClassrooms?: Array<string>,
 }
 
 export type NewUserInput = {

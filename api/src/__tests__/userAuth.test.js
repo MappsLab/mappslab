@@ -80,7 +80,7 @@ describe('queries', () => {
 	it('[loginViewer] should return `requiresReset` if the supplied password fails but matches `user.temporaryPassword`', async () => {
 		/* Create a new user with a temporary password */
 		const createUserMutation = /* GraphQL */ `
-			mutation CreateStudent($input: NewStudentData!) {
+			mutation CreateStudent($input: CreateStudentInput!) {
 				createStudent(input: $input) {
 					uid
 					name

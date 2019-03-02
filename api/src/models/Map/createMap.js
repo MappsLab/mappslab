@@ -26,7 +26,6 @@ export const createMap = async (input: NewMapData): Promise<MapType> => {
 					{},
 			  ])
 			: []
-	console.log(validatedMapData, classroomEdges)
 	const newMap = await createNodeWithEdges(validatedMapData, [...classroomEdges])
 
 	return newMap

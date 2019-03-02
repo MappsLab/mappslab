@@ -22,8 +22,9 @@ export const getClassroom = async (args: GetNodeArgs, viewer?: ViewerType): Prom
 		}
 	`
 	const variables = { viewerUid: viewer ? viewer.uid : '0x1', ...args }
-	const result: Object = await query(q, variables)
+	const result = await query(q, variables)
 	const classroom = head(result.getClassroom)
+
 	if (!classroom || classroom.type !== 'classroom') return null
 	return classroom
 }

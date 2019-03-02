@@ -8,7 +8,7 @@ import { createClassroom, assignUser } from '../utils/classroom'
 import { createGeneratedMap } from '../utils/map'
 import { createGeneratedPin } from '../utils/pin'
 import { createRoute } from '../utils/route'
-import { createAdminUsers } from '../utils/db'
+import { createTestAdminUsers } from '../utils/db'
 
 const dgraph = require('dgraph-js')
 const debug = require('debug')('seed')
@@ -30,7 +30,7 @@ const seedDatabase = async () => {
 	await dropAll()
 	await setSchema()
 	debug('🤓  Creating admin user')
-	const [admin, admin2] = await createAdminUsers()
+	const [admin, admin2] = await createTestAdminUsers()
 	debug('👶  Creating and inserting users...')
 
 	const teachers = await promiseSerial(R.times(() => async () => createTeacher({}, { viewer: admin }), 3))
@@ -71,7 +71,7 @@ const seedDatabase = async () => {
 	const maps = await Promise.all(
 		classrooms.map(async (classroom) =>
 			promiseSerial(
-				R.times(() => async () => createGeneratedMap({ classroomUid: classroom.uid }, { viewer: classroom.teacher }), 1),
+				R.times(() => async () => createGeneratedMap({ addToClassrooms: [classroom.uid] }, { viewer: classroom.teacher }), 1),
 			),
 		),
 	)

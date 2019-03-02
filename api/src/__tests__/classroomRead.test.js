@@ -104,6 +104,14 @@ describe('queries', () => {
 				classroom(input: { slug: $slug }) {
 					uid
 					viewerIsTeacher
+					teachers {
+						edges {
+							node {
+								uid
+								roles
+							}
+						}
+					}
 				}
 			}
 		`
