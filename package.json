@@ -8,13 +8,13 @@
 		"docz:dev": "docz dev",
 		"dev:app": "yarn workspace mappslab-app dev",
 		"dev:api": "yarn workspace mappslab-api dev",
-		"build:app": "yarn workspace mappslab-app build:app",
-		"build:api": "yarn workspace mappslab-api build:api",
+		"build:app": "yarn workspace mappslab-app build",
+		"build:api": "yarn workspace mappslab-api build",
 		"build:mapp": "yarn workspace @mappslab/map build",
 		"flow:doctor": "flow-mono install-types && flow-mono create-symlinks ./api/.flowconfig && flow-mono create-symlinks ./app/.flowconfig",
 		"test:app": "yarn workspace mappslab-app test",
 		"test:app:watch": "yarn workspace mappslab-app test:watch",
-		"test:api": "yarn workspace mappslab-api test",
+		"test:api": "yarn workspace mappslab-api ci-test",
 		"test:api:watch": "yarn workspace mappslab-api test:watch"
 	},
 	"repository": {

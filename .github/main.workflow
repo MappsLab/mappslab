@@ -21,19 +21,14 @@ action "test-app" {
   needs = "install"
   uses = "actions/npm@1.0.0"
   runs = "yarn"
-  args = "workspace mappslab-app test"
+  args = "test:app"
 }
 
 action "test-api" {
   needs = "install"
   uses = "actions/npm@1.0.0"
   runs = "yarn"
-  args = [
-    "workspace mappslab-api db:test:init",
-    "workspace mappslab-api db:test:start",
-    "workspace mappslab-api db:test:seed",
-    "workspace mappslab-api test"
-  ]
+  args = "test:api"
 }
 
 # build with yarn
@@ -41,17 +36,14 @@ action "build-app" {
   needs = "test-app"
   uses = "actions/npm@1.0.0"
   runs = "yarn"
-  args = [
-    "workspace @mappslab/map build",
-    "workspace mappslab-app build",
-  ]
+  args = ["build:mapp", "build:app"]
 }
 
 action "build-api" {
   needs = "test-api"
   uses = "actions/npm@1.0.0"
   runs = "yarn"
-  args = "workspace mappslab-api build"
+  args = "build:api"
 }
 
 # Deploy with Zeit
