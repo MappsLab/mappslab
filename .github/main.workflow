@@ -29,10 +29,10 @@ action "test-api" {
   uses = "actions/npm@1.0.0"
   runs = "yarn"
   args = [
-    "db:test:init",
-    "db:test:start",
-    "db:test:seed",
-    "test:api"
+    "workspace mappslab-api db:test:init",
+    "workspace mappslab-api db:test:start",
+    "workspace mappslab-api db:test:seed",
+    "workspace mappslab-api test"
   ]
 }
 
