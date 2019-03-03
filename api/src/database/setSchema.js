@@ -63,7 +63,6 @@ export const setSchema = async () => {
 		'has_route: uid @reverse @count . ',
 		'has_group: uid @reverse @count . ',
 	].join('\n')
-
 	debug(schema)
 	const op = new dgraph.Operation()
 	op.setSchema(schema)

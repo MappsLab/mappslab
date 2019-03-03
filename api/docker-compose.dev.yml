@@ -1,0 +1,45 @@
+version: '3.2'
+services:
+  zero:
+    image: dgraph/dgraph:latest
+    container_name: mappslab-dev_dgraph-zero
+    volumes:
+      - type: volume
+        source: dgraph-mappslab
+        target: /dgraph-mappslab
+        volume:
+          nocopy: true
+    ports:
+      - 5080:5080
+      - 6080:6080
+    restart: on-failure
+    command: dgraph zero --my=zero:5080
+  server:
+    container_name: mappslab-dev_dgraph-server
+    image: dgraph/dgraph:latest
+    volumes:
+      - type: volume
+        source: dgraph-mappslab
+        target: /dgraph-mappslab
+        volume:
+          nocopy: true
+    ports:
+      - 8080:8080
+      - 9080:9080
+    restart: on-failure
+    command: dgraph server --my=server:7080 --lru_mb=2048 --zero=zero:5080
+  ratel:
+    container_name: mappslab-dev_dgraph-ratel
+    image: dgraph/dgraph:latest
+    volumes:
+      - type: volume
+        source: dgraph-mappslab
+        target: /dgraph-mappslab
+        volume:
+          nocopy: true
+    ports:
+      - 8090:8000
+    command: dgraph-ratel
+
+volumes:
+  dgraph-mappslab:

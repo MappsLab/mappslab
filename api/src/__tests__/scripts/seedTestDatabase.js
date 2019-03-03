@@ -30,7 +30,7 @@ const seedDatabase = async () => {
 	await dropAll()
 	await setSchema()
 	debug('🤓  Creating admin user')
-	const [admin, admin2] = await createTestAdminUsers()
+	const [admin] = await createTestAdminUsers()
 	debug('👶  Creating and inserting users...')
 
 	const teachers = await promiseSerial(R.times(() => async () => createTeacher({}, { viewer: admin }), 3))
