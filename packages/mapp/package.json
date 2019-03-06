@@ -1,10 +1,10 @@
 {
-  "name": "@mappslab/map",
+  "name": "@mappslab/mapp",
   "version": "0.0.1",
   "description": "The base Map component used in MappsLab",
   "main": "dist/index.js",
   "scripts": {
-    "build": "babel ./src --out-dir ./dist",
+    "build": "rimraf ./dist && babel ./src --out-dir ./dist",
     "build:watch": "watch 'yarn build' ./src",
     "test": "jest"
   },
@@ -33,6 +33,7 @@
     "flow-typed": "^2.5.1",
     "flowgen": "^1.3.0",
     "jest": "^23.6.0",
+    "rimraf": "^2.6.3",
     "watch": "^1.0.2"
   },
   "peerDependencies": {
