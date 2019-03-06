@@ -27,7 +27,7 @@ services:
       - 8081:8080
       - 9081:9080
     restart: on-failure
-    command: dgraph server --my=server:7081 --lru_mb=2048 --zero=zero:5081
+    command: dgraph alpha --my=server:7081 --lru_mb=2048 --zero=zero:5081
   ratel:
     container_name: mappslab-test_dgraph-ratel
     image: dgraph/dgraph:latest

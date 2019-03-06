@@ -1,17 +1,12 @@
 {
+	"name": "mappslab-api",
 	"alias": "mappslab-api",
+	"version": 2,
+	"builds": [{ "src": "dist/server.js", "use": "@now/node-server" }],
+	"routes": [{ "src": "/.*", "dest": "dist/server.js" }],
 	"env": {
-		"ENV": "staging",
-		"DEBUG": "api"
-	},
-	"dotenv": "./dist/.env",
-	"engines": {
-		"node": "10.x.x"
-	},
-	"scale": {
-		"sfo1": {
-			"min": 1,
-			"max": "auto"
-		}
+		"JWT_KEY": "PGroGm8NZiG^p2*kwatz",
+		"DATABASE_ADDRESS": "167.99.175.140:9080",
+		"NODE_ENV": "staging"
 	}
 }

@@ -9,6 +9,11 @@ const debug = require('debug')('seed')
 
 faker.seed(667)
 
+/* Make sure node exists if there is an error */
+process.on('unhandledRejection', (up) => {
+	throw up
+})
+
 const dropAll = async () => {
 	const op = new dgraph.Operation()
 	op.setDropAll(true)

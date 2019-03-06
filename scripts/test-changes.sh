@@ -19,36 +19,30 @@ echo "DEPLOY_ENV: $DEPLOY_ENV"
 	echo "*     * * *     *"
 	echo "⚗️  Testing API"
 	echo "*     * * *     *"
-	npm run db:test:init
+	yarn workspace mappslab-api db:test:init
 	sleep 5 
-	npm run db:test:start
-	sleep 5
-	npm run db:test:seed
-	npm run test:api
+	yarn workspace mappslab-api db:test:seed
 
 	echo "*     * * *     *"
-	echo "⚗️  API Tests passed. Compiling.."
+	echo "⚗️  API Tests passed."
 	echo "*     * * *     *"
 
 
-	echo "🛠  BUILD  - Environment: $DEPLOY_ENV"
-	echo "🛠  Compiling App to ./.build/api "
+	# echo "🛠  BUILD  - Environment: $DEPLOY_ENV"
+	# echo "🛠  Compiling App to ./.build/api "
 
-	rm -rf ./build/api
-	npm run build:api
+	# npm run build:api
 
-	echo "🛠  Successfully compiled. Copying configuration files.."	
+	# echo "🛠  Successfully compiled. Copying configuration files.."	
 
-	cp ./api/package.json ./build/api/
+	# cp ./api/package.json ./build/api/
 
-	if [ "$DEPLOY_ENV" = "production" ]
-		then
-		cp ./api/now.production.json ./build/api/now.json
-		cp ./api/.env.production ./build/api/
-	else
-		cp ./api/now.staging.json ./build/api/now.json
-		cp ./api/.env.staging ./build/api/
-	fi
+	# if [ "$DEPLOY_ENV" = "production" ]
+	# 	then
+	# 	cp ./api/.env.production ./api/dist/.env
+	# else
+	# 	cp ./api/.env.staging ./api/dist/.env
+	# fi
 # fi
 
 # if git diff --name-only $TRAVIS_COMMIT_RANGE | grep "^app/"
@@ -59,34 +53,34 @@ echo "DEPLOY_ENV: $DEPLOY_ENV"
 	npm run test:app
 
 	echo "*     * * *     *"
-	echo "⚗️  App tests passed. Compiling.."
+	echo "⚗️  App tests passed"
 	echo "*     * * *     *"
 	echo "🛠  BUILD  - Environment: $DEPLOY_ENV"
 
-	echo "🛠  Building packages.."
+	# echo "🛠  Building packages.."
 
-	npm run build:mapp
+	# npm run build:mapp
 
-	cd $TRAVIS_BUILD_DIR
+	# cd $TRAVIS_BUILD_DIR
 
 
-	echo "🛠  Compiling App to ./build/web "
+	# echo "🛠  Compiling App to ./build/web "
 
-	rm -rf ./build/web
-	mkdir -p ./build/web
+	# rm -rf ./build/web
+	# mkdir -p ./build/web
 
-	echo "🛠  Copying configuration files.."
+	# echo "🛠  Copying configuration files.."
 
-	if [ "$DEPLOY_ENV" = "production" ]
-		then
-		npm run build:app
-		cp -r public/* ./build/web
-		mv ./build/web/now.production.json ./build/web/now.json
-	else
-		npm run build:app
-		cp -r public/* ./build/web
-		mv ./build/web/now.staging.json ./build/web/now.json
-	fi
+	# if [ "$DEPLOY_ENV" = "production" ]
+	# 	then
+	# 	npm run build:app
+	# 	cp -r public/* ./build/web
+	# 	mv ./build/web/now.production.json ./build/web/now.json
+	# else
+	# 	npm run build:app
+	# 	cp -r public/* ./build/web
+	# 	mv ./build/web/now.staging.json ./build/web/now.json
+	# fi
 
 # fi
 

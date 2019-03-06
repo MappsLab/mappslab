@@ -7,7 +7,9 @@
   "license": "ISC",
   "scripts": {
     "start": "cross-env DEBUG=api node ./dist/server.js",
-    "build": "cross-env NODE_ENV=production cross-env ENV=production babel ./src -d ./dist",
+    "build": "yarn build:clean && yarn build:compile",
+    "build:clean": "rimraf ./dist",
+    "build:compile": "cross-env NODE_ENV=production cross-env ENV=production babel ./src -d ./dist",
     "dev": "cross-env ENV=development cross-env DEBUG=api nodemon --watch ./src ./src/server.js --exec babel-node",
     "test": "cross-env ENV=test cross-env DEBUG=test cross-env TEST_DB=true jest",
     "test:coverage": "cross-env ENV=test cross-env DEBUG=test cross-env TEST_DB=true jest --coverage",
@@ -15,16 +17,17 @@
     "ci-test": "yarn db:test:init && yarn db:test:start && yarn db:test:seed && yarn test",
     "db:init": "yarn db:test:init && yarn db:dev:init",
     "db:stopall": "docker stop $(docker ps -q)",
-    "db:test:init": "docker-compose -p mappslab-test -f ./docker-compose.test.yml up -d",
+    "db:test:init": "docker-compose -p mappslab-test -f ./docker-compose.test.yml up -d && sleep 5",
+    "db:test:start": "docker start mappslab-test_dgraph-zero mappslab-test_dgraph-server mappslab-test_dgraph-ratel && sleep 5",
     "db:test:seed": "cross-env ENV=test cross-env TEST_DB=true cross-env DEBUG=seed,db babel-node ./src/__tests__/scripts/seedTestDatabase.js",
-    "db:test:start": "docker start mappslab-test_dgraph-zero mappslab-test_dgraph-server mappslab-test_dgraph-ratel",
     "db:test:stop": "docker stop mappslab-test_dgraph-zero mappslab-test_dgraph-server mappslab-test_dgraph-ratel",
     "db:dev:init": "docker-compose -p mappslab-dev -f ./docker-compose.dev.yml up -d",
     "db:dev:seed": "cross-env ENV=development cross-env DEBUG=seed,db babel-node ./src/__tests__/scripts/seedNewDatabase.js",
     "db:dev:start": "docker start mappslab-dev_dgraph-zero mappslab-dev_dgraph-server mappslab-dev_dgraph-ratel",
     "db:dev:stop": "docker stop mappslab-dev_dgraph-zero mappslab-dev_dgraph-server mappslab-dev_dgraph-ratel",
     "db:staging:seed": "cli-confirm 'Do you really want to reset the staging database?' && cross-env ENV=staging cross-env DEBUG=seed,db babel-node ./src/__tests__/scripts/seedNewDatabase.js",
-    "deploy": "yarn build && now && now alias"
+    "deploy:dev": "yarn build && now && now alias",
+    "deploy": "yarn build && now -t $ZEIT_TOKEN && now alias -t $ZEIT_TOKEN"
   },
   "dependencies": {
     "apollo-server": "^2.4.0",

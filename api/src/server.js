@@ -13,10 +13,20 @@ const debug = require('debug')('api')
 const port = PORT || 3000
 const path = '/graphql'
 
-const server = new ApolloServer({ typeDefs, resolvers, context, formatError: createErrorFormatter })
+const isProduction = process.env.NODE_ENV === 'production'
+
+const server = new ApolloServer({
+	typeDefs,
+	resolvers,
+	context,
+	formatError: createErrorFormatter,
+	playground: !isProduction,
+	introspection: !isProduction,
+})
 const app = express()
 app.use(cors())
 app.use(path, getCurrentViewer)
+
 server.applyMiddleware({ app, path })
 
 const httpServer = createServer(app)
@@ -24,5 +34,5 @@ const httpServer = createServer(app)
 server.installSubscriptionHandlers(httpServer)
 
 httpServer.listen({ port: 3000 }, () => {
-	debug(`Server running on port ${port}`)
+	console.log(`Server running on port ${port}`)
 })

@@ -1,42 +1,36 @@
 const path = require('path')
 
-module.exports = function(api) {
-	const env = api.env()
-	const projectRoot = env === 'production' ? path.resolve(__dirname, 'dist') : path.resolve(__dirname, 'src')
-	api.cache(env === 'development')
-	return {
-		presets: [
-			'@babel/preset-flow',
-			[
-				'@babel/preset-env',
-				{
-					targets: {
-						node: 'current',
-					},
+module.exports = {
+	presets: [
+		'@babel/preset-flow',
+		[
+			'@babel/preset-env',
+			{
+				targets: {
+					node: 'current',
 				},
-			],
+			},
 		],
-		plugins: [
-			[
-				'babel-plugin-module-resolver',
-				{
-					root: ['/'],
-					alias: {
-						GraphQL: path.resolve(projectRoot, 'graphql'),
-						Models: path.resolve(projectRoot, 'models'),
-						Utils: path.resolve(projectRoot, 'utils'),
-						Database: path.resolve(projectRoot, 'database'),
-						Config: path.resolve(projectRoot, 'config'),
-						Errors: path.resolve(projectRoot, 'errorTypes'),
-						Types: path.resolve(projectRoot, 'types'),
-						Shared: path.resolve(projectRoot, '..', '..', 'types'),
-					},
-					// cwd: 'babelrc',
+	],
+	plugins: [
+		[
+			'babel-plugin-module-resolver',
+			{
+				root: [`./src`],
+				alias: {
+					GraphQL: './src/graphql',
+					Models: './src/models',
+					Utils: './src/utils',
+					Database: './src/database',
+					Config: './src/config',
+					Errors: './src/errorTypes',
+					Types: './src/types',
 				},
-			],
-			'@babel/plugin-proposal-object-rest-spread',
-			'@babel/plugin-proposal-export-default-from',
+				cwd: 'packagejson',
+			},
 		],
-		ignore: ['node_modules', 'build'],
-	}
+		'@babel/plugin-proposal-object-rest-spread',
+		'@babel/plugin-proposal-export-default-from',
+	],
+	ignore: ['node_modules', 'build'],
 }

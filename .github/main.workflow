@@ -9,35 +9,48 @@ action "develop-branch-filter" {
 }
 
 # install with yarn
-action "install" {
-  needs = "develop-branch-filter"
-  uses = "actions/npm@1.0.0"
-  runs = "yarn"
-  args = "install"
-}
+# action "install" {
+#   needs = "develop-branch-filter"
+#   uses = "actions/npm@1.0.0"
+#   runs = "yarn"
+#   args = "install"
+# }
 
-# test with yarn
-action "test-app" {
-  needs = "install"
-  uses = "actions/npm@1.0.0"
-  runs = "yarn"
-  args = "test:app"
+# # test with yarn
+# action "test-app" {
+#   needs = "install"
+#   uses = "actions/npm@1.0.0"
+#   runs = "yarn"
+#   args = "test:app"
+# }
+
+action "test-api-init" {
+  needs = "develop-branch-filter"
+  uses = "actions/docker/cli@master"
+  # runs = "docker"
+  args = [
+    "build -t mappslab-test -f Dockerfile .",
+    # "run -v /var/run/docker.sock:/var/run/docker.sock mappslab-test"
+  ]
 }
 
 action "test-api" {
-  needs = "install"
-  uses = "actions/npm@1.0.0"
-  runs = "yarn"
-  args = "test:api"
+  needs = "test-api-init"
+  uses = "actions/docker/cli@master"
+  # runs = "docker"
+  args = [
+    # "build -t mappslab-test -f Dockerfile .",
+    "run -v /var/run/docker.sock:/var/run/docker.sock mappslab-test"
+  ]
 }
 
 # build with yarn
-action "build-app" {
-  needs = "test-app"
-  uses = "actions/npm@1.0.0"
-  runs = "yarn"
-  args = ["build:mapp", "build:app"]
-}
+# action "build-app" {
+#   needs = "test-app"
+#   uses = "actions/npm@1.0.0"
+#   runs = "yarn"
+#   args = ["build:mapp", "build:app"]
+# }
 
 action "build-api" {
   needs = "test-api"
@@ -47,12 +60,12 @@ action "build-api" {
 }
 
 # Deploy with Zeit
-action "deploy-app" {
-  needs = "test-app"
-  uses = "actions/zeit-now@master"
-  args = "--local-config=./app/public/now.json deploy ./app/public > $HOME/$GITHUB_ACTION.txt -e GIT_RELEASE=$GITHUB_SHA"
-  secrets = ["ZEIT_TOKEN"]
-}
+# action "deploy-app" {
+#   needs = "test-app"
+#   uses = "actions/zeit-now@master"
+#   args = "--local-config=./app/public/now.json deploy ./app/public > $HOME/$GITHUB_ACTION.txt -e GIT_RELEASE=$GITHUB_SHA"
+#   secrets = ["ZEIT_TOKEN"]
+# }
 
 action "deploy-api" {
   needs = "test-api"
@@ -63,12 +76,12 @@ action "deploy-api" {
 
 # Alias with Zeit
 action "release" {
-  needs = ["deploy-app", "deploy-api"]
+  needs = [ "deploy-api"]
   uses = "actions/zeit-now@master"
   args = [
     "alias --local-config=./app/public/now.json",
     "alias --local-config=./api/now.json",
-  ]    
+  ]
   secrets = [
     "ZEIT_TOKEN",
   ]
