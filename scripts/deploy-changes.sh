@@ -10,7 +10,7 @@ x=''
 	echo "🚀 Deploying API"
 	echo "*     * * *     *"
 
-	yarn workspace mappslab-api deploy
+	# yarn workspace mappslab-api deploy
 
 	echo "🛠  Build complete! 🎉"
 # fi
@@ -22,7 +22,7 @@ x=''
 	echo "*     * * *     *"
 	echo "🚀  Deploying App"
 	echo "*     * * *     *"
-
+	yarn workspace @mappslab/mapp build
 	yarn workspace mappslab-app deploy
 	
 	echo "🛠  Build complete! 🎉"
