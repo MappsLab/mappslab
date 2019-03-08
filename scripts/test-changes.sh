@@ -22,6 +22,7 @@ echo "DEPLOY_ENV: $DEPLOY_ENV"
 	yarn workspace mappslab-api db:test:init
 	sleep 5 
 	yarn workspace mappslab-api db:test:seed
+	yarn workspace mappslab-api test
 
 	echo "*     * * *     *"
 	echo "⚗️  API Tests passed."
