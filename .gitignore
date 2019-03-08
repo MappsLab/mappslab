@@ -9,6 +9,7 @@ npm-debug.log
 yarn-error.log
 
 build/
+dist/
 
 stats.json
 app/public/js/app.js
@@ -27,3 +28,6 @@ api/coverage
 app/coverage
 
 .docz
+
+# un-ignore
+!.env.example

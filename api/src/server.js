@@ -5,12 +5,12 @@ import { createServer } from 'http'
 import { ApolloServer } from 'apollo-server-express'
 import createErrorFormatter from 'Utils/graphql-error-formatter'
 import { typeDefs, resolvers } from './schema'
-import { PORT } from './config'
+import config from './config'
 import getCurrentViewer from './middleware/getCurrentViewer'
 import context from './serverContext'
 
 const debug = require('debug')('api')
-const port = PORT || 3000
+const port = config.get('server.port')
 const path = '/graphql'
 
 const isProduction = process.env.NODE_ENV === 'production'
@@ -34,5 +34,5 @@ const httpServer = createServer(app)
 server.installSubscriptionHandlers(httpServer)
 
 httpServer.listen({ port: 3000 }, () => {
-	console.log(`Server running on port ${port}`)
+	debug(`Server running on port ${port}`)
 })

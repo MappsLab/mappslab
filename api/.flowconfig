@@ -19,7 +19,7 @@
 __tests__
 
 [include]
-;../node_modules
+../node_modules
 
 [libs]
 node_modules/react-native/Libraries/react-native/react-native-interface.js
@@ -46,6 +46,7 @@ module.name_mapper='^Database' -> '<PROJECT_ROOT>/src/database'
 module.name_mapper='^Errors' -> '<PROJECT_ROOT>/src/errorTypes'
 module.name_mapper='^Config' -> '<PROJECT_ROOT>/src/config'
 module.name_mapper='^Types' -> '<PROJECT_ROOT>/src/types'
+module.name_mapper='^Services' -> '<PROJECT_ROOT>/src/services'
 module.name_mapper='^Shared' -> '<PROJECT_ROOT>/../shared'
 
 
