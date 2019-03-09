@@ -85,6 +85,12 @@ const config = convict({
 			default: 'mappslab-beta',
 			env: 'AWS_BUCKET_NAME',
 		},
+		imageDirectory: {
+			doc: 'AWS Bucket Image Directory',
+			format: String,
+			default: 'images',
+			env: 'AWS_BUCKET_IMAGE_DIR',
+		},
 	},
 })
 

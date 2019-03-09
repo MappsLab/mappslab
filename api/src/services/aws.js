@@ -1,5 +1,6 @@
 // @flow
-import { S3 } from 'aws-sdk'
+import AWS from 'aws-sdk'
+import type { ReadStream } from 'fs'
 import config from '../config'
 
 const credentials = {
@@ -7,19 +8,34 @@ const credentials = {
 	secretAccessKey: config.get('aws.secretKey'),
 }
 
-const client = new S3({
+const useLocal = !/staging|production/.test(config.get('env'))
+
+const s3client = new AWS.S3({
 	credentials,
+	endpoint: useLocal ? 'http://localhost:4572' : undefined,
 })
 
-type PutResponse = any
-
-const put = async (data: Buffer, name: string): Promise<PutResponse> =>
-	new Promise((resolve) => {
-		client.putObject({
-			Bucket: config.get('aws.bucketName'),
-		})
-	})
-
-export const uploadImage = async (data: Buffer, name: string): Promise<null> => {
-	s3.put
+type PutResponse = {
+	ETag: string,
+	Location: string,
+	key: string,
+	Bucket: string,
 }
+
+export const put = async (data: Buffer | ReadStream, name: string): Promise<PutResponse, Error> =>
+	new Promise((resolve) => {
+		const bucketName = config.get('aws.bucketName')
+		const imageDir = config.get('aws.imageDirectory')
+		s3client.upload(
+			{
+				Bucket: bucketName,
+				/* include the bucket name here. For some reason Localstack needs it */
+				Key: `${bucketName}/${imageDir}/${name}`,
+				Body: data,
+			},
+			(err, response) => {
+				if (err) throw err
+				resolve(response)
+			},
+		)
+	})

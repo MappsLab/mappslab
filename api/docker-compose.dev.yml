@@ -40,6 +40,20 @@ services:
     ports:
       - 8090:8000
     command: dgraph-ratel
+  localstack:
+    image: localstack/localstack:latest
+    container_name: mappslab-dev_localstack
+    ports:
+      - '4563-4584:4563-4584'
+      - '8050:8080'
+    environment:
+      - SERVICES=s3
+      - DEBUG=1
+      - DATA_DIR=/tmp/localstack/data
+      - PORT_WEB_UI=8080
+    volumes:
+      - '/private/tmp/localstack:/tmp/localstack'
+      - '/var/run/docker.sock:/var/run/docker.sock'
 
 volumes:
   dgraph-mappslab:
