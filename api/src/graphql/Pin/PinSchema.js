@@ -11,6 +11,8 @@ const Pin = /* GraphQL */ `
 		maps: MapConnection
 		route: PinInRoute
 		draft: Boolean
+		image: Image
+		video: String
 	}
 
 	type PinInRoute {
@@ -45,6 +47,7 @@ const Pin = /* GraphQL */ `
 		addToMaps: [String]!
 		lessonUids: [String]
 		addToRoute: AddPinToRouteInput
+		image: Upload
 	}
 
 	enum Position {
@@ -72,6 +75,7 @@ const Pin = /* GraphQL */ `
 		addToMaps: [String]
 		lessonUids: [String]
 		addToRoute: AddPinToRouteInput
+		image: Upload
 	}
 
 	input PinSortParameter {

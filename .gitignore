@@ -31,3 +31,4 @@ app/coverage
 
 # un-ignore
 !.env.example
+.localstack

@@ -39,7 +39,7 @@ module.exports = {
 				['Config', path.resolve(__dirname, 'src', 'config')],
 				['Errors', path.resolve(__dirname, 'src', 'errorTypes')],
 				['Types', path.resolve(__dirname, 'src', 'types')],
-				['Services', path.resolve(__dirname, 'src', 'types')],
+				['Services', path.resolve(__dirname, 'src', 'services')],
 				['Shared', path.resolve(__dirname, '..', 'shared')],
 			],
 		},

@@ -51,6 +51,9 @@ const relationshipStringCreators = {
 	// Route-first relationships
 	routeContainsPin: genericRelationship('includes_pin'),
 	routeWithinMap,
+
+	// Image-first relationships
+	hasImage: genericRelationship('~has_image'),
 }
 
 const createRelationshipFilter = (operator: string, field: string, value: any): FilterStrings | void => {

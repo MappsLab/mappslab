@@ -10,31 +10,6 @@ require('dotenv').config({
 	path: path.resolve(__dirname, '..', envFile),
 })
 
-// const {
-// 	ENV,
-// 	PORT: _PORT,
-// 	JWT_KEY: _JWT_KEY,
-// 	DATABASE_ADDRESS,
-// 	TEST_DATABASE_ADDRESS,
-// 	AWS_ACCESS_KEY,
-// 	AWS_SECRET_KEY,
-// 	AWS_BUCKET_NAME,
-// } = process.env
-// const address = ENV === 'test' ? TEST_DATABASE_ADDRESS : DATABASE_ADDRESS
-
-// export const PORT = _PORT || 3000
-// export const JWT_KEY = _JWT_KEY || 'xyz'
-// export const database = {
-// 	address,
-// }
-
-// // export const AWS_ACCESS_KEY
-// export const aws = {
-// 	AWS_ACCESS_KEY,
-// 	AWS_SECRET_KEY,
-// 	AWS_BUCKET_NAME,
-// }
-
 const config = convict({
 	env: {
 		doc: 'The application environment',

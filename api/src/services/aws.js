@@ -18,11 +18,11 @@ const s3client = new AWS.S3({
 type PutResponse = {
 	ETag: string,
 	Location: string,
-	key: string,
+	Key: string,
 	Bucket: string,
 }
 
-export const put = async (data: Buffer | ReadStream, name: string): Promise<PutResponse, Error> =>
+export const upload = async (data: Buffer | ReadStream, name: string): Promise<PutResponse> =>
 	new Promise((resolve) => {
 		const bucketName = config.get('aws.bucketName')
 		const imageDir = config.get('aws.imageDirectory')

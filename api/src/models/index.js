@@ -5,6 +5,7 @@ import Map from './Map'
 import Pin from './Pin'
 import Route from './Route'
 import User from './User'
+import Image from './Image'
 
 const models = {
 	Classroom,
@@ -13,6 +14,7 @@ const models = {
 	Pin,
 	Route,
 	User,
+	Image,
 }
 
 export default models

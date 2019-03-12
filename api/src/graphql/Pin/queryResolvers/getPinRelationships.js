@@ -1,6 +1,7 @@
 // @flow
 import type { UserType } from 'Types/UserTypes'
 import type { MapType } from 'Types/MapTypes'
+import type { ImageType } from 'Types/ImageTypes'
 import type { PinType, GetPinArgs } from 'Types/PinTypes'
 import type { RouteType } from 'Types/RouteTypes'
 import type { GraphQLContext, PageType, PaginationInput } from 'Types/sharedTypes'
@@ -11,9 +12,15 @@ type GetPinInput = {
 	input: GetPinArgs,
 }
 
-export const owner = async (fetchedPin: PinType, _: GetPinInput, ctx: GraphQLContext): Promise<UserType | null> => {
+export const owner = async (fetchedPin: PinType, _: GetPinInput, ctx: GraphQLContext): Promise<UserType> => {
 	const filter = { where: { userOwnsPin: { eq: fetchedPin.uid } } }
 	const result = await ctx.models.User.getUsers(filter)
+	return result && result[0]
+}
+
+export const image = async (fetchedPin: PinType, _: any, ctx: GraphQLContext): Promise<ImageType> => {
+	const filter = { where: { hasImage: { eq: fetchedPin.uid } } }
+	const result = await ctx.models.Image.getImages(filter)
 	return result && result[0]
 }
 

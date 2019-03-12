@@ -62,7 +62,10 @@ export const createTestAdminUsers = async () => {
  * Request Helper
  */
 
-const schema = makeExecutableSchema({ typeDefs, resolvers })
+/* Apollo Server includes this by default, but we aren't using that here so we need to add it manually */
+const uploadScalar = `scalar Upload`
+
+const schema = makeExecutableSchema({ typeDefs: [typeDefs, uploadScalar].join(','), resolvers })
 
 type Options = {
 	context?: {

@@ -10,6 +10,7 @@ import getCurrentViewer from './middleware/getCurrentViewer'
 import context from './serverContext'
 
 const debug = require('debug')('api')
+
 const port = config.get('server.port')
 const path = '/graphql'
 
