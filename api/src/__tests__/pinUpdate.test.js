@@ -84,11 +84,16 @@ describe('[updatePin]', () => {
 
 	it.only('should upload an image and return all sizes', async () => {
 		const imagePath = path.resolve(__dirname, 'assets', 'test-image.jpg')
-		const imageStream = fs.readFileSync(imagePath)
+
+		const mockUpload = new Promise((resolve) =>
+			resolve({
+				createReadStream: () => fs.createReadStream(imagePath),
+			}),
+		)
 
 		const variables = {
 			uid: firstPins[0].uid,
-			image: imageStream,
+			image: mockUpload,
 		}
 		const context = {
 			viewer: firstPins[0].owner,

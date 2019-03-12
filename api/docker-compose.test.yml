@@ -24,7 +24,7 @@ services:
         volume:
           nocopy: true
     ports:
-      - 8081:8080
+      - 9091:8080
       - 9081:9080
     restart: on-failure
     command: dgraph alpha --my=server:7081 --lru_mb=2048 --zero=zero:5081

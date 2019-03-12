@@ -15,7 +15,6 @@ export const checkPassword = async (
 	credentials: Credentials,
 ): Promise<UserType | { uid: string, requiresReset: true } | false> => {
 	const { email, password, uid } = credentials
-
 	const func = uid ? `uid(${uid})` : 'eq(email, $email)'
 	const q = `query getUser($email: string) {
 		getUser(func: ${func}) {
@@ -37,7 +36,6 @@ export const checkPassword = async (
 	// otherwise, see if the reset password is valid
 	const resetValid = await bcrypt.compare(password, user.temporaryPassword || '')
 	if (resetValid) return { uid: user.uid, requiresReset: true }
-
 	// if not, return false. The credentials are not valid.
 	return false
 }
@@ -77,6 +75,7 @@ export const resetPassword = async (credentials: PasswordResetInput): Promise<Us
 	}
 	const cleaned = await clean({ password, passwordReset, temporaryPassword: null, temporaryPasswordExpires: null })
 	const validated = await validateUpdate(cleaned)
+
 	await mutateNode(user.uid, { data: validated })
 	return user
 }

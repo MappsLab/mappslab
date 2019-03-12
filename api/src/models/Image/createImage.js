@@ -1,7 +1,7 @@
 // @flow
 import uuidv1 from 'uuid/v1'
 import { upload } from 'Services/aws'
-import { resizeImage, parseImage } from 'Utils/media'
+import { resizeImage, parseImage, streamToBuffer } from 'Utils/media'
 import { createNode } from 'Database'
 import type { ImageSize, ImageType } from 'Types/ImageTypes'
 import { validateNew } from './imageDBSchema'
@@ -27,10 +27,11 @@ export const createImage = async (
 	widths?: Array<number> = defaultWidths,
 	imageName?: string,
 ): Promise<ImageType> => {
+	const buffer = await streamToBuffer(source)
 	const name = imageName || uuidv1()
 	const [original, sizes] = await Promise.all([
-		parseAndUpload(source, name),
-		Promise.all(widths.map((size) => parseAndUpload(source, name, size))),
+		parseAndUpload(buffer, name),
+		Promise.all(widths.map((size) => parseAndUpload(buffer, name, size))),
 	])
 	const image = {
 		original,

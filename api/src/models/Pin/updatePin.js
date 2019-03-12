@@ -1,6 +1,7 @@
 // @flow
 import type { PinType, UpdatePinData } from 'Types/PinTypes'
 import { mutateNode, createEdge } from 'Database'
+import { streamToBuffer } from 'Utils/media'
 import { clean, validateUpdate } from './pinDBSchema'
 import Image from '../Image'
 

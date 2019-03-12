@@ -1,5 +1,11 @@
 // @flow
 
+export type ImageUpload = Promise<{
+	createReadStream: () => ReadableStream,
+	mimetype: string,
+	filename: string,
+}>
+
 export type ImageSize = {
 	uri: string,
 	width: number,

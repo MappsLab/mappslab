@@ -2,7 +2,7 @@
 
 import type { UserType } from 'Types/UserTypes'
 import type { MapType } from 'Types/MapTypes'
-import type { ImageType } from 'Types/ImageTypes'
+import type { ImageType, ImageUpload } from 'Types/ImageTypes'
 import type { RouteType } from './RouteTypes'
 
 export type GetPinArgs = {
@@ -56,5 +56,5 @@ export type UpdatePinData = {
 		connectToPin?: string,
 	},
 	deleted: boolean,
-	image: Buffer,
+	image: ImageUpload,
 }
