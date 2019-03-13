@@ -23,6 +23,11 @@ const GlobalStyle = createGlobalStyle`
 			margin: 0;
 		}
 
+		iframe {
+			border: none;
+			background-color: rgb(220, 220, 220);
+		}
+
 		button, input, select, option, textarea {
 			background: white;
 			font-family: ${theme.font.family.sans};
@@ -70,7 +75,8 @@ const GlobalStyle = createGlobalStyle`
 			margin 0;
 		}
 
-		img {
+		img,
+		body .gm-style img {
 			max-width: 100%;
 		}
 	`}

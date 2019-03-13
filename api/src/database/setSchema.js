@@ -33,6 +33,11 @@ export const setSchema = async () => {
 		'owns_route: uid @reverse . ',
 
 		/**
+		 * Pin Indices
+		 */
+		'has_image: uid @reverse .',
+
+		/**
 		 * Classroom Indices
 		 */
 		'has_map: uid @reverse .',

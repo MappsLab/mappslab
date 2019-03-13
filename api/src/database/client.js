@@ -1,11 +1,12 @@
 // @flow
+import config from '../config'
 
-const dgraph = require('dgraph-js')
+/* dgraph-js and grpc don't support ESM, use require() instead */
 const grpc = require('grpc')
+const dgraph = require('dgraph-js')
 const debug = require('debug')('db')
-const config = require('../config')
 
-const { address } = config.database
+const address = config.get('db.address')
 
 if (!address) throw new Error('No database address was supplied.')
 

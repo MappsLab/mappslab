@@ -1,7 +1,11 @@
+import fs from 'fs'
+import path from 'path'
 import { request } from './utils/db'
 import { getDBUsers } from './utils/user'
 import { getDBPins } from './utils/pin'
 import { getDBMaps } from './utils/map'
+
+jest.mock('Services/aws')
 
 let firstPins
 let firstMaps
@@ -78,6 +82,52 @@ describe('[updatePin]', () => {
 		// Reset the pin
 		const reset = await request(mutation, { variables: originalPin, context })
 		expect(reset.data.updatePin.title).toBe(firstPins[0].title)
+	})
+
+	it.only('should upload an image and return all sizes', async () => {
+		const imagePath = path.resolve(__dirname, 'assets', 'test-image.jpg')
+		const mockUpload = new Promise((resolve) =>
+			resolve({
+				createReadStream: () => fs.createReadStream(imagePath),
+			}),
+		)
+
+		const variables = {
+			uid: firstPins[0].uid,
+			image: mockUpload,
+		}
+		const context = {
+			viewer: firstPins[0].owner,
+		}
+
+		const imageMutation = /* GraphQL */ `
+			mutation UpdatePin($uid: String!, $image: Upload) {
+				updatePin(input: { uid: $uid, image: $image }) {
+					uid
+					title
+					image {
+						uid
+						sizes {
+							format
+							width
+							height
+						}
+						original {
+							format
+							width
+							height
+						}
+					}
+				}
+			}
+		`
+
+		const result = await request(imageMutation, { variables, context })
+		expect(result.data.updatePin.image.original.format).toBe('jpeg')
+		result.data.updatePin.image.sizes.map((size) => {
+			expect(size.format).toBe('jpeg')
+			expect(size.width).toBeGreaterThan(1)
+		})
 	})
 
 	it.skip('should add and remove classroom connections', async () => {

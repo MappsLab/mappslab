@@ -24,7 +24,7 @@ services:
         volume:
           nocopy: true
     ports:
-      - 8080:8080
+      - 9090:8080
       - 9080:9080
     restart: on-failure
     command: dgraph alpha --my=server:7080 --lru_mb=2048 --zero=zero:5080
@@ -40,6 +40,20 @@ services:
     ports:
       - 8090:8000
     command: dgraph-ratel
+  localstack:
+    image: localstack/localstack:latest
+    container_name: mappslab-dev_localstack
+    ports:
+      - '4563-4584:4563-4584'
+      - '8050:8080'
+    environment:
+      - SERVICES=s3
+      - DEBUG=1
+      - DATA_DIR=/tmp/localstack/data
+      - PORT_WEB_UI=8080
+    volumes:
+      - './.localstack:/tmp/localstack'
+      - '/var/run/docker.sock:/var/run/docker.sock'
 
 volumes:
   dgraph-mappslab:

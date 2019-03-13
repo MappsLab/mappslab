@@ -4,28 +4,11 @@ import type { UserType } from 'Types/User'
 import { UsersQuery } from 'Queries/User'
 import { QuestionConsumer } from 'Components/Question'
 import type { QuestionContext } from 'Components/Question'
-import { Form, Field } from 'Components/Forms'
+import { Prompt } from 'Components/Forms'
 import List from './List'
 import type { ListOfTypeProps, ListOfTypeBaseProps } from './utils'
 
 const { useState } = React
-
-type PromptProps = {
-	name: string,
-	label: string,
-	answer: (any) => Promise<void>,
-	type?: string,
-}
-
-const Prompt = ({ name, label, answer, type }: PromptProps) => (
-	<Form onSubmit={answer}>
-		<Field name={name} label={label} type={type} />
-	</Form>
-)
-
-Prompt.defaultProps = {
-	type: 'input',
-}
 
 /**
  * UserList

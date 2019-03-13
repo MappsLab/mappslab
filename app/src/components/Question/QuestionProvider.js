@@ -10,6 +10,7 @@ export type QuestionConfig = {
 	message: string,
 	options?: Array<OptionConfig>,
 	returnOnCancel?: any,
+	showCancelButton?: boolean,
 }
 
 export type PromisedQuestionConfig = {

@@ -32,7 +32,11 @@ export const userSchema = (isNew: boolean = true) =>
 			: Joi.string(),
 		password: Joi.string(),
 		temporaryPassword: Joi.string().allow(null),
-		temporaryPasswordExpires: Joi.date().allow(null),
+		temporaryPasswordExpires: Joi.any().when('temporaryPassword', {
+			is: null,
+			then: Joi.valid(null),
+			otherwise: Joi.date().default(new Date(Date.now() + 3600000)),
+		}),
 		passwordReset: Joi.object().keys({
 			token: Joi.string()
 				.required()

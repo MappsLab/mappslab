@@ -9,7 +9,6 @@ export const updatePin = async (_: Object, { input }: { input: UpdatePinData }, 
 	const existingPin = await ctx.models.Pin.getPin(input.uid)
 	if (!existingPin) throw new Error('This pin does not exist')
 	if (existingPin.owner.uid !== ctx.viewer.uid) throw new Error('You can only update your own pins')
-
 	const newPin = await ctx.models.Pin.updatePin(input)
 	// // Query the DB for the new pin so we can include relational data in the subscription filter
 	const pin = await ctx.models.Pin.getPin(newPin.uid)

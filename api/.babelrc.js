@@ -24,6 +24,7 @@ module.exports = {
 					Database: './src/database',
 					Config: './src/config',
 					Errors: './src/errorTypes',
+					Services: './src/services',
 					Types: './src/types',
 				},
 				cwd: 'packagejson',

@@ -2,7 +2,9 @@
 import crypto from 'crypto-promise'
 import jwt from 'jsonwebtoken'
 import type { JWT, UserType } from 'Types/UserTypes'
-import { JWT_KEY } from '../config'
+import config from '../config'
+
+const JWT_KEY = config.get('jwtKey')
 
 export const createToken = (): Promise<string> =>
 	new Promise((resolve, reject) => {

@@ -19,9 +19,10 @@ echo "DEPLOY_ENV: $DEPLOY_ENV"
 	echo "*     * * *     *"
 	echo "⚗️  Testing API"
 	echo "*     * * *     *"
-	yarn workspace mappslab-api db:test:init
+	yarn workspace mappslab-api docker:test:init
 	sleep 5 
 	yarn workspace mappslab-api db:test:seed
+	yarn workspace mappslab-api test
 
 	echo "*     * * *     *"
 	echo "⚗️  API Tests passed."
