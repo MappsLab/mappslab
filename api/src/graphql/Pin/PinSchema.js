@@ -48,6 +48,7 @@ const Pin = /* GraphQL */ `
 		lessonUids: [String]
 		addToRoute: AddPinToRouteInput
 		image: Upload
+		video: String
 	}
 
 	enum Position {
@@ -76,6 +77,7 @@ const Pin = /* GraphQL */ `
 		lessonUids: [String]
 		addToRoute: AddPinToRouteInput
 		image: Upload
+		video: String
 	}
 
 	input PinSortParameter {
