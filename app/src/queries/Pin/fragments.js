@@ -21,5 +21,21 @@ export const pinFragment = gql`
 			name
 			roles
 		}
+		video
+		image {
+			uid
+			original {
+				uri
+				width
+				height
+				format
+			}
+			sizes {
+				uri
+				width
+				height
+				format
+			}
+		}
 	}
 `

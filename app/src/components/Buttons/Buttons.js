@@ -1,11 +1,12 @@
 // @flow
 import React from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { Link } from 'react-router-dom'
 
 export const ButtonWrapper = styled.button`
-	${({ theme, level }) => `
+	${({ theme, level, disabled }) => css`
 		display: inline-block;
+		cursor: pointer;
 		margin: ${level === 'tertiary' ? theme.layout.spacing.quarter : theme.layout.spacing.single} auto;	
 		padding: ${level === 'tertiary' ? theme.layout.spacing.half : theme.layout.spacing.single};
 		font-size: ${level === 'tertiary' ? theme.font.size.h5 : theme.font.size.p};
@@ -22,6 +23,9 @@ export const ButtonWrapper = styled.button`
 		};
 		border: ${level === 'secondary' ? `1px solid ${theme.color.primary.normal}` : ''};
 		transition: 0.1s;
+		opacity: ${disabled ? 0.6 : 1};
+		pointer-events: ${disabled ? 'none' : 'auto'};
+
 
 		&:hover {
 			background-color: ${level === 'primary' ? theme.color.primary.accent : ''};
@@ -36,10 +40,11 @@ type ButtonProps = {
 	level?: 'primary' | 'secondary' | 'tertiary',
 	onClick?: () => any | (() => Promise<any>),
 	to?: string,
+	as?: string,
 }
 
 export const Button = (props: ButtonProps) => (
-	<ButtonWrapper {...props} as={props.to ? Link : undefined} type={props.to ? undefined : props.type} />
+	<ButtonWrapper {...props} as={props.as || (props.to ? Link : undefined)} type={props.to || props.as ? undefined : props.type} />
 )
 
 Button.defaultProps = {
@@ -47,6 +52,7 @@ Button.defaultProps = {
 	level: 'primary',
 	onClick: undefined,
 	to: undefined,
+	as: undefined,
 }
 
 type SubmitButtonProps = {

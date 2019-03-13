@@ -2,6 +2,7 @@
 
 import type { UserType } from './User'
 import type { RouteType } from './Route'
+import type { ImageType } from './Media'
 
 export type PinType = {
 	uid: string,
@@ -18,4 +19,6 @@ export type PinType = {
 		nextPin?: PinType,
 		prevPin?: PinType,
 	},
+	image?: ImageType | null,
+	video?: string,
 }

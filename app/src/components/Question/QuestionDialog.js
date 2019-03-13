@@ -3,6 +3,7 @@ import * as React from 'react'
 import styled, { css } from 'styled-components'
 import Pane from 'Components/Pane'
 import { Button } from 'Components/Buttons'
+import NativeListener from 'react-native-listener'
 import { P } from 'Components/Text'
 import { QuestionConsumer } from './QuestionProvider'
 import type { QuestionContext } from './QuestionProvider'
@@ -60,7 +61,7 @@ const defaultOptions = [
 
 const QuestionDialog = ({ currentQuestion, cancelQuestion, answer }: QuestionDialogProps) => {
 	if (!currentQuestion) return null
-	const { title: paneTitle, message, options, render } = currentQuestion
+	const { title: paneTitle, message, showCancelButton, options, render } = currentQuestion
 	const questionOptions = options || defaultOptions
 	return (
 		<Background data-testid="alert">
@@ -81,6 +82,11 @@ const QuestionDialog = ({ currentQuestion, cancelQuestion, answer }: QuestionDia
 							</Button>
 						))}
 					</Buttons>
+				)}
+				{showCancelButton && (
+					<NativeListener onClick={cancelQuestion}>
+						<Button level="tertiary">Cancel</Button>
+					</NativeListener>
 				)}
 			</Pane>
 		</Background>
