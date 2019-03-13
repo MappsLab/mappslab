@@ -23,8 +23,11 @@ export const ButtonWrapper = styled.button`
 		};
 		border: ${level === 'secondary' ? `1px solid ${theme.color.primary.normal}` : ''};
 		transition: 0.1s;
-		opacity: ${disabled ? 0.6 : 1};
-		pointer-events: ${disabled ? 'none' : 'auto'};
+		${disabled &&
+			`
+			opacity: 0.6;
+			pointer-events: none;
+		`}
 
 
 		&:hover {
