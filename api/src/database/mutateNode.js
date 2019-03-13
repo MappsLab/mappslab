@@ -75,8 +75,6 @@ const mutateNode = async (uid: string, { data, edges }: MutateArgs, existingTxn?
 		const { setJson, deleteJson } = split
 		mu.setSetJson(setJson)
 		// Only delete if there are values to delete, otherwise dGraph deletes everything!
-		console.log(flattened)
-		console.log(deleteJson)
 		if (Object.keys(deleteJson).length > 0) mu.setDeleteJson({ uid, ...deleteJson })
 		await txn.mutate(mu)
 		if (!existingTxn) await txn.commit()

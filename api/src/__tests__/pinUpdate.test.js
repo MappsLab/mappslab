@@ -5,6 +5,8 @@ import { getDBUsers } from './utils/user'
 import { getDBPins } from './utils/pin'
 import { getDBMaps } from './utils/map'
 
+jest.mock('Services/aws')
+
 let firstPins
 let firstMaps
 let viewer
@@ -84,7 +86,6 @@ describe('[updatePin]', () => {
 
 	it.only('should upload an image and return all sizes', async () => {
 		const imagePath = path.resolve(__dirname, 'assets', 'test-image.jpg')
-
 		const mockUpload = new Promise((resolve) =>
 			resolve({
 				createReadStream: () => fs.createReadStream(imagePath),
@@ -98,6 +99,7 @@ describe('[updatePin]', () => {
 		const context = {
 			viewer: firstPins[0].owner,
 		}
+
 		const imageMutation = /* GraphQL */ `
 			mutation UpdatePin($uid: String!, $image: Upload) {
 				updatePin(input: { uid: $uid, image: $image }) {
