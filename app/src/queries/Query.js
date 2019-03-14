@@ -1,6 +1,5 @@
 // @flow
 import * as React from 'react'
-import merge from 'deepmerge'
 import type { DocumentNode } from 'graphql'
 import type { QueryRenderProps } from 'react-apollo'
 import { Query as ApolloQuery } from 'react-apollo'
@@ -53,16 +52,13 @@ const Query = <T: GenericResponse>(props: QueryProps<T>) => {
 	const shouldSkip = (skip === true || delayQuery === true) && fetchedAfterSkip === false
 	return (
 		<ApolloQuery {...queryProps} variables={variables} skip={shouldSkip}>
-			{({ refetch, ...response }: QueryRenderProps<T>) => {
+			{(response: QueryRenderProps<T>) => {
 				const { networkStatus, error } = response
-				const betterRefetch = (newVariables) => {
-					if (fetchedAfterSkip) {
-						refetch(newVariables)
-					} else {
-						setFetchAfterSkip(true)
-						setFetchAfterSkipVariables(newVariables)
-					}
+				const betterRefetch = async (newVariables) => {
+					setFetchAfterSkip(true)
+					setFetchAfterSkipVariables(newVariables)
 				}
+
 				const status = getNetworkStatus(networkStatus)
 				const { LoadingComponent, ErrorComponent } = props
 				if (!delayQuery && LoadingComponent !== false && status === 'loading')
@@ -70,11 +66,12 @@ const Query = <T: GenericResponse>(props: QueryProps<T>) => {
 				if (error && ErrorComponent !== false) {
 					return ErrorComponent && <ErrorComponent status={status} {...response} />
 				}
-				const { data } = response
+
+				const { data, refetch } = response
 				const renderProps = {
 					...response,
 					data: data ? unwindEdges(data) : data,
-					refetch: skip || delayQuery ? betterRefetch : refetch,
+					refetch: shouldSkip ? betterRefetch : refetch,
 					queryConfig: {
 						query: queryProps.query,
 						variables,

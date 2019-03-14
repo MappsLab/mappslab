@@ -6,6 +6,7 @@ export const parseQueryString = (search: string): SearchParams =>
 	search
 		.replace(/^\??/, '')
 		.split('&')
+		.filter(Boolean)
 		.reduce((acc, term) => {
 			const [key, val] = term.split('=')
 			return {

@@ -11,15 +11,11 @@ const mutation = gql`
 `
 
 const defaultOptions = (props) => {
-	console.log(props)
 	return {
 		variables: {
 			uid: props.pin.uid,
 		},
 		update: (cache, { data }) => {
-			console.log('!!!')
-			console.log(props)
-
 			// Update the unfollowed user's data from the query
 			if (data.deletePin.success === true) {
 				cache.writeFragment({

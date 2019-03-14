@@ -61,7 +61,7 @@ const defaultOptions = [
 
 const QuestionDialog = ({ currentQuestion, cancelQuestion, answer }: QuestionDialogProps) => {
 	if (!currentQuestion) return null
-	const { title: paneTitle, message, showCancelButton, options, render } = currentQuestion
+	const { title: paneTitle, message, options, render } = currentQuestion
 	const questionOptions = options || defaultOptions
 	return (
 		<Background data-testid="alert">
@@ -83,11 +83,9 @@ const QuestionDialog = ({ currentQuestion, cancelQuestion, answer }: QuestionDia
 						))}
 					</Buttons>
 				)}
-				{showCancelButton && (
-					<NativeListener onClick={cancelQuestion}>
-						<Button level="tertiary">Cancel</Button>
-					</NativeListener>
-				)}
+				<NativeListener onClick={cancelQuestion}>
+					<Button level="tertiary">Cancel</Button>
+				</NativeListener>
 			</Pane>
 		</Background>
 	)

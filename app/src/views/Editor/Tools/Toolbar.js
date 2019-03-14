@@ -10,7 +10,7 @@ const Wrapper = styled.div`
 		display: flex;
 		pointer-events: none;
 
-		& button {
+		> * {
 			pointer-events: initial;
 		}
 	`}

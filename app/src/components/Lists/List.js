@@ -5,7 +5,7 @@ import ItemIcon from 'Components/ItemIcon'
 import ListAddEntry from './ListAddEntry'
 import ListItem from './ListItem'
 import { ListTitle, ListWrapper, ListItems } from './styled'
-import type { SearchForList, ListItemHandler } from './utils'
+import type { CreateNewFn, SearchForList, ListItemHandler } from './utils'
 import { nodeToListItem } from './utils'
 
 /**
@@ -22,10 +22,11 @@ type Props = {
 	create?: CreateNewFn,
 	onSearchResultClick?: ListItemHandler,
 	searchResults?: Array<Node>,
-	onItemClick: ListItemHandler,
+	onItemClick?: ListItemHandler,
 }
 
 const defaultAddLabel = 'Add'
+const defaultOnItemClick = async () => {}
 
 const List = ({
 	items,
@@ -39,7 +40,7 @@ const List = ({
 	onSearchResultClick,
 	searchResults,
 }: Props) => {
-	const itemToListItem = (node) => nodeToListItem(node, onItemClick)
+	const itemToListItem = (node) => nodeToListItem(node, onItemClick || defaultOnItemClick)
 	if (viewerCanAdd && (!search || !onSearchResultClick || !create))
 		throw new Error('You must provide `search`, `onSearchResultClick`, and `create` functions')
 	return (
@@ -50,7 +51,7 @@ const List = ({
 			</ListTitle>
 			<ListItems>
 				{items.map(itemToListItem).map((item) => (
-					<ListItem key={item.node.uid} {...item} />
+					<ListItem key={item.key} {...item} />
 				))}
 			</ListItems>
 			{viewerCanAdd && search && onSearchResultClick && create && (
@@ -72,8 +73,10 @@ List.defaultProps = {
 	viewerCanAdd: false,
 	addLabel: defaultAddLabel,
 	search: undefined,
+	create: undefined,
 	onSearchResultClick: undefined,
 	searchResults: [],
+	onItemClick: async () => {},
 }
 
 export default List

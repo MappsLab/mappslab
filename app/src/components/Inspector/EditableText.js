@@ -75,10 +75,8 @@ class EditableText extends React.Component<Props, State> {
 		initialValue: '',
 		fontSize: 'p',
 		placeholder: 'Untitled',
-		label: undefined,
 		updateFn: undefined,
 		viewerCanEdit: false,
-		updateVariables: {},
 		autoFocus: true,
 		multiline: false,
 		toolTip: 'Click to edit',
@@ -89,7 +87,7 @@ class EditableText extends React.Component<Props, State> {
 		value: this.props.initialValue || '',
 	}
 
-	inputRef = React.createRef()
+	inputRef = React.createRef<HTMLInputElement>()
 
 	componentDidMount() {
 		this.autoSize()

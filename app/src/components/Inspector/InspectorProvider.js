@@ -1,27 +1,28 @@
 // @flow
 import * as React from 'react'
 import { Route } from 'react-router-dom'
-import type { RouterHistory, Location as LocationType } from 'react-router-dom'
+import type { RouterHistory } from 'react-router-dom'
 import { parseQueryString, buildQueryString } from 'Utils/url'
-import { findLastIndex, objEquals } from 'Utils/data'
+import { findLastIndex } from 'Utils/data'
 import { CurrentViewerQuery } from 'Queries/Viewer'
 import Inspector from './Inspector'
 
 export type InspectorItem = {
 	uid: string,
-	__typename: 'User' | 'Classroom' | 'Map' | 'Pin' | 'Route',
+	__typename: string,
+	// __typename: 'User' | 'Classroom' | 'Map' | 'Pin' | 'Route',
 	title?: string,
 	name?: string,
 }
 
-export type InspectItem = (InspectorItem) => void
+export type InspectItem = (InspectorItem) => Promise<void>
 
 type ContextType = {
 	inspectItem: InspectItem,
 }
 
 const { Consumer, Provider } = React.createContext<ContextType>({
-	inspectItem: () => undefined,
+	inspectItem: async () => {},
 })
 
 export const InspectorConsumer = Consumer
@@ -36,6 +37,7 @@ type BaseProps = {
 
 type Props = BaseProps & {
 	initialItem: null | InspectorItem,
+	currentItem: null | InspectorItem,
 	location: {
 		pathname: string,
 		search: string,
@@ -86,28 +88,40 @@ class InspectorProviderBase extends React.Component<Props, State> {
 		})
 	}
 
-	inspectItem = (nextItem: InspectorItem) => {
-		this.setState(({ inspectorHistory }) => ({ inspectorHistory: [...inspectorHistory, nextItem] }))
+	inspectItem = async (nextItem: InspectorItem) => {
+		await this.setState(({ inspectorHistory }) => ({ inspectorHistory: [...inspectorHistory, nextItem] }))
+		this.updateLocation(nextItem)
 	}
 
-	goBackTo = (item: InspectorItem) => {
-		this.setState(
-			({ inspectorHistory }) => {
-				const index = findLastIndex<InspectorItem>(inspectorHistory, (i) => i.uid === item.uid)
-				return {
-					inspectorHistory: inspectorHistory.slice(0, index + 1),
-				}
-			},
-			// () => {
-			// 	this.props.pushToBrowserHistory(item)
-			// },
-		)
+	goBackTo = async (item: InspectorItem) => {
+		await this.setState(({ inspectorHistory }) => {
+			const index = findLastIndex<InspectorItem>(inspectorHistory, (i) => i.uid === item.uid)
+			return {
+				inspectorHistory: inspectorHistory.slice(0, index + 1),
+			}
+		})
+		this.updateLocation(item)
+	}
+
+	updateLocation(item: InspectorItem) {
+		const { location, history } = this.props
+		const { __typename, uid, title, name } = item
+		const { inspect, ...searchParams } = parseQueryString(location.search)
+		const label = title || name
+		if (!label) throw new Error('The current item does not have a name or a title')
+		const newQueryString = buildQueryString({
+			inspect: `${__typename}-${uid}-${label}`,
+			...searchParams,
+		})
+
+		const newPath = `${location.pathname}${newQueryString}`
+		history.push(newPath)
 	}
 
 	render() {
-		const { children } = this.props
+		const { children, currentItem } = this.props
 		const { inspectorHistory } = this.state
-		const currentItem = inspectorHistory[inspectorHistory.length - 1]
+		// const currentItem = inspectorHistory[inspectorHistory.length - 1]
 
 		const value = {
 			inspectItem: this.inspectItem,
@@ -142,6 +156,7 @@ export const InspectorProvider = (baseProps: BaseProps) => (
 				location={location}
 				history={history}
 				initialItem={getItemFromQueryString(location.search)}
+				currentItem={getItemFromQueryString(location.search)}
 			/>
 		)}
 	/>

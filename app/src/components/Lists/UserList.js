@@ -60,14 +60,15 @@ const UserList = ({
 						render: (answer) => <Prompt answer={answer} name="email" label="Teacher Email" type="email" />,
 				  })
 				: undefined
+		if (userType === 'teacher' && !emailQuestion) return
 		const tempPassQuestion = await question.ask({
 			message: 'Enter a temporary password for this user',
 			render: (answer) => <Prompt answer={answer} name="temporaryPassword" label="Temporary Password" />,
 		})
+		if (!tempPassQuestion) return
 		const { email } = emailQuestion || {}
 		const { temporaryPassword } = tempPassQuestion
-		console.log(name, email, temporaryPassword)
-		return create({ name, email, temporaryPassword })
+		create({ name, email, temporaryPassword })
 	}
 
 	return (
@@ -78,6 +79,7 @@ const UserList = ({
 			onSearchResultClick={update}
 			viewerCanAdd={viewerCanAdd}
 			type="user"
+			// $FlowFixMe
 			items={items}
 			create={createUser}
 			onItemClick={onItemClick}
@@ -94,6 +96,7 @@ const UserListWrapper = (baseProps: BaseProps) => (
 		{(question) => (
 			<UsersQuery delayQuery>
 				{({ data, refetch }) => (
+					// $FlowFixMe
 					<UserList question={question} searchQuery={refetch} searchResults={data ? data.users || [] : []} {...baseProps} />
 				)}
 			</UsersQuery>

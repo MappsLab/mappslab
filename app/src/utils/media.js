@@ -1,5 +1,6 @@
 // @flow
 import parseUrl from 'url-parse'
+import type { ImageType } from 'Types/Media'
 
 type ParsedURL = {
 	hostname: string,
@@ -51,7 +52,7 @@ const getVideoId = (type: VideoType, url: ParsedURL): string => {
 	throw new Error(`Video type "${type}" is not valid`)
 }
 
-const getEmbedSrc = (type: VideoType, id: string, url: ParsedURL) => {
+const getEmbedSrc = (type: VideoType, id: string) => {
 	switch (type) {
 		case VIMEO:
 			return `//player.vimeo.com/video/${id}`
@@ -72,13 +73,18 @@ export type VideoInfo = {
 	parsedURL: ParsedURL,
 }
 
+/**
+ * getVideoSrc
+ *
+ * returns an embed code when given a Youtube/Vimeo/DailyMotion URL
+ */
 export const getVideoSrc = (url: string): VideoInfo => {
 	const parsedURL = parseUrl(url, true)
 	if (!parsedURL || !parsedURL.hostname || !parsedURL.pathname) throw new Error('!!')
 	if (parsedURL.hostname === undefined) throw new Error('?')
 	const type = getVideoType(parsedURL)
 	const id = getVideoId(type, parsedURL)
-	const src = getEmbedSrc(type, id, parsedURL)
+	const src = getEmbedSrc(type, id)
 	return {
 		type,
 		id,
@@ -87,3 +93,23 @@ export const getVideoSrc = (url: string): VideoInfo => {
 		url,
 	}
 }
+
+/**
+ * getBestSize
+ *
+ * returns the next-largest image size
+ */
+export const getBestSize = (image: ImageType, size: number) =>
+	// include the original size in the search
+	[...image.sizes, image.original]
+		// sort the sizes
+		.sort((a, b) => a.width - b.width)
+		.reduce((prev, current) => {
+			if (
+				(size > prev.width && size < current.width) ||
+				(size < prev.width && current.width < prev.width) ||
+				(size > prev.width && size > current.width)
+			)
+				return current
+			return prev
+		})

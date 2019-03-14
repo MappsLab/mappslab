@@ -1,4 +1,5 @@
 import { traceObject, eventsReducer } from '../utils/data'
+import { getBestSize } from '../utils/media'
 
 describe('[traceObject]', () => {
 	it('should return an array of found values', async () => {
@@ -108,5 +109,26 @@ describe('[eventsReducer]', () => {
 			second: null,
 			third: true,
 		})
+	})
+})
+
+describe('[getBestSize]', () => {
+	const image = {
+		original: {
+			width: 1099,
+		},
+		sizes: [{ width: 100 }, { width: 600 }, { width: 1200 }],
+	}
+
+	it('should return the next-greatest image size', () => {
+		expect(getBestSize(image, 50).width).toBe(100)
+		expect(getBestSize(image, 100).width).toBe(100)
+		expect(getBestSize(image, 101).width).toBe(600)
+		expect(getBestSize(image, 800).width).toBe(1099)
+		expect(getBestSize(image, 1100).width).toBe(1200)
+	})
+
+	it('should fall back to the largest size', () => {
+		expect(getBestSize(image, 1900).width).toBe(1200)
 	})
 })

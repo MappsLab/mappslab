@@ -91,7 +91,11 @@ const ListAddEntry = ({ addLabel, searchName, search, type, searchResults, onSea
 			{inputValue.length > 2 && (
 				<ListItems>
 					{searchResultItems && searchResultItems.length ? (
-						searchResultItems.map((item) => <ListItem key={item.key} {...item} title={`add ${item.title || item.name}`} />)
+						searchResultItems.map((item) => {
+							const label = item.node.title || item.node.name
+							if (!label) throw new Error('This node does not have a name or title')
+							return <ListItem key={item.key} {...item} title={`add ${label}`} />
+						})
 					) : (
 						<ListItemWrapper align="center" visible={isOpen}>
 							<Header5 align="center" fontStyle="italic" color="middleGray">
@@ -103,11 +107,9 @@ const ListAddEntry = ({ addLabel, searchName, search, type, searchResults, onSea
 			)}
 			{inputValue.length > 2 && (
 				<LineWrapper align="center" visible={isOpen}>
-					<AddButton
-						data-testid="list-createButton"
-						level="tertiary"
-						onClick={onCreateClick}
-					>{`+ Create new ${type} "${inputValue}"`}</AddButton>
+					<AddButton data-testid="list-createButton" level="tertiary" onClick={onCreateClick}>
+						{`+ Create new ${type} "${inputValue}"`}
+					</AddButton>
 				</LineWrapper>
 			)}
 		</React.Fragment>

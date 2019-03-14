@@ -6,16 +6,17 @@ type OptionConfig = {
 	[key: string]: any, // Allow for other props to be passed
 }
 
+type AnswerFn = (any) => void
+
 export type QuestionConfig = {
 	message: string,
 	options?: Array<OptionConfig>,
 	returnOnCancel?: any,
-	showCancelButton?: boolean,
 }
 
 export type PromisedQuestionConfig = {
 	message: string,
-	render?: () => React.Node,
+	render?: (AnswerFn) => React.Node,
 	/* Prettier doesn't jive */
 	/* eslint-disable-next-line flowtype/generic-spacing */
 	options?: Array<
@@ -28,7 +29,7 @@ export type PromisedQuestionConfig = {
 
 export type QuestionContext = {
 	ask: (QuestionConfig) => Promise<any>,
-	answer: (any) => void,
+	answer: AnswerFn,
 	cancelQuestion: () => any,
 	currentQuestion?: PromisedQuestionConfig,
 	answered: boolean,
@@ -37,6 +38,7 @@ export type QuestionContext = {
 const defaultContext = {
 	ask: async () => {},
 	cancelQuestion: () => {},
+	answer: () => {},
 	answered: false,
 }
 
@@ -73,9 +75,7 @@ export class QuestionProvider extends React.Component<Props, State> {
 
 	ask = (newQuestion: QuestionConfig) =>
 		new Promise<any>((resolve) => {
-			const resolveQuestion = (value: any) => async () => answer(value)
-
-			const answer = async (value: any) => {
+			const answer = (value: any) => {
 				resolve(value)
 				this.setState({ answered: true, currentQuestion: undefined, cancelQuestion: noop })
 			}

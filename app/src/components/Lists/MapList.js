@@ -48,6 +48,7 @@ const MapList = ({
 			onSearchResultClick={update}
 			viewerCanAdd={viewerCanAdd}
 			type="Map"
+			// $FlowFixMe
 			items={items}
 			create={create}
 			onItemClick={onItemClick}

@@ -152,7 +152,7 @@ describe('queries', () => {
 		expect(jwt.expires).toBe(86400)
 	})
 
-	describe('JWT creation & verification', async () => {
+	describe('JWT creation & verification', () => {
 		it('should only return username, email, uid in JWT token', async () => {
 			const jwt = createJWT(teacher)
 			const result = await verifyJWT(jwt.token.replace(/^Bearer /, ''))

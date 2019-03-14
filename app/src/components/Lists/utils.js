@@ -7,20 +7,22 @@ import type { Variables } from 'Types/GraphQL'
 
 export type SearchForList = (any) => Promise<void> | void
 
-export type ListItemHandler = (Node) => void
+export type ListItemHandler = (Node) => void | Promise<void>
 
 export type CreateNewFn = (string) => void | Promise<void>
 
 export type ListItem = {
+	key: string,
 	node: Node,
-	onClick: () => void,
+	info: Array<string>,
+	onClick: () => void | Promise<void>,
 }
 
 export type ListOfTypeBaseProps<Type> = {
 	title: string,
 	items: Array<Type>,
 	viewerCanAdd: boolean,
-	update: (Type) => void,
+	update: (Type) => void | Promise<void>,
 	onItemClick: ListItemHandler,
 	create: (any) => Promise<void> | void,
 }
@@ -31,7 +33,6 @@ export type ListOfTypeProps<Type> = ListOfTypeBaseProps<Type> & {
 }
 
 export const nodeToListItem = (node: Node, handler: ListItemHandler): ListItem => {
-	// $FlowFixMe TODO: make this detect types
 	const { uid } = node
 	return {
 		key: uid,

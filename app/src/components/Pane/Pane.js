@@ -5,14 +5,20 @@ import { Header1, Header5 } from 'Components/Text'
 import { EditableText } from 'Components/Inspector'
 
 const Wrapper = styled.div`
-	${({ theme }) => `
+	${({ theme, allowOverflow }) => `
 		background-color: white;
 		box-shadow: ${theme.mixins.boxShadow.heavy};
 		border-radius: 2px;
 		border: 1px solid ${theme.color.darkGray};
 		position: relative;
 		max-height: 95vh;
-		overflow: hidden;
+		${
+			allowOverflow
+				? ``
+				: `
+			overflow: hidden;
+		`
+		}
 	`};
 `
 
@@ -30,7 +36,7 @@ const Title = styled.div`
 const TitleText = styled.div``
 
 const Content = styled.div`
-	${({ theme, size }) => `
+	${({ theme, size, allowOverflow }) => `
 		display: flex;
 		flex-direction: column;
 		justify-content: ${size === 'full' ? 'flex-start' : 'center'};
@@ -39,8 +45,14 @@ const Content = styled.div`
 		min-height: ${size === 'small' ? 'auto' : '300px'};
 		width: ${size === 'full' ? '650px' : size === 'small' ? '320px' : '425px'};
 		position: relative;
-		overflow-x: hidden;
-		overflow-y: scroll;
+		${
+			allowOverflow
+				? ``
+				: `
+			overflow-x: hidden;
+			overflow-y: scroll;
+		`
+		}
 	`};
 `
 
@@ -65,11 +77,12 @@ type Props = {
 	children: React.Node,
 	titleFieldName?: string,
 	size: 'small' | 'normal' | 'full',
+	allowOverflow: boolean,
 }
 
-const Pane = ({ title, subtitle, titleFieldName, children, icon, size, viewerCanEdit, updateTitle }: Props) => {
+const Pane = ({ title, subtitle, titleFieldName, children, icon, size, viewerCanEdit, updateTitle, allowOverflow }: Props) => {
 	return (
-		<Wrapper size={size}>
+		<Wrapper size={size} allowOverflow={allowOverflow}>
 			{title && (
 				<Title size={size}>
 					{icon && <TitleIcon>{icon}</TitleIcon>}
@@ -85,7 +98,7 @@ const Pane = ({ title, subtitle, titleFieldName, children, icon, size, viewerCan
 					</TitleText>
 				</Title>
 			)}
-			<Content direction="column" size={size}>
+			<Content direction="column" size={size} allowOverflow={allowOverflow}>
 				{children}
 			</Content>
 		</Wrapper>
@@ -99,6 +112,7 @@ Pane.defaultProps = {
 	icon: undefined,
 	viewerCanEdit: false,
 	updateTitle: undefined,
+	allowOverflow: false,
 }
 
 export default Pane

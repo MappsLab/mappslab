@@ -28,9 +28,13 @@ type Props = BaseProps & {
 	createMap: Mutation,
 }
 
-type CreateUserFnProps = {
+type CreateUserFnArgs = {
+	/* Annoy: Eslint thinks that these are Component props */
+	/* eslint-disable-next-line react/no-unused-prop-types */
 	name: string,
+	/* eslint-disable-next-line */
 	email?: string,
+	/* eslint-disable-next-line react/no-unused-prop-types */
 	temporaryPassword: string,
 }
 
@@ -75,11 +79,7 @@ const ClassroomInspector = ({
 		await createMap({ variables, refetchQueries: [classroomQueryConfig] })
 	}
 
-	const createUserInClassroom = (role: 'student' | 'teacher') => async ({
-		name,
-		email,
-		temporaryPassword,
-	}: CreateUserFnProps) => {
+	const createUserInClassroom = (role: 'student' | 'teacher') => async ({ name, email, temporaryPassword }: CreateUserFnArgs) => {
 		const mutationByRole = {
 			student: createStudent,
 			teacher: createTeacher,
@@ -95,14 +95,14 @@ const ClassroomInspector = ({
 				addToClassrooms: [classroom.uid],
 			},
 		}
-		console.log(variables)
 		await mutate({ variables, refetchQueries: [classroomQueryConfig] })
 	}
 
 	const viewerCanAdd = Boolean(
 		viewer &&
 			(viewer.roles.includes('admin') ||
-				(viewer.roles.includes('teacher') || classroom.teachers.map((t) => t.uid).includes(viewer.uid))),
+				(viewer.roles.includes('teacher') ||
+					(classroom.teachers && classroom.teachers.length && classroom.teachers.map((t) => t.uid).includes(viewer.uid)))),
 	)
 
 	return (

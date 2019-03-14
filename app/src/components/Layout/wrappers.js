@@ -23,7 +23,7 @@ export const Column = styled.section`
 
 export const Centered = styled.div`
 	${({ theme }) => `
-		position: relative;
+		position: absolute;
 		z-index: ${theme.layout.z.modal};
 		width: 100%;
 		height: 100%;

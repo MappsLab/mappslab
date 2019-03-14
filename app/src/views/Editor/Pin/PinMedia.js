@@ -9,7 +9,7 @@ import { Prompt } from 'Components/Forms'
 import { QuestionConsumer } from 'Components/Question'
 import type { QuestionContext } from 'Components/Question'
 import ToolTip from 'Components/ToolTip'
-import { getVideoSrc } from 'Utils/media'
+import { getVideoSrc, getBestSize } from 'Utils/media'
 import config from '../../../config'
 
 const MediaWrapper = styled.div`
@@ -66,8 +66,8 @@ type Props = BaseProps & {
 }
 
 const PinMedia = ({ pin, viewerCanEdit, submitUpdate, alt, question }: Props) => {
-	const pinImage = pin.image && pin.image.sizes && pin.image.sizes[1]
-	if (!viewerCanEdit && !pinImage) return null
+	// this is kind of bad. here we're getting the 'middle' image. Instead, make a `getImageBySize` which gets the best match
+	if (!viewerCanEdit && !pin.image) return null
 
 	const removeImage = () => {
 		submitUpdate({ image: null })
@@ -76,7 +76,6 @@ const PinMedia = ({ pin, viewerCanEdit, submitUpdate, alt, question }: Props) =>
 	const askForVideo = async () => {
 		const result = await question.ask({
 			message: 'Enter the URL of a Youtube or Vimeo Video',
-			showCancelButton: true,
 			render: (answer) => <Prompt answer={answer} name="video" label="Video URL" type="url" />,
 		})
 		const { video } = result
@@ -88,10 +87,10 @@ const PinMedia = ({ pin, viewerCanEdit, submitUpdate, alt, question }: Props) =>
 		submitUpdate({ video: null })
 	}
 
-	const removeFn = pinImage ? removeImage : removeVideo
+	const removeFn = pin.image ? removeImage : removeVideo
 	// return null
-	const removeLabel = pinImage ? 'Remove Image' : 'Remove Video'
-	return pinImage || pin.video ? (
+	const removeLabel = pin.image ? 'Remove Image' : 'Remove Video'
+	return pin.image || pin.video ? (
 		<MediaWrapper>
 			{viewerCanEdit && (
 				<ButtonWrapper>
@@ -102,13 +101,13 @@ const PinMedia = ({ pin, viewerCanEdit, submitUpdate, alt, question }: Props) =>
 					</NativeListener>
 				</ButtonWrapper>
 			)}
-			{pinImage && pinImage.uri ? (
-				<img alt={alt} src={`${config.imageBucketRoot}${pinImage.uri}`} />
-			) : (
+			{pin.image ? (
+				<img alt={alt} src={`${config.imageBucketRoot}${getBestSize(pin.image, 600).uri}`} />
+			) : pin.video ? (
 				<VideoFrame>
-					<iframe src={getVideoSrc(pin.video).src} width="100%" height="100%" />
+					<iframe title={pin.title} src={getVideoSrc(pin.video).src} width="100%" height="100%" />
 				</VideoFrame>
-			)}
+			) : null}
 		</MediaWrapper>
 	) : (
 		<MediaButtons>

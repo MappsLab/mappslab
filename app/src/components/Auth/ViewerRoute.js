@@ -12,12 +12,12 @@ import { CurrentViewerQuery } from 'Queries/Viewer'
 type Props = {
 	render?: null | (({ viewer: ViewerType }) => Node | Array<Node>),
 	children?: null | React.Node,
-	Component?: null | React.ComponentType<any, any>,
+	component?: null | React.ComponentType<any>,
 	redirectTo: string,
 }
 
 // $FlowFixMe -- Flow doesn't like us using the keyword 'Component' as a normal variable
-export const ViewerRoute = ({ render, children, Component, redirectTo, ...rest }: Props) => (
+export const ViewerRoute = ({ render, children, component: Component, redirectTo, ...rest }: Props) => (
 	<CurrentViewerQuery>
 		{({ data }) => {
 			return (
@@ -40,6 +40,6 @@ export const ViewerRoute = ({ render, children, Component, redirectTo, ...rest }
 
 ViewerRoute.defaultProps = {
 	children: null,
-	Component: null,
+	component: null,
 	render: null,
 }

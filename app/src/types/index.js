@@ -8,9 +8,13 @@ export type * from './GraphQL'
 // export type * from './Statechart'
 export type * from './Route'
 
-export type Node = {
-	uid: string,
-	__typename: 'User' | 'Classroom' | 'Map' | 'Pin' | 'Route',
-	title?: string,
-	name?: string,
+/* I'm not doing this right. An interface should include the common fields, here I'm throwing everything in */
+export interface Node {
+	uid: string;
+	__typename: string;
+	title?: string;
+	name?: string;
+	slug?: string;
+	description?: string;
+	roles?: Array<string>;
 }

@@ -88,7 +88,6 @@ class PinInspector extends React.Component<PinInspectorProps> {
 	submitUpdate = async (args) => {
 		const { pin, viewer, updatePin, sendNotification } = this.props
 		// @todo add a 'viewerOwnsPin' field to the GraphQL API
-		console.log(args)
 		const viewerIsOwner = Boolean(viewer && pin.owner.uid === viewer.uid)
 
 		if (!viewerIsOwner) return

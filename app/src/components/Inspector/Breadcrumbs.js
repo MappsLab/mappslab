@@ -20,7 +20,7 @@ const Wrapper = styled.div`
  */
 
 type Props = {
-	goBackTo: (InspectorItem) => void,
+	goBackTo: (InspectorItem) => Promise<void>,
 	inspectorHistory: Array<InspectorItem>,
 }
 

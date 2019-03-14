@@ -13,6 +13,7 @@ import Pin from './Pin'
 import Route from './Route'
 import NewRoute from './Route/NewRoute'
 import Tools from './Tools'
+import NotLoggedIn from './NotLoggedIn'
 import { MapConsumer } from './Provider'
 import type { ProviderProps } from './Provider'
 import WelcomeDialog from './WelcomeDialog'
@@ -90,7 +91,7 @@ class MapEditor extends React.Component<EditorProps> {
 	}
 
 	logSubscriptionUpdate = (previous, updated) => {
-		console.log(previous, updated)
+		// console.log(previous, updated)
 	}
 
 	addEventListeners() {
@@ -169,14 +170,14 @@ class MapEditor extends React.Component<EditorProps> {
 	}
 
 	render() {
-		const { mapData, transition } = this.props
+		const { mapData, transition, viewer } = this.props
 		if (!mapData) return null
 		return (
 			<React.Fragment>
 				<State is="Welcome">
 					<WelcomeDialog map={mapData} transition={transition} />
 				</State>
-				<Tools {...this.props} />
+				{viewer ? <Tools {...this.props} /> : <NotLoggedIn />}
 				<MapNotifications />
 				{this.renderMapData()}
 			</React.Fragment>

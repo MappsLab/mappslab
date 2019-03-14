@@ -64,7 +64,7 @@ export type StartSubscriptionOptions<PreviousResponse, ResponseData> = Subscript
 
 type Variable = string | number | boolean | Variable
 
-type Variables = {
+export type Variables = {
 	[key: string]: Variable | Variables | Array<Variable>,
 }
 

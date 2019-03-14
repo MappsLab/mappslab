@@ -54,13 +54,8 @@ const LoginSuccess = ({ viewer, transition }: Props) => {
 				</React.Fragment>
 			) : null}
 			{isTeacher && (
-				<Button to={encodeURI(`/dashboard?inspect=User-${viewer.uid}-${viewer.name}`)} level="tertiary">
+				<Button to="/dashboard" level="tertiary">
 					Manage my classrooms
-				</Button>
-			)}
-			{isAdmin && (
-				<Button to={encodeURI(`/dashboard?inspect=admin`)} level="tertiary">
-					Go to the Admin dashboard
 				</Button>
 			)}
 			<Button level="tertiary" onClick={logout}>
@@ -71,17 +66,7 @@ const LoginSuccess = ({ viewer, transition }: Props) => {
 }
 
 const Wrapper = (props: BaseProps) => (
-	<InspectorConsumer>
-		{(inspectorProps) => (
-			<ViewerDashboardQuery>
-				{({ data }) => <LoginSuccess {...props} {...inspectorProps} viewer={data.currentViewer.viewer} />}
-			</ViewerDashboardQuery>
-		)}
-	</InspectorConsumer>
+	<ViewerDashboardQuery>{({ data }) => <LoginSuccess {...props} viewer={data.currentViewer.viewer} />}</ViewerDashboardQuery>
 )
-
-Wrapper.defaultProps = {
-	classroomUid: null,
-}
 
 export default Wrapper

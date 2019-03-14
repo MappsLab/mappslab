@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { Centered } from 'Components/Layout'
 import type { ViewerType } from 'Types/User'
 import Pane from 'Components/Pane'
-import { UserInspector, ClassroomInspector, MapInspector, AdminInspector } from './Inspectors'
+import { UserInspector, ClassroomInspector, MapInspector } from './Inspectors'
 import type { InspectItem, InspectorItem } from './InspectorProvider'
 import Breadcrumbs from './Breadcrumbs'
 
@@ -23,7 +23,7 @@ type Props = {
 	inspectItem: InspectItem,
 	viewer: null | ViewerType,
 	// for the breadcrumb
-	goBackTo: (InspectorItem) => void,
+	goBackTo: (InspectorItem) => Promise<void>,
 	inspectorHistory: Array<InspectorItem>,
 	currentItem: InspectorItem,
 }
@@ -34,9 +34,6 @@ const Loader = (props: Props) => {
 
 	const renderInner = () => {
 		switch (__typename.toLowerCase()) {
-			case 'admin':
-				if (!viewer) return <p>You must be logged in</p>
-				return <AdminInspector viewer={viewer} inspectItem={inspectItem} />
 			case 'user':
 				return <UserInspector uid={uid} viewer={viewer} inspectItem={inspectItem} />
 			case 'classroom':

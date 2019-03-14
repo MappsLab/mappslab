@@ -38,6 +38,7 @@ const ClassroomList = ({
 			onSearchResultClick={update}
 			viewerCanAdd={viewerCanAdd}
 			type="classroom"
+			// $FlowFixMe
 			items={items}
 			create={create}
 			onItemClick={onItemClick}
