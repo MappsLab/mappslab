@@ -52,6 +52,7 @@ class Pin extends React.Component<PinProps, PinState> {
 		if (handler) {
 			const result = handler({ payload, props: this.props })
 			const { state, actions } = result
+			console.log(result)
 			if (actions) {
 				Object.keys(actions).forEach((key) => {
 					const action = actions[key]

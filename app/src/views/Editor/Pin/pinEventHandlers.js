@@ -44,13 +44,8 @@ export const pinEvents = {
 		DropPin: {
 			onClick: ({ state, props }: HandlerProps) => {
 				const { pin } = props
-				// Don't allow clicks on pins that are not in a route
-				if (!pin.route) return null
-				const { isFirst, isLast } = pin.route
-				// Don't allow clicks on pins that are first or last in a route
-				if (!isFirst && !isLast) return null
 				const position = props.pin.route && props.pin.route.isFirst ? 'BEFORE' : 'AFTER'
-				const transition = () => props.transition('enterConnect', { connectToPin: { pin: props.pin, position } })
+				const transition = () => props.transition('enterConnect', { connectToPin: { pin, position } })
 				return { state, props, actions: { transition } }
 			},
 		},
