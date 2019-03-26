@@ -8,7 +8,6 @@ export const pinFragment = gql`
 		description
 		lat
 		lng
-		draft
 		route {
 			route {
 				uid

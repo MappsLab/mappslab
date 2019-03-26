@@ -9,7 +9,6 @@ export type PinType = {
 	lat: number,
 	lng: number,
 	owner: UserType,
-	draft: boolean,
 	title?: string,
 	description?: string,
 	route?: {
