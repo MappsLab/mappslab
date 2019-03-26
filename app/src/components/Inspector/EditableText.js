@@ -1,24 +1,23 @@
 // @flow
 import * as React from 'react'
-import styled from 'styled-components'
-import { FaPencilAlt } from 'react-icons/fa'
+import styled, { css } from 'styled-components'
 import NativeListener from 'react-native-listener'
 import { Header1, Header2, Header3, Header4, Header5, P, TextArea, Input } from 'Components/Text'
-import ToolTip from 'Components/ToolTip'
 
 const StyledInput = styled(Input)`
-	${({ theme, fontSize }) => `
+	${({ theme, fontSize }) => css`
 		font-size: ${theme.font.size[fontSize] || theme.font.size.p};
 		max-width: 100%;
 		min-height: 1.3em;
 		background-color: inherit;
 		cursor: inherit;
 		width: 100%;
+		background-color: ${theme.color.xLightGray};
 	`}
 `
 
 const Wrapper = styled.div`
-	${({ theme, focused }) => `
+	${({ theme, focused }) => css`
 		margin-bottom: ${theme.layout.spacing.single};
 		position: relative;
 		background-color: ${focused ? `${theme.color.xLightGray}` : ''};
@@ -27,16 +26,6 @@ const Wrapper = styled.div`
 		&:hover {
 			background-color: ${theme.color.xLightGray};
 		}
-	`}
-`
-
-const IconWrapper = styled.div`
-	${({ theme }) => `
-		position: absolute;
-		top: 3px;
-		right: 3px;
-		font-size: ${theme.font.size.h4};
-		color: ${theme.color.middleGray};
 	`}
 `
 
@@ -62,7 +51,6 @@ type Props = {
 	initialValue?: string,
 	placeholder?: string,
 	multiline?: boolean,
-	toolTip?: string,
 }
 
 type State = {
@@ -79,7 +67,6 @@ class EditableText extends React.Component<Props, State> {
 		viewerCanEdit: false,
 		autoFocus: true,
 		multiline: false,
-		toolTip: 'Click to edit',
 	}
 
 	state = {
@@ -101,7 +88,6 @@ class EditableText extends React.Component<Props, State> {
 
 	componentWillUnmount() {
 		this.submitChange()
-		// const inputRef = this.inputRef ? this.inputRef.current : undefined
 	}
 
 	autoSize = () => {
@@ -132,6 +118,10 @@ class EditableText extends React.Component<Props, State> {
 		this.autoSize()
 	}
 
+	/**
+	 * TODO: Blur and componentWillUnmount both fire, double-updating
+	 * figure out how to ensure it only happens once
+	 */
 	blur = async () => {
 		await this.setState({ focused: false })
 		this.submitChange()
@@ -148,32 +138,26 @@ class EditableText extends React.Component<Props, State> {
 	}
 
 	render() {
-		const { viewerCanEdit, fontSize, placeholder, multiline, autoFocus, toolTip } = this.props
+		const { viewerCanEdit, fontSize, placeholder, multiline, autoFocus } = this.props
 		const { value, focused } = this.state
 		const Text = textComponentsMap[fontSize || 'p'] || textComponentsMap.p
 		if (!viewerCanEdit) {
 			return <Text>{value}</Text>
 		}
-		const StatusIcon = FaPencilAlt
 		return (
 			<Wrapper focused={focused}>
-				<ToolTip active={!focused} relative={false} message={toolTip || 'Click to edit'}>
-					<IconWrapper>
-						<StatusIcon />
-					</IconWrapper>
-					<NativeListener onClick={this.focus}>
-						<StyledInput
-							onBlur={this.blur}
-							fontSize={fontSize}
-							as={multiline ? TextArea : undefined}
-							autoFocus={autoFocus}
-							onChange={this.handleChange}
-							value={value}
-							ref={this.inputRef}
-							placeholder={placeholder}
-						/>
-					</NativeListener>
-				</ToolTip>
+				<NativeListener onClick={this.focus}>
+					<StyledInput
+						onBlur={this.blur}
+						fontSize={fontSize}
+						as={multiline ? TextArea : undefined}
+						autoFocus={autoFocus}
+						onChange={this.handleChange}
+						value={value}
+						ref={this.inputRef}
+						placeholder={placeholder}
+					/>
+				</NativeListener>
 			</Wrapper>
 		)
 	}

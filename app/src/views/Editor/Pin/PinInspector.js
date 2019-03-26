@@ -4,25 +4,34 @@ import * as R from 'ramda'
 import styled, { css } from 'styled-components'
 import { adopt } from 'react-adopt'
 import NativeListener from 'react-native-listener'
+import { FaPencilAlt } from 'react-icons/fa'
 import type { PinType } from 'Types/Pin'
 import type { ViewerType } from 'Types/User'
 import type { Mutation } from 'Types/GraphQL'
 import { CurrentViewerQuery } from 'Queries/Viewer'
 import { UpdatePinMutation, DeletePinMutation } from 'Queries/Pin'
 import { EditableText } from 'Components/Inspector'
-import { UserChip } from 'Components/User'
 import Pane from 'Components/Pane'
 import { Button } from 'Components/Buttons'
-import { NotificationsConsumer } from 'Components/Notifications'
-import type { NewNotification } from 'Components/Notifications'
 import { QuestionConsumer } from 'Components/Question'
 import type { QuestionContext } from 'Components/Question'
+import { Header5 } from 'Components/Text'
 import { query as mapQuery } from 'Queries/Map/MapQuery'
 import PinMedia from './PinMedia'
 
 /**
  * PinInspector
  */
+
+const ByLine = styled.div`
+	margin-bottom: 10px;
+	display: flex;
+	justify-content: flex-start;
+
+	& > ${Header5} {
+		margin-right: 0.4em;
+	}
+`
 
 const Header = styled.div`
 	position: relative;
@@ -76,17 +85,35 @@ type PinInspectorProps = BaseProps & {
 	deletePin: Mutation,
 	mapUid: string,
 	closeInspector: () => void,
-	sendNotification: (NewNotification) => void,
+}
+type State = {
+	editMode: boolean,
 }
 
-class PinInspector extends React.Component<PinInspectorProps> {
+class PinInspector extends React.Component<PinInspectorProps, State> {
+	static defaultProps = {
+		viewer: undefined,
+	}
+
+	state = {
+		editMode: false,
+	}
+
 	close = () => {
 		const { closeInspector } = this.props
 		closeInspector()
 	}
 
+	enterEditMode = () => {
+		this.setState({ editMode: true })
+	}
+
+	exitEditMode = () => {
+		this.setState({ editMode: false })
+	}
+
 	submitUpdate = async (args) => {
-		const { pin, viewer, updatePin, sendNotification } = this.props
+		const { pin, viewer, updatePin } = this.props
 		// @todo add a 'viewerOwnsPin' field to the GraphQL API
 		const viewerIsOwner = Boolean(viewer && pin.owner.uid === viewer.uid)
 
@@ -96,9 +123,7 @@ class PinInspector extends React.Component<PinInspectorProps> {
 			...args,
 		}
 
-		const update = await updatePin({ variables })
-		const updatedPin = update.data.updatePin
-		sendNotification({ message: `Updated pin ${updatedPin.title}` })
+		await updatePin({ variables })
 	}
 
 	removePin = async () => {
@@ -120,12 +145,13 @@ class PinInspector extends React.Component<PinInspectorProps> {
 
 	render() {
 		const { pin, viewer } = this.props
+		const { editMode } = this.state
 		const viewerIsOwner = Boolean(viewer && pin.owner.uid === viewer.uid)
+		const canEdit = Boolean(viewerIsOwner && editMode)
 		return (
 			<React.Fragment>
 				<Pane size="small">
 					<Header>
-						<UserChip size="small" user={pin.owner} />
 						<NativeListener onClick={this.close}>
 							<CloseButton level="tertiary" />
 						</NativeListener>
@@ -136,10 +162,14 @@ class PinInspector extends React.Component<PinInspectorProps> {
 						updateFn={this.submitUpdate}
 						fontSize="h1"
 						placeholder="Untitled Pin"
-						initialValue={pin.title}
-						viewerCanEdit={viewerIsOwner}
+						initialValue={pin.title || 'Untitled Pin'}
+						viewerCanEdit={canEdit}
 						autoFocus
 					/>
+					<ByLine>
+						<Header5 color="lightGray">Pinned by:</Header5>
+						<Header5 color="middleGray">{pin.owner.name}</Header5>
+					</ByLine>
 					<EditableText
 						label="Description"
 						name="description"
@@ -148,14 +178,29 @@ class PinInspector extends React.Component<PinInspectorProps> {
 						placeholder="Describe your pin"
 						fontSize="p"
 						initialValue={pin.description}
-						viewerCanEdit={viewerIsOwner}
+						viewerCanEdit={canEdit}
 					/>
-					<PinMedia pin={pin} submitUpdate={this.submitUpdate} viewerCanEdit={viewerIsOwner} alt={pin.description || ''} />
-					{viewerIsOwner ? (
-						<NativeListener onClick={this.removePin}>
-							<Button level="tertiary">Delete</Button>
+
+					<PinMedia pin={pin} submitUpdate={this.submitUpdate} viewerCanEdit={canEdit} alt={pin.description || ''} />
+					{canEdit ? (
+						<React.Fragment>
+							<NativeListener onClick={this.removePin}>
+								<Button level="tertiary">Delete</Button>
+							</NativeListener>
+							<hr />
+							<NativeListener onClick={this.exitEditMode}>
+								<Button level="tertiary">
+									<FaPencilAlt /> Done Editing
+								</Button>
+							</NativeListener>
+						</React.Fragment>
+					) : (
+						<NativeListener onClick={this.enterEditMode}>
+							<Button level="tertiary">
+								<FaPencilAlt /> Edit
+							</Button>
 						</NativeListener>
-					) : null}
+					)}
 				</Pane>
 			</React.Fragment>
 		)
@@ -169,8 +214,6 @@ const Composed = adopt(
 		currentViewerQuery: <CurrentViewerQuery />,
 		updatePin: <UpdatePinMutation />,
 		deletePin: <DeletePinMutation />,
-		// $FlowFixMe
-		notificationContext: <NotificationsConsumer />,
 	},
 	({ currentViewerQuery, notificationContext, ...rest }) => ({
 		viewer: R.path(['data', 'currentViewer', 'viewer'], currentViewerQuery),

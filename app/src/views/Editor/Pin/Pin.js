@@ -22,21 +22,22 @@ export type PinProps = BaseProps & ProviderProps
 
 export type PinState = {
 	mouseOver: boolean,
-	events: {},
 }
 
 class Pin extends React.Component<PinProps, PinState> {
-	static defaultProps = {
-		viewer: null,
-	}
+	constructor(props) {
+		super(props)
+		this.eventHandlers = markerEventNames.reduce(
+			(acc, name) => ({
+				...acc,
+				[name]: this.handleEvent(name),
+			}),
+			{},
+		)
 
-	state = {
-		mouseOver: false,
-		events: {},
-	}
-
-	componentDidMount() {
-		this.setState({ events: this.getPinEventHandlers() })
+		this.state = {
+			mouseOver: false,
+		}
 	}
 
 	/**
@@ -52,7 +53,6 @@ class Pin extends React.Component<PinProps, PinState> {
 		if (handler) {
 			const result = handler({ payload, props: this.props })
 			const { state, actions } = result
-			console.log(result)
 			if (actions) {
 				Object.keys(actions).forEach((key) => {
 					const action = actions[key]
@@ -68,43 +68,39 @@ class Pin extends React.Component<PinProps, PinState> {
 		transition('close', { inspectedItem: null })
 	}
 
-	getPinEventHandlers = () =>
-		markerEventNames.reduce(
-			(acc, name) => ({
-				...acc,
-				[name]: this.handleEvent(name),
-			}),
-			{},
-		)
+	eventHandlers: any
+
+	isClickable(): boolean {
+		const { machineState, viewer, pin } = this.props
+		const { route } = pin
+		const stateString = getStateString(machineState.value)
+		if (stateString === 'Lesson.DropPin.DropMode.Connect') return false
+		if (stateString === 'Lesson.DropPin.DropMode.Drop') {
+			if (route && (!route.isFirst || !route.isLast)) return false
+			if (!viewer) return false
+			if (pin.owner.uid !== viewer.uid) return false
+		}
+		return true
+	}
 
 	render() {
-		const { pin, inspectedItem, mapData, machineState } = this.props
+		const { pin, inspectedItem, mapData } = this.props
 		const { mouseOver } = this.state
-		const { lat, lng, route } = pin
+		const { lat, lng } = pin
 		const isInspected = inspectedItem && inspectedItem.uid === pin.uid
-		const stateString = getStateString(machineState.value)
-		const disabled =
-			// If we are already connecting to a pin, disable
-			stateString === 'Lesson.DropPin.DropMode.Connect' ||
-			// Or, if we are in drop mode
-			(stateString === 'Lesson.DropPin.DropMode.Drop' &&
-				// And if the pin is within a route
-				route &&
-				// And the pin is neither first nor last
-				!route.isFirst &&
-				!route.isLast)
+		const enabled = this.isClickable()
 		const options = {
 			position: {
 				lat,
 				lng,
 			},
-			clickable: !disabled,
-			opacity: disabled ? 0.3 : 1,
+			clickable: enabled,
+			opacity: enabled ? 1 : 0.3,
 		}
 		return (
 			<Marker
 				// TODO: get all of these ahead of time
-				events={this.getPinEventHandlers()}
+				events={this.eventHandlers}
 				options={options}
 				render={({ anchor }) =>
 					anchor ? (

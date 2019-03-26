@@ -6,6 +6,7 @@ import type { LatLng } from 'mapp/types'
 // import { State } from 'react-automata'
 import type { PinType } from 'Types/Pin'
 import type { RouteType } from 'Types/Route'
+import { eventsReducer, isFunc, getStateString } from 'Utils/data'
 import { MapConsumer } from '../Provider'
 import type { ProviderProps } from '../Provider'
 import { getHandlersForState } from './routeEventHandlers'
@@ -33,7 +34,6 @@ type BaseProps = {
 type RouteProps = BaseProps &
 	ProviderProps & {
 		active?: boolean,
-		clickable?: boolean,
 	}
 
 type RouteState = {
@@ -44,7 +44,6 @@ class Route extends React.Component<RouteProps, RouteState> {
 	static defaultProps = {
 		viewer: null,
 		active: false,
-		clickable: true,
 	}
 
 	state = {
@@ -58,12 +57,12 @@ class Route extends React.Component<RouteProps, RouteState> {
 	 *
 	 */
 
-	// this.events =
-
 	getOptions() {
-		const { route, active, clickable } = this.props
+		const { route, active, machineState } = this.props
 		const { mouseOver } = this.state
 		const path = getPathFromPins(route.pins)
+		const stateString = getStateString(machineState.value)
+		const clickable = !/Lesson.DropPin.DropMode/.test(stateString)
 		return {
 			path,
 			strokeColor: 'hsl(5, 94%, 60%)',

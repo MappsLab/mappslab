@@ -72,7 +72,6 @@ export const mapEvents = {
 							input: {
 								lat: payload.latLng.lat(),
 								lng: payload.latLng.lng(),
-								draft: true,
 								addToMaps: [mapUid],
 								lessonUids: [lessonUid],
 								addToRoute,
