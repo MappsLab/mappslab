@@ -1,5 +1,5 @@
 // @flow
-import React from 'react'
+import * as React from 'react'
 import styled from 'styled-components'
 import ToolTip from 'Components/ToolTip'
 
@@ -36,7 +36,7 @@ type BaseProps = {
 	isActive: boolean,
 	disabled: boolean,
 	label: string,
-	icon: string,
+	icon: React.Node,
 	size: 'normal' | 'large',
 }
 

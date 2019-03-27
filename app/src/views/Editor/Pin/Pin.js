@@ -25,10 +25,6 @@ export type PinState = {
 }
 
 class Pin extends React.Component<PinProps, PinState> {
-	static defaultProps = {
-		viewer: null,
-	}
-
 	constructor(props) {
 		super(props)
 		this.eventHandlers = markerEventNames.reduce(
@@ -90,20 +86,9 @@ class Pin extends React.Component<PinProps, PinState> {
 	render() {
 		const { pin, inspectedItem, mapData } = this.props
 		const { mouseOver } = this.state
-		const { lat, lng, route } = pin
+		const { lat, lng } = pin
 		const isInspected = inspectedItem && inspectedItem.uid === pin.uid
 		const enabled = this.isClickable()
-		// // If we are already connecting to a pin, disable
-		// stateString === 'Lesson.DropPin.DropMode.Connect' ||
-		// // Or, if we are in drop mode
-		// (stateString === 'Lesson.DropPin.DropMode.Drop' &&
-		// 	// And if the pin is within a route
-		// 	route &&
-		// 	// And the pin is neither first nor last
-		// 	!route.isFirst &&
-		// 	!route.isLast &&
-		// 	// And the viewer owns this pin
-		// 	(viewer && viewer.uid !== pin.owner.uid))
 		const options = {
 			position: {
 				lat,

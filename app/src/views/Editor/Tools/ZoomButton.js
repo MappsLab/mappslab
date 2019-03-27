@@ -1,7 +1,7 @@
 // @flow
 import React from 'react'
+import { FaPlus, FaMinus } from 'react-icons/fa'
 import { RoundButton } from 'Components/Buttons'
-
 /**
  * ZoomButton
  */
@@ -14,7 +14,11 @@ type Props = {
 }
 
 const ZoomButton = ({ direction, ...rest }: Props) => (
-	<RoundButton icon={direction === 'in' ? '➕' : '➖'} label={direction === 'in' ? 'Zoom in' : 'Zoom Out'} {...rest} />
+	<RoundButton
+		icon={direction === 'in' ? <FaPlus /> : <FaMinus />}
+		label={direction === 'in' ? 'Zoom in' : 'Zoom Out'}
+		{...rest}
+	/>
 )
 
 ZoomButton.defaultProps = {
