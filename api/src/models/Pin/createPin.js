@@ -24,9 +24,6 @@ const addPinToRoute = async (pin: PinType, addToRoute: AddToRouteArgs, ownerUid:
 	const route = existingRoute
 		? await Route.addPin({ routeUid: existingRoute.uid, pinUid: pin.uid, connectToPin, position }, ownerUid)
 		: await Route.createRoute({ pins: position === 'BEFORE' ? [pin.uid, connectToPin] : [connectToPin, pin.uid] }, ownerUid)
-	// const newRoute = routeUid
-	// 	? await Route.addPin({ routeUid, pinUid: pin.uid, connectToPin }, ownerUid)
-	// 	: await Route.createRoute({ pins }, ownerUid)
 	return route
 }
 
@@ -46,9 +43,7 @@ export const createPin = async (args: NewPinData, ownerUid: string): Promise<Pin
 	if (addToLessons) edges.push(...addToLessons.map((fromUid) => [{ fromUid, pred: 'has_pin' }, {}]))
 
 	const pin: PinType = await createNodeWithEdges(validatedPinData, edges)
-
 	// // Add the pin to a route (optional)
 	if (addToRoute) await addPinToRoute(pin, addToRoute, ownerUid)
-
 	return pin
 }

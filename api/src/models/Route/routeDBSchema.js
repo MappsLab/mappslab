@@ -14,13 +14,18 @@ export const routeSchema = (isNew: boolean = true) =>
 		.keys({
 			title: Joi.string()
 				.min(3)
-				.max(35)
-				.default('Untitled Route'),
+				.max(35),
 			createdAt: isNew
 				? Joi.date().default(new Date()) // .required()
 				: Joi.any().forbidden(),
 			updatedAt: Joi.date().required(),
+			description: Joi.string()
+				.max(400)
+				.allow(''),
 			deleted: isNew ? Joi.boolean().default(false) : Joi.boolean(),
+			video: Joi.string()
+				.uri()
+				.trim(),
 			type: Joi.any().only('route'),
 		})
 		.options({ stripUnknown: true })
@@ -38,6 +43,8 @@ export const publicFields = [
 	'uid',
 	'title',
 	'updatedAt',
+	'video',
+	'description',
 	`pins: includes_pin @facets(order) @filter((eq(deleted, false))) {
 		uid
 		title
@@ -46,18 +53,16 @@ export const publicFields = [
 		uid
 		username
 	}`,
+	'type',
 ].join('\n')
 const singleFields = ['owner']
+
 /**
  * Clean
  */
 
 export const clean = <T: UpdateRouteData | NewRouteData>(routeData: T): Promise<T> =>
-	promisePipe(
-		// $FlowFixMe
-		merge(defaultValues),
-		filterNullAndUndefined,
-	)(routeData)
+	promisePipe(merge(defaultValues), filterNullAndUndefined)(routeData)
 
 /**
  * Parse
@@ -73,7 +78,6 @@ const sortPins = (obj) => {
 }
 
 const parse = pipe(
-	// $FlowFixMe
 	parseSingularFields(singleFields),
 	// when(propEq('description', undefined), assoc('description', '')),
 	when(prop('pins'), sortPins),

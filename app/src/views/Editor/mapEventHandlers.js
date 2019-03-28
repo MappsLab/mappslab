@@ -24,15 +24,19 @@ export const mapEvents = {
 		},
 	},
 	Lesson: {
-		keyup: ({ payload, props }: MapEvent<KeyboardEvent>) => {
-			const transition = payload.key === ' ' ? () => props.transition('clickedDropPin') : null
-			return transition
-				? {
-						actions: {
-							transition,
-						},
-				  }
-				: null
+		// keyup: ({ payload, props }: MapEvent<KeyboardEvent>) => {
+		// 	const transition = payload.key === ' ' ? () => props.transition('clickedDropPin') : null
+		// 	return transition
+		// 		? {
+		// 				actions: {
+		// 					transition,
+		// 				},
+		// 		  }
+		// 		: null
+		// },
+		onClick: ({ props }: MapEvent<MouseEvent>) => {
+			const { closeInspector } = props
+			closeInspector()
 		},
 		Browse: {
 			handlers: {},
@@ -49,17 +53,8 @@ export const mapEvents = {
 						  }
 						: null
 				},
-				onEntry: ({ props }: MapEvent<null>) => {
-					const { sendNotification } = props
-
-					return {
-						actions: {
-							sendNotification: () => sendNotification({ message: 'Click to drop a new pin' }),
-						},
-					}
-				},
 				onClick: ({ payload, props }: MapEvent<MouseEvent>) => {
-					const { createPin, mapUid, lessonUid, transition, connectToPin } = props
+					const { createPin, mapUid, lessonUid, transition, connectToPin, inspectItem } = props
 					const createNewPin = async () => {
 						const addToRoute = connectToPin
 							? {
@@ -67,7 +62,6 @@ export const mapEvents = {
 									position: connectToPin.position,
 							  }
 							: undefined
-
 						const variables = {
 							input: {
 								lat: payload.latLng.lat(),
@@ -82,7 +76,14 @@ export const mapEvents = {
 							refetchQueries: [{ query: mapQuery, variables: { uid: props.mapData.uid } }],
 						})
 						const newPin = result.data.createPin
-						transition('droppedPin', { inspectedItem: newPin, connectToPin: null })
+
+						const position = {
+							lat: newPin.lat,
+							lng: newPin.lng,
+						}
+
+						inspectItem(newPin, position)
+						transition('droppedPin', { connectToPin: null })
 					}
 
 					const actions = {
@@ -117,21 +118,21 @@ export const mapEvents = {
 				}
 			},
 			onEntry: ({ props }: MapEvent<null>) => {
-				const { panTo, inspectedItem } = props
-				const pan = () => {
-					debug('panning to', inspectedItem)
-					const yOffset = window.innerHeight / 2 - 150
-					panTo(inspectedItem, { x: 0, y: -yOffset })
-				}
-				return {
-					actions: { pan },
-				}
+				/* todo DISABLED */
+				// const { panTo, inspectedItem } = props
+				// const pan = () => {
+				// 	debug('panning to', inspectedItem)
+				// 	const yOffset = window.innerHeight / 2 - 150
+				// 	console.log('TO DO: move this to a generic InspectedItem component')
+				// 	// panTo(inspectedItem, { x: 0, y: -yOffset })
+				// }
+				// return {
+				// 	actions: { pan },
+				// }
 			},
 			onClick: ({ props }: MapEvent<MouseEvent>) => {
-				const transition = () => props.transition('close', { inspectedItem: null })
-				return {
-					actions: { transition },
-				}
+				const { closeInspector } = props
+				closeInspector()
 			},
 		},
 	},

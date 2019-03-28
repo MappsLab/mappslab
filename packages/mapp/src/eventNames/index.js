@@ -10,6 +10,7 @@ export const polylineEvents = {
 	onMouseOut: 'mouseout',
 	onMouseOver: 'mouseover',
 	onMouseUp: 'mouseup',
+	onMouseMove: 'mousemove',
 	onRightClick: 'rightclick',
 }
 

@@ -133,13 +133,14 @@ class Mapp extends React.Component<Props, State> {
 		 * @param {Offset} [offset]
 		 * @returns {void}
 		 */
-		const panTo = (latLng: LatLng, offset?: Offset): void => {
+		const panTo = (position: LatLng, offset?: Offset): void => {
 			const { x, y } = {
 				x: 0,
 				y: 0,
 				...offset,
 			}
-			const actual = this.overlay.getProjection().fromLatLngToContainerPixel(new google.maps.LatLng(latLng))
+			const latLng = typeof position.lat === 'function' ? position : new google.maps.LatLng(position)
+			const actual = this.overlay.getProjection().fromLatLngToContainerPixel(latLng)
 			const newX = actual.x + x
 			const newY = actual.y + y
 			const newCenter = this.overlay.getProjection().fromContainerPixelToLatLng(new google.maps.Point(newX, newY))

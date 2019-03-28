@@ -72,13 +72,20 @@ const definePopup = (): OverlayView => {
 		}
 	}
 
+	Popup.prototype.setPosition = function(position) {
+		this.position = position
+		this.draw()
+	}
+
 	Popup.prototype.draw = function() {
-		const divPosition = this.getProjection().fromLatLngToDivPixel(this.position)
+		const latLng = typeof this.position.lat === 'function' ? this.position : new google.maps.LatLng(this.position)
+		const divPosition = this.getProjection().fromLatLngToDivPixel(latLng)
 
 		const display = Math.abs(divPosition.x) < 4000 && Math.abs(divPosition.y) < 4000 ? 'block' : 'none'
 		if (display === 'block') {
 			this.anchorDiv.style.left = `${divPosition.x}px`
 			this.anchorDiv.style.top = `${divPosition.y}px`
+			this.anchorDiv.style.outline = '1px solid red'
 		}
 		if (this.anchorDiv.style.display !== display) {
 			this.anchorDiv.style.display = display

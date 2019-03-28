@@ -5,10 +5,11 @@ import type { RouteType } from './Route'
 import type { ImageType } from './Media'
 
 export type PinType = {
+	__typename: 'Pin',
 	uid: string,
 	lat: number,
 	lng: number,
-	owner: UserType,
+	owner?: $Shape<UserType>,
 	title?: string,
 	description?: string,
 	route?: {
@@ -18,6 +19,6 @@ export type PinType = {
 		nextPin?: PinType,
 		prevPin?: PinType,
 	},
-	image?: ImageType | null,
+	image?: ImageType,
 	video?: string,
 }

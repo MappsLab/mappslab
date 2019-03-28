@@ -1,17 +1,16 @@
 // @flow
 import React from 'react'
-import { PolyLine, CustomPopup } from 'mapp'
+import { PolyLine } from 'mapp'
 import { polylineEventNames } from 'mapp/eventNames'
 import type { LatLng } from 'mapp/types'
-// import { State } from 'react-automata'
 import type { PinType } from 'Types/Pin'
 import type { RouteType } from 'Types/Route'
-import { eventsReducer, isFunc, getStateString } from 'Utils/data'
+import { getStateString } from 'Utils/data'
+import { InspectorConsumer } from '../ItemInspector'
+import type { ItemInspectorProviderProps } from '../ItemInspector'
 import { MapConsumer } from '../Provider'
 import type { ProviderProps } from '../Provider'
-import { getHandlersForState } from './routeEventHandlers'
-// import { PopupWrapper } from './InfoPopups'
-// import PinInspector from './PinInspector'
+import RouteHoverPopup from './RouteHoverPopup'
 
 const getPathFromPins = (pins: Array<PinType | LatLng>): Array<LatLng> =>
 	pins.map(({ lat, lng }) => ({
@@ -20,24 +19,23 @@ const getPathFromPins = (pins: Array<PinType | LatLng>): Array<LatLng> =>
 	}))
 
 /**
- * Pin
+ * Route
  */
 
-type InProgressRoute = {
-	pins: Array<PinType | LatLng>,
-}
-
 type BaseProps = {
-	route: RouteType | InProgressRoute,
+	route: RouteType,
 }
 
 type RouteProps = BaseProps &
 	ProviderProps & {
 		active?: boolean,
+		clickable?: boolean,
+		inspectItem: $PropertyType<ItemInspectorProviderProps, 'inspectItem'>,
 	}
 
 type RouteState = {
 	mouseOver: boolean,
+	mouseLatLng?: LatLng,
 }
 
 class Route extends React.Component<RouteProps, RouteState> {
@@ -48,19 +46,62 @@ class Route extends React.Component<RouteProps, RouteState> {
 
 	state = {
 		mouseOver: false,
+		mouseLatLng: undefined,
 	}
 
-	/**
-	 * Factory function to create smart handlers for each type of event.
-	 * If the current mode has a handler for this event,
-	 * this will call it with the (optional) payload.
-	 *
-	 */
+	constructor(props) {
+		super(props)
+		this.eventHandlers = polylineEventNames.reduce(
+			(acc, eventName) =>
+				Object.prototype.hasOwnProperty.call(this, eventName)
+					? {
+							...acc,
+							// $FlowFixMe
+							[eventName]: this[eventName],
+					  }
+					: acc,
+			{},
+		)
+		this.state = {
+			mouseOver: false,
+			mouseLatLng: undefined,
+		}
+	}
+
+	/** TODO: Get GMAPS input event type */
+
+	onClick = (e: { latLng: LatLng }) => {
+		const { route, inspectItem } = this.props
+		this.setState({ mouseOver: false })
+		const position = e.latLng
+		inspectItem(route, position)
+	}
+
+	onMouseOver = (e) => {
+		this.setState({
+			mouseOver: true,
+			mouseLatLng: e.latLng,
+		})
+	}
+
+	onMouseOut = () => {
+		this.setState({
+			mouseOver: false,
+			mouseLatLng: null,
+		})
+	}
+
+	onMouseMove = (e) => {
+		this.setState({
+			mouseLatLng: e.latLng,
+		})
+	}
 
 	getOptions() {
+		//
 		const { route, active, machineState } = this.props
 		const { mouseOver } = this.state
-		const path = getPathFromPins(route.pins)
+		const path = route.pins ? getPathFromPins(route.pins) : []
 		const stateString = getStateString(machineState.value)
 		const clickable = !/Lesson.DropPin.DropMode/.test(stateString)
 		return {
@@ -72,27 +113,19 @@ class Route extends React.Component<RouteProps, RouteState> {
 		}
 	}
 
-	handleEvent = (eventName: string) => (payload) => {
-		const { machineState } = this.props
-		const handlers = getHandlersForState(machineState.value)
-		if (handlers[eventName]) {
-			const newState = handlers[eventName](payload, this.props)
-			if (newState) this.setState(newState)
-		}
-	}
-
-	getEventHandlers = () =>
-		polylineEventNames.reduce(
-			(acc, name) => ({
-				...acc,
-				[name]: this.handleEvent(name),
-			}),
-			{},
-		)
+	eventHandlers: any
 
 	render() {
 		const options = this.getOptions()
-		return <PolyLine events={this.getEventHandlers()} options={options} />
+		const { route } = this.props
+		const { mouseLatLng, mouseOver } = this.state
+		// { mouseOver && <RouteHoverPopup />}
+		return (
+			<React.Fragment>
+				{mouseOver && mouseLatLng && <RouteHoverPopup position={mouseLatLng} route={route} />}
+				<PolyLine events={this.eventHandlers} options={options} />
+			</React.Fragment>
+		)
 	}
 }
 
@@ -103,8 +136,9 @@ class Route extends React.Component<RouteProps, RouteState> {
 const Wrapper = (props: BaseProps) => (
 	<MapConsumer>
 		{(contextValue) => (
-			//
-			<Route {...props} {...contextValue} />
+			<InspectorConsumer>
+				{({ inspectItem }) => <Route {...props} {...contextValue} inspectItem={inspectItem} />}
+			</InspectorConsumer>
 		)}
 	</MapConsumer>
 )

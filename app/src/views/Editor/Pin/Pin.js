@@ -1,13 +1,12 @@
 // @flow
 import React from 'react'
 import { Marker, CustomPopup, markerEventNames } from 'mapp'
-import { State } from 'react-automata'
 import type { PinType } from 'Types/Pin'
-import { eventsReducer, isFunc, getStateString } from 'Utils/data'
+import { getStateString } from 'Utils/data'
+import { InspectorConsumer } from '../ItemInspector'
+import type { ItemInspectorProviderProps } from '../ItemInspector'
 import { MapConsumer } from '../Provider'
 import type { ProviderProps } from '../Provider'
-import PinInspector from './PinInspector'
-import { pinEvents } from './pinEventHandlers'
 import PinHoverPopup from './PinHoverPopup'
 
 /**
@@ -18,7 +17,11 @@ type BaseProps = {
 	pin: PinType,
 }
 
-export type PinProps = BaseProps & ProviderProps
+export type PinProps = BaseProps &
+	ProviderProps & {
+		isInspected: boolean,
+		inspectItem: $PropertyType<ItemInspectorProviderProps, 'inspectItem'>,
+	}
 
 export type PinState = {
 	mouseOver: boolean,
@@ -28,10 +31,14 @@ class Pin extends React.Component<PinProps, PinState> {
 	constructor(props) {
 		super(props)
 		this.eventHandlers = markerEventNames.reduce(
-			(acc, name) => ({
-				...acc,
-				[name]: this.handleEvent(name),
-			}),
+			(acc, eventName) =>
+				Object.prototype.hasOwnProperty.call(this, eventName)
+					? {
+							...acc,
+							// $FlowFixMe
+							[eventName]: this[eventName],
+					  }
+					: acc,
 			{},
 		)
 
@@ -40,32 +47,36 @@ class Pin extends React.Component<PinProps, PinState> {
 		}
 	}
 
-	/**
-	 * Factory function to create smart handlers for each type of event.
-	 * If the current mode has a handler for this event,
-	 * this will call it with the (optional) payload.
-	 *
-	 */
+	componentWillReceiveProps(nextProps: PinProps) {
+		const currentStateString = getStateString(this.props.machineState.value)
+		const nextStateString = getStateString(nextProps.machineState.value)
 
-	handleEvent = (eventName: string) => (payload) => {
-		const { machineState } = this.props
-		const handler = eventsReducer(pinEvents, machineState.value, eventName)
-		if (handler) {
-			const result = handler({ payload, props: this.props })
-			const { state, actions } = result
-			if (actions) {
-				Object.keys(actions).forEach((key) => {
-					const action = actions[key]
-					if (isFunc(action)) action()
-				})
+		if (currentStateString !== nextStateString) this.setState({ mouseOver: false })
+	}
+
+	onClick = () => {
+		const { pin, inspectItem, machineState, transition } = this.props
+		const stateString = getStateString(machineState.value)
+		/* If dropping a pin */
+		if (stateString === 'Lesson.DropPin.DropMode.Drop') {
+			const position = pin.route && pin.route.isFirst ? 'BEFORE' : 'AFTER'
+			transition('enterConnect', { connectToPin: { pin, position } })
+		} else {
+			this.setState({ mouseOver: false })
+			const position = {
+				lat: pin.lat,
+				lng: pin.lng,
 			}
-			if (state) this.setState(state)
+			inspectItem(pin, position)
 		}
 	}
 
-	closeInspector = () => {
-		const { transition } = this.props
-		transition('close', { inspectedItem: null })
+	onMouseOver = (e) => {
+		this.setState({ mouseOver: true })
+	}
+
+	onMouseOut = () => {
+		this.setState({ mouseOver: false })
 	}
 
 	eventHandlers: any
@@ -76,18 +87,18 @@ class Pin extends React.Component<PinProps, PinState> {
 		const stateString = getStateString(machineState.value)
 		if (stateString === 'Lesson.DropPin.DropMode.Connect') return false
 		if (stateString === 'Lesson.DropPin.DropMode.Drop') {
-			if (route && (!route.isFirst || !route.isLast)) return false
 			if (!viewer) return false
 			if (pin.owner.uid !== viewer.uid) return false
+			if (route && (!route.isFirst && !route.isLast)) return false
 		}
 		return true
 	}
 
 	render() {
-		const { pin, inspectedItem, mapData } = this.props
+		const { pin, isInspected } = this.props
 		const { mouseOver } = this.state
 		const { lat, lng } = pin
-		const isInspected = inspectedItem && inspectedItem.uid === pin.uid
+		// const isInspected = inspectedItem && inspectedItem.uid === pin.uid
 		const enabled = this.isClickable()
 		const options = {
 			position: {
@@ -105,17 +116,10 @@ class Pin extends React.Component<PinProps, PinState> {
 				render={({ anchor }) =>
 					anchor ? (
 						<React.Fragment>
-							{!isInspected && mouseOver ? (
-								<CustomPopup anchor={anchor}>
+							{!isInspected && enabled && mouseOver ? (
+								<CustomPopup position={anchor.position}>
 									<PinHoverPopup pin={pin} />
 								</CustomPopup>
-							) : null}
-							{isInspected ? (
-								<State is="Lesson.Inspect">
-									<CustomPopup anchor={anchor}>
-										<PinInspector pin={pin} mapUid={mapData.uid} closeInspector={this.closeInspector} />
-									</CustomPopup>
-								</State>
 							) : null}
 						</React.Fragment>
 					) : null
@@ -132,8 +136,17 @@ class Pin extends React.Component<PinProps, PinState> {
 const Wrapper = ({ pin }: BaseProps) => (
 	<MapConsumer>
 		{(contextValue) => (
-			//
-			<Pin pin={pin} {...contextValue} />
+			<InspectorConsumer>
+				{({ inspectItem, item: inspectedItem }) => (
+					/* $FlowFixMe */
+					<Pin
+						pin={pin}
+						inspectItem={inspectItem}
+						isInspected={Boolean(inspectedItem && pin.uid === inspectedItem.uid)}
+						{...contextValue}
+					/>
+				)}
+			</InspectorConsumer>
 		)}
 	</MapConsumer>
 )

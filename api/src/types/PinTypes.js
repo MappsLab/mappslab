@@ -56,5 +56,6 @@ export type UpdatePinData = {
 		connectToPin?: string,
 	},
 	deleted: boolean,
+	video: string,
 	image: ImageUpload,
 }

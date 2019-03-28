@@ -9,6 +9,8 @@ import { NotificationsConsumer } from 'Components/Notifications'
 import type { NewNotification } from 'Components/Notifications'
 import { eventsReducer, isFunc } from 'Utils/data'
 import { getMapBounds } from 'Utils/maps'
+import { InspectorProvider, ItemInspector, InspectorConsumer } from './ItemInspector'
+import type { ItemInspectorProviderProps } from './ItemInspector'
 import Pin from './Pin'
 import Route from './Route'
 import NewRoute from './Route/NewRoute'
@@ -23,6 +25,7 @@ import { mapEvents } from './mapEventHandlers'
 export type EditorProps = ProviderProps & {
 	mapUid: null | string,
 	sendNotification: (NewNotification) => void,
+	closeInspector: $PropertyType<ItemInspectorProviderProps, 'closeInspector'>,
 }
 
 const domEventNames = ['keyup']
@@ -179,6 +182,7 @@ class MapEditor extends React.Component<EditorProps> {
 				</State>
 				{viewer ? <Tools {...this.props} /> : <NotLoggedIn />}
 				<MapNotifications />
+				<ItemInspector />
 				{this.renderMapData()}
 			</React.Fragment>
 		)
@@ -194,13 +198,29 @@ type WrapperProps = {
 }
 
 const Wrapper = ({ mapUid }: WrapperProps) => (
-	<NotificationsConsumer>
-		{({ sendNotification }) => (
-			<MapConsumer>
-				{(contextValue) => <MapEditor mapUid={mapUid || null} sendNotification={sendNotification} {...contextValue} />}
-			</MapConsumer>
+	<MapConsumer>
+		{(contextValue) => (
+			/* $FlowFixMe */
+			<InspectorProvider {...contextValue}>
+				<InspectorConsumer>
+					{({ closeInspector, inspectItem }) => (
+						<NotificationsConsumer>
+							{({ sendNotification }) => (
+								/* $FlowFixMe */
+								<MapEditor
+									closeInspector={closeInspector}
+									inspectItem={inspectItem}
+									mapUid={mapUid || null}
+									sendNotification={sendNotification}
+									{...contextValue}
+								/>
+							)}
+						</NotificationsConsumer>
+					)}
+				</InspectorConsumer>
+			</InspectorProvider>
 		)}
-	</NotificationsConsumer>
+	</MapConsumer>
 )
 
 Wrapper.defaultProps = {

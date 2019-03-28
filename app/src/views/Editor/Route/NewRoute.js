@@ -17,11 +17,17 @@ type NewRouteProps = {
 }
 
 const NewRoute = ({ connectToPin, userLatLng }: NewRouteProps) => {
+	const inProgressPin = {
+		...userLatLng,
+		__typename: 'Pin',
+		uid: '__in-progress-pin__',
+	}
 	const route: {
 		pins: Array<PinType | LatLng>,
 	} = {
-		uid: '__in-progress__',
-		pins: [connectToPin.pin, userLatLng],
+		__typename: 'Route',
+		uid: '__in-progress-route__',
+		pins: [connectToPin.pin, inProgressPin],
 	}
 	return <Route route={route} active clickable={false} />
 }

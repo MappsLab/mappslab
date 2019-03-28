@@ -116,7 +116,7 @@ describe('[addPin]', () => {
 		}
 		const pin3result = await request(addMutation, { context, variables: { input: pin3input } })
 		const pin3 = pin3result.data.createPin
-		pinsToRemove.push(pin2)
+		pinsToRemove.push(pin3)
 		expect(pin3.route.route.pins.edges).toHaveLength(3)
 		// expect(pinNames(pin3.route.route.pins)).toEqual(['A', 'C', 'B'])
 		expect(pinRouteNames(pin3)).toEqual(['A', 'C', 'B'])

@@ -12,44 +12,6 @@ import ToolTip from 'Components/ToolTip'
 import { getVideoSrc, getBestSize } from 'Utils/media'
 import config from '../../../config'
 
-const MediaWrapper = styled.div`
-	position: relative;
-`
-
-const VideoFrame = styled.div`
-	padding-bottom: 56%;
-	position: relative;
-
-	> iframe {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-	}
-`
-
-const ButtonWrapper = styled.div`
-	${({ theme }) => css`
-		position: absolute;
-		top: ${theme.layout.spacing.single};
-		right: ${theme.layout.spacing.single};
-		opacity: 0;
-		pointer-events: none;
-		transition: opacity 0.2s;
-		z-index: 10;
-		${MediaWrapper}:hover & {
-			opacity: 1;
-			pointer-events: initial;
-		}
-	`}
-`
-
-const MediaButtons = styled.div`
-	display: flex;
-	justify-content: center;
-`
-
 /**
  * PinMedia
  */

@@ -12,3 +12,9 @@ export type ImageType = {
 	original: ImageSize,
 	sizes: Array<ImageSize>,
 }
+
+export type VideoType = string
+// export type VideoType = {
+// 	url: string,
+// 	provider: string,
+// }
