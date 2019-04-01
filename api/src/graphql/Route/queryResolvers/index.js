@@ -1,6 +1,6 @@
 // @flow
 
-import { pins, owner } from './fetchRouteRelationships'
+import { pins, owner, image } from './fetchRouteRelationships'
 import { route, routes } from './getRoutes'
 
 export default {
@@ -11,6 +11,7 @@ export default {
 	Route: {
 		pins,
 		owner,
+		image,
 		// maps
 	},
 }

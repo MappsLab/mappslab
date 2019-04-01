@@ -51,12 +51,17 @@ class CustomPopup extends React.Component<Props, State> {
 	}
 
 	componentDidMount() {
-		const { map, anchor } = this.props
+		const { map, position } = this.props
 		const Popup = createPopup()
 		// $FlowFixMe
-		this.entity = new Popup(anchor.position, this.container)
+		this.entity = new Popup(position, this.container)
 		this.entity.setMap(map)
 		this.setState({ ready: true })
+	}
+
+	componentWillReceiveProps(nextProps: Props) {
+		const { position } = nextProps
+		if (this.entity) this.entity.setPosition(position)
 	}
 
 	componentWillUnmount() {

@@ -1,5 +1,6 @@
 // @flow
 import gql from 'graphql-tag'
+import { imageFragment } from '../shared/fragments'
 
 export const pinFragment = gql`
 	fragment PinFragment on Pin {
@@ -10,7 +11,12 @@ export const pinFragment = gql`
 		lng
 		route {
 			route {
+				__typename
 				uid
+				owner {
+					uid
+					name
+				}
 			}
 			isFirst
 			isLast
@@ -22,19 +28,8 @@ export const pinFragment = gql`
 		}
 		video
 		image {
-			uid
-			original {
-				uri
-				width
-				height
-				format
-			}
-			sizes {
-				uri
-				width
-				height
-				format
-			}
+			...ImageFragment
 		}
 	}
+	${imageFragment}
 `

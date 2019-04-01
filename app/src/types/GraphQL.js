@@ -75,7 +75,7 @@ export type QueryConfig = {
 
 export type MutationOptions = {
 	variables: Variables,
-	refetchQueries: Array<QueryConfig>,
+	refetchQueries?: Array<QueryConfig>,
 }
 
 export type Mutation = (options?: MutationOptions) => Promise<void>

@@ -5,6 +5,12 @@ import type { UserType } from 'Types/UserTypes'
 import type { GraphQLContext, PageType, PaginationInput } from 'Types/sharedTypes'
 import { assemblePage } from 'Utils/graphql'
 
+export const image = async (fetchedRoute: RouteType, _: any, ctx: GraphQLContext): Promise<ImageType> => {
+	const filter = { where: { hasImage: { eq: fetchedRoute.uid } } }
+	const result = await ctx.models.Image.getImages(filter)
+	return result && result[0]
+}
+
 export const pins = async (
 	fetchedRoute: RouteType,
 	{ input }: PaginationInput,

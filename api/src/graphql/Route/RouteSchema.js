@@ -4,9 +4,12 @@ const Route = /* GraphQL */ `
 	type Route implements Node {
 		uid: String!
 		title: String
+		description: String
 		owner: User!
 		pins: PinConnection
 		maps: MapConnection
+		image: Image
+		video: String
 	}
 
 	input NewRouteInput {
@@ -16,11 +19,12 @@ const Route = /* GraphQL */ `
 	}
 
 	input UpdateRouteInput {
+		uid: String!
 		title: String
 		addPin: String
-		removePin: String
-		pins: [String]
-		removePins: [String]
+		description: String
+		image: Upload
+		video: String
 	}
 
 	input GetRouteInput {

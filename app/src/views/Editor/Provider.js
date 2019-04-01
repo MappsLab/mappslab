@@ -7,6 +7,7 @@ import { CurrentViewerQuery, MapQuery } from 'Queries'
 import { CreatePinMutation } from 'Queries/Pin'
 import type { PinType } from 'Types/Pin'
 import type { MapType } from 'Types/Map'
+import type { RouteType } from 'Types/Route'
 import type { ViewerType } from 'Types/User'
 import type { Mutation, SubscriptionConfig } from 'Types/GraphQL'
 import { getOptionsForState } from './mapOptions'
@@ -24,20 +25,7 @@ type Props = MappRenderProps & {
 	initialView?: View,
 	initialMapUid?: string | null,
 	children: React.Node,
-	inspectedItem?: PinType | null,
-
-	// MappRenderProps:
-	// (copied for reference)
-	// googleMap: Map,
-	// overlay: OverlayView,
-	// utils: {
-	// 	zoom: (number) => void,
-	// 	zoomIn: () => void,
-	// 	zoomOut: () => void,
-	// 	panTo: (LatLng, Offset) => void,
-	// 	addEventListeners: (eventHandlers: EventHandlers) => void,
-	// 	removeEventListeners: (eventHandlers: EventHandlers) => void,
-	// },
+	inspectedItem?: PinType | RouteType,
 }
 
 type State = {

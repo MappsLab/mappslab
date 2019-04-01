@@ -4,6 +4,8 @@ import type { MapType } from 'Types/Map'
 import type { QueryWrapper } from '../Query'
 import { withDefaultQuery } from '../Query'
 import { pinFragment } from '../Pin/fragments'
+import { userFragment } from '../User/fragments'
+import { imageFragment } from '../shared/fragments'
 
 export const query = gql/* GraphQL */ `
 	query MapQuery($uid: String!) {
@@ -46,8 +48,17 @@ export const query = gql/* GraphQL */ `
 				edges {
 					cursor
 					node {
+						__typename
 						uid
 						title
+						description
+						video
+						image {
+							...ImageFragment
+						}
+						owner {
+							...UserFragment
+						}
 						pins {
 							edges {
 								node {
@@ -60,7 +71,9 @@ export const query = gql/* GraphQL */ `
 			}
 		}
 	}
+	${imageFragment}
 	${pinFragment}
+	${userFragment}
 `
 
 export type MapResponse = {

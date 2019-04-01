@@ -3,13 +3,16 @@
 import type { UserType } from 'Types/UserTypes'
 import type { MapType } from 'Types/MapTypes'
 import type { PinType } from 'Types/PinTypes'
+import type { ImageUpload } from 'Types/ImageTypes'
 
 export type RouteType = {
 	uid: string,
-	title?: string,
 	owner: UserType,
-	maps?: Array<MapType>,
 	pins: Array<PinType>,
+	description: string,
+	title?: string,
+	maps?: Array<MapType>,
+	image?: Image,
 }
 
 export type GetRouteArgs = {
@@ -22,6 +25,10 @@ export type NewRouteData = {
 }
 
 export type UpdateRouteData = NewRouteData & {
-	removePin?: string,
-	removepins?: Array<string>,
+	uid: string,
+	pins: Array<string>, // pin UIDs
+	description?: string,
+	title?: string,
+	video: String,
+	image: ImageUpload,
 }

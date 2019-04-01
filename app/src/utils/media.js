@@ -78,7 +78,8 @@ export type VideoInfo = {
  *
  * returns an embed code when given a Youtube/Vimeo/DailyMotion URL
  */
-export const getVideoSrc = (url: string): VideoInfo => {
+
+export const getVideoInfo = (url: string): VideoInfo => {
 	const parsedURL = parseUrl(url, true)
 	if (!parsedURL || !parsedURL.hostname || !parsedURL.pathname) throw new Error('!!')
 	if (parsedURL.hostname === undefined) throw new Error('?')

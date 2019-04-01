@@ -1,6 +1,8 @@
 // @flow
 import * as React from 'react'
 
+const { useContext } = React
+
 type OptionConfig = {
 	returnValue?: any,
 	[key: string]: any, // Allow for other props to be passed
@@ -42,9 +44,11 @@ const defaultContext = {
 	answered: false,
 }
 
-const { Provider, Consumer } = React.createContext<QuestionContext>(defaultContext)
+const Context = React.createContext<QuestionContext>(defaultContext)
+const { Provider, Consumer } = Context
 
 export const QuestionConsumer = Consumer
+export const useQuestion = () => useContext(Context)
 
 /**
  * QuestionProvider

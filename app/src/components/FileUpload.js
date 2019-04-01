@@ -1,9 +1,9 @@
 // @flow
 import * as React from 'react'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 import { Button } from './Buttons'
 
-const { useRef, useState } = React
+const { useState } = React
 
 const Input = styled.input`
 	display: none;
@@ -18,9 +18,10 @@ type Props = {
 	name: string,
 	label: string,
 	accept?: string,
+	Icon?: React.ComponentType<any>,
 }
 
-const FileUpload = ({ onSubmit, name, accept, label }: Props) => {
+const FileUpload = ({ onSubmit, name, accept, label, Icon }: Props) => {
 	const [isLoading, setIsLoading] = useState(false)
 
 	const handleChange = async (e, file) => {
@@ -33,6 +34,11 @@ const FileUpload = ({ onSubmit, name, accept, label }: Props) => {
 	return (
 		<React.Fragment>
 			<Button as="label" disabled={isLoading} htmlFor={name} level="tertiary">
+				{Icon ? (
+					<React.Fragment>
+						<Icon />{' '}
+					</React.Fragment>
+				) : null}
 				{isLoading ? 'Loading..' : label}
 			</Button>
 			<Input type="file" accept={accept} id={name} name={name} required onChange={handleChange} />
@@ -42,6 +48,7 @@ const FileUpload = ({ onSubmit, name, accept, label }: Props) => {
 
 FileUpload.defaultProps = {
 	accept: undefined,
+	Icon: undefined,
 }
 
 export default FileUpload
