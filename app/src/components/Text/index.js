@@ -41,8 +41,8 @@ export const P = styled.p`
 `
 
 export const Header4 = styled.h4`
+	${commonTextStyles};
 	${({ theme }) => `
-		${commonTextStyles};
 		font-size: ${theme.font.size.h4};
 	`};
 `

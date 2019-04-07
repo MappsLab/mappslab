@@ -1,7 +1,8 @@
 // @flow
 import React from 'react'
 import type { Node } from 'react'
-import { ApolloProvider } from 'react-apollo'
+// import { ApolloProvider } from 'react-apollo'
+import { ApolloProvider } from 'react-apollo-hooks'
 import { ApolloLink, split } from 'apollo-link'
 import { WebSocketLink } from 'apollo-link-ws'
 import { ApolloClient } from 'apollo-client'

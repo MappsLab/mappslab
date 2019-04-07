@@ -8,7 +8,7 @@ import { Header2, P } from 'Components/Text'
 import { Button } from 'Components/Buttons'
 
 /**
- * MyComponent
+ * WelcomeDialog
  */
 
 type Props = {
@@ -16,7 +16,7 @@ type Props = {
 	transition: Transition,
 }
 
-const MyComponent = ({ map, transition }: Props) => {
+const WelcomeDialog = ({ map, transition }: Props) => {
 	const enterLesson = (lessonUid?: string) => () => {
 		transition('enterLesson', { lessonUid })
 	}
@@ -32,4 +32,4 @@ const MyComponent = ({ map, transition }: Props) => {
 	)
 }
 
-export default MyComponent
+export default WelcomeDialog

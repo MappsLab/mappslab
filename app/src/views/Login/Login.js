@@ -56,6 +56,13 @@ type Props = BaseProps & {
 }
 
 class Login extends React.Component<Props, State> {
+	static defaultProps = {
+		classroomUid: null,
+		userUid: null,
+		error: null,
+		resetToken: null,
+	}
+
 	componentDidMount() {
 		const { viewer, transition } = this.props
 		const transitionName = viewer ? WITH_VIEWER : NO_VIEWER
@@ -113,13 +120,6 @@ class Login extends React.Component<Props, State> {
 			</Centered>
 		)
 	}
-}
-
-Login.defaultProps = {
-	classroomUid: null,
-	userUid: null,
-	error: null,
-	resetToken: null,
 }
 
 const Wrapper = (props: BaseProps) => (

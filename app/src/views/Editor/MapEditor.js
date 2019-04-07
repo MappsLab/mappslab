@@ -19,6 +19,7 @@ import NotLoggedIn from './NotLoggedIn'
 import { MapConsumer } from './Provider'
 import type { ProviderProps } from './Provider'
 import WelcomeDialog from './WelcomeDialog'
+import MapNavigation from './MapNavigation'
 import MapNotifications from './MapNotifications'
 import { mapEvents } from './mapEventHandlers'
 
@@ -180,6 +181,7 @@ class MapEditor extends React.Component<EditorProps> {
 				<State is="Welcome">
 					<WelcomeDialog map={mapData} transition={transition} />
 				</State>
+				<MapNavigation map={mapData} transition={transition} />
 				{viewer ? <Tools {...this.props} /> : <NotLoggedIn />}
 				<MapNotifications />
 				<ItemInspector />
