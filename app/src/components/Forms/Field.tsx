@@ -1,19 +1,20 @@
 // @flow
 import React from 'react'
 import { Field as FinalFormField } from 'react-final-form'
-import { composeValidators, required } from './validators'
+import { composeValidators, required, ValidatorFunction } from './validators'
 import { FieldWrapper, Label, HelpText, Input, ValidationError } from './styles'
 
-type Props = {
-	label: false | string,
-	name: string,
-	validate?: Function | Array<Function>,
-	helpText?: string,
-	type?: string,
-	required?: boolean,
+interface Props {
+	label: false | string
+	name: string
+	validate?: ValidatorFunction
+	helpText?: string
+	type?: string
+	required?: boolean
+	value?: string
 }
 
-const Field = (props: Props) => {
+export const Field = (props: Props) => {
 	const validators = props.validate
 		? props.required
 			? composeValidators(required, props.validate)
@@ -46,5 +47,3 @@ Field.defaultProps = {
 	helpText: '',
 	validate: () => undefined,
 }
-
-export default Field

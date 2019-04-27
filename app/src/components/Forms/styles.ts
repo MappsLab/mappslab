@@ -1,6 +1,6 @@
 // @flow
-import styled from 'styled-components'
-import { Header4, Header5 } from 'Components/Text'
+import styled, { DefaultTheme } from 'styled-components'
+import { Header4, Header5 } from '../Text'
 /* Forms */
 
 export const FormWrapper = styled.form`
@@ -9,12 +9,14 @@ export const FormWrapper = styled.form`
 	justify-content: center;
 	align-items: center;
 	text-align: center;
-	${({ disabled }) =>
-		disabled &&
-		`
-		opacity: 0.5;
-		pointer-events: none;
-	`};
+	${({ disabled }: { disabled: boolean }) => {
+		if (disabled) {
+			return `
+			opacity: 0.5;
+			pointer-events: none;
+			`
+		}
+	}}
 `
 
 export const FormError = styled(Header4)`
@@ -34,8 +36,14 @@ export const FieldWrapper = styled.div`
 	`};
 `
 
+interface LabelProps {
+	theme: DefaultTheme
+	active?: boolean
+	required?: boolean
+}
+
 export const Label = styled.label`
-	${({ theme, active }) => `
+	${({ theme, active }: LabelProps) => `
 		position: absolute;
 		top: calc(-${theme.font.size.h5} / 2);
 		left: 10px;
@@ -58,8 +66,14 @@ export const ValidationError = styled(HelpText)`
 	color: ${({ theme }) => theme.color.error};
 `
 
+interface InputProps {
+	theme: DefaultTheme
+	active?: boolean
+	required?: boolean
+}
+
 export const Input = styled.input`
-	${({ theme }) => `
+	${({ theme }: InputProps) => `
 		font-size: ${theme.font.size.p};
 		width: 100%;
 		padding: ${theme.layout.spacing.single};

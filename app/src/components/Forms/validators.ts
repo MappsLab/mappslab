@@ -2,6 +2,7 @@
 import * as R from 'ramda'
 import { arrayify } from 'Utils/data'
 
+export type ValidatorFunction = (value: any, allValues: object) => any
 // Chains a series of validators.
 // Returns `undefined` if valid, or the message from the first failed validator.
 
@@ -9,7 +10,9 @@ import { arrayify } from 'Utils/data'
  * Utilities
  */
 
-export const composeValidators = (...validators: Array<Function | Array<Function>>): Function => (value: string | void) =>
+export const composeValidators = (...validators: Array<ValidatorFunction | Array<ValidatorFunction>>): ValidatorFunction => (
+	value: string | void,
+) =>
 	arrayify(validators).reduce((error, validator) => {
 		if (error) return error
 		if (typeof validator === 'function') return validator(value)
@@ -35,8 +38,10 @@ export const minMaxLength = (min: number, max: number) => (value: string = '') =
  * Numeric validators
  */
 
-export const mustBeNumber = (value: string | void) =>
-	!Number.isNaN(parseFloat(value)) && Number.isFinite(value) ? undefined : 'Must be a number'
+export const mustBeNumber = (value: string | number | void) =>
+	typeof value === 'number' || (value && !Number.isNaN(parseFloat(value)) && Number.isFinite(parseFloat(value)))
+		? undefined
+		: 'Must be a number'
 
 export const minValue = (min: number) =>
 	composeValidators(mustBeNumber, (value: number) => (value >= min ? undefined : `Should be at least ${min}`))
@@ -45,9 +50,8 @@ export const maxValue = (min: number) =>
 	composeValidators(mustBeNumber, (value: number) => (value <= min ? undefined : `Should be no more than ${min}`))
 
 export const minMaxValue = (min: number, max: number) =>
-	composeValidators(
-		mustBeNumber,
-		(value: number) => (value >= min && value <= max ? undefined : `Should be between ${min} and ${max}`),
+	composeValidators(mustBeNumber, (value: number) =>
+		value >= min && value <= max ? undefined : `Should be between ${min} and ${max}`,
 	)
 
 /**
@@ -87,15 +91,15 @@ const arrayValuesMatch = (values: Array<string | number>): boolean => {
 	return R.uniq(values).length === 1
 }
 
-const valuesMustMatch = (fields: Array<string>) => (values: mixed): boolean =>
+const valuesMustMatch = (fields: string[]) => (values): boolean =>
 	// $FlowFixMe
 	R.pipe(
 		R.pickAll(fields),
-		R.values,
+		Object.values,
 		arrayValuesMatch,
 	)(values)
 
-export const passwordsMustMatch = (values: mixed) => {
+export const passwordsMustMatch = (values: { password: string; password2: string }) => {
 	const match = valuesMustMatch(['password', 'password2'])(values)
 	return match ? {} : { password2: 'Passwords must match' }
 }

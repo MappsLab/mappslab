@@ -6,7 +6,8 @@ import styled from 'styled-components'
 import Pane from 'Components/Pane'
 import { Centered } from 'Components/Layout'
 import { Button } from 'Components/Buttons'
-import { CurrentViewerQuery } from 'Queries/Viewer'
+import { useCurrentViewer } from 'Providers/CurrentViewer'
+// import { CurrentViewerQuery } from 'Queries/Viewer'
 import type { ViewerType } from 'Types/User'
 import StudentLogin from './StudentLogin'
 import TeacherLogin from './TeacherLogin'
@@ -48,7 +49,7 @@ type BaseProps = {
 }
 
 type Props = BaseProps & {
-	viewer?: null | ViewerType,
+	viewer: null | ViewerType,
 	classroomUid?: null | string,
 	resetToken?: null | string,
 	userUid?: null | string,
@@ -122,14 +123,10 @@ class Login extends React.Component<Props, State> {
 	}
 }
 
-const Wrapper = (props: BaseProps) => (
-	<CurrentViewerQuery>
-		{({ data }) => {
-			const viewer = data.currentViewer ? data.currentViewer.viewer : null
-			return <Login {...props} viewer={viewer} />
-		}}
-	</CurrentViewerQuery>
-)
+const Wrapper = (props: BaseProps) => {
+	const { viewer } = useCurrentViewer()
+	return <Login {...props} viewer={viewer} />
+}
 
 export default withStateMachine(statechart)(Wrapper)
 // withStateMachine(statechart)(Login)

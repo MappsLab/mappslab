@@ -1,8 +1,7 @@
 // @flow
 import React from 'react'
-import type { Node } from 'react'
 import { Form as FinalForm } from 'react-final-form'
-import { Header4 } from 'Components/Text'
+import { Header4 } from '../Text'
 import { SubmitButton } from '../Buttons'
 import { FormWrapper, FormError } from './styles'
 
@@ -11,18 +10,19 @@ import { FormWrapper, FormError } from './styles'
  */
 
 type Props = {
-	onSubmit: (Object) => Promise<Object | void | Error>,
-	message?: string | null,
-	errorMessage?: string | null,
-	submitButtonText?: string,
-	showSubmitButton?: boolean,
-	disabled?: boolean,
-	validate?: (values: Object) => Object | Promise<Object>,
-	children?: Node | Array<Node>,
-	render?: (formProps: Object) => Node | Array<Node>,
+	onSubmit: (Object) => Promise<Object | void | Error>
+	message?: string | null
+	errorMessage?: string | null
+	submitButtonText?: string
+	showSubmitButton?: boolean
+	disabled?: boolean
+	validate?: (values: Object) => Object | Promise<Object>
+	children?: React.ReactNode
+	render?: (formProps: Object) => React.ReactNode
+	initialValues?: { [key: string]: string | number }
 }
 
-const Form = (props: Props) => (
+export const Form = (props: Props) => (
 	<FinalForm
 		{...props}
 		render={(formProps) => {
@@ -57,5 +57,3 @@ Form.defaultProps = {
 	render: () => null,
 	validate: () => ({}),
 }
-
-export default Form

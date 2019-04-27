@@ -14,6 +14,7 @@ module.exports = {
 					['Components', path.resolve(__dirname, 'src', 'components')],
 					['Views', path.resolve(__dirname, 'src', 'views')],
 					['Utils', path.resolve(__dirname, 'src', 'utils')],
+					['Providers', path.resolve(__dirname, 'src', 'providers')],
 					['Queries', path.resolve(__dirname, 'src', 'queries')],
 					['Types', path.resolve(__dirname, 'src', 'types')],
 					['Styles', path.resolve(__dirname, 'src', 'theme')],
@@ -21,7 +22,7 @@ module.exports = {
 					['Shared', path.resolve(__dirname, 'shared')],
 					['mapp', path.resolve(__dirname, '..', 'packages', 'mapp', 'src')],
 				],
-				extensions: ['.js', '.jsx'],
+				extensions: ['.js', '.jsx', '.ts', '.tsx'],
 			},
 
 			node: {

@@ -6,6 +6,7 @@ import type { MapType } from 'Types/Map'
 import { Header2, Header4 } from 'Components/Text'
 import Burger from 'Components/Burger'
 import { Button } from 'Components/Buttons'
+import { Test } from './Test'
 
 const { useState } = React
 
@@ -89,6 +90,7 @@ const MapNavigation = ({ map }: Props) => {
 				<Burger />
 				<ClassInfo>
 					<Header2>🗺 {title}</Header2>
+					<Test />
 					{classroom ? (
 						<Header4 align="center" color="middleGray">
 							{classroom.title}

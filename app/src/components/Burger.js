@@ -9,7 +9,7 @@ const Line = styled.div`
 	`}
 `
 
-const BurgerWrapper = styled.button`
+const BurgerWrapper = styled.div`
 	position: relative;
 	width: 19px;
 	height: 22px;
