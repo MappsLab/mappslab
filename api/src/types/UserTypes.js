@@ -5,7 +5,7 @@ import type { ClassroomType } from 'Types/ClassroomTypes'
 
 export type JWT = {
 	token: string,
-	expires: number,
+	expires: string,
 }
 
 export type Role = 'admin' | 'teacher' | 'student'
