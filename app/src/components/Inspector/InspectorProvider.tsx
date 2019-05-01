@@ -1,52 +1,59 @@
-// @flow
 import * as React from 'react'
+import { History } from 'history'
 import { Route } from 'react-router-dom'
-import type { RouterHistory } from 'react-router-dom'
 import { parseQueryString, buildQueryString } from 'Utils/url'
 import { findLastIndex } from 'Utils/data'
-import { CurrentViewerQuery } from 'Queries/Viewer'
+import { Viewer } from '../../types'
+import { useCurrentViewer } from '../../providers/CurrentViewer'
 import Inspector from './Inspector'
 
-export type InspectorItem = {
-	uid: string,
-	__typename: string,
+const { useContext } = React
+
+export interface InspectorItem {
+	uid: string
+	__typename: string
 	// __typename: 'User' | 'Classroom' | 'Map' | 'Pin' | 'Route',
-	title?: string,
-	name?: string,
+	title?: string
+	name?: string
 }
 
-export type InspectItem = (InspectorItem) => Promise<void>
+export type InspectItem = (item: InspectorItem) => Promise<void>
 
-type ContextType = {
-	inspectItem: InspectItem,
+interface ContextType {
+	inspectItem: InspectItem
 }
 
-const { Consumer, Provider } = React.createContext<ContextType>({
-	inspectItem: async () => {},
-})
+const Context = React.createContext<ContextType | undefined>(undefined)
 
-export const InspectorConsumer = Consumer
+export const useInspector = () => {
+	const ctx = useContext(Context)
+	if (!ctx) throw new Error('`useInspector` must be used within a InspectorProvider')
+	return ctx
+}
+
+export const InspectorConsumer = Context.Consumer
 
 /**
  * InspectorProvider
  */
 
-type BaseProps = {
-	children: React.Node,
+interface BaseProps {
+	children: React.ReactNode
 }
 
-type Props = BaseProps & {
-	initialItem: null | InspectorItem,
-	currentItem: null | InspectorItem,
+interface Props extends BaseProps {
+	viewer: Viewer
+	initialItem: null | InspectorItem
+	currentItem: null | InspectorItem
 	location: {
-		pathname: string,
-		search: string,
-	},
-	history: RouterHistory,
+		pathname: string
+		search: string
+	}
+	history: History
 }
 
 type State = {
-	inspectorHistory: Array<InspectorItem>,
+	inspectorHistory: Array<InspectorItem>
 }
 
 const getItemFromQueryString = (locationSearch: string): InspectorItem | null => {
@@ -119,7 +126,7 @@ class InspectorProviderBase extends React.Component<Props, State> {
 	}
 
 	render() {
-		const { children, currentItem } = this.props
+		const { children, currentItem, viewer } = this.props
 		const { inspectorHistory } = this.state
 		// const currentItem = inspectorHistory[inspectorHistory.length - 1]
 
@@ -128,36 +135,36 @@ class InspectorProviderBase extends React.Component<Props, State> {
 		}
 
 		return (
-			<CurrentViewerQuery>
-				{({ data }) => (
-					<Provider value={value}>
-						{currentItem && (
-							<Inspector
-								viewer={data && data.currentViewer && data.currentViewer.viewer}
-								currentItem={currentItem}
-								inspectorHistory={inspectorHistory}
-								inspectItem={this.inspectItem}
-								goBackTo={this.goBackTo}
-							/>
-						)}
-						{children}
-					</Provider>
+			<Context.Provider value={value}>
+				{currentItem && (
+					<Inspector
+						viewer={viewer}
+						currentItem={currentItem}
+						inspectorHistory={inspectorHistory}
+						inspectItem={this.inspectItem}
+						goBackTo={this.goBackTo}
+					/>
 				)}
-			</CurrentViewerQuery>
+				{children}
+			</Context.Provider>
 		)
 	}
 }
 
-export const InspectorProvider = (baseProps: BaseProps) => (
-	<Route
-		render={({ location, history }) => (
-			<InspectorProviderBase
-				{...baseProps}
-				location={location}
-				history={history}
-				initialItem={getItemFromQueryString(location.search)}
-				currentItem={getItemFromQueryString(location.search)}
-			/>
-		)}
-	/>
-)
+export const InspectorProvider = (baseProps: BaseProps) => {
+	const { viewer } = useCurrentViewer()
+	return (
+		<Route
+			render={({ location, history }) => (
+				<InspectorProviderBase
+					{...baseProps}
+					location={location}
+					history={history}
+					viewer={viewer}
+					initialItem={getItemFromQueryString(location.search)}
+					currentItem={getItemFromQueryString(location.search)}
+				/>
+			)}
+		/>
+	)
+}

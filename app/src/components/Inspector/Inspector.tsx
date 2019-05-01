@@ -1,11 +1,11 @@
 // @flow
 import * as React from 'react'
 import styled from 'styled-components'
-import { Centered } from 'Components/Layout'
-import type { ViewerType } from 'Types/User'
-import Pane from 'Components/Pane'
+import { Centered } from '../../components/Layout'
+import { Viewer } from '../../types/User'
+import Pane from '../../components/Pane'
 import { UserInspector, ClassroomInspector, MapInspector } from './Inspectors'
-import type { InspectItem, InspectorItem } from './InspectorProvider'
+import { InspectItem, InspectorItem } from './InspectorProvider'
 import Breadcrumbs from './Breadcrumbs'
 
 const Outer = styled.div`
@@ -18,17 +18,18 @@ const Outer = styled.div`
  * Parses the given inspectPath and loads the correct Inspector
  */
 
-type Props = {
+interface Props {
 	// for the Pane
-	inspectItem: InspectItem,
-	viewer: null | ViewerType,
+	inspectItem: InspectItem
+	viewer: null | Viewer
 	// for the breadcrumb
-	goBackTo: (InspectorItem) => Promise<void>,
-	inspectorHistory: Array<InspectorItem>,
-	currentItem: InspectorItem,
+	goBackTo: (InspectorItem) => Promise<void>
+	inspectorHistory: Array<InspectorItem>
+	currentItem: InspectorItem
 }
 
 const Loader = (props: Props) => {
+	console.log(props)
 	const { currentItem, goBackTo, inspectorHistory, viewer, inspectItem } = props
 	const { __typename, uid, title, name } = currentItem
 

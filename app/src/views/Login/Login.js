@@ -125,6 +125,7 @@ class Login extends React.Component<Props, State> {
 
 const Wrapper = (props: BaseProps) => {
 	const { viewer } = useCurrentViewer()
+	console.log(viewer)
 	return <Login {...props} viewer={viewer} />
 }
 

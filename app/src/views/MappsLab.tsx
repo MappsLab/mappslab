@@ -1,14 +1,13 @@
-// @flow
 import React from 'react'
 import { Switch, Route, Redirect } from 'react-router-dom'
-import { InspectorProvider } from 'Components/Inspector'
-import { NotificationsProvider } from 'Components/Notifications'
-import { QuestionProvider, QuestionDialog } from 'Components/Question'
-import { ViewerRoute } from 'Components/Auth'
+import { InspectorProvider } from '../components/Inspector'
+import { NotificationsProvider } from '../components/Notifications'
+import { QuestionProvider, QuestionDialog } from '../components/Question'
+import { ViewerRoute } from '../components/Auth'
 import { BaseMap, MapEditor } from './Editor'
 import Login from './Login'
 import Sandbox from './Sandbox'
-import Dashboard from './Dashboard'
+import { Dashboard } from './Dashboard'
 
 /**
  * MappsLab
@@ -16,7 +15,7 @@ import Dashboard from './Dashboard'
 
 const apiKey = 'AIzaSyCOqxjWmEzFlHKC9w-iUZ5zL2rIyBglAag'
 
-const MappsLab = () => (
+export const MappsLab = () => (
 	<BaseMap
 		APIKey={apiKey}
 		render={(googleMap) => (
@@ -37,5 +36,3 @@ const MappsLab = () => (
 		)}
 	/>
 )
-
-export default MappsLab

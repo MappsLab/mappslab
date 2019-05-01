@@ -8,7 +8,7 @@ import { getCookie, VIEWER_COOKIE_TOKEN } from 'Utils/storage'
 import { CurrentViewer } from './providers/CurrentViewer'
 import ApolloWrapper from './services/Apollo'
 import theme from './theme'
-import MappsLab from './views/MappsLab'
+import { MappsLab } from './views/MappsLab'
 import GlobalStyle from './theme/global'
 import config from './config'
 
@@ -57,9 +57,9 @@ const renderApp = (Component) => {
 renderApp(MappsLab)
 
 if ((module as any).hot) {
-	;(module as any).hot.accept('./views/MappsLab.js', () => {
+	;(module as any).hot.accept('./views/MappsLab.tsx', () => {
 		// eslint-disable-next-line
-		const NewApp = require('./views/MappsLab.js').default
+		const NewApp = require('./views/MappsLab.tsx').Mappslab
 		renderApp(NewApp)
 	})
 }
