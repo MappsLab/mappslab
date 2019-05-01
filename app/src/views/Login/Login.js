@@ -12,7 +12,7 @@ import type { ViewerType } from 'Types/User'
 import StudentLogin from './StudentLogin'
 import TeacherLogin from './TeacherLogin'
 import UserLogin from './UserLogin'
-import LoginSuccess from './LoginSuccess'
+import { LoginSuccess } from './LoginSuccess'
 import SetNewPassword from './SetNewPassword'
 import {
 	// states

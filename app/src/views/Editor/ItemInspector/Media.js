@@ -75,7 +75,7 @@ const Media = ({ image, video, viewerCanEdit, submitUpdate, alt }: Props) => {
 			{viewerCanEdit && (image || video) ? (
 				<ButtonWrapper>
 					<NativeListener onClick={removeFn}>
-						<Button toolTip={removeLabel} level="tertiary">
+						<Button tooltip={removeLabel} level="tertiary">
 							<FaTrashAlt />
 						</Button>
 					</NativeListener>

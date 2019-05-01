@@ -35,8 +35,6 @@ export const ButtonWrapper = styled.button`
 			margin: 0 0.5em;
 		}
 
-
-
 		&:hover {
 			background-color: ${level === 'primary' ? theme.color.primary.accent : ''};
 			box-shadow: ${level === 'tertiary' ? theme.mixins.boxShadow.normal : ''};
@@ -48,14 +46,14 @@ type ButtonProps = {
 	type?: 'button' | 'submit' | 'reset',
 	level?: 'primary' | 'secondary' | 'tertiary',
 	onClick?: () => any | (() => Promise<any>),
-	toolTip?: string,
+	tooltip?: string,
 	to?: string,
 	as?: string,
 }
 
 export const Button = (props: ButtonProps) =>
-	props.toolTip ? (
-		<ToolTip message={props.toolTip}>
+	props.tooltip ? (
+		<ToolTip message={props.tooltip}>
 			<ButtonWrapper
 				{...props}
 				as={props.as || (props.to ? Link : undefined)}
@@ -73,7 +71,7 @@ export const Button = (props: ButtonProps) =>
 Button.defaultProps = {
 	type: 'button',
 	level: 'primary',
-	toolTip: undefined,
+	tooltip: undefined,
 	onClick: undefined,
 	to: undefined,
 	as: undefined,

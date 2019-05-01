@@ -1,11 +1,10 @@
-import React from 'react'
-import { FORM_ERROR } from 'final-form'
+import React, { useEffect } from 'react'
 import { transition as transitionType } from 'react-automata'
 import { UserType } from '../../types'
-import { UserLoginMutation, UserQuery } from '../../queries/User'
+import { UserQuery } from '../../queries/User'
 import { Header2, Header4 } from '../../components/Text'
 import { Form, Field, ErrorMessage } from '../../components/Forms'
-import { useCurrentViewer } from '../../providers/CurrentViewer'
+import { useCurrentViewer, Credentials } from '../../providers/CurrentViewer'
 import { SUCCESS, REQUIRE_RESET } from './statechart'
 
 /**
@@ -21,32 +20,22 @@ interface Props extends BaseProps {
 }
 
 const UserLogin = ({ user, transition }: Props) => {
-	const { loginUser, loading, viewer, error } = useCurrentViewer()
+	const { loginUser, loading, viewer, error, resetToken } = useCurrentViewer()
 	const { uid, name } = user
-	console.log(error, viewer)
 
-	const handleSubmit = async (variables) => {
-		const result = await loginUser(variables)
-		// try {
-		console.log(result)
-		// 	const result = await loginUser({ variables })
-		// 	const { resetToken } = result.data.loginViewer
-		// 	if (resetToken) {
-		// 		transition(REQUIRE_RESET, { resetToken })
-		// 	} else {
-		// 		transition(SUCCESS)
-		// 	}
-		// } catch (e) {
-		// 	return {
-		// 		[FORM_ERROR]: e.message,
-		// 	}
-		// }
-		return undefined
-	}
+	useEffect(() => {
+		if (resetToken) {
+			transition(REQUIRE_RESET)
+		} else if (viewer) {
+			transition(SUCCESS)
+		}
+	}, [viewer, resetToken])
+
+	const handleSubmit = (variables: Credentials) => loginUser(variables)
 
 	return (
 		<Form disabled={loading} onSubmit={handleSubmit} initialValues={{ uid }} submitButtonText="login">
-			{loading ? 'Loading...' : <Header2>Hi, {name}</Header2>}
+			{viewer ? 'Loading...' : <Header2>Hi, {name}</Header2>}
 			<Header4>Please enter your password to log in.</Header4>
 			<Field label="uid" name="uid" type="hidden" value="UID" />
 			<Field label="Password" name="password" type="password" />
