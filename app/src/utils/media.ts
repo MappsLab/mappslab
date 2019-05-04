@@ -1,12 +1,12 @@
 // @flow
 import parseUrl from 'url-parse'
-import type { ImageType } from 'Types/Media'
+import { Image } from '../types-ts'
 
 type ParsedURL = {
-	hostname: string,
-	pathname: string,
-	query?: { [key: string]: string },
-	href: string,
+	hostname: string
+	pathname: string
+	query?: { [key: string]: string }
+	href: string
 }
 const VIMEO = 'vimeo'
 const YOUTUBE = 'youtube'
@@ -66,11 +66,11 @@ const getEmbedSrc = (type: VideoType, id: string) => {
 }
 
 export type VideoInfo = {
-	type: VideoType,
-	id: string,
-	src: string,
-	url: string,
-	parsedURL: ParsedURL,
+	type: VideoType
+	id: string
+	src: string
+	url: string
+	parsedURL: ParsedURL
 }
 
 /**
@@ -100,7 +100,7 @@ export const getVideoInfo = (url: string): VideoInfo => {
  *
  * returns the next-largest image size
  */
-export const getBestSize = (image: ImageType, size: number) =>
+export const getBestSize = (image: Image, size: number) =>
 	// include the original size in the search
 	[...image.sizes, image.original]
 		// sort the sizes

@@ -164,8 +164,6 @@ export const CurrentViewer = ({ children }: Props) => {
 		dispatch({ type: LOGOUT })
 	}
 
-	console.log(state)
-
 	const value = {
 		...state,
 		loginUser,

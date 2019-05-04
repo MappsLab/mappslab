@@ -19,8 +19,8 @@ import config from './config'
 const client = createClient({
 	url: config.apiRoot,
 	fetchOptions: (...args) => {
-		console.log(args)
 		const cookie = getCookie(VIEWER_COOKIE_TOKEN)
+		console.log(args, cookie)
 		const headers = cookie ? { Authorization: cookie } : {}
 		return {
 			headers,

@@ -2439,6 +2439,11 @@
   resolved "https://registry.yarnpkg.com/@types/googlemaps/-/googlemaps-3.30.18.tgz#c7076c68bff44e99c09b99926568a6a3fb15be44"
   integrity sha512-rXYs277SHf7ceAR7RSoGh/fkYvy2eBl5mvmMlUEcPMMkwCP9XkFdwrtDZ4OGeEawOfnwauu/yoi0eTpfGp4MPg==
 
+"@types/googlemaps@^3.30.19":
+  version "3.30.19"
+  resolved "https://registry.yarnpkg.com/@types/googlemaps/-/googlemaps-3.30.19.tgz#359c025e244490b0775826fb216bed093fd66b16"
+  integrity sha512-9uzg5jC6FRyAsMrhOLnUbblyN1xbcOVnqecQZxrnCDxTKssn4lwk0K4EWsw/sw8cJX32MFRMivyAT8dX/JBatg==
+
 "@types/graphql@^14.2.0":
   version "14.2.0"
   resolved "https://registry.yarnpkg.com/@types/graphql/-/graphql-14.2.0.tgz#74e1da5f2a4a744ac6eb3ed57b48242ea9367202"

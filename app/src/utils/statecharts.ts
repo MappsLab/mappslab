@@ -4,21 +4,15 @@ import { path } from 'ramda'
 type NestedObject = any
 
 type SearchConfig = {
-	chart: NestedObject,
-	searchKey: string,
-	defaults?: NestedObject,
+	chart: NestedObject
+	searchKey: string
+	defaults?: NestedObject
 }
-
-type MachineState =
-	| String
-	| {
-			[key: string]: MachineState,
-	  }
 
 export const createObjectSearchByState = ({ chart, searchKey, defaults }: SearchConfig) => (values: NestedObject) => {
 	const getByPath = (paths) => path([...paths, searchKey])(chart)
 
-	const getOptions = (value: any, previousValues?: {} = {}, parentPath?: Array<string> = []) => {
+	const getOptions = (value: any, previousValues: {} = {}, parentPath: Array<string> = []) => {
 		if (typeof value === 'string') {
 			return {
 				...previousValues,

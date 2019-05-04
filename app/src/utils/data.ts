@@ -1,6 +1,4 @@
-// @flow
-import * as R from 'ramda'
-import type { NestedArray } from 'ramda'
+import R from 'ramda'
 
 export const objEquals = R.equals
 
@@ -9,7 +7,7 @@ export const findLastIndex = <T>(array: Array<T>, fn: (T) => boolean): number =>
 	return array.length - reverseIndex - 1
 }
 
-export const findNextInArray = (array: Array<mixed>, item: mixed): any | void => {
+export const findNextInArray = <T>(array: T[], item: T): T | void => {
 	if (!array.includes(item)) return null
 	let nextI
 	const currI = array.findIndex((k) => k === item)
@@ -19,14 +17,23 @@ export const findNextInArray = (array: Array<mixed>, item: mixed): any | void =>
 	return array[nextI]
 }
 
-export const arrayify = (...things: NestedArray<mixed>): Array<mixed> => R.flatten(things)
+export const arrayify = R.flatten
 
 export const minMax = (min: number, max: number) => (num: number): number => Math.min(Math.max(num, min), max)
 
-// Push an item to an array within an object
+export const propByPath = (path: string | string[], obj: object) => {
+	const propPath = typeof path === 'string' ? path.split('.') : path
+	const [firstKey, ...rest] = propPath
+	return rest.length ? propByPath(rest, obj[firstKey]) : obj[firstKey]
+}
 
+/**
+ * Push an item to an array within an object
+ */
 export const pushPath = (path: Array<string>, item: any) => (target: Object) => {
-	const arr = R.path(path)(target) || []
+	// const arr: any[] = R.path(path)(target) || []
+	const arr = propByPath(path, target)
+	if (!Array.isArray(arr)) throw new Error(`Prop ${path} on this object is not an array`)
 	return R.assocPath(path, [...arr, item])(target)
 }
 
@@ -40,9 +47,9 @@ export const compose = (...funcs: Array<Function>) => funcs.reduce((a, b) => (..
  */
 
 type MachineValue = {
-	[key: string]: string | MachineValue,
+	[key: string]: string | MachineValue
 }
-export const getStateString = (value: MachineValue): string =>
+export const getStateString = (value: MachineValue | string): string =>
 	typeof value === 'string'
 		? value
 		: Object.entries(value)
@@ -62,7 +69,7 @@ export const isFunc = (fn: any): boolean => Boolean(fn instanceof Function)
 const fnReducer = (fns: Array<Function>) => (val = {}) =>
 	fns.reduce(
 		(acc, fn) => {
-			if (fn.then && isFunc(fn.then)) throw new Error('Actions must not be promises')
+			// if (fn.then && isFunc(fn.then)) throw new Error('Actions must not be promises')
 			return {
 				...acc,
 				/* Apply each function to the accumulated value,

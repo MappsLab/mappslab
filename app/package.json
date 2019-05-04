@@ -71,6 +71,7 @@
     "@types/enzyme-to-json": "^1.5.3",
     "@types/eslint": "^4.16.6",
     "@types/faker": "^4.1.5",
+    "@types/googlemaps": "^3.30.19",
     "@types/graphql": "^14.2.0",
     "@types/js-cookie": "^2.2.2",
     "@types/node-fetch": "^2.3.0",

@@ -1,4 +1,7 @@
+import 'googlemaps'
 import 'styled-components'
+
+declare module 'googlemaps'
 
 declare module 'styled-components' {
 	export interface DefaultTheme {
