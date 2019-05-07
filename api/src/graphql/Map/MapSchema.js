@@ -9,6 +9,7 @@ const Map = /* GraphQL */ `
 		classroom: Classroom
 		pins: PinConnection
 		routes: RouteConnection
+		baseImage: Upload
 	}
 
 	# Relationships

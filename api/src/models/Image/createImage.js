@@ -3,7 +3,7 @@ import uuidv1 from 'uuid/v1'
 import { upload } from 'Services/aws'
 import { resizeImage, parseImage, streamToBuffer } from 'Utils/media'
 import { createNode } from 'Database'
-import type { ImageSize, ImageType } from 'Types/ImageTypes'
+import type { ImageSize, ImageUpload, ImageType } from 'Types/ImageTypes'
 import { validateNew } from './imageDBSchema'
 
 const defaultWidths = [100, 600, 1200]
@@ -23,7 +23,7 @@ const parseAndUpload = async (source: Buffer, name: string, size?: number): Prom
 }
 
 export const createImage = async (
-	source: Buffer,
+	source: ImageUpload,
 	widths?: Array<number> = defaultWidths,
 	imageName?: string,
 ): Promise<ImageType> => {

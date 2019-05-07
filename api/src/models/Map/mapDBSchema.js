@@ -40,7 +40,8 @@ export const publicFields = ['uid', 'title', 'description', 'slug', 'createdAt',
  * Clean
  */
 
-export const clean = async (mapData: UpdateMapData = {}): Promise<UpdateMapData> => promisePipe(filterNullAndUndefined)(mapData)
+export const clean = async (mapData: $Shape<UpdateMapData>): Promise<UpdateMapData> =>
+	promisePipe(filterNullAndUndefined)(mapData)
 
 /**
  * Parse
