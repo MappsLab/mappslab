@@ -89,6 +89,7 @@ const development = merge([
 		resolve: {
 			alias: {
 				mapp: path.resolve(__dirname, '../packages/mapp/src'),
+				'react-dom': '@hot-loader/react-dom',
 			},
 			extensions: ['.js'],
 		},

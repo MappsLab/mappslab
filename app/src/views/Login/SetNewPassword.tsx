@@ -13,7 +13,6 @@ import { useCurrentViewer, Credentials, ResetCredentials } from '../../providers
  */
 
 type Props = {
-	resetToken: string | null
 	transition: Transition
 }
 

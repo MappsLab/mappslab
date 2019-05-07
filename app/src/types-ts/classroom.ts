@@ -1,5 +1,6 @@
 import { User } from './user'
 import { Map } from './map'
+import { Paginated } from './graphql'
 
 export interface Classroom {
 	uid: string
@@ -7,8 +8,8 @@ export interface Classroom {
 	description?: string
 	slug: string
 	viewerIsTeacher?: boolean
-	students?: User[]
-	teachers?: User[]
-	maps?: Map[]
+	students?: Paginated<User>
+	teachers?: Paginated<User>
+	maps?: Paginated<Map>
 	__typename: 'Classroom'
 }

@@ -1,4 +1,4 @@
-import { User, JWT } from 'Types'
+import { Viewer, JWT } from 'Types'
 
 /**
  * Current Viewer
@@ -14,6 +14,37 @@ export const CURRENT_VIEWER_QUERY = /* GraphQL */ `
 				uid
 				name
 				roles
+				classrooms {
+					edges {
+						node {
+							uid
+							title
+							slug
+							maps {
+								edges {
+									node {
+										uid
+										title
+										classroom {
+											uid
+											title
+											slug
+										}
+									}
+								}
+							}
+							teachers {
+								edges {
+									node {
+										uid
+										name
+										roles
+									}
+								}
+							}
+						}
+					}
+				}
 			}
 		}
 	}
@@ -21,7 +52,7 @@ export const CURRENT_VIEWER_QUERY = /* GraphQL */ `
 
 interface LoginSuccess {
 	jwt: JWT
-	viewer: User
+	viewer: Viewer
 }
 
 export interface CurrentViewerResponse {

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { User } from 'Types'
+import { Viewer } from 'Types'
 import { useMutation, useQuery, Context as ClientContext } from 'urql'
 import { setViewerCookie, removeViewerCookie } from 'Utils/storage'
 import {
@@ -28,7 +28,7 @@ export interface ResetCredentials {
 }
 
 interface ViewerState {
-	viewer: User | null
+	viewer: Viewer | null
 	loading: boolean
 	ready: boolean
 	resetToken?: string
@@ -65,6 +65,8 @@ export const useCurrentViewer = () => {
 	if (!ctx) throw new Error('`useCurrentViewer` must be used within the context of the CurrentViewer provider')
 	return ctx
 }
+
+export const CurrentViewerConsumer = Context.Consumer
 
 /**
  * State

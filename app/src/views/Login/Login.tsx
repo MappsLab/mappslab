@@ -1,14 +1,14 @@
 // @flow
 import React from 'react'
-import { withStateMachine, State, Action } from 'react-automata'
+import { withStateMachine, State, Action, Transition } from 'react-automata'
 import styled from 'styled-components'
 // import { Link } from 'react-router-dom'
-import Pane from 'Components/Pane'
-import { Centered } from 'Components/Layout'
-import { Button } from 'Components/Buttons'
-import { useCurrentViewer } from 'Providers/CurrentViewer'
+import Pane from '../../components/Pane'
+import { Centered } from '../../components/Layout'
+import { Button } from '../../components/Buttons'
+import { useCurrentViewer } from '../../providers/CurrentViewer'
 // import { CurrentViewerQuery } from 'Queries/Viewer'
-import type { ViewerType } from 'Types/User'
+import { Viewer } from '../../types-ts'
 import StudentLogin from './StudentLogin'
 import TeacherLogin from './TeacherLogin'
 import UserLogin from './UserLogin'
@@ -45,15 +45,15 @@ const Content = styled.div`
  */
 
 type BaseProps = {
-	transition: (string, ?{}) => void,
+	transition: Transition
 }
 
 type Props = BaseProps & {
-	viewer: null | ViewerType,
-	classroomUid?: null | string,
-	resetToken?: null | string,
-	userUid?: null | string,
-	error?: null | string,
+	viewer: null | Viewer
+	classroomUid?: null | string
+	resetToken?: null | string
+	userUid?: null | string
+	error?: null | string
 }
 
 class Login extends React.Component<Props, State> {
@@ -96,7 +96,7 @@ class Login extends React.Component<Props, State> {
 							<TeacherLogin {...childProps} />
 						</State>
 
-						<State is={ENTER_PASSWORD}>{childProps.userUid !== null ? <UserLogin {...childProps} /> : null}</State>
+						<State is={ENTER_PASSWORD}>{childProps.userUid ? <UserLogin {...childProps} /> : null}</State>
 
 						<State is={SET_NEW_PASSWORD}>
 							<SetNewPassword {...childProps} />

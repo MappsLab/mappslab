@@ -1,15 +1,10 @@
-// @flow
 import * as React from 'react'
-import type { MappRenderProps, LatLng } from 'mapp'
-import { withStateMachine } from 'react-automata'
-import type { MachineState } from 'react-automata'
-import { CurrentViewerQuery, MapQuery } from 'Queries'
-import { CreatePinMutation } from 'Queries/Pin'
-import type { PinType } from 'Types/Pin'
-import type { MapType } from 'Types/Map'
-import type { RouteType } from 'Types/Route'
-import type { ViewerType } from 'Types/User'
-import type { Mutation, SubscriptionConfig } from 'Types/GraphQL'
+import { MappRenderProps, LatLng } from 'mapp'
+import { withStateMachine, MachineState } from 'react-automata'
+import { MapQuery } from '../../queries'
+import CreatePinMutation from '../../queries/Pin/createPinMutation'
+import { CurrentViewerConsumer } from '../../providers/CurrentViewer'
+import { Pin, Map, Route, Viewer, Mutation, SubscriptionConfig } from '../../types-ts'
 import { getOptionsForState } from './mapOptions'
 import statechart from './statechart'
 
@@ -22,49 +17,49 @@ const debug = require('debug')('app')
 export type View = 'normal' | 'street'
 
 type Props = MappRenderProps & {
-	initialView?: View,
-	initialMapUid?: string | null,
-	children: React.Node,
-	inspectedItem?: PinType | RouteType,
+	initialView?: View
+	initialMapUid?: string | null
+	children: React.ReactNode
+	inspectedItem?: Pin | Route
 }
 
 type State = {
-	mapUid: string | null,
-	userLatLng: LatLng | null,
+	mapUid: string | null
+	userLatLng: LatLng | null
 }
 
-type Utils = $PropertyType<MappRenderProps, 'utils'>
+type Utils = Pick<MappRenderProps, 'utils'>
 
 export type ProviderProps = Utils & {
-	mapUid: string | null,
-	viewer?: ViewerType,
-	setMap: (string) => void,
-	mapData?: MapType,
-	transition: (string, ?{}) => void,
-	updateMapState: (string, $Shape<State>) => void,
-	createPin: Mutation,
+	mapUid: string | null
+	viewer?: Viewer
+	setMap: (id: string) => void
+	mapData?: Map
+	transition: (string, {}) => void
+	updateMapState: (string: string, state: Partial<State>) => void
+	createPin: Mutation
 	connectToPin?: {
-		pin: PinType,
-		position?: 'BEFORE' | 'AFTER',
-	},
-	userLatLng?: LatLng,
-	subscribeToMore: (SubscriptionConfig) => () => void,
-	machineState: MachineState,
+		pin: Pin
+		position?: 'BEFORE' | 'AFTER'
+	}
+	userLatLng?: LatLng
+	subscribeToMore: (SubscriptionConfig) => () => void
+	machineState: MachineState
 }
 
-const defaults = {
-	mapUid: null,
-	viewer: undefined,
-	mapData: undefined,
-	setMap: () => {},
-	createPin: async () => {},
-	updateMapState: () => {},
-	transition: () => {},
-	subscribeToMore: () => () => {},
-	machineState: 'none',
-}
+// const defaults = {
+// 	mapUid: null,
+// 	viewer: undefined,
+// 	mapData: undefined,
+// 	setMap: () => {},
+// 	createPin: async () => {},
+// 	updateMapState: () => {},
+// 	transition: () => {},
+// 	subscribeToMore: () => () => {},
+// 	machineState: 'none',
+// }
 
-const { Provider, Consumer } = React.createContext<ProviderProps>(defaults)
+const { Provider, Consumer } = React.createContext<ProviderProps | undefined>(undefined)
 export const MapConsumer = Consumer
 
 class MapProviderClass extends React.Component<Props, State> {
@@ -119,12 +114,12 @@ class MapProviderClass extends React.Component<Props, State> {
 			...utils,
 			...this.getEditorUtils(),
 		}
+
 		return (
 			<CreatePinMutation>
 				{(createPin) => (
-					<CurrentViewerQuery>
-						{({ data: viewerQueryData }) => {
-							const viewer = viewerQueryData.currentViewer ? viewerQueryData.currentViewer.viewer : null
+					<CurrentViewerConsumer>
+						{({ viewer }) => {
 							return (
 								<MapQuery variables={{ uid: mapUid }} delayQuery={mapUid === null}>
 									{({ data: mapQueryData, subscribeToMore }) => (
@@ -143,7 +138,7 @@ class MapProviderClass extends React.Component<Props, State> {
 								</MapQuery>
 							)
 						}}
-					</CurrentViewerQuery>
+					</CurrentViewerConsumer>
 				)}
 			</CreatePinMutation>
 		)

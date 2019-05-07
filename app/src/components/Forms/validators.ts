@@ -12,10 +12,11 @@ export type ValidatorFunction = (value: any, allValues: object) => any
 
 export const composeValidators = (...validators: Array<ValidatorFunction | Array<ValidatorFunction>>): ValidatorFunction => (
 	value: string | void,
+	allValues: { [key: string]: string } = {},
 ) =>
 	arrayify(validators).reduce((error, validator) => {
 		if (error) return error
-		if (typeof validator === 'function') return validator(value)
+		if (typeof validator === 'function') return validator(value, allValues)
 		throw new Error('Validator must be a function')
 	}, undefined)
 

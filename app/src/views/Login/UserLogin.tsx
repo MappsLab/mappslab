@@ -45,11 +45,12 @@ const UserLogin = ({ user, transition }: Props) => {
 }
 
 interface WrapperProps extends BaseProps {
-	userUid: string
+	userUid?: string
 }
 
-const WithUser = ({ userUid, ...props }: WrapperProps) => (
-	<UserQuery variables={{ uid: userUid }}>{({ data }) => <UserLogin user={data.user} {...props} />}</UserQuery>
-)
+const WithUser = ({ userUid, ...props }: WrapperProps) => {
+	if (!userUid) throw new Error('You must supply a `userUid`')
+	return <UserQuery variables={{ uid: userUid }}>{({ data }) => <UserLogin user={data.user} {...props} />}</UserQuery>
+}
 
 export default WithUser

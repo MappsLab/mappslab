@@ -1,14 +1,15 @@
 // @flow
 /* eslint-disable */
 
-import { createGlobalStyle } from 'styled-components'
+import { createGlobalStyle, DefaultTheme } from 'styled-components'
 import normalized from './normalized'
+// import { DefaultTheme }
 
 const GlobalStyle = createGlobalStyle`
 	${normalized}
 	@import url('https://fonts.googleapis.com/css?family=Work+Sans:400,500,600');
 
-	${({ theme }) => `
+	${({ theme }: { theme: DefaultTheme }) => `
 		html {
 			font-size: 10px;
 			font-family: ${theme.font.family.sans};
