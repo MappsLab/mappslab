@@ -32,7 +32,7 @@ if (window.localStorage) {
 	window.localStorage.debug = 'app'
 }
 
-const renderApp = (Component) => {
+const renderApp = (Component: React.ComponentType) => {
 	render(
 		<AppContainer>
 			<UrqlProvider value={client}>
@@ -59,7 +59,7 @@ renderApp(MappsLab)
 if ((module as any).hot) {
 	;(module as any).hot.accept('./views/MappsLab.tsx', () => {
 		// eslint-disable-next-line
-		const NewApp = require('./views/MappsLab.tsx').Mappslab
-		renderApp(NewApp)
+		const NewApp = require('./views/MappsLab.tsx')
+		renderApp(NewApp.MappsLab)
 	})
 }
