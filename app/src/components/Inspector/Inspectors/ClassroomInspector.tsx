@@ -1,44 +1,42 @@
-// @flow
 import * as React from 'react'
-import type { ClassroomType } from 'Types/Classroom'
-import type { ViewerType } from 'Types/User'
-import type { Mutation, QueryConfig } from 'Types/GraphQL'
-import { UpdateClassroomMutation, ClassroomQuery } from 'Queries/Classroom'
-import { CreateMapMutation } from 'Queries/Map'
-import { CreateStudentMutation, CreateTeacherMutation } from 'Queries/User'
-import { MapList, UserList } from 'Components/Lists'
-import type { InspectItem } from '../InspectorProvider'
+import { Classroom, Viewer, Mutation, QueryConfig, User } from '../../../types-ts'
+import { UpdateClassroomMutation, ClassroomQuery } from '../../../queries/Classroom'
+import { CreateMapMutation } from '../../../queries/Map'
+import { CreateStudentMutation, CreateTeacherMutation } from '../../../queries/User'
+import { MapList, UserList } from '../../Lists'
+import { InspectItem } from '../InspectorProvider'
 import InspectorSkeleton from '../InspectorSkeleton'
+import { unwindEdges } from '../../../utils/graphql'
 
 /**
  * ClassroomInspector
  */
 
-type BaseProps = {
-	inspectItem: InspectItem,
-	viewer: ViewerType | null,
+interface BaseProps {
+	inspectItem: InspectItem
+	viewer: Viewer | null
 }
 
-type Props = BaseProps & {
-	classroom: ClassroomType,
-	classroomQueryConfig: QueryConfig,
-	updateClassroom: Mutation,
-	createTeacher: Mutation,
-	createStudent: Mutation,
-	createMap: Mutation,
+interface Props extends BaseProps {
+	classroom: Classroom
+	classroomQueryConfig: QueryConfig
+	updateClassroom: Mutation
+	createTeacher: Mutation
+	createStudent: Mutation
+	createMap: Mutation
 }
 
-type CreateUserFnArgs = {
+interface CreateUserFnArgs {
 	/* Annoy: Eslint thinks that these are Component props */
 	/* eslint-disable-next-line react/no-unused-prop-types */
-	name: string,
+	name: string
 	/* eslint-disable-next-line */
-	email?: string,
+	email?: string
 	/* eslint-disable-next-line react/no-unused-prop-types */
-	temporaryPassword: string,
+	temporaryPassword: string
 }
 
-const ClassroomInspector = ({
+const ClassroomInspectorMain = ({
 	viewer,
 	classroom,
 	updateClassroom,
@@ -98,11 +96,11 @@ const ClassroomInspector = ({
 		await mutate({ variables, refetchQueries: [classroomQueryConfig] })
 	}
 
+	const [teachers] = unwindEdges<User>(classroom.teachers)
 	const viewerCanAdd = Boolean(
 		viewer &&
 			(viewer.roles.includes('admin') ||
-				(viewer.roles.includes('teacher') ||
-					(classroom.teachers && classroom.teachers.length && classroom.teachers.map((t) => t.uid).includes(viewer.uid)))),
+				(viewer.roles.includes('teacher') || (teachers && teachers.length && teachers.map((t) => t.uid).includes(viewer.uid)))),
 	)
 
 	return (
@@ -140,7 +138,7 @@ const ClassroomInspector = ({
 	)
 }
 
-const Wrapper = ({ uid, ...baseProps }: BaseProps & { uid: string }) => (
+export const ClassroomInspector = ({ uid, ...baseProps }: BaseProps & { uid: string }) => (
 	<ClassroomQuery LoadingComponent={false} variables={{ uid }}>
 		{({ data, loading, queryConfig }) =>
 			loading ? (
@@ -154,7 +152,7 @@ const Wrapper = ({ uid, ...baseProps }: BaseProps & { uid: string }) => (
 									{(createStudent) => (
 										<UpdateClassroomMutation>
 											{(updateClassroom) => (
-												<ClassroomInspector
+												<ClassroomInspectorMain
 													classroom={data.classroom}
 													classroomQueryConfig={queryConfig}
 													updateClassroom={updateClassroom}
@@ -175,4 +173,3 @@ const Wrapper = ({ uid, ...baseProps }: BaseProps & { uid: string }) => (
 		}
 	</ClassroomQuery>
 )
-export default Wrapper

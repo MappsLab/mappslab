@@ -29,7 +29,6 @@ interface Props {
 }
 
 const Loader = (props: Props) => {
-	console.log(props)
 	const { currentItem, goBackTo, inspectorHistory, viewer, inspectItem } = props
 	const { __typename, uid, title, name } = currentItem
 
@@ -38,9 +37,9 @@ const Loader = (props: Props) => {
 			case 'user':
 				return <UserInspector uid={uid} viewer={viewer} inspectItem={inspectItem} />
 			case 'classroom':
-				return <ClassroomInspector viewer={viewer} uid={uid} paneTitle={title} inspectItem={inspectItem} />
+				return <ClassroomInspector viewer={viewer} uid={uid} inspectItem={inspectItem} />
 			case 'map':
-				return <MapInspector viewer={viewer} uid={uid} paneTitle={title} inspectItem={inspectItem} />
+				return <MapInspector viewer={viewer} uid={uid} inspectItem={inspectItem} />
 			default:
 				throw new Error(`There is no inspector for type "${__typename}"`)
 		}

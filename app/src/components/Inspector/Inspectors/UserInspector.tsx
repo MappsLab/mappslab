@@ -1,30 +1,29 @@
 // @flow
 import * as React from 'react'
-import type { ViewerType, UserType } from 'Types/User'
-import type { Mutation, QueryConfig } from 'Types/GraphQL'
-import { UpdateUserMutation, UserQuery } from 'Queries/User'
-import { CreateClassroomMutation } from 'Queries/Classroom'
-import { ClassroomList } from 'Components/Lists'
-import type { InspectItem } from '../InspectorProvider'
+import { Viewer, User, Mutation, QueryConfig } from '../../../types-ts'
+import { UpdateUserMutation, UserQuery } from '../../../queries/User'
+import { CreateClassroomMutation } from '../../../queries/Classroom'
+import { ClassroomList } from '../../Lists'
+import { InspectItem } from '../InspectorProvider'
 import InspectorSkeleton from '../InspectorSkeleton'
 
 /**
  * UserInspector
  */
 
-type BaseProps = {
-	viewer: null | ViewerType,
-	inspectItem: InspectItem,
+interface BaseProps {
+	viewer: null | Viewer
+	inspectItem: InspectItem
 }
 
-type Props = BaseProps & {
-	userQueryConfig: QueryConfig,
-	user: UserType,
-	updateUser: Mutation,
-	createClassroom: Mutation,
+interface Props extends BaseProps {
+	userQueryConfig: QueryConfig
+	user: User
+	updateUser: Mutation
+	createClassroom: Mutation
 }
 
-const UserInspector = ({ user, viewer, updateUser, inspectItem, userQueryConfig, createClassroom }: Props) => {
+const UserInspectorMain = ({ user, viewer, updateUser, inspectItem, userQueryConfig, createClassroom }: Props) => {
 	const updateUserClassrooms = (classroom) => {
 		const variables = {
 			input: {
@@ -60,7 +59,7 @@ const UserInspector = ({ user, viewer, updateUser, inspectItem, userQueryConfig,
 	)
 }
 
-const Wrapper = ({ uid, ...baseProps }: BaseProps & { uid: string }) => (
+export const UserInspector = ({ uid, ...baseProps }: BaseProps & { uid: string }) => (
 	<CreateClassroomMutation>
 		{(createClassroom) => (
 			<UpdateUserMutation>
@@ -70,7 +69,7 @@ const Wrapper = ({ uid, ...baseProps }: BaseProps & { uid: string }) => (
 							loading ? (
 								<InspectorSkeleton />
 							) : (
-								<UserInspector
+								<UserInspectorMain
 									{...baseProps}
 									userQueryConfig={queryConfig}
 									user={data.user}
@@ -85,5 +84,3 @@ const Wrapper = ({ uid, ...baseProps }: BaseProps & { uid: string }) => (
 		)}
 	</CreateClassroomMutation>
 )
-
-export default Wrapper

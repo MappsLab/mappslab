@@ -1,11 +1,10 @@
 // @flow
 import * as React from 'react'
-import type { MapType } from 'Types/Map'
-import type { Mutation, QueryConfig } from 'Types/GraphQL'
-import { MapQuery, UpdateMapMutation } from 'Queries/Map'
-import { Button } from 'Components/Buttons'
-import { ClassroomList } from 'Components/Lists'
-import type { InspectItem } from '../InspectorProvider'
+import { Map, Viewer, Mutation, QueryConfig } from '../../../types-ts'
+import { MapQuery, UpdateMapMutation } from '../../../queries/Map'
+import { Button } from '../../Buttons'
+import { ClassroomList } from '../../Lists'
+import { InspectItem } from '../InspectorProvider'
 import EditableText from '../EditableText'
 import InspectorSkeleton from '../InspectorSkeleton'
 
@@ -13,18 +12,18 @@ import InspectorSkeleton from '../InspectorSkeleton'
  * MapInspector
  */
 
-type BaseProps = {
-	// viewer: null | ViewerType,
-	inspectItem: InspectItem,
+interface BaseProps {
+	viewer: null | Viewer
+	inspectItem: InspectItem
 }
 
-type Props = BaseProps & {
-	map: MapType,
-	mapQueryConfig: QueryConfig,
-	updateMap: Mutation,
+interface Props extends BaseProps {
+	map: Map
+	mapQueryConfig: QueryConfig
+	updateMap: Mutation
 }
 
-const MapInspector = ({ map, inspectItem, mapQueryConfig, updateMap }: Props) => {
+const MapInspectorMain = ({ map, inspectItem, mapQueryConfig, updateMap }: Props) => {
 	const updateMapClassrooms = (classroom) => {
 		const variables = {
 			input: {
@@ -51,18 +50,16 @@ const MapInspector = ({ map, inspectItem, mapQueryConfig, updateMap }: Props) =>
 	)
 }
 
-const Wrapper = ({ uid, ...baseProps }: BaseProps & { uid: string }) => (
+export const MapInspector = ({ uid, ...baseProps }: BaseProps & { uid: string }) => (
 	<MapQuery LoadingComponent={false} variables={{ uid }}>
 		{({ data, loading, queryConfig }) =>
 			loading ? (
 				<InspectorSkeleton />
 			) : (
 				<UpdateMapMutation>
-					{(updateMap) => <MapInspector map={data.map} mapQueryConfig={queryConfig} updateMap={updateMap} {...baseProps} />}
+					{(updateMap) => <MapInspectorMain map={data.map} mapQueryConfig={queryConfig} updateMap={updateMap} {...baseProps} />}
 				</UpdateMapMutation>
 			)
 		}
 	</MapQuery>
 )
-
-export default Wrapper

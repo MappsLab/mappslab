@@ -42,8 +42,8 @@ type UnwoundEdges<EdgeType> = [EdgeWithCursor<EdgeType>[], PageInfo]
  * @returns {UnwoundEdges<EdgeType>}
  */
 
-export const unwindEdges = <EdgeType>({ edges, pageInfo }: Paginated<EdgeType>): UnwoundEdges<EdgeType> => [
+export const unwindEdges = <EdgeType>(connection: Paginated<EdgeType>): UnwoundEdges<EdgeType> => [
 	// edges.map((edge: Node<EdgeType>) => edge.node),
-	edges.map((edge: Node<EdgeType>) => ({ ...edge.node, __cursor: edge.cursor })),
-	pageInfo,
+	connection.edges ? connection.edges.map((edge: Node<EdgeType>) => ({ ...edge.node, __cursor: edge.cursor })) : [],
+	connection.pageInfo || { hasNextPage: false, hasPrevPage: false },
 ]

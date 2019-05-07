@@ -1,6 +1,49 @@
 import { Viewer, JWT } from 'Types'
 
 /**
+ * Shared
+ */
+
+const viewerFragment = /* GraphQL */ `
+	fragment ViewerFields on User {
+		uid
+		name
+		roles
+		classrooms {
+			edges {
+				node {
+					uid
+					title
+					slug
+					maps {
+						edges {
+							node {
+								uid
+								title
+								classroom {
+									uid
+									title
+									slug
+								}
+							}
+						}
+					}
+					teachers {
+						edges {
+							node {
+								uid
+								name
+								roles
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+`
+
+/**
  * Current Viewer
  */
 export const CURRENT_VIEWER_QUERY = /* GraphQL */ `
@@ -11,43 +54,11 @@ export const CURRENT_VIEWER_QUERY = /* GraphQL */ `
 				expires
 			}
 			viewer {
-				uid
-				name
-				roles
-				classrooms {
-					edges {
-						node {
-							uid
-							title
-							slug
-							maps {
-								edges {
-									node {
-										uid
-										title
-										classroom {
-											uid
-											title
-											slug
-										}
-									}
-								}
-							}
-							teachers {
-								edges {
-									node {
-										uid
-										name
-										roles
-									}
-								}
-							}
-						}
-					}
-				}
+				...ViewerFields
 			}
 		}
 	}
+	${viewerFragment}
 `
 
 interface LoginSuccess {
@@ -72,9 +83,7 @@ export const LOGIN_MUTATION = /* GraphQL */ `
 					expires
 				}
 				viewer {
-					uid
-					name
-					roles
+					...ViewerFields
 				}
 			}
 			... on RequiresReset {
@@ -82,6 +91,7 @@ export const LOGIN_MUTATION = /* GraphQL */ `
 			}
 		}
 	}
+	${viewerFragment}
 `
 
 export interface LoginResponse {
@@ -103,9 +113,7 @@ export const RESET_MUTATION = /* GraphQL */ `
 					expires
 				}
 				viewer {
-					uid
-					name
-					roles
+					...ViewerFields
 				}
 			}
 			... on RequiresReset {
@@ -113,6 +121,7 @@ export const RESET_MUTATION = /* GraphQL */ `
 			}
 		}
 	}
+	${viewerFragment}
 `
 
 export interface ResetResponse {
