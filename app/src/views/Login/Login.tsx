@@ -67,7 +67,6 @@ class Login extends React.Component<Props, State> {
 	componentDidMount() {
 		const { viewer, transition } = this.props
 		const transitionName = viewer ? WITH_VIEWER : NO_VIEWER
-		console.log(this.props, transitionName)
 		transition(transitionName)
 	}
 
@@ -125,7 +124,8 @@ class Login extends React.Component<Props, State> {
 }
 
 const Wrapper = (props: BaseProps) => {
-	const { viewer } = useCurrentViewer()
+	const { viewer, ready } = useCurrentViewer()
+	if (!ready) return null
 	return <Login {...props} viewer={viewer} />
 }
 
