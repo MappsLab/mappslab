@@ -50,6 +50,7 @@ export type ProviderProps = Utils & {
 
 	addEventListeners: (listeners: { [key: string]: (args: any) => void }) => void
 	removeEventListeners: (listeners: { [key: string]: (args: any) => void }) => void
+	setBaseImage: (s: string) => void
 }
 
 // const defaults = {

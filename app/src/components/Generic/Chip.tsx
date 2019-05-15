@@ -1,10 +1,18 @@
 // @flow
 import React from 'react'
-import styled from 'styled-components'
+import styled, { DefaultTheme } from 'styled-components'
 import { Link } from 'react-router-dom'
 
+interface WrapperProps {
+	theme: DefaultTheme
+	size: string
+	borders?: boolean
+	active?: boolean
+	to?: string
+}
+
 const Wrapper = styled.div`
-	${({ theme, size, active, borders }) => `
+	${({ theme, size, active, borders }: WrapperProps) => `
 		height: ${theme.sizes.chip[size].height};
 		display: inline-flex;
 		justify-content: flex-start;
@@ -17,26 +25,6 @@ const Wrapper = styled.div`
 	`};
 `
 
-// const ImageWrapper = styled.figure`
-// 	${({ theme, size }) => {
-// 		const { height } = theme.sizes.chip[size]
-// 		const width = size === 'large' ? `${height} - 18px` : `${height} - 12px`
-// 		return `
-// 			width: calc(${width});
-// 			height: calc(${width});
-// 			margin-right: ${size === 'large' ? '5px' : '3px'};
-// 			border-radius: calc(${width} / 2);
-// 			overflow: hidden;
-// 		`
-// 	}};
-
-// 	> img {
-// 		width: 100%;
-// 		height: 100%;
-// 		object-fit: cover;
-// 	}
-// `
-
 const TitleWrapper = styled.div`
 	display: flex;
 	flex-direction: column;
@@ -44,15 +32,20 @@ const TitleWrapper = styled.div`
 	align-items: flex-start;
 `
 
+interface TitleProps {
+	theme: DefaultTheme
+	size: string
+}
+
 const Title = styled.span`
-	${({ theme, size }) => `
+	${({ theme, size }: TitleProps) => `
 		font-size: ${size === 'small' ? theme.font.size.h5 : theme.font.size.h4};
 		font-weight: ${size === 'small' ? theme.font.weight.semi : theme.font.weight.semi};
 	`};
 `
 
 const Subtitle = styled.span`
-	${({ theme, size }) => `
+	${({ theme, size }: TitleProps) => `
 		font-size: ${theme.font.size.h5};
 		display: ${size === 'large' ? 'block' : 'none'};
 		color: ${theme.color.middleGray};
@@ -63,22 +56,21 @@ const Subtitle = styled.span`
  * Chip
  */
 
-export type ChipProps = {
-	size?: 'small' | 'large' | 'full',
-	active?: boolean,
+export interface ChipProps {
+	size?: 'small' | 'large' | 'full'
+	active?: boolean
 }
 
-type Props = {
-	size?: 'small' | 'large' | 'full',
-	active?: boolean,
-	// image?: string | null,
-	title: string,
-	subtitle?: string | null,
-	onClick?: null | (() => any | (() => Promise<any>)),
-	to?: null | string,
+interface Props {
+	size?: 'small' | 'large' | 'full'
+	active?: boolean
+	title: string
+	subtitle?: string | null
+	onClick?: null | (() => any | (() => Promise<any>))
+	to?: null | string
 }
 
-const Chip = ({ title, subtitle, size, active, to, onClick }: Props) => {
+export const Chip = ({ title, subtitle, size, active, to, onClick }: Props) => {
 	const as = to
 		? // if 'to', use a Link
 		  Link
@@ -87,15 +79,7 @@ const Chip = ({ title, subtitle, size, active, to, onClick }: Props) => {
 		? 'button'
 		: undefined
 	return (
-		<Wrapper
-			size={size}
-			active={active || undefined}
-			borders={to || onClick}
-			as={as}
-			type={as === 'button' ? 'button' : undefined}
-			to={to}
-			onClick={onClick}
-		>
+		<Wrapper size={size} active={active || undefined} borders={Boolean(to || onClick)} as={as} to={to} onClick={onClick}>
 			<TitleWrapper>
 				<Title size={size}>{title}</Title>
 				<Subtitle size={size}>{subtitle}</Subtitle>
@@ -103,6 +87,7 @@ const Chip = ({ title, subtitle, size, active, to, onClick }: Props) => {
 		</Wrapper>
 	)
 }
+
 Chip.defaultProps = {
 	size: 'large',
 	active: false,
@@ -111,5 +96,3 @@ Chip.defaultProps = {
 	// image: null,
 	subtitle: null,
 }
-
-export default Chip

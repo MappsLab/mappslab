@@ -26,6 +26,7 @@ export type EditorProps = ProviderProps & {
 	mapUid: null | string
 	sendNotification: (n: NewNotification) => void
 	closeInspector: $PropertyType<ItemInspectorProviderProps, 'closeInspector'>
+	setBaseImage: (s: string) => void
 }
 
 const domEventNames = ['keyup']
@@ -40,7 +41,7 @@ class MapEditorMain extends React.Component<EditorProps> {
 	mapListeners: {} = {}
 
 	componentDidMount() {
-		const { mapUid, setMap } = this.props
+		const { mapUid, setMap, setBaseImage } = this.props
 		if (mapUid) {
 			setMap(mapUid)
 			this.startSubscriptions()
@@ -50,6 +51,8 @@ class MapEditorMain extends React.Component<EditorProps> {
 			const bounds = getMapBounds(pins)
 			this.props.fitBounds(bounds)
 		}
+		console.log(this.props.mapData)
+		if (this.props.mapData && this.props.mapData.baseImage) setBaseImage(this.props.mapData.baseImage.original.uri)
 		this.addEventListeners()
 	}
 

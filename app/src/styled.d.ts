@@ -21,7 +21,17 @@ declare module 'styled-components' {
 			[key: string]: string | { [key: string]: string }
 		}
 		sizes: {
-			chip: { [key: string]: string | { [key: string]: string } }
+			chip: {
+				small: {
+					[key: string]: string
+				}
+				large: {
+					[key: string]: string
+				}
+				full: {
+					[key: string]: string
+				}
+			}
 			column: { [key: string]: string }
 		}
 		mixins: {
