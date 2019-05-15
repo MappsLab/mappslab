@@ -1,12 +1,10 @@
-// @flow
 import * as React from 'react'
-import type { UserType } from 'Types/User'
+import { User } from 'Types/User'
 import { UsersQuery } from 'Queries/User'
-import { QuestionConsumer } from 'Components/Question'
-import type { QuestionContext } from 'Components/Question'
+import { QuestionConsumer, QuestionContext } from 'Components/Question'
 import { Prompt } from 'Components/Forms'
-import List from './List'
-import type { ListOfTypeProps, ListOfTypeBaseProps } from './utils'
+import { List } from './List'
+import { ListOfTypeProps, ListOfTypeBaseProps } from './utils'
 
 const { useState } = React
 
@@ -14,12 +12,12 @@ const { useState } = React
  * UserList
  */
 
-type Props = ListOfTypeProps<UserType> & {
-	userType: 'teacher' | 'student' | void,
-	question: QuestionContext,
+type Props = ListOfTypeProps<User> & {
+	userType: 'teacher' | 'student' | void
+	question: QuestionContext
 }
 
-const UserList = ({
+const UserListMain = ({
 	title,
 	searchQuery,
 	searchResults,
@@ -66,7 +64,7 @@ const UserList = ({
 			render: (answer) => <Prompt answer={answer} name="temporaryPassword" label="Temporary Password" />,
 		})
 		if (!tempPassQuestion) return
-		const { email } = emailQuestion || {}
+		const email = emailQuestion ? emailQuestion.email : {}
 		const { temporaryPassword } = tempPassQuestion
 		create({ name, email, temporaryPassword })
 	}
@@ -87,21 +85,19 @@ const UserList = ({
 	)
 }
 
-type BaseProps = ListOfTypeBaseProps<UserType> & {
-	userType: 'teacher' | 'student' | void,
+type BaseProps = ListOfTypeBaseProps<User> & {
+	userType: 'teacher' | 'student' | void
 }
 
-const UserListWrapper = (baseProps: BaseProps) => (
+export const UserList = (baseProps: BaseProps) => (
 	<QuestionConsumer>
 		{(question) => (
 			<UsersQuery delayQuery>
 				{({ data, refetch }) => (
 					// $FlowFixMe
-					<UserList question={question} searchQuery={refetch} searchResults={data ? data.users || [] : []} {...baseProps} />
+					<UserListMain question={question} searchQuery={refetch} searchResults={data ? data.users || [] : []} {...baseProps} />
 				)}
 			</UsersQuery>
 		)}
 	</QuestionConsumer>
 )
-
-export default UserListWrapper

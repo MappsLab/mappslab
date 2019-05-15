@@ -1,4 +1,3 @@
-// @flow
 import React from 'react'
 import { Form as FinalForm } from 'react-final-form'
 import { Header4 } from '../Text'

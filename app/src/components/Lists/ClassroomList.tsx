@@ -1,15 +1,14 @@
-// @flow
 import * as React from 'react'
-import type { ClassroomType } from 'Types/Classroom'
+import { Classroom } from 'Types'
 import { ClassroomsQuery } from 'Queries/Classroom'
-import List from './List'
-import type { ListOfTypeProps, ListOfTypeBaseProps } from './utils'
+import { List } from './List'
+import { ListOfTypeProps, ListOfTypeBaseProps } from './utils'
 
 /**
  * ClassroomList
  */
 
-const ClassroomList = ({
+const ClassroomListMain = ({
 	title,
 	searchQuery,
 	searchResults,
@@ -18,7 +17,7 @@ const ClassroomList = ({
 	update,
 	onItemClick,
 	create,
-}: ListOfTypeProps<ClassroomType>) => {
+}: ListOfTypeProps<Classroom>) => {
 	const search = (searchValue: string) => {
 		if (searchValue.length < 3) return
 		searchQuery({
@@ -46,12 +45,10 @@ const ClassroomList = ({
 	)
 }
 
-const ClassroomListWrapper = (baseProps: ListOfTypeBaseProps<ClassroomType>) => (
+export const ClassroomList = (baseProps: ListOfTypeBaseProps<Classroom>) => (
 	<ClassroomsQuery delayQuery>
 		{({ data, refetch }) => (
-			<ClassroomList searchQuery={refetch} searchResults={data ? data.classrooms || [] : []} {...baseProps} />
+			<ClassroomListMain searchQuery={refetch} searchResults={data ? data.classrooms || [] : []} {...baseProps} />
 		)}
 	</ClassroomsQuery>
 )
-
-export default ClassroomListWrapper

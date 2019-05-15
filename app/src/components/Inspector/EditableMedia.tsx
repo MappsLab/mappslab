@@ -8,6 +8,7 @@ import { Prompt } from '../Forms'
 import { Image as ImageType, Video as VideoType } from '../../types-ts'
 import { Button } from '../Buttons'
 import { Image, Video } from '../Media'
+import { Header2 } from 'Components/Text'
 
 /**
  * Styles
@@ -52,6 +53,7 @@ interface Props {
 	submitUpdate: (formData: { [key: string]: any }) => void | Promise<void>
 	viewerCanEdit?: boolean
 	alt?: string
+	label?: string
 }
 
 export const EditableMedia = ({
@@ -64,6 +66,7 @@ export const EditableMedia = ({
 	viewerCanEdit,
 	submitUpdate,
 	alt,
+	label,
 }: Props) => {
 	if (!viewerCanEdit && !image && !video) return null
 	const { ask } = useQuestion()
@@ -74,7 +77,7 @@ export const EditableMedia = ({
 			render: (answer) => <Prompt answer={answer} name="video" label="Video URL" type="url" />,
 		})
 		if (!result.video) return
-		submitUpdate({ video: result.video })
+		submitUpdate({ [videoName]: result.video })
 	}
 
 	const remove = (key: string) => () => {
@@ -84,42 +87,47 @@ export const EditableMedia = ({
 	const removeLabel = image ? 'Remove Image' : 'Remove Video'
 	const removeFn = image ? remove(imageName || 'image') : remove('video')
 	return (
-		<MediaWrapper>
-			{viewerCanEdit && (image || video) ? (
-				<ButtonWrapper>
-					<NativeListener onClick={removeFn}>
-						<Button tooltip={removeLabel} level="tertiary">
-							<FaTrashAlt />
-						</Button>
-					</NativeListener>
-				</ButtonWrapper>
-			) : null}
-			{image && enableImage ? (
-				<Image
-					//
-					image={image}
-					alt={alt}
-					size={600}
-					submitUpdate={submitUpdate}
-				/>
-			) : video && enableVideo ? (
-				<Video
-					//
-					video={video}
-					submitUpdate={submitUpdate}
-				/>
-			) : null}
-			{viewerCanEdit && !video && !image ? (
-				<MediaButtons>
-					<FileUpload onSubmit={submitUpdate} name="image" Icon={FaRegImage} label="Add Image" />
-					<NativeListener onClick={askForVideo}>
-						<Button level="tertiary">
-							<FaVideo /> Add Video
-						</Button>
-					</NativeListener>
-				</MediaButtons>
-			) : null}
-		</MediaWrapper>
+		<React.Fragment>
+			{label && <Header2>{label}</Header2>}
+			<MediaWrapper>
+				{viewerCanEdit && (image || video) ? (
+					<ButtonWrapper>
+						<NativeListener onClick={removeFn}>
+							<Button tooltip={removeLabel} level="tertiary">
+								<FaTrashAlt />
+							</Button>
+						</NativeListener>
+					</ButtonWrapper>
+				) : null}
+				{image && enableImage ? (
+					<Image
+						//
+						image={image}
+						alt={alt}
+						size={600}
+						submitUpdate={submitUpdate}
+					/>
+				) : video && enableVideo ? (
+					<Video
+						//
+						video={video}
+						submitUpdate={submitUpdate}
+					/>
+				) : null}
+				{viewerCanEdit && !video && !image ? (
+					<MediaButtons>
+						{enableImage && <FileUpload onSubmit={submitUpdate} name={imageName} Icon={FaRegImage} label="Add Image" />}
+						{enableVideo && (
+							<NativeListener onClick={askForVideo}>
+								<Button level="tertiary">
+									<FaVideo /> Add Video
+								</Button>
+							</NativeListener>
+						)}
+					</MediaButtons>
+				) : null}
+			</MediaWrapper>
+		</React.Fragment>
 	)
 }
 

@@ -1,4 +1,3 @@
-// @flow
 /* eslint-disable */
 
 import { createGlobalStyle, DefaultTheme } from 'styled-components'

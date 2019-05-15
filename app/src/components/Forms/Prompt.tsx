@@ -1,4 +1,3 @@
-// @flow
 import * as React from 'react'
 import { Form } from './Form'
 import { Field } from './Field'

@@ -1,4 +1,3 @@
-// @flow
 import React, { useEffect } from 'react'
 import { Transition } from 'react-automata'
 import { FORM_ERROR } from 'final-form'

@@ -1,4 +1,3 @@
-// @flow
 import * as React from 'react'
 import { LatLng } from 'mapp'
 import { Route, Pin } from 'Types'

@@ -70,7 +70,7 @@ const Query = <T: GenericResponse>(props: QueryProps<T>) => {
 				const { data, refetch } = response
 				const renderProps = {
 					...response,
-					data: data ? unwindEdges(data) : data,
+					data,
 					refetch: shouldSkip ? betterRefetch : refetch,
 					queryConfig: {
 						query: queryProps.query,

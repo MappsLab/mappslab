@@ -1,4 +1,3 @@
-// @flow
 import styled, { DefaultTheme } from 'styled-components'
 import { Header4, Header5 } from '../Text'
 /* Forms */

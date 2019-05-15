@@ -1,11 +1,10 @@
-// @flow
 import * as React from 'react'
-import type { Node } from 'Types'
+import { Node } from 'Types'
 import ItemIcon from 'Components/ItemIcon'
-import ListAddEntry from './ListAddEntry'
-import ListItem from './ListItem'
+import { ListAddEntry } from './ListAddEntry'
+import { ListItem } from './ListItem'
 import { ListTitle, ListWrapper, ListItems } from './styled'
-import type { CreateNewFn, SearchForList, ListItemHandler } from './utils'
+import { CreateNewFn, SearchForList, ListItemHandler } from './utils'
 import { nodeToListItem } from './utils'
 
 /**
@@ -13,22 +12,22 @@ import { nodeToListItem } from './utils'
  */
 
 type Props = {
-	items: Array<Node>,
-	title: string,
-	type: string,
-	viewerCanAdd?: boolean,
-	addLabel?: string,
-	search?: SearchForList,
-	create?: CreateNewFn,
-	onSearchResultClick?: ListItemHandler,
-	searchResults?: Array<Node>,
-	onItemClick?: ListItemHandler,
+	items: Node[]
+	title: string
+	type: string
+	viewerCanAdd?: boolean
+	addLabel?: string
+	search?: SearchForList
+	create?: CreateNewFn
+	onSearchResultClick?: ListItemHandler
+	searchResults?: Node[]
+	onItemClick?: ListItemHandler
 }
 
 const defaultAddLabel = 'Add'
 const defaultOnItemClick = async () => {}
 
-const List = ({
+export const List = ({
 	items,
 	title,
 	type,
@@ -78,5 +77,3 @@ List.defaultProps = {
 	searchResults: [],
 	onItemClick: async () => {},
 }
-
-export default List

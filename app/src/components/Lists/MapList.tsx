@@ -1,9 +1,8 @@
-// @flow
 import * as React from 'react'
-import type { MapType } from 'Types/Map'
+import { Map } from 'Types'
 import { MapsQuery } from 'Queries/Map'
-import List from './List'
-import type { ListOfTypeProps, ListOfTypeBaseProps } from './utils'
+import { List } from './List'
+import { ListOfTypeProps, ListOfTypeBaseProps } from './utils'
 
 const { useState } = React
 
@@ -11,7 +10,7 @@ const { useState } = React
  * MapList
  */
 
-const MapList = ({
+const MapListMain = ({
 	title,
 	searchQuery,
 	searchResults,
@@ -20,7 +19,7 @@ const MapList = ({
 	update,
 	onItemClick,
 	create,
-}: ListOfTypeProps<MapType>) => {
+}: ListOfTypeProps<Map>) => {
 	const [showResults, setShowResults] = useState(false)
 
 	const search = (searchValue: string) => {
@@ -56,10 +55,8 @@ const MapList = ({
 	)
 }
 
-const MapListWrapper = (baseProps: ListOfTypeBaseProps<MapType>) => (
+export const MapList = (baseProps: ListOfTypeBaseProps<Map>) => (
 	<MapsQuery delayQuery>
-		{({ data, refetch }) => <MapList searchQuery={refetch} searchResults={data ? data.maps || [] : []} {...baseProps} />}
+		{({ data, refetch }) => <MapListMain searchQuery={refetch} searchResults={data ? data.maps || [] : []} {...baseProps} />}
 	</MapsQuery>
 )
-
-export default MapListWrapper

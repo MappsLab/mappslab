@@ -1,4 +1,3 @@
-// @flow
 import * as React from 'react'
 import { Map, Viewer, Mutation, QueryConfig } from '../../../types-ts'
 import { MapQuery, UpdateMapMutation } from '../../../queries/Map'
@@ -27,8 +26,9 @@ interface Props extends BaseProps {
 
 const MapInspectorMain = ({ map, viewer, inspectItem, mapQueryConfig, updateMap }: Props) => {
 	const [teachers] = unwindEdges(map.classroom.teachers)
+	console.log(viewer)
 	const viewerIsOwner = Boolean(viewer && teachers.find((t) => t.uid === viewer.uid))
-
+	console.log(viewerIsOwner, map)
 	const updateMapClassrooms = (classroom) => {
 		const variables = {
 			input: {
@@ -45,19 +45,13 @@ const MapInspectorMain = ({ map, viewer, inspectItem, mapQueryConfig, updateMap 
 			uid: map.uid,
 			...args,
 		}
+		updateMap({ variables, refetchQueries: [mapQueryConfig] })
 	}
 
 	return (
 		<React.Fragment>
 			<EditableText label="Description" name="description" initialValue={map.description} />
 			<Button to={`/maps/${map.uid}`}>Go to map →</Button>
-			<EditableMedia
-				submitUpdate={submitUpdate}
-				enableVideo={false}
-				imageName="baseImage"
-				image={map.baseImage}
-				viewerCanEdit={viewerIsOwner}
-			/>
 			<ClassroomList
 				title="Classroom"
 				items={[map.classroom].filter(Boolean)}
@@ -65,6 +59,14 @@ const MapInspectorMain = ({ map, viewer, inspectItem, mapQueryConfig, updateMap 
 				onItemClick={inspectItem}
 				viewerCanAdd={false}
 				create={() => {}}
+			/>
+			<EditableMedia
+				submitUpdate={submitUpdate}
+				enableVideo={false}
+				imageName="baseImage"
+				image={map.baseImage}
+				label="Base Image"
+				viewerCanEdit={viewerIsOwner}
 			/>
 		</React.Fragment>
 	)

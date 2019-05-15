@@ -97,6 +97,9 @@ const ClassroomInspectorMain = ({
 	}
 
 	const [teachers] = unwindEdges<User>(classroom.teachers)
+	const [maps] = unwindEdges(classroom.maps)
+	const [students] = unwindEdges(classroom.students)
+
 	const viewerCanAdd = Boolean(
 		viewer &&
 			(viewer.roles.includes('admin') ||
@@ -107,8 +110,7 @@ const ClassroomInspectorMain = ({
 		<React.Fragment>
 			<MapList
 				title="Maps in this Classroom"
-				items={classroom.maps || []}
-				viewer={viewer}
+				items={maps}
 				update={updateClassroomMaps}
 				onItemClick={inspectItem}
 				viewerCanAdd={viewerCanAdd}
@@ -117,8 +119,7 @@ const ClassroomInspectorMain = ({
 			<UserList
 				title="Students in this Classroom"
 				userType="student"
-				items={classroom.students || []}
-				viewer={viewer}
+				items={students}
 				update={updateClassroomUsers}
 				onItemClick={inspectItem}
 				viewerCanAdd={viewerCanAdd}
@@ -127,8 +128,7 @@ const ClassroomInspectorMain = ({
 			<UserList
 				title="Teachers in this Classroom"
 				userType="teacher"
-				items={classroom.teachers || []}
-				viewer={viewer}
+				items={teachers}
 				update={updateClassroomUsers}
 				onItemClick={inspectItem}
 				viewerCanAdd={viewerCanAdd}

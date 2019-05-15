@@ -1,4 +1,3 @@
-// @flow
 import React from 'react'
 import { Field as FinalFormField } from 'react-final-form'
 import { composeValidators, required, ValidatorFunction } from './validators'

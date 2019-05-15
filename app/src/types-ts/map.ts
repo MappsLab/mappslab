@@ -1,4 +1,3 @@
-// @flow
 import { Pin } from './pin'
 import { Route } from './route'
 import { Classroom } from './classroom'

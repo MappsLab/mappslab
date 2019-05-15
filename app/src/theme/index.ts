@@ -1,4 +1,3 @@
-// @flow
 import { DefaultTheme } from 'styled-components'
 import * as color from './color'
 import * as mixins from './mixins'

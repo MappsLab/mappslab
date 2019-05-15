@@ -1,5 +1,4 @@
-// @flow
-import styled, { css } from 'styled-components'
+import styled, { css, DefaultTheme } from 'styled-components'
 import { Button } from 'Components/Buttons'
 import { Header4, Header5 } from 'Components/Text'
 
@@ -17,7 +16,7 @@ export const ListTitle = styled(Header4)`
 
 export const ListWrapper = styled.div`
 	${({ theme }) => css`
-		margin-top: ${theme.layout.spacing.quadruple};
+		margin: ${theme.layout.spacing.double} 0;
 		border: 1px solid ${theme.color.lightGray};
 		border-radius: 2px;
 	`}
@@ -63,8 +62,13 @@ export const ItemInfo = styled(Header5)`
  * Adding Items
  */
 
+interface LineWrapperProps {
+	theme: DefaultTheme
+	align?: string
+}
+
 export const LineWrapper = styled.div`
-	${({ theme, align }) => css`
+	${({ theme, align }: LineWrapperProps) => css`
 		padding: ${theme.layout.spacing.half};
 		text-align: ${align || 'left'};
 	`}

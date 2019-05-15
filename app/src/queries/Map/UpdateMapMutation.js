@@ -3,10 +3,11 @@ import gql from 'graphql-tag'
 import type { MapType } from 'Types/Map'
 import { withDefaultMutation } from '../Mutation'
 import type { MutationWrapper } from '../Mutation'
+import { pinFragment } from '../Pin/fragments'
 
 const mutation = gql`
-	mutation UpdateMap($input: UpdateMapInput!) {
-		updateMap(input: $input) {
+	mutation UpdateMap($uid: String!, $title: String, $description: String, $baseImage: Upload) {
+		updateMap(input: { uid: $uid, title: $title, description: $description, baseImage: $baseImage }) {
 			title
 			uid
 			slug
@@ -59,6 +60,7 @@ const mutation = gql`
 			}
 		}
 	}
+	${pinFragment}
 `
 
 type Response = {

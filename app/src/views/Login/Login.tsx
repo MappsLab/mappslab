@@ -1,4 +1,3 @@
-// @flow
 import React from 'react'
 import { withStateMachine, State, Action, Transition } from 'react-automata'
 import styled from 'styled-components'

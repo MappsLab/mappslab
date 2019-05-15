@@ -1,4 +1,3 @@
-// @flow
 import React from 'react'
 import { PolyLine } from 'mapp'
 import { LatLng, polylineEventNames } from 'mapp'

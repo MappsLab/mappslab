@@ -1,4 +1,3 @@
-// @flow
 import parseUrl from 'url-parse'
 import { Image } from '../types-ts'
 

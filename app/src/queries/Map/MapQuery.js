@@ -13,6 +13,9 @@ export const query = gql/* GraphQL */ `
 			title
 			uid
 			slug
+			baseImage {
+				...ImageFragment
+			}
 			description
 			classroom {
 				uid

@@ -1,5 +1,3 @@
-// @flow
-
 interface ImageSize {
 	format: string
 	width: number

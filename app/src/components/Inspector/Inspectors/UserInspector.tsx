@@ -1,4 +1,3 @@
-// @flow
 import * as React from 'react'
 import { Viewer, User, Mutation, QueryConfig } from '../../../types-ts'
 import { UpdateUserMutation, UserQuery } from '../../../queries/User'
@@ -6,6 +5,7 @@ import { CreateClassroomMutation } from '../../../queries/Classroom'
 import { ClassroomList } from '../../Lists'
 import { InspectItem } from '../InspectorProvider'
 import InspectorSkeleton from '../InspectorSkeleton'
+import { unwindEdges } from '../../../utils/graphql'
 
 /**
  * UserInspector
@@ -44,12 +44,13 @@ const UserInspectorMain = ({ user, viewer, updateUser, inspectItem, userQueryCon
 		createClassroom({ variables, refetchQueries: [userQueryConfig] })
 	}
 
+	const [classrooms] = unwindEdges(user.classrooms)
+
 	return (
 		<React.Fragment>
 			<ClassroomList
 				title="Classrooms"
-				parent={user}
-				items={user.classrooms || []}
+				items={classrooms}
 				viewerCanAdd={Boolean(viewer && user.uid === viewer.uid)}
 				update={updateUserClassrooms}
 				onItemClick={inspectItem}

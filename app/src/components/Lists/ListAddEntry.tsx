@@ -1,10 +1,9 @@
-// @flow
-import * as React from 'react'
-import type { Node } from 'Types'
+import React, { ChangeEvent } from 'react'
+import { Node } from 'Types'
 import { Header5 } from 'Components/Text'
-import type { SearchForList, ListItemHandler, CreateNewFn } from './utils'
+import { SearchForList, ListItemHandler, CreateNewFn } from './utils'
 import { nodeToListItem } from './utils'
-import ListItem from './ListItem'
+import { ListItem } from './ListItem'
 import { AddButton, LineWrapper, SearchLabel, SearchInput, ListItems, ListItemWrapper } from './styled'
 
 const { useState, useEffect, useRef, useLayoutEffect } = React
@@ -14,16 +13,16 @@ const { useState, useEffect, useRef, useLayoutEffect } = React
  */
 
 type Props = {
-	addLabel: string,
-	type: string,
-	searchName: string,
-	search: SearchForList,
-	create: CreateNewFn,
-	searchResults?: Array<Node>,
-	onSearchResultClick: ListItemHandler,
+	addLabel: string
+	type: string
+	searchName: string
+	search: SearchForList
+	create: CreateNewFn
+	searchResults?: Array<Node>
+	onSearchResultClick: ListItemHandler
 }
 
-const ListAddEntry = ({ addLabel, searchName, search, type, searchResults, onSearchResultClick, create }: Props) => {
+export const ListAddEntry = ({ addLabel, searchName, search, type, searchResults, onSearchResultClick, create }: Props) => {
 	const [isOpen, setIsOpen] = useState(false)
 	const [inputValue, setInputValue] = useState('')
 	const inputRef = useRef(null)
@@ -57,7 +56,7 @@ const ListAddEntry = ({ addLabel, searchName, search, type, searchResults, onSea
 		if (isOpen && inputRef && inputRef.current) inputRef.current.focus()
 	})
 
-	const onInputChange = (e: SyntheticInputEvent<HTMLInputElement>) => {
+	const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
 		setInputValue(e.target.value)
 	}
 
@@ -94,10 +93,10 @@ const ListAddEntry = ({ addLabel, searchName, search, type, searchResults, onSea
 						searchResultItems.map((item) => {
 							const label = item.node.title || item.node.name
 							if (!label) throw new Error('This node does not have a name or title')
-							return <ListItem key={item.key} {...item} title={`add ${label}`} />
+							return <ListItem key={item.key} {...item} />
 						})
 					) : (
-						<ListItemWrapper align="center" visible={isOpen}>
+						<ListItemWrapper>
 							<Header5 align="center" fontStyle="italic" color="middleGray">
 								{`No results for "${inputValue}"`}
 							</Header5>
@@ -106,7 +105,7 @@ const ListAddEntry = ({ addLabel, searchName, search, type, searchResults, onSea
 				</ListItems>
 			)}
 			{inputValue.length > 2 && (
-				<LineWrapper align="center" visible={isOpen}>
+				<LineWrapper>
 					<AddButton data-testid="list-createButton" level="tertiary" onClick={onCreateClick}>
 						{`+ Create new ${type} "${inputValue}"`}
 					</AddButton>
@@ -119,5 +118,3 @@ const ListAddEntry = ({ addLabel, searchName, search, type, searchResults, onSea
 ListAddEntry.defaultProps = {
 	searchResults: [],
 }
-
-export default ListAddEntry

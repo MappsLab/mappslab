@@ -1,4 +1,3 @@
-// @flow
 import * as React from 'react'
 import { CustomPopup } from 'mapp'
 import { PopupWrapper } from 'Components/InfoPopup'

@@ -1,5 +1,3 @@
-// @flow
-
 import { Pin } from './pin'
 import { User } from './user'
 

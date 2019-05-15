@@ -1,5 +1,3 @@
-// @flow
-
 export const chip = {
 	small: {
 		height: '28px',
