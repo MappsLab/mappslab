@@ -1,7 +1,7 @@
 // @flow
 import sharp from 'sharp'
 import toArray from 'stream-to-array'
-import type { ImageUpload } from 'Types/ImageTypes'
+// import type { ReadStream } from 'fs'
 
 type ParsedImage = {
 	data: Buffer,
@@ -19,10 +19,8 @@ export const resizeImage = async (source: Buffer, width: number, height?: number
 		.resize(width, height)
 		.toBuffer({ resolveWithObject: true })
 
-export const streamToBuffer = async (source: ImageUpload): Promise<Buffer> =>
+export const streamToBuffer = async (stream: ReadableStream): Promise<Buffer> =>
 	new Promise(async (resolve) => {
-		const { createReadStream } = await source
-		const stream = createReadStream()
 		toArray(stream).then((parts) => {
 			const buffers = parts.map((part) => (Buffer.isBuffer(part) ? part : Buffer.from(part)))
 			resolve(Buffer.concat(buffers))

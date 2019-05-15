@@ -5,13 +5,15 @@ import { resizeImage, parseImage, streamToBuffer } from 'Utils/media'
 import { createNode } from 'Database'
 import type { ImageSize, ImageUpload, ImageType } from 'Types/ImageTypes'
 import { validateNew } from './imageDBSchema'
+import config from '../../config'
 
 const defaultWidths = [100, 600, 1200]
+const imageDirectory = config.get('aws.imageDirectory')
 
 const parseAndUpload = async (source: Buffer, name: string, size?: number): Promise<ImageSize> => {
 	const parsed = size ? await resizeImage(source, size) : await parseImage(source)
 	const { info, data } = parsed
-	const fileName = `${name}/w_${size || 'original'}.${info.format}`
+	const fileName = `${imageDirectory}/${name}/w_${size || 'original'}.${info.format}`
 	const uploaded = await upload(data, fileName)
 	const { width, height, format } = info
 	return {
@@ -27,7 +29,8 @@ export const createImage = async (
 	widths?: Array<number> = defaultWidths,
 	imageName?: string,
 ): Promise<ImageType> => {
-	const buffer = await streamToBuffer(source)
+	const { createReadStream } = await source
+	const buffer = await streamToBuffer(createReadStream())
 	const name = imageName || uuidv1()
 	const [original, sizes] = await Promise.all([
 		parseAndUpload(buffer, name),

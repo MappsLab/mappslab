@@ -1,5 +1,6 @@
 // @flow
 import type { EdgeInput, Txn } from 'Types/database'
+import { flatten } from 'flat'
 import dbClient from './client'
 import createEdge from './createEdge'
 
@@ -25,11 +26,11 @@ const createNodeWithEdges = async (nodeData: Object, edges: NewEdges, existingTx
 	try {
 		// create the new node
 		const mu = new dgraph.Mutation()
-		mu.setSetJson(nodeData)
+		mu.setSetJson(flatten(nodeData, { safe: true }))
 		const newNode = await txn.mutate(mu)
 
 		const newNodeUid = newNode.getUidsMap().get('blank-0')
-		debug(newNodeUid)
+		debug(`Created new node: ${newNodeUid}`, 'with data:', nodeData)
 
 		const newEdges = await Promise.all(
 			edges.map(async ([partialEdge, edgeConfig]) => {
@@ -41,7 +42,7 @@ const createNodeWithEdges = async (nodeData: Object, edges: NewEdges, existingTx
 					  { toUid, pred, fromUid: newNodeUid, facets }
 					: // Otherwise, set the new node as the 'to' uid
 					  { toUid: newNodeUid, pred, fromUid, facets }
-				debug(newEdge)
+				// debug(newEdge)
 				// $FlowFixMe
 				await createEdge(newEdge, edgeConfig, txn)
 				return newEdge

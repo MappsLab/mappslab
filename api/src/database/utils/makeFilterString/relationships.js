@@ -54,6 +54,9 @@ const relationshipStringCreators = {
 
 	// Image-first relationships
 	hasImage: genericRelationship('~has_image'),
+
+	// Tileset relationships
+	hasTileset: genericRelationship('~has_tiles'),
 }
 
 const createRelationshipFilter = (operator: string, field: string, value: any): FilterStrings | void => {

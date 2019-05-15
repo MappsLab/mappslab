@@ -66,6 +66,12 @@ const config = convict({
 			default: 'images',
 			env: 'AWS_BUCKET_IMAGE_DIR',
 		},
+        tileDirectory: {
+            doc: 'AWS Bucket Tile Image Directory',
+            format: String,
+            default: 'tiles',
+            env: 'AWS_TILE_IMAGE_DIR'
+        }
 	},
 })
 

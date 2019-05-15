@@ -1,13 +1,14 @@
 // @flow
 import { merge } from 'lodash'
-import { coreTypes, coreTypeResolvers, coreQueryResolvers } from './graphql/core'
-import { scalarTypes, scalarResolvers } from './graphql/Scalars'
-import { ClassroomSchema, ClassroomQueryResolvers, ClassroomMutationResolvers } from './graphql/Classroom'
-import { MapSchema, MapQueryResolvers, MapMutationResolvers } from './graphql/Map'
-import { PinSchema, PinQueryResolvers, PinMutationResolvers, PinSubscriptionResolvers } from './graphql/Pin'
-import { RouteSchema, RouteQueryResolvers, RouteMutationResolvers } from './graphql/Route'
-import { UserSchema, UserQueryResolvers, UserMutationResolvers } from './graphql/User'
-import { ImageSchema } from './graphql/Image'
+import { coreTypes, coreTypeResolvers, coreQueryResolvers } from './core'
+import { scalarTypes, scalarResolvers } from './Scalars'
+import { ClassroomSchema, ClassroomQueryResolvers, ClassroomMutationResolvers } from './Classroom'
+import { MapSchema, MapQueryResolvers, MapMutationResolvers } from './Map'
+import { PinSchema, PinQueryResolvers, PinMutationResolvers, PinSubscriptionResolvers } from './Pin'
+import { RouteSchema, RouteQueryResolvers, RouteMutationResolvers } from './Route'
+import { UserSchema, UserQueryResolvers, UserMutationResolvers } from './User'
+import { ImageSchema, ImageResolvers } from './Image'
+import { TilesetSchema } from './Tileset'
 
 const Root = /* GraphQL */ `
 	type Query {
@@ -42,6 +43,7 @@ export const resolvers = merge(
 	PinQueryResolvers,
 	RouteQueryResolvers,
 	UserQueryResolvers,
+	ImageResolvers,
 	/**
 	 * Mutations
 	 */
@@ -66,4 +68,5 @@ export const typeDefs = [
 	RouteSchema,
 	UserSchema,
 	ImageSchema,
+	TilesetSchema,
 ]
