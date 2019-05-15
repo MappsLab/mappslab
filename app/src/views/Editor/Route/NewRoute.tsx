@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { LatLng } from 'mapp'
 import { Pin, Route as RouteType } from 'Types'
-import Route from './Route'
+import { Route } from './Route'
 
 /**
  * NewRoute

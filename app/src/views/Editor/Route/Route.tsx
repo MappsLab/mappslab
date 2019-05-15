@@ -8,6 +8,7 @@ import { ItemInspectorProviderProps } from '../ItemInspector'
 import { MapConsumer } from '../Provider'
 import { ProviderProps } from '../Provider'
 import RouteHoverPopup from './RouteHoverPopup'
+import { unwindEdges } from '../../../utils/graphql'
 
 const getPathFromPins = (pins: Array<Pin | LatLng>): Array<LatLng> =>
 	pins.map(({ lat, lng }) => ({
@@ -37,7 +38,7 @@ type RouteState = {
 	mouseLatLng?: LatLng
 }
 
-class Route extends React.Component<RouteProps, RouteState> {
+class RouteMain extends React.Component<RouteProps, RouteState> {
 	static defaultProps = {
 		viewer: null,
 		active: false,
@@ -99,7 +100,8 @@ class Route extends React.Component<RouteProps, RouteState> {
 	getOptions() {
 		const { route, active, machineState } = this.props
 		const { mouseOver } = this.state
-		const path = route.pins ? getPathFromPins(route.pins) : []
+		const [pins] = unwindEdges(route.pins)
+		const path = route.pins ? getPathFromPins(pins) : []
 		const stateString = getStateString(machineState.value)
 		const clickable = !/Lesson.DropPin.DropMode/.test(stateString)
 		return {
@@ -131,14 +133,12 @@ class Route extends React.Component<RouteProps, RouteState> {
  * Wrapper
  */
 
-const Wrapper = (props: BaseProps) => (
+export const Route = (props: BaseProps) => (
 	<MapConsumer>
 		{(contextValue) => (
 			<InspectorConsumer>
-				{({ inspectItem }) => <Route {...props} {...contextValue} inspectItem={inspectItem} />}
+				{({ inspectItem }) => <RouteMain {...props} {...contextValue} inspectItem={inspectItem} />}
 			</InspectorConsumer>
 		)}
 	</MapConsumer>
 )
-
-export default Wrapper

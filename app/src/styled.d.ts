@@ -24,6 +24,9 @@ declare module 'styled-components' {
 			chip: { [key: string]: string | { [key: string]: string } }
 			column: { [key: string]: string }
 		}
-		mixins: { [key: string]: string | FlattenSimpleInterpolation | { [key: string]: string } }
+		mixins: {
+			boxShadow: { [key: string]: string }
+			[key: string]: string | FlattenSimpleInterpolation | { [key: string]: string }
+		}
 	}
 }

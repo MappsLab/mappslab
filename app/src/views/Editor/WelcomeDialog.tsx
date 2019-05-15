@@ -1,7 +1,7 @@
 // @flow
 import React from 'react'
-import type { MapType } from 'Types/Map'
-import type { Transition } from 'react-automata'
+import { Map } from 'Types'
+import { Transition } from 'react-automata'
 import { Centered } from 'Components/Layout'
 import Pane from 'Components/Pane'
 import { Header2, P } from 'Components/Text'
@@ -12,8 +12,8 @@ import { Button } from 'Components/Buttons'
  */
 
 type Props = {
-	map: MapType,
-	transition: Transition,
+	map: Map
+	transition: Transition
 }
 
 const WelcomeDialog = ({ map, transition }: Props) => {

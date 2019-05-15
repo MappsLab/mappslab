@@ -46,6 +46,10 @@ export type ProviderProps = Utils & {
 	subscribeToMore: (SubscriptionConfig) => () => void
 	machineState: MachineState
 	panTo: (ll: LatLng) => void
+	fitBounds: (bounds: any) => void
+
+	addEventListeners: (listeners: { [key: string]: (args: any) => void }) => void
+	removeEventListeners: (listeners: { [key: string]: (args: any) => void }) => void
 }
 
 // const defaults = {

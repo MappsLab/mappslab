@@ -2,6 +2,7 @@ import { Pin } from './pin'
 import { Route } from './route'
 import { Classroom } from './classroom'
 import { Image } from './media'
+import { Paginated } from './graphql'
 
 export interface Map {
 	title: string
@@ -9,8 +10,8 @@ export interface Map {
 	__typename: 'Map'
 	classroom: Classroom
 	description?: string
-	lessons?: any[]
-	pins?: Pin[]
-	routes?: Route[]
+	// lessons?: any[]
+	pins?: Paginated<Pin>
+	routes?: Paginated<Route>
 	baseImage?: Image
 }

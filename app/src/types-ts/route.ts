@@ -1,5 +1,6 @@
 import { Pin } from './pin'
 import { User } from './user'
+import { Paginated } from './graphql'
 
 export interface Route {
 	__typename: 'Route'
@@ -7,5 +8,5 @@ export interface Route {
 	title?: string
 	owner?: Partial<User>
 	description?: string
-	pins?: Pin[]
+	pins?: Paginated<Pin>
 }

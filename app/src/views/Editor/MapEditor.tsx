@@ -1,37 +1,36 @@
-// @flow
 import React from 'react'
 import { mapEventNames } from 'mapp'
 import { State } from 'react-automata'
-import type { Subscription } from 'Types/GraphQL'
+import { Subscription } from 'Types'
+import { $PropertyType } from 'utility-types'
 import { startSubscription } from 'Queries/startSubscription'
 import { pinAddedToMap, pinDeleted, pinUpdated } from 'Queries/Map/mapSubscriptions'
-import { NotificationsConsumer } from 'Components/Notifications'
-import type { NewNotification } from 'Components/Notifications'
+import { NewNotification, NotificationsConsumer } from 'Components/Notifications'
 import { eventsReducer, isFunc } from 'Utils/data'
 import { getMapBounds } from 'Utils/maps'
 import { InspectorProvider, ItemInspector, InspectorConsumer } from './ItemInspector'
-import type { ItemInspectorProviderProps } from './ItemInspector'
+import { ItemInspectorProviderProps } from './ItemInspector'
 import Pin from './Pin'
-import Route from './Route'
+import { Route } from './Route'
 import NewRoute from './Route/NewRoute'
 import Tools from './Tools'
 import NotLoggedIn from './NotLoggedIn'
-import { MapConsumer } from './Provider'
-import type { ProviderProps } from './Provider'
+import { ProviderProps, MapConsumer } from './Provider'
 import WelcomeDialog from './WelcomeDialog'
 import MapNavigation from './MapNavigation'
 import MapNotifications from './MapNotifications'
 import { mapEvents } from './mapEventHandlers'
+import { unwindEdges } from '../../utils/graphql'
 
 export type EditorProps = ProviderProps & {
-	mapUid: null | string,
-	sendNotification: (NewNotification) => void,
-	closeInspector: $PropertyType<ItemInspectorProviderProps, 'closeInspector'>,
+	mapUid: null | string
+	sendNotification: (n: NewNotification) => void
+	closeInspector: $PropertyType<ItemInspectorProviderProps, 'closeInspector'>
 }
 
 const domEventNames = ['keyup']
 
-class MapEditor extends React.Component<EditorProps> {
+class MapEditorMain extends React.Component<EditorProps> {
 	static defaultProps = {
 		viewer: null,
 		mapData: null,
@@ -46,14 +45,15 @@ class MapEditor extends React.Component<EditorProps> {
 			setMap(mapUid)
 			this.startSubscriptions()
 		}
-		if (this.props.mapData && this.props.mapData.pins && this.props.mapData.pins.length > 0) {
-			const bounds = getMapBounds(this.props.mapData.pins)
+		if (this.props.mapData && this.props.mapData.pins && this.props.mapData.pins.edges.length > 0) {
+			const [pins] = unwindEdges(this.props.mapData.pins)
+			const bounds = getMapBounds(pins)
 			this.props.fitBounds(bounds)
 		}
 		this.addEventListeners()
 	}
 
-	componentWillUpdate(nextProps) {
+	componentWillUpdate(nextProps: EditorProps) {
 		if (nextProps.mapUid && nextProps.mapUid !== this.props.mapUid) {
 			this.props.setMap(nextProps.mapUid)
 			this.stopSubscriptions()
@@ -61,7 +61,7 @@ class MapEditor extends React.Component<EditorProps> {
 		}
 	}
 
-	componentDidUpdate(prevProps) {
+	componentDidUpdate(prevProps: EditorProps) {
 		if (prevProps.machineState.value !== this.props.machineState.value) {
 			this.handleEvent('onEntry')()
 		}
@@ -78,7 +78,7 @@ class MapEditor extends React.Component<EditorProps> {
 	 * this will call it with the (optional) payload.
 	 *
 	 */
-	handleEvent = (eventName: string) => (payload) => {
+	handleEvent = (eventName: string) => (payload?: any) => {
 		const { machineState } = this.props
 		const handler = eventsReducer(mapEvents, machineState.value, eventName)
 		if (handler) {
@@ -94,9 +94,9 @@ class MapEditor extends React.Component<EditorProps> {
 		}
 	}
 
-	logSubscriptionUpdate = (previous, updated) => {
-		// console.log(previous, updated)
-	}
+	// logSubscriptionUpdate = (previous, updated) => {
+	// 	// console.log(previous, updated)
+	// }
 
 	addEventListeners() {
 		const { addEventListeners } = this.props
@@ -139,7 +139,7 @@ class MapEditor extends React.Component<EditorProps> {
 			startSubscription({
 				subscribeToMore,
 				variables: { mapUid },
-				callback: this.logSubscriptionUpdate(s.name),
+				// callback: this.logSubscriptionUpdate(s.name),
 				...s,
 			}),
 		)
@@ -159,7 +159,8 @@ class MapEditor extends React.Component<EditorProps> {
 	renderMapData() {
 		const { mapData, connectToPin, userLatLng } = this.props
 		if (!mapData) return null
-		const { pins, routes } = mapData
+		const [pins] = unwindEdges(mapData.pins)
+		const [routes] = unwindEdges(mapData.routes)
 		return (
 			<React.Fragment>
 				{pins && pins.map((p) => <Pin key={p.uid} pin={p} />)}
@@ -181,7 +182,7 @@ class MapEditor extends React.Component<EditorProps> {
 				<State is="Welcome">
 					<WelcomeDialog map={mapData} transition={transition} />
 				</State>
-				<MapNavigation map={mapData} transition={transition} />
+				<MapNavigation map={mapData} />
 				{viewer ? <Tools {...this.props} /> : <NotLoggedIn />}
 				<MapNotifications />
 				<ItemInspector />
@@ -196,22 +197,19 @@ class MapEditor extends React.Component<EditorProps> {
  */
 
 type WrapperProps = {
-	mapUid?: null | string,
+	mapUid?: null | string
 }
 
-const Wrapper = ({ mapUid }: WrapperProps) => (
+export const MapEditor = ({ mapUid }: WrapperProps) => (
 	<MapConsumer>
 		{(contextValue) => (
-			/* $FlowFixMe */
 			<InspectorProvider {...contextValue}>
 				<InspectorConsumer>
-					{({ closeInspector, inspectItem }) => (
+					{({ closeInspector }) => (
 						<NotificationsConsumer>
 							{({ sendNotification }) => (
-								/* $FlowFixMe */
-								<MapEditor
+								<MapEditorMain
 									closeInspector={closeInspector}
-									inspectItem={inspectItem}
 									mapUid={mapUid || null}
 									sendNotification={sendNotification}
 									{...contextValue}
@@ -225,8 +223,6 @@ const Wrapper = ({ mapUid }: WrapperProps) => (
 	</MapConsumer>
 )
 
-Wrapper.defaultProps = {
+MapEditor.defaultProps = {
 	mapUid: null,
 }
-
-export default Wrapper

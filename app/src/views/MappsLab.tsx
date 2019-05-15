@@ -18,7 +18,7 @@ const apiKey = 'AIzaSyCOqxjWmEzFlHKC9w-iUZ5zL2rIyBglAag'
 export const MappsLab = () => (
 	<BaseMap
 		APIKey={apiKey}
-		render={(googleMap) => (
+		render={() => (
 			<NotificationsProvider>
 				<QuestionProvider>
 					<QuestionDialog />
@@ -27,7 +27,7 @@ export const MappsLab = () => (
 							<Route path="/sandbox" component={Sandbox} />
 							<Route path="/login" exact component={Login} />
 							<ViewerRoute path="/dashboard" component={Dashboard} />
-							<Route path="/maps/:uid" render={({ match }) => <MapEditor mapUid={match.params.uid} map={googleMap} />} />
+							<Route path="/maps/:uid" render={({ match }) => <MapEditor mapUid={match.params.uid} />} />
 							<Redirect to="/login" />
 						</Switch>
 					</InspectorProvider>

@@ -2,6 +2,7 @@ import * as React from 'react'
 import { LatLng } from 'mapp'
 import { Route, Pin } from 'Types'
 import { ProviderProps as MapProviderProps } from '../Provider'
+import { unwindEdges } from '../../../utils/graphql'
 
 const { useContext, useReducer } = React
 
@@ -78,7 +79,9 @@ export const InspectorProvider = ({ children, mapData, panTo }: Props) => {
 		if (!newItem) return undefined
 		if (!mapData) throw new Error('Map data has not been loaded')
 		const { uid, __typename } = newItem
-		const { pins, routes } = mapData
+		const [pins] = unwindEdges(mapData.pins)
+		const [routes] = unwindEdges(mapData.routes)
+
 		if (__typename === 'Pin') return pins ? pins.find((p) => p.uid === uid) : undefined
 		// $FlowFixMe
 		if (__typename === 'Route') return routes ? routes.find((r) => r.uid === uid) : undefined

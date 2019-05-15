@@ -1,7 +1,6 @@
-// @flow
 import * as React from 'react'
-import styled, { css } from 'styled-components'
-import type { MapType } from 'Types/Map'
+import styled, { DefaultTheme, css } from 'styled-components'
+import { Map } from 'Types'
 // import type { Transition } from 'react-automata'
 import { Header2, Header4 } from 'Components/Text'
 import Burger from 'Components/Burger'
@@ -10,9 +9,14 @@ import { Test } from './Test'
 
 const { useState } = React
 
+interface BackgroundProps {
+	theme: DefaultTheme
+	visible?: boolean
+}
+
 const Background = styled.button`
-	${({ theme, visible }) => css`
-		z-index: ${theme.layout.navigation - 1};
+	${({ theme, visible }: BackgroundProps) => css`
+		z-index: ${theme.layout.z.navigation - 1};
 		position: fixed;
 		opacity: ${visible ? '1' : '0'};
 		${!visible && 'pointer-events: none;'}
@@ -46,9 +50,14 @@ const ClassInfo = styled.div`
 	`}
 `
 
+interface NavigationProps {
+	theme: DefaultTheme
+	open?: boolean
+}
+
 const Navigation = styled.nav`
-	${({ theme, open }) => css`
-		z-index: ${theme.layout.navigation - 1};
+	${({ theme, open }: NavigationProps) => css`
+		z-index: ${theme.layout.z.navigation - 1};
 		position: fixed;
 		top: 0;
 		left: ${open ? '0' : '-255px'};
@@ -72,7 +81,7 @@ const Logout = styled.div`
 `
 
 type Props = {
-	map: MapType,
+	map: Map
 	// transition: Transition,
 }
 
