@@ -1,6 +1,6 @@
 // @flow
 import Joi from 'joi'
-import { pipe, head, assoc, when, propEq, map } from 'ramda'
+import { pipe, head, assoc, when, propEq, map, merge } from 'ramda'
 import type { UpdateMapData, NewMapData, MapType } from 'Types/MapTypes'
 import { promisePipe, filterNullAndUndefined } from 'Utils'
 import { parseSingularFields } from 'Utils/parsing'
@@ -26,7 +26,7 @@ export const mapSchema = (isNew: boolean = true) =>
 		deleted: isNew ? Joi.boolean().default(false) : Joi.boolean(),
 	})
 
-export const defaultValues = {
+const defaultValues = {
 	type: 'map',
 	updatedAt: new Date(),
 }
@@ -34,14 +34,29 @@ export const defaultValues = {
 export const validateNew = (mapData: NewMapData) => Joi.validate(mapData, mapSchema(true))
 export const validateUpdate = (mapData: UpdateMapData) => Joi.validate(mapData, mapSchema(false))
 
-export const publicFields = ['uid', 'title', 'description', 'slug', 'createdAt', 'updatedAt', 'type'].join('\n')
+export const publicFields = [
+	//
+	'uid',
+	'title',
+	'description',
+	'slug',
+	'createdAt',
+	'updatedAt',
+	'type',
+	`classroom: ~has_map {
+		owners: ~teaches_in {
+			uid
+			username
+		}
+	}`,
+].join('\n')
 
 /**
  * Clean
  */
 
 export const clean = async (mapData: $Shape<UpdateMapData>): Promise<UpdateMapData> =>
-	promisePipe(filterNullAndUndefined)(mapData)
+	promisePipe(merge(defaultValues), filterNullAndUndefined)(mapData)
 
 /**
  * Parse
