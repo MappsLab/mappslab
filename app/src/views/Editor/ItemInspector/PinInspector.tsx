@@ -1,29 +1,25 @@
-// @flow
 import * as React from 'react'
 import NativeListener from 'react-native-listener'
 import { useQuestion } from 'Components/Question'
 import { FaPencilAlt, FaTrashAlt } from 'react-icons/fa'
-import type { ViewerType } from 'Types/User'
-import type { PinType } from 'Types/Pin'
-import type { Mutation } from 'Types/GraphQL'
-import { EditableText } from 'Components/Inspector'
+import { Viewer, Pin, Mutation } from '../../../types'
+import { EditableText, EditableMedia } from 'Components/Inspector'
 import { Button } from 'Components/Buttons'
 import { UpdatePinMutation, DeletePinMutation } from 'Queries/Pin'
 import { query as mapQuery } from 'Queries/Map/MapQuery'
-import Media from './Media'
 import { useInspector } from './Provider'
 
 const { useState } = React
 
-type BaseProps = {
-	pin: PinType,
-	mapUid: string,
-	viewer?: ViewerType,
+interface BaseProps {
+	pin: Pin
+	mapUid: string
+	viewer?: Viewer
 }
 
 type Props = BaseProps & {
-	updatePin: Mutation,
-	deletePin: Mutation,
+	updatePin: Mutation
+	deletePin: Mutation
 }
 
 const PinInspector = ({ pin, viewer, updatePin, deletePin, mapUid }: Props) => {
@@ -88,7 +84,7 @@ const PinInspector = ({ pin, viewer, updatePin, deletePin, mapUid }: Props) => {
 				initialValue={pin.description}
 				viewerCanEdit={canEdit}
 			/>
-			<Media submitUpdate={submitUpdate} image={pin.image} video={pin.video} viewerCanEdit={canEdit} />
+			<EditableMedia submitUpdate={submitUpdate} image={pin.image} video={pin.video} viewerCanEdit={canEdit} />
 			{viewerIsOwner && canEdit === false ? (
 				<NativeListener onClick={enterEdit}>
 					<Button level="tertiary">

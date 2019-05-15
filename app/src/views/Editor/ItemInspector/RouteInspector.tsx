@@ -1,26 +1,23 @@
 // @flow
 import * as React from 'react'
-import { EditableText } from 'Components/Inspector'
+import { EditableText, EditableMedia } from 'Components/Inspector'
 import NativeListener from 'react-native-listener'
-import type { RouteType } from 'Types/Route'
-import type { ViewerType } from 'Types/User'
-import type { Mutation } from 'Types/GraphQL'
+import { Route, Viewer, Mutation } from 'Types'
 import { FaPencilAlt } from 'react-icons/fa'
 import { Button } from 'Components/Buttons'
 import { UpdateRouteMutation } from 'Queries/Route'
 import { query as mapQuery } from 'Queries/Map/MapQuery'
-import Media from './Media'
 
 const { useState } = React
 
 type BaseProps = {
-	route: RouteType,
-	mapUid: string,
-	viewer?: ViewerType,
+	route: Route
+	mapUid: string
+	viewer?: Viewer
 }
 
 type Props = BaseProps & {
-	updateRoute: Mutation,
+	updateRoute: Mutation
 }
 
 const RouteInspector = ({ route, viewer, updateRoute, mapUid }: Props) => {
@@ -65,7 +62,7 @@ const RouteInspector = ({ route, viewer, updateRoute, mapUid }: Props) => {
 				viewerCanEdit={canEdit}
 				autoFocus
 			/>
-			<Media submitUpdate={submitUpdate} image={route.image} video={route.video} viewerCanEdit={canEdit} />
+			<EditableMedia submitUpdate={submitUpdate} image={route.image} video={route.video} viewerCanEdit={canEdit} />
 			{viewerIsOwner && canEdit === false ? (
 				<NativeListener onClick={enterEdit}>
 					<Button level="tertiary">

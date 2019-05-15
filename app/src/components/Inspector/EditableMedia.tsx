@@ -1,14 +1,13 @@
-// @flow
 import * as React from 'react'
 import styled, { css } from 'styled-components'
 import { FaVideo, FaRegImage, FaTrashAlt } from 'react-icons/fa'
 import NativeListener from 'react-native-listener'
-import { useQuestion } from 'Components/Question'
-import FileUpload from 'Components/FileUpload'
-import { Prompt } from 'Components/Forms'
-import type { ImageType, VideoType } from 'Types/Media'
-import { Button } from 'Components/Buttons'
-import { Image, Video } from 'Components/Media'
+import { useQuestion } from '../Question'
+import FileUpload from '../FileUpload'
+import { Prompt } from '../Forms'
+import { Image as ImageType, Video as VideoType } from '../../types-ts'
+import { Button } from '../Buttons'
+import { Image, Video } from '../Media'
 
 /**
  * Styles
@@ -43,15 +42,29 @@ const MediaButtons = styled.div`
  * Media
  */
 
-type Props = {
-	image?: ImageType,
-	video?: VideoType,
-	submitUpdate: ({ [key: string]: any }) => void | Promise<void>,
-	viewerCanEdit?: boolean,
-	alt?: string,
+interface Props {
+	image?: Image
+	imageName?: string
+	enableImage?: boolean
+	video?: Video
+	videoName?: string
+	enableVideo?: boolean
+	submitUpdate: (formData: { [key: string]: any }) => void | Promise<void>
+	viewerCanEdit?: boolean
+	alt?: string
 }
 
-const Media = ({ image, video, viewerCanEdit, submitUpdate, alt }: Props) => {
+export const EditableMedia = ({
+	image,
+	enableImage,
+	imageName,
+	video,
+	videoName,
+	enableVideo,
+	viewerCanEdit,
+	submitUpdate,
+	alt,
+}: Props) => {
 	if (!viewerCanEdit && !image && !video) return null
 	const { ask } = useQuestion()
 
@@ -69,7 +82,7 @@ const Media = ({ image, video, viewerCanEdit, submitUpdate, alt }: Props) => {
 	}
 
 	const removeLabel = image ? 'Remove Image' : 'Remove Video'
-	const removeFn = image ? remove('image') : remove('video')
+	const removeFn = image ? remove(imageName || 'image') : remove('video')
 	return (
 		<MediaWrapper>
 			{viewerCanEdit && (image || video) ? (
@@ -81,7 +94,7 @@ const Media = ({ image, video, viewerCanEdit, submitUpdate, alt }: Props) => {
 					</NativeListener>
 				</ButtonWrapper>
 			) : null}
-			{image ? (
+			{image && enableImage ? (
 				<Image
 					//
 					image={image}
@@ -89,7 +102,7 @@ const Media = ({ image, video, viewerCanEdit, submitUpdate, alt }: Props) => {
 					size={600}
 					submitUpdate={submitUpdate}
 				/>
-			) : video ? (
+			) : video && enableVideo ? (
 				<Video
 					//
 					video={video}
@@ -110,11 +123,13 @@ const Media = ({ image, video, viewerCanEdit, submitUpdate, alt }: Props) => {
 	)
 }
 
-Media.defaultProps = {
+EditableMedia.defaultProps = {
 	image: undefined,
+	imageName: 'image',
+	enableImage: true,
 	video: undefined,
+	videoName: 'video',
+	enableVideo: true,
 	viewerCanEdit: false,
 	alt: undefined,
 }
-
-export default Media

@@ -1,7 +1,6 @@
-// @flow
 import * as React from 'react'
-import type { LatLng } from 'mapp/types'
-import type { PinType } from 'Types/Pin'
+import { LatLng } from 'mapp'
+import { Pin, Route as RouteType } from 'Types'
 import Route from './Route'
 
 /**
@@ -10,10 +9,10 @@ import Route from './Route'
 
 type NewRouteProps = {
 	connectToPin: {
-		pin: PinType,
-		position?: 'BEFORE' | 'AFTER',
-	},
-	userLatLng: LatLng,
+		pin: Pin
+		position?: 'BEFORE' | 'AFTER'
+	}
+	userLatLng: LatLng
 }
 
 const NewRoute = ({ connectToPin, userLatLng }: NewRouteProps) => {
@@ -22,14 +21,12 @@ const NewRoute = ({ connectToPin, userLatLng }: NewRouteProps) => {
 		__typename: 'Pin',
 		uid: '__in-progress-pin__',
 	}
-	const route: {
-		pins: Array<PinType | LatLng>,
-	} = {
+	const route = {
 		__typename: 'Route',
 		uid: '__in-progress-route__',
 		pins: [connectToPin.pin, inProgressPin],
 	}
-	return <Route route={route} active clickable={false} />
+	return <Route route={route} />
 }
 
 export default NewRoute

@@ -45,6 +45,7 @@ export type ProviderProps = Utils & {
 	userLatLng?: LatLng
 	subscribeToMore: (SubscriptionConfig) => () => void
 	machineState: MachineState
+	panTo: (ll: LatLng) => void
 }
 
 // const defaults = {

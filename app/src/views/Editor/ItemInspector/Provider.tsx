@@ -1,9 +1,8 @@
 // @flow
 import * as React from 'react'
-import type { LatLng } from 'mapp'
-import type { RouteType } from 'Types/Route'
-import type { PinType } from 'Types/Pin'
-import type { ProviderProps as MapProviderProps } from '../Provider'
+import { LatLng } from 'mapp'
+import { Route, Pin } from 'Types'
+import { ProviderProps as MapProviderProps } from '../Provider'
 
 const { useContext, useReducer } = React
 
@@ -11,39 +10,41 @@ const { useContext, useReducer } = React
  * Types
  */
 
-type InspectorItem = RouteType | PinType
+type InspectorItem = Route | Pin
 
-type ItemInspectorState = {
-	item?: InspectorItem,
-	position?: LatLng,
+interface ItemInspectorState {
+	item?: InspectorItem
+	position?: LatLng
 }
 
-export type ItemInspectorProviderProps = ItemInspectorState & {
-	inspectItem: (InspectorItem, ?LatLng) => void,
-	closeInspector: () => void,
-	panTo: $PropertyType<MapProviderProps, 'panTo'>,
-	mapUid: string,
+interface Offset {
+	x: number
+	y: number
+}
+
+export interface ItemInspectorProviderProps extends ItemInspectorState {
+	inspectItem: (item: InspectorItem, latlng?: LatLng) => void
+	closeInspector: () => void
+	panTo: (latlng: LatLng, offset?: Offset) => void
+	// panTo: Pick<MapProviderProps, 'panTo'>
+	mapUid: string
 }
 
 type Props = MapProviderProps & {
-	children: React.Node,
+	children: React.ReactNode
 }
 
 /**
  * Context Setup
  */
 
-const InspectorContext = React.createContext<ItemInspectorProviderProps>({
-	inspectItem: () => {},
-	closeInspector: () => {},
-	panTo: () => {},
-	mapUid: '',
-})
+const InspectorContext = React.createContext<ItemInspectorProviderProps | undefined>(undefined)
 
 export const InspectorConsumer = InspectorContext.Consumer
 
 export const useInspector = () => {
 	const ctx = useContext(InspectorContext)
+	if (!ctx) throw new Error('`useInspector` must be used within a provider')
 	return ctx
 }
 
@@ -55,7 +56,7 @@ const INSPECT_ITEM = 'INSPECT_ITEM'
 const CLOSE_INSPECTOR = 'CLOSE_INSPECTOR'
 
 type ReducerArgs = ItemInspectorState & {
-	type: typeof INSPECT_ITEM | typeof CLOSE_INSPECTOR,
+	type: typeof INSPECT_ITEM | typeof CLOSE_INSPECTOR
 }
 
 const inspectorReducer = (state: ItemInspectorState, { type, item, position }: ReducerArgs) => {

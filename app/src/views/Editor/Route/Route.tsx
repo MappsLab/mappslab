@@ -1,18 +1,16 @@
 // @flow
 import React from 'react'
 import { PolyLine } from 'mapp'
-import { polylineEventNames } from 'mapp/eventNames'
-import type { LatLng } from 'mapp/types'
-import type { PinType } from 'Types/Pin'
-import type { RouteType } from 'Types/Route'
+import { LatLng, polylineEventNames } from 'mapp'
+import { Pin, Route as RouteType } from 'Types'
 import { getStateString } from 'Utils/data'
 import { InspectorConsumer } from '../ItemInspector'
-import type { ItemInspectorProviderProps } from '../ItemInspector'
+import { ItemInspectorProviderProps } from '../ItemInspector'
 import { MapConsumer } from '../Provider'
-import type { ProviderProps } from '../Provider'
+import { ProviderProps } from '../Provider'
 import RouteHoverPopup from './RouteHoverPopup'
 
-const getPathFromPins = (pins: Array<PinType | LatLng>): Array<LatLng> =>
+const getPathFromPins = (pins: Array<Pin | LatLng>): Array<LatLng> =>
 	pins.map(({ lat, lng }) => ({
 		lat,
 		lng,
@@ -23,19 +21,21 @@ const getPathFromPins = (pins: Array<PinType | LatLng>): Array<LatLng> =>
  */
 
 type BaseProps = {
-	route: RouteType,
+	route: RouteType
 }
 
-type RouteProps = BaseProps &
-	ProviderProps & {
-		active?: boolean,
-		clickable?: boolean,
-		inspectItem: $PropertyType<ItemInspectorProviderProps, 'inspectItem'>,
-	}
+type $PropertyType<T extends object, K extends keyof T> = T[K]
+
+interface RouteProps extends ProviderProps {
+	route: RouteType
+	active?: boolean
+	clickable?: boolean
+	inspectItem: $PropertyType<ItemInspectorProviderProps, 'inspectItem'>
+}
 
 type RouteState = {
-	mouseOver: boolean,
-	mouseLatLng?: LatLng,
+	mouseOver: boolean
+	mouseLatLng?: LatLng
 }
 
 class Route extends React.Component<RouteProps, RouteState> {
@@ -98,7 +98,6 @@ class Route extends React.Component<RouteProps, RouteState> {
 	}
 
 	getOptions() {
-		//
 		const { route, active, machineState } = this.props
 		const { mouseOver } = this.state
 		const path = route.pins ? getPathFromPins(route.pins) : []

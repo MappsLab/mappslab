@@ -1,5 +1,6 @@
 // @flow
 import { path } from 'ramda'
+import { parseQueryString } from './url'
 
 type NestedObject = any
 

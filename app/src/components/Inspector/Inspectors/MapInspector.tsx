@@ -6,7 +6,9 @@ import { Button } from '../../Buttons'
 import { ClassroomList } from '../../Lists'
 import { InspectItem } from '../InspectorProvider'
 import EditableText from '../EditableText'
+import { EditableMedia } from '../EditableMedia'
 import InspectorSkeleton from '../InspectorSkeleton'
+import { unwindEdges } from '../../../utils/graphql'
 
 /**
  * MapInspector
@@ -23,7 +25,10 @@ interface Props extends BaseProps {
 	updateMap: Mutation
 }
 
-const MapInspectorMain = ({ map, inspectItem, mapQueryConfig, updateMap }: Props) => {
+const MapInspectorMain = ({ map, viewer, inspectItem, mapQueryConfig, updateMap }: Props) => {
+	const [teachers] = unwindEdges(map.classroom.teachers)
+	const viewerIsOwner = Boolean(viewer && teachers.find((t) => t.uid === viewer.uid))
+
 	const updateMapClassrooms = (classroom) => {
 		const variables = {
 			input: {
@@ -34,10 +39,25 @@ const MapInspectorMain = ({ map, inspectItem, mapQueryConfig, updateMap }: Props
 		updateMap({ variables, refetchQueries: [mapQueryConfig] })
 	}
 
+	const submitUpdate = async (args) => {
+		if (!viewerIsOwner) throw new Error('You can only update maps you own')
+		const variables = {
+			uid: map.uid,
+			...args,
+		}
+	}
+
 	return (
 		<React.Fragment>
 			<EditableText label="Description" name="description" initialValue={map.description} />
 			<Button to={`/maps/${map.uid}`}>Go to map →</Button>
+			<EditableMedia
+				submitUpdate={submitUpdate}
+				enableVideo={false}
+				imageName="baseImage"
+				image={map.baseImage}
+				viewerCanEdit={viewerIsOwner}
+			/>
 			<ClassroomList
 				title="Classroom"
 				items={[map.classroom].filter(Boolean)}

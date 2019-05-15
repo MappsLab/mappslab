@@ -1,5 +1,3 @@
-// @flow
-
 type SearchParams = { [key: string]: string }
 
 export const parseQueryString = (search: string): SearchParams =>

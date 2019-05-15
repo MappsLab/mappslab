@@ -22,15 +22,16 @@
 		"noImplicitAny": true,
 		"strictNullChecks": true
 		*/
-		"baseUrl": ".",
+
+		"baseUrl": "src",
 		"paths": {
-			"Components": ["./src/components/*"],
-			"Views/*": ["./src/views/*", "./src/views"],
-			"GraphQL": ["./src/graphql"],
-			"Types": ["./src/types-ts"],
-			"Providers": ["./src/providers"],
-			"Utils/*": ["./src/utils/*"],
-			"mapp": ["../packages/mapp"]
+			"Components/*": ["components/*"],
+			"Views/*": ["views/*"],
+			"GraphQL/*": ["graphql/*"],
+			"Types/*": ["types-ts/*"],
+			"Providers/*": ["providers/*"],
+			"Utils/*": ["utils/*"],
+			"mapp": ["../../packages/mapp/src"]
 		}
 	},
 	"include": ["./src"],
