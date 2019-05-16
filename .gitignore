@@ -27,6 +27,8 @@ secrets.tar
 api/coverage
 app/coverage
 
+.tmp
+.temp
 .docz
 
 # un-ignore
