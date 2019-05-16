@@ -56,7 +56,7 @@ const relationshipStringCreators = {
 	hasImage: genericRelationship('~has_image'),
 
 	// Tileset relationships
-	hasTileset: genericRelationship('~has_tiles'),
+	hasTileset: genericRelationship('~has_tileset'),
 }
 
 const createRelationshipFilter = (operator: string, field: string, value: any): FilterStrings | void => {

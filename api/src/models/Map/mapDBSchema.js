@@ -1,5 +1,5 @@
 // @flow
-import Joi from 'joi'
+import Joi from '@hapi/joi'
 import { pipe, head, assoc, when, propEq, map, merge } from 'ramda'
 import type { UpdateMapData, NewMapData, MapType } from 'Types/MapTypes'
 import { promisePipe, filterNullAndUndefined } from 'Utils'

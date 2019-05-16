@@ -14,7 +14,7 @@ const useLocal = !/staging|production/.test(config.get('env'))
 
 const s3client = new AWS.S3({
 	credentials,
-	endpoint: useLocal ? 'http://localhost:4572' : undefined,
+	endpoint: config.get('aws.endpoint'),
 })
 
 type PutResponse = {

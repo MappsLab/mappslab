@@ -1,5 +1,5 @@
 // @flow
-import Joi from 'joi'
+import Joi from '@hapi/joi'
 import { merge } from 'ramda'
 import type { TilesetType } from 'Types/TileTypes'
 

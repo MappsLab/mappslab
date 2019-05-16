@@ -83,7 +83,7 @@ export const createTileSet = async (imageUpload: ImageUpload, imageNode: ImageTy
 	const imageEdge = [
 		{
 			fromUid: imageNode.uid,
-			pred: 'has_tiles',
+			pred: 'has_tileset',
 		},
 		{},
 	]

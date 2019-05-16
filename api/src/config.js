@@ -40,6 +40,13 @@ const config = convict({
 		},
 	},
 	aws: {
+		endpoint: {
+			doc: 'AWS Endpoint URL',
+			format: String,
+			sensitive: false,
+			default: undefined,
+			env: 'AWS_ENDPOINT',
+		},
 		accessKey: {
 			doc: 'AWS Access key',
 			format: String,
@@ -66,12 +73,12 @@ const config = convict({
 			default: 'images',
 			env: 'AWS_BUCKET_IMAGE_DIR',
 		},
-        tileDirectory: {
-            doc: 'AWS Bucket Tile Image Directory',
-            format: String,
-            default: 'tiles',
-            env: 'AWS_TILE_IMAGE_DIR'
-        }
+		tileDirectory: {
+			doc: 'AWS Bucket Tile Image Directory',
+			format: String,
+			default: 'tiles',
+			env: 'AWS_TILE_IMAGE_DIR',
+		},
 	},
 })
 

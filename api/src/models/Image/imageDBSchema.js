@@ -1,6 +1,6 @@
 // @flow
 
-import Joi from 'joi'
+import Joi from '@hapi/joi'
 import type { ImageType } from 'Types/ImageTypes'
 
 /**
