@@ -2,11 +2,10 @@
 /* eslint-disable no-undef */
 import * as React from 'react'
 import { fireEvent, wait } from 'react-testing-library'
-import { render } from 'Jest/utils'
-import { QuestionProvider, QuestionConsumer, QuestionDialog } from 'Components/Question'
-import type { QuestionContext } from 'Components/Question/QuestionProvider'
+import { render } from '../../jest/utils'
+import { QuestionProvider, QuestionContext, QuestionConsumer, QuestionDialog } from '../components/Question'
 
-const QuestionWrapper = ({ children }: { children: (QuestionContext) => React.Node }) => (
+const QuestionWrapper = ({ children }: { children: (QuestionContext) => React.ReactNode }) => (
 	<QuestionProvider>
 		<QuestionConsumer>{children}</QuestionConsumer>
 	</QuestionProvider>
@@ -39,7 +38,7 @@ describe('Question Component', () => {
 
 	it('should render its children', async () => {
 		const { getByTestId } = render(<BasicQuestion />)
-		expect(getByTestId('button')).toHaveTextContent('click?')
+		expect(getByTestId('button').textContent).toBe('click?')
 	})
 
 	it('should not render a <QuestionDialog> by default', async () => {

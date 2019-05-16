@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Map } from 'Types'
-import { MapsQuery } from 'Queries/Map'
+import { MapsQuery } from '../../queries/Map'
 import { List } from './List'
 import { ListOfTypeProps, ListOfTypeBaseProps } from './utils'
 

@@ -1,3 +1,8 @@
+export interface Tileset {
+	uid: string
+	tileId: string
+}
+
 interface ImageSize {
 	format: string
 	width: number
@@ -9,6 +14,7 @@ export interface Image {
 	uid: string
 	original: ImageSize
 	sizes: ImageSize[]
+	tileset?: Tileset
 }
 
 export type Video = string

@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Classroom } from 'Types'
-import { ClassroomsQuery } from 'Queries/Classroom'
+import { ClassroomsQuery } from '../../queries/Classroom'
 import { List } from './List'
 import { ListOfTypeProps, ListOfTypeBaseProps } from './utils'
 

@@ -12,10 +12,11 @@ interface RenderParameters {
 }
 
 interface Props {
+	path: string
 	render?: null | ((RenderParameters) => React.ReactNode)
 	children?: null | React.ReactNode
 	component?: null | React.ComponentType<any>
-	redirectTo: string
+	redirectTo?: string
 }
 
 // $FlowFixMe -- Flow doesn't like us using the keyword 'Component' as a normal variable
@@ -26,7 +27,7 @@ export const ViewerRoute = ({ render, children, component: Component, redirectTo
 			{...rest}
 			render={(routeProps) => {
 				if (loading) return null
-				if (!viewer) return <Redirect to={redirectTo} />
+				if (!viewer) return <Redirect to={redirectTo || '/login'} />
 				if (Component) return <Component viewer={viewer} {...routeProps} />
 				if (render) return render({ viewer, ...routeProps })
 				if (children) return children

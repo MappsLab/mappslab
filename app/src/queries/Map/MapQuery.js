@@ -15,6 +15,10 @@ export const query = gql/* GraphQL */ `
 			slug
 			baseImage {
 				...ImageFragment
+				tileset {
+					uid
+					tileId
+				}
 			}
 			description
 			classroom {

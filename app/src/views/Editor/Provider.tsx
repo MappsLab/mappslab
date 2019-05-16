@@ -47,10 +47,10 @@ export type ProviderProps = Utils & {
 	machineState: MachineState
 	panTo: (ll: LatLng) => void
 	fitBounds: (bounds: any) => void
-
+	// todo: remove after converting mapp to TS
 	addEventListeners: (listeners: { [key: string]: (args: any) => void }) => void
 	removeEventListeners: (listeners: { [key: string]: (args: any) => void }) => void
-	setBaseImage: (s: string) => void
+	setBaseImage: (args: any) => void
 }
 
 // const defaults = {

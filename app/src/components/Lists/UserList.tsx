@@ -1,8 +1,8 @@
 import * as React from 'react'
 import { User } from 'Types/User'
-import { UsersQuery } from 'Queries/User'
-import { QuestionConsumer, QuestionContext } from 'Components/Question'
-import { Prompt } from 'Components/Forms'
+import { UsersQuery } from '../../queries/User'
+import { QuestionConsumer, QuestionContext } from '../Question'
+import { Prompt } from '../Forms'
 import { List } from './List'
 import { ListOfTypeProps, ListOfTypeBaseProps } from './utils'
 

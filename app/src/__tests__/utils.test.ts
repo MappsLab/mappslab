@@ -1,5 +1,6 @@
 import { traceObject, eventsReducer } from '../utils/data'
 import { getBestSize } from '../utils/media'
+import { Image } from '../types-ts'
 
 describe('[traceObject]', () => {
 	it('should return an array of found values', async () => {
@@ -113,11 +114,19 @@ describe('[eventsReducer]', () => {
 })
 
 describe('[getBestSize]', () => {
-	const image = {
+	const image: Image = {
+		uid: '0x123',
 		original: {
+			uri: '/abc',
+			format: 'png',
+			height: 100,
 			width: 1099,
 		},
-		sizes: [{ width: 100 }, { width: 600 }, { width: 1200 }],
+		sizes: [
+			{ format: 'png', uri: '/xyz', height: 200, width: 100 },
+			{ format: 'png', uri: '/xyz', height: 200, width: 600 },
+			{ format: 'png', uri: '/xyz', height: 200, width: 1200 },
+		],
 	}
 
 	it('should return the next-greatest image size', () => {

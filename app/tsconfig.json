@@ -14,7 +14,7 @@
 		"lib": ["es6", "es7", "dom"],
 		"outDir": "./dist",
 		"esModuleInterop": true,
-
+		"types": ["node", "jest"],
 		/*
 		TODO: Tighten these up once development is rolling
 		"noImplicitReturns": true,
@@ -29,8 +29,10 @@
 			"Views/*": ["views/*"],
 			"GraphQL/*": ["graphql/*"],
 			"Types/*": ["types-ts/*"],
+			"Queries/*": ["queries/*"],
 			"Providers/*": ["providers/*"],
 			"Utils/*": ["utils/*"],
+			"Jest/*": ["../jest/*"],
 			"mapp": ["../../packages/mapp/src"]
 		}
 	},

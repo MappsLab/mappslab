@@ -1,7 +1,7 @@
 import * as R from 'ramda'
 import { arrayify } from 'Utils/data'
 
-export type ValidatorFunction = (value: any, allValues: object) => any
+export type ValidatorFunction = (value: any, allValues?: object) => any
 // Chains a series of validators.
 // Returns `undefined` if valid, or the message from the first failed validator.
 
