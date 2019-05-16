@@ -55,6 +55,23 @@ export type MappRenderProps =
  * Types
  */
 
+type setBaseImageArgs = {
+	getTileUrl: (c: any, zoom: number) => string,
+	tileSize: number,
+	maxZoom: number,
+	minZoom: number,
+	radius: number,
+	name: string,
+}
+
+const defaultBaseImageOptions = {
+	tileSize: 256,
+	maxZoom: 9,
+	minZoom: 0,
+	radius: 1738000,
+	name: 'Base Image',
+}
+
 type Props = {
 	APIKey: string,
 	initialOptions?: Object,
@@ -162,12 +179,33 @@ class Mapp extends React.Component<Props, State> {
 		const zoomIn = zoomFactory(1)
 		const zoomOut = zoomFactory(-1)
 
+		const setBaseImage = (options: setBaseImageArgs) => {
+			const all = {
+				...defaultBaseImageOptions,
+				...options,
+			}
+			console.log(all)
+			const { getTileUrl, tileSize, maxZoom, minZoom, radius, name } = all
+			const baseImage = new google.maps.ImageMapType({
+				getTileUrl,
+				tileSize: new google.maps.Size(tileSize, tileSize),
+				maxZoom,
+				minZoom,
+				// radius,
+				name,
+			})
+
+			this.map.mapTypes.set('moon', baseImage)
+			this.map.setMapTypeId('moon')
+		}
+
 		return {
 			panTo,
 			fitBounds,
 			zoom,
 			zoomIn,
 			zoomOut,
+			setBaseImage,
 			removeEventListeners: this.removeEventListeners,
 			addEventListeners: this.addEventListeners,
 		}

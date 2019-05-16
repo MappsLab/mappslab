@@ -3,7 +3,6 @@
 import type { LatLng, LatLngLiteral, LatLngBoundsLiteral } from '../types/latLngTypes'
 
 const getMinMax = (numbers: Array<number>): [number, number] => {
-	console.log(numbers)
 	return [Math.min(...numbers), Math.max(...numbers)]
 }
 
@@ -16,8 +15,4 @@ export const getBounds = (latLngs: Array<LatLng | LatLngLiteral>): LatLngBoundsL
 		south: minLat,
 		west: minLng,
 	}
-
-	// const bounds = latLngs.reduce((acc, current) => ({
-	// 	minLat
-	// }))
 }
