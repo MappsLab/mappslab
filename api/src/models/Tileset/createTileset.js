@@ -19,7 +19,7 @@ const createSlices = async (file: string, outputDir: string): Promise<void> =>
 	new Promise((resolve) => {
 		const mapSlicer = new MapSlicer({
 			file, // (required) Huge image to slice
-			output: `${outputDir}/{z}/{y}/{x}.png`, // Output file pattern
+			output: `${outputDir}/{z}/{x}/{y}.png`, // Output file pattern
 			imageMagick: true, // (default: false) If (true) then use ImageMagick instead of GraphicsMagick
 			// background: '#0000000', // (default: '#FFFFFFFF') Background color to be used for the tiles. More: http://ow.ly/rsluD
 			// tmp: './temp', // (default: '.tmp') Temporary directory to be used to store helper files

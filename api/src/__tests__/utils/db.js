@@ -2,7 +2,7 @@
 import { graphql } from 'graphql'
 import { makeExecutableSchema } from 'graphql-tools'
 import models from 'Models'
-import { typeDefs, resolvers } from '../../schema'
+import { typeDefs, resolvers } from '../../graphql/schema'
 // import { joseph, john, waverly } from '../scripts/testDatabase/fixtures/users'
 
 /*

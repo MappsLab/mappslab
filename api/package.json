@@ -99,8 +99,5 @@
     "flow-typed": "^2.5.1",
     "nodemon": "^1.18.10",
     "rimraf": "^2.6.3"
-  },
-  "resolutions": {
-    "graphql": "14.1.1"
   }
 }
