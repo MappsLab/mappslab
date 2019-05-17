@@ -32,8 +32,8 @@
     "db:staging:seed": "cli-confirm 'Do you really want to reset the staging database?' && cross-env NODE_ENV=staging cross-env DEBUG=seed,db babel-node ./src/__tests__/scripts/seedNewDatabase.js",
     "db:staging:schema": "cross-env NODE_ENV=staging cross-env DEBUG=api,db babel-node ./src/database/scripts/updateSchema.js",
     "localstack:setup": "aws --endpoint-url=http://localhost:4572 s3 mb s3://mappslab-beta && aws --endpoint-url=http://localhost:4572 s3api put-bucket-acl --bucket mappslab-beta --acl public-read",
-    "deploy:dev": "yarn build && now && now alias",
-    "deploy": "yarn build && now -t $ZEIT_TOKEN && now alias -t $ZEIT_TOKEN"
+    "deploy:dev": "yarn build && now --docker && now alias",
+    "deploy": "yarn build && now -t $ZEIT_TOKEN --docker && now alias -t $ZEIT_TOKEN"
   },
   "dependencies": {
     "@hapi/joi": "^15.0.3",
