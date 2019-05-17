@@ -1,12 +1,10 @@
-// @flow
 import * as React from 'react'
 import styled, { css } from 'styled-components'
 import Pane from 'Components/Pane'
 import { Button } from 'Components/Buttons'
 import NativeListener from 'react-native-listener'
 import { P } from 'Components/Text'
-import { QuestionConsumer } from './QuestionProvider'
-import type { QuestionContext } from './QuestionProvider'
+import { QuestionContext, QuestionConsumer } from './QuestionProvider'
 
 const Background = styled.div`
 	${({ theme }) => css`
@@ -50,19 +48,10 @@ const Message = styled.div`
 
 type QuestionDialogProps = QuestionContext
 
-const defaultOptions = [
-	{
-		title: 'OK',
-		level: 'primary',
-		returnValue: true,
-		answerQuestion: async () => true,
-	},
-]
-
-const QuestionDialog = ({ currentQuestion, cancelQuestion, answer }: QuestionDialogProps) => {
+const QuestionDialogBase = ({ currentQuestion, cancelQuestion, answer }: QuestionDialogProps) => {
 	if (!currentQuestion) return null
 	const { title: paneTitle, message, options, render } = currentQuestion
-	const questionOptions = options || defaultOptions
+	console.log(currentQuestion, options)
 	return (
 		<Background data-testid="alert">
 			<BackgroundCancelButton onClick={cancelQuestion} />
@@ -76,19 +65,18 @@ const QuestionDialog = ({ currentQuestion, cancelQuestion, answer }: QuestionDia
 					render(answer)
 				) : (
 					<Buttons>
-						{questionOptions.map(({ title, answerQuestion, ...buttonConfig }) => (
+						{options.map(({ title, answerQuestion, ...buttonConfig }) => (
 							<Button key={title} onClick={answerQuestion} {...buttonConfig}>
 								{title}
 							</Button>
 						))}
 					</Buttons>
 				)}
-				<NativeListener onClick={cancelQuestion}>
-					<Button level="tertiary">Cancel</Button>
-				</NativeListener>
 			</Pane>
 		</Background>
 	)
 }
 
-export default () => <QuestionConsumer>{(questionProps) => <QuestionDialog {...questionProps} />}</QuestionConsumer>
+export const QuestionDialog = () => (
+	<QuestionConsumer>{(questionProps) => <QuestionDialogBase {...questionProps} />}</QuestionConsumer>
+)

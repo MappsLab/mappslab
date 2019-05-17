@@ -3,12 +3,14 @@ import styled, { css } from 'styled-components'
 import { FaVideo, FaRegImage, FaTrashAlt } from 'react-icons/fa'
 import NativeListener from 'react-native-listener'
 import { useQuestion } from '../Question'
-import FileUpload from '../FileUpload'
+import { FileUpload } from '../FileUpload'
 import { Prompt } from '../Forms'
 import { Image as ImageType, Video as VideoType } from '../../types-ts'
 import { Button } from '../Buttons'
 import { Image, Video } from '../Media'
 import { Header2 } from 'Components/Text'
+
+const { useState } = React
 
 /**
  * Styles
@@ -47,6 +49,8 @@ const MediaButtons = styled.div`
  * Media
  */
 
+type MediaSubmission = (data: { [key: string]: any }) => void | Promise<void>
+
 interface Props {
 	image?: Image
 	imageName?: string
@@ -54,7 +58,7 @@ interface Props {
 	video?: Video
 	videoName?: string
 	enableVideo?: boolean
-	submitUpdate: (formData: { [key: string]: any }) => void | Promise<void>
+	submitUpdate: (formData: any) => void | Promise<void>
 	viewerCanEdit?: boolean
 	alt?: string
 	label?: string
@@ -74,7 +78,13 @@ export const EditableMedia = ({
 }: Props) => {
 	if (!viewerCanEdit && !image && !video) return null
 	const { ask } = useQuestion()
+	const [loading, setLoading] = useState(false)
 
+	const handleImageSubmit = async (args: MediaSubmission) => {
+		setLoading(true)
+		const result = await submitUpdate(args)
+		setLoading(false)
+	}
 	const askForVideo = async () => {
 		const result = await ask({
 			message: 'Enter the URL of a Youtube or Vimeo Video',
@@ -120,7 +130,15 @@ export const EditableMedia = ({
 				) : null}
 				{viewerCanEdit && !video && !image ? (
 					<MediaButtons>
-						{enableImage && <FileUpload onSubmit={submitUpdate} name={imageName} Icon={FaRegImage} label="Add Image" />}
+						{enableImage && (
+							<FileUpload
+								onSubmit={handleImageSubmit}
+								accept="image/*"
+								name={imageName}
+								Icon={FaRegImage}
+								label={loading ? 'Loading..' : 'Add Image'}
+							/>
+						)}
 						{enableVideo && (
 							<NativeListener onClick={askForVideo}>
 								<Button level="tertiary">

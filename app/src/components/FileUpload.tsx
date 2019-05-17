@@ -1,4 +1,3 @@
-// @flow
 import * as React from 'react'
 import styled from 'styled-components'
 import { Button } from './Buttons'
@@ -13,21 +12,22 @@ const Input = styled.input`
  * FileUpload
  */
 
-type Props = {
-	onSubmit: (any) => void | Promise<void>,
-	name: string,
-	label: string,
-	accept?: string,
-	Icon?: React.ComponentType<any>,
+interface Props {
+	onSubmit: (any) => void | Promise<void>
+	name: string
+	label: string
+	accept: string
+	multiple?: boolean
+	Icon?: React.ComponentType<any>
 }
 
-const FileUpload = ({ onSubmit, name, accept, label, Icon }: Props) => {
+export const FileUpload = ({ onSubmit, multiple, name, accept, label, Icon }: Props) => {
 	const [isLoading, setIsLoading] = useState(false)
 
-	const handleChange = async (e, file) => {
+	const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
 		setIsLoading(true)
-		const inputFile = file || e.target.files[0]
-		onSubmit({ [name]: inputFile })
+		const inputFile = e.target.files[0]
+		await onSubmit({ [name]: inputFile })
 		setIsLoading(false)
 	}
 
@@ -41,14 +41,12 @@ const FileUpload = ({ onSubmit, name, accept, label, Icon }: Props) => {
 				) : null}
 				{isLoading ? 'Loading..' : label}
 			</Button>
-			<Input type="file" accept={accept} id={name} name={name} required onChange={handleChange} />
+			<Input type="file" accept={accept} id={name} name={name} required onChange={handleChange} multiple={multiple} />
 		</React.Fragment>
 	)
 }
 
 FileUpload.defaultProps = {
-	accept: undefined,
 	Icon: undefined,
+	mutiple: false,
 }
-
-export default FileUpload

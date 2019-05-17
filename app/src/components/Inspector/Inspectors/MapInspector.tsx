@@ -8,6 +8,7 @@ import EditableText from '../EditableText'
 import { EditableMedia } from '../EditableMedia'
 import InspectorSkeleton from '../InspectorSkeleton'
 import { unwindEdges } from '../../../utils/graphql'
+import { useQuestion } from '../../../components/Question'
 
 /**
  * MapInspector
@@ -25,6 +26,7 @@ interface Props extends BaseProps {
 }
 
 const MapInspectorMain = ({ map, viewer, inspectItem, mapQueryConfig, updateMap }: Props) => {
+	const { ask } = useQuestion()
 	const [teachers] = unwindEdges(map.classroom.teachers)
 	const viewerIsOwner = Boolean(viewer && teachers.find((t) => t.uid === viewer.uid))
 	const updateMapClassrooms = (classroom) => {
@@ -43,7 +45,14 @@ const MapInspectorMain = ({ map, viewer, inspectItem, mapQueryConfig, updateMap 
 			uid: map.uid,
 			...args,
 		}
-		updateMap({ variables, refetchQueries: [mapQueryConfig] })
+
+		if (args.baseImage) {
+			ask({
+				message:
+					'Processing map tiles takes several minutes. You may navigate away from this page and the map will automatically update when the tiles are ready.',
+			})
+		}
+		return updateMap({ variables, refetchQueries: [mapQueryConfig] })
 	}
 
 	return (
