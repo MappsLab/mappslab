@@ -44,7 +44,6 @@ class MapEditorMain extends React.Component<EditorProps> {
 	mapListeners: {} = {}
 
 	componentDidMount() {
-		console.log(this.props)
 		const { mapUid, setMap } = this.props
 		if (mapUid) {
 			setMap(mapUid)

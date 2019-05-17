@@ -26,9 +26,7 @@ interface Props extends BaseProps {
 
 const MapInspectorMain = ({ map, viewer, inspectItem, mapQueryConfig, updateMap }: Props) => {
 	const [teachers] = unwindEdges(map.classroom.teachers)
-	console.log(viewer)
 	const viewerIsOwner = Boolean(viewer && teachers.find((t) => t.uid === viewer.uid))
-	console.log(viewerIsOwner, map)
 	const updateMapClassrooms = (classroom) => {
 		const variables = {
 			input: {
