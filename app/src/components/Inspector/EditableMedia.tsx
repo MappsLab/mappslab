@@ -15,7 +15,11 @@ import { Header2 } from 'Components/Text'
  */
 
 const MediaWrapper = styled.div`
-	position: relative;
+	${({ theme }) => css`
+		background-color: ${theme.color.lightGray};
+		min-height: 30px;
+		position: relative;
+	`}
 `
 
 const ButtonWrapper = styled.div`

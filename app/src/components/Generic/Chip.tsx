@@ -1,4 +1,3 @@
-// @flow
 import React from 'react'
 import styled, { DefaultTheme } from 'styled-components'
 import { Link } from 'react-router-dom'
@@ -6,21 +5,21 @@ import { Link } from 'react-router-dom'
 interface WrapperProps {
 	theme: DefaultTheme
 	size: string
-	borders?: boolean
+	withBorders?: boolean
 	active?: boolean
 	to?: string
 }
 
 const Wrapper = styled.div`
-	${({ theme, size, active, borders }: WrapperProps) => `
+	${({ theme, size, active, withBorders }: WrapperProps) => `
 		height: ${theme.sizes.chip[size].height};
 		display: inline-flex;
 		justify-content: flex-start;
 		align-items: center;	
 		margin: ${size === 'large' ? theme.layout.spacing.half : theme.layout.spacing.half} 0;
-		padding: ${borders ? `0 ${size === 'large' ? theme.layout.spacing.single : theme.layout.spacing.half}` : ``};
+		padding: ${withBorders ? `0 ${size === 'large' ? theme.layout.spacing.single : theme.layout.spacing.half}` : ``};
 		background-color: ${active ? theme.color.primary.muted : 'white'};
-		border: ${borders ? `1px solid ${theme.color.primary.normal}` : ''};
+		border: ${withBorders ? `1px solid ${theme.color.primary.normal}` : ''};
 		border-radius: 2px;
 	`};
 `
@@ -79,7 +78,7 @@ export const Chip = ({ title, subtitle, size, active, to, onClick }: Props) => {
 		? 'button'
 		: undefined
 	return (
-		<Wrapper size={size} active={active || undefined} borders={Boolean(to || onClick)} as={as} to={to} onClick={onClick}>
+		<Wrapper size={size} active={active || undefined} withBorders={Boolean(to || onClick)} as={as} to={to} onClick={onClick}>
 			<TitleWrapper>
 				<Title size={size}>{title}</Title>
 				<Subtitle size={size}>{subtitle}</Subtitle>

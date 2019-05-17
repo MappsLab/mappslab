@@ -81,6 +81,7 @@ export const mapEvents = {
 							lat: newPin.lat,
 							lng: newPin.lng,
 						}
+						console.log(props)
 
 						inspectItem(newPin, position)
 						transition('droppedPin', { connectToPin: null })

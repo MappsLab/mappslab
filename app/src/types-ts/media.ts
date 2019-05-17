@@ -1,6 +1,7 @@
 export interface Tileset {
 	uid: string
-	tileId: string
+	baseUri: string
+	maxZoom: number
 }
 
 interface ImageSize {

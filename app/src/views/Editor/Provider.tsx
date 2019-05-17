@@ -43,6 +43,7 @@ export type ProviderProps = Utils & {
 		position?: 'BEFORE' | 'AFTER'
 	}
 	userLatLng?: LatLng
+	refetch: () => Promise<void>
 	subscribeToMore: (SubscriptionConfig) => () => void
 	machineState: MachineState
 	panTo: (ll: LatLng) => void
@@ -51,6 +52,7 @@ export type ProviderProps = Utils & {
 	addEventListeners: (listeners: { [key: string]: (args: any) => void }) => void
 	removeEventListeners: (listeners: { [key: string]: (args: any) => void }) => void
 	setBaseImage: (args: any) => void
+	setZoom: (z: number) => void
 }
 
 // const defaults = {
@@ -128,10 +130,11 @@ class MapProviderClass extends React.Component<Props, State> {
 						{({ viewer }) => {
 							return (
 								<MapQuery variables={{ uid: mapUid }} delayQuery={mapUid === null}>
-									{({ data: mapQueryData, subscribeToMore }) => (
+									{({ data: mapQueryData, subscribeToMore, ...rest }) => (
 										<Provider
 											value={{
 												...value,
+												...rest,
 												viewer,
 												subscribeToMore,
 												mapData: mapQueryData ? mapQueryData.map : undefined,

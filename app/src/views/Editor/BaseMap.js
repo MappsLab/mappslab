@@ -19,8 +19,7 @@ type Props = {
 
 const defaultOptions = {
 	center: { lat: 40.65, lng: -111.85 },
-	zoom: 4,
-	maxZoom: 4,
+	// zoom: 6,
 	disableDefaultUI: true,
 	zoomControlOptions: false,
 	streetViewControlOptions: false,

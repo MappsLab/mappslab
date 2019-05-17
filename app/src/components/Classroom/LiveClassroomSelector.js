@@ -2,6 +2,7 @@
 import React from 'react'
 import { ClassroomsQuery } from 'Queries'
 import { LiveSelector, SelectorItem } from 'Components/Selector'
+import { unwindEdges } from '../../utils/graphql'
 
 /**
  * LiveClassroomSelector
@@ -31,14 +32,14 @@ const LiveClassroomSelector = ({ disabled, delayQuery, onSelect }: Props) => (
 					},
 				})
 			}
-			const items =
-				data && data.classrooms
-					? data.classrooms.map((c) => ({
-							value: c.uid,
-							label: c.title,
-							render: ({ highlighted, selected }) => <SelectorItem title={c.title} active={highlighted || selected} />,
-					  }))
-					: []
+			console.log(data)
+			const classrooms = data && data.classrooms && data.classrooms.edges ? unwindEdges(data.classrooms)[0] : []
+			const items = classrooms.map((c) => ({
+				value: c.uid,
+				label: c.title,
+				render: ({ highlighted, selected }) => <SelectorItem title={c.title} active={highlighted || selected} />,
+			}))
+			console.log(items)
 			return (
 				<LiveSelector
 					label="Select your classroom"

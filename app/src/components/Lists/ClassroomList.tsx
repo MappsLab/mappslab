@@ -3,6 +3,7 @@ import { Classroom } from 'Types'
 import { ClassroomsQuery } from '../../queries/Classroom'
 import { List } from './List'
 import { ListOfTypeProps, ListOfTypeBaseProps } from './utils'
+import { unwindEdges } from '../../utils/graphql'
 
 /**
  * ClassroomList
@@ -48,7 +49,7 @@ const ClassroomListMain = ({
 export const ClassroomList = (baseProps: ListOfTypeBaseProps<Classroom>) => (
 	<ClassroomsQuery delayQuery>
 		{({ data, refetch }) => (
-			<ClassroomListMain searchQuery={refetch} searchResults={data ? data.classrooms || [] : []} {...baseProps} />
+			<ClassroomListMain searchQuery={refetch} searchResults={data ? unwindEdges(data.classrooms)[0] || [] : []} {...baseProps} />
 		)}
 	</ClassroomsQuery>
 )

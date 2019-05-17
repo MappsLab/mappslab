@@ -9,6 +9,7 @@
     "start": "serve . --single",
     "build": "webpack -p --env production --progress --colors",
     "dev": "cross-env ENV=development DEBUG=api webpack-dev-server --colors --env development --config webpack.config.js",
+    "dev:staging": "cross-env ENV=development cross-env AWS_BUCKET_ROOT=https://mappslab-beta.s3.amazonaws.com DEBUG=api webpack-dev-server --colors --env development --config webpack.config.js",
     "install-types": "typesync && yarn install",
     "test": "cross-env ENV=development cross-env DEBUG=test cross-env TEST_DB=true jest ",
     "test:coverage": "cross-env ENV=development cross-env DEBUG=test cross-env TEST_DB=true jest ",

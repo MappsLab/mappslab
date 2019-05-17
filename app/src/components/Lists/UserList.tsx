@@ -5,6 +5,7 @@ import { QuestionConsumer, QuestionContext } from '../Question'
 import { Prompt } from '../Forms'
 import { List } from './List'
 import { ListOfTypeProps, ListOfTypeBaseProps } from './utils'
+import { unwindEdges } from '../../utils/graphql'
 
 const { useState } = React
 
@@ -95,7 +96,12 @@ export const UserList = (baseProps: BaseProps) => (
 			<UsersQuery delayQuery>
 				{({ data, refetch }) => (
 					// $FlowFixMe
-					<UserListMain question={question} searchQuery={refetch} searchResults={data ? data.users || [] : []} {...baseProps} />
+					<UserListMain
+						question={question}
+						searchQuery={refetch}
+						searchResults={data ? unwindEdges<User>(data.users)[0] || [] : []}
+						{...baseProps}
+					/>
 				)}
 			</UsersQuery>
 		)}

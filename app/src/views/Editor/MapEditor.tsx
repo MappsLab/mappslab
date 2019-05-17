@@ -1,10 +1,11 @@
 import React from 'react'
+import { path } from 'ramda'
 import { mapEventNames } from 'mapp'
 import { State } from 'react-automata'
 import { Subscription } from 'Types'
 import { $PropertyType } from 'utility-types'
 import { startSubscription } from 'Queries/startSubscription'
-import { pinAddedToMap, pinDeleted, pinUpdated } from 'Queries/Map/mapSubscriptions'
+import { pinAddedToMap, pinDeleted, pinUpdated, mapUpdated } from 'Queries/Map/mapSubscriptions'
 import { NewNotification, NotificationsConsumer } from 'Components/Notifications'
 import { eventsReducer, isFunc } from 'Utils/data'
 import { getMapBounds } from 'Utils/maps'
@@ -27,6 +28,7 @@ export type EditorProps = ProviderProps & {
 	mapUid: null | string
 	sendNotification: (n: NewNotification) => void
 	closeInspector: $PropertyType<ItemInspectorProviderProps, 'closeInspector'>
+	inspectItem: $PropertyType<ItemInspectorProviderProps, 'inspectItem'>
 	setBaseImage: (args: any) => void
 }
 
@@ -42,7 +44,8 @@ class MapEditorMain extends React.Component<EditorProps> {
 	mapListeners: {} = {}
 
 	componentDidMount() {
-		const { mapUid, setMap, setBaseImage } = this.props
+		console.log(this.props)
+		const { mapUid, setMap } = this.props
 		if (mapUid) {
 			setMap(mapUid)
 			this.startSubscriptions()
@@ -52,16 +55,18 @@ class MapEditorMain extends React.Component<EditorProps> {
 			const bounds = getMapBounds(pins)
 			this.props.fitBounds(bounds)
 		}
-		console.log(this.props.mapData)
 		this.setBaseImage()
 		this.addEventListeners()
 	}
 
-	setBaseImage() {
-		const { setBaseImage, mapData } = this.props
+	componentWillReceiveProps(nextProps: EditorProps) {
+		const tileset = path(['mapData', 'baseImage', 'tileset'], nextProps)
+		if (tileset) this.setBaseImage(nextProps)
+	}
+
+	setBaseImage({ setBaseImage, mapData, setZoom }: EditorProps = this.props) {
 		if (!(mapData && mapData.baseImage && mapData.baseImage.tileset)) return
-		const { tileId } = mapData.baseImage.tileset
-		console.log('setting base image...')
+		const { baseUri, maxZoom } = mapData.baseImage.tileset
 
 		function getNormalizedCoord(coord, zoom) {
 			var y = coord.y
@@ -85,15 +90,14 @@ class MapEditorMain extends React.Component<EditorProps> {
 		}
 
 		const getTileUrl = (coord, zoom) => {
-			const { x, y } = getNormalizedCoord(coord, zoom)
-			console.log(' - - - -')
-			console.log(zoom, x, y)
-			const url = `${config.imageBucketRoot}mappslab-beta/tiles/${tileId}/${zoom}/${x}/${y}.png`
-			console.log(url)
+			const normalized = getNormalizedCoord(coord, zoom)
+			if (!normalized) return null
+			const { x, y } = normalized
+			const url = `${config.imageBucketRoot}${baseUri}/${zoom}/${x}/${y}.png`
 			if (zoom > 4) return null
 			return url
 		}
-		setBaseImage({ getTileUrl })
+		setBaseImage({ getTileUrl, maxZoom })
 	}
 
 	componentWillUpdate(nextProps: EditorProps) {
@@ -174,18 +178,21 @@ class MapEditorMain extends React.Component<EditorProps> {
 	}
 
 	startSubscriptions() {
-		const { subscribeToMore, mapUid } = this.props
+		const { subscribeToMore, mapUid, refetch } = this.props
 		if (!mapUid) this.stopSubscriptions()
-		const subscriptions = [pinAddedToMap, pinUpdated, pinDeleted]
+		const subscriptions = [pinAddedToMap, pinUpdated, pinDeleted, mapUpdated]
 
-		this.subscriptions = subscriptions.map((s) =>
-			startSubscription({
-				subscribeToMore,
-				variables: { mapUid },
-				// callback: this.logSubscriptionUpdate(s.name),
-				...s,
-			}),
-		)
+		this.subscriptions = subscriptions
+			.map((s) => (typeof s === 'function' ? s(this.props) : s))
+			.map((s) =>
+				startSubscription({
+					subscribeToMore,
+					refetch,
+					variables: { mapUid },
+					// callback: this.logSubscriptionUpdate(s.name),
+					...s,
+				}),
+			)
 	}
 
 	domListeners: { [key: string]: { remove: () => void } }
@@ -248,11 +255,12 @@ export const MapEditor = ({ mapUid }: WrapperProps) => (
 		{(contextValue) => (
 			<InspectorProvider {...contextValue}>
 				<InspectorConsumer>
-					{({ closeInspector }) => (
+					{({ closeInspector, inspectItem }) => (
 						<NotificationsConsumer>
 							{({ sendNotification }) => (
 								<MapEditorMain
 									closeInspector={closeInspector}
+									inspectItem={inspectItem}
 									mapUid={mapUid || null}
 									sendNotification={sendNotification}
 									{...contextValue}

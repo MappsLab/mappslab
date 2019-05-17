@@ -1,16 +1,44 @@
-// @flow
 import gql from 'graphql-tag'
 import * as R from 'ramda'
-import type { PinType } from 'Types/Pin'
-import type { MapResponse } from 'Queries/Map/MapQuery'
-import type { SubscriptionCallback, SubscriptionConfig } from 'Types/GraphQL'
+import { Pin, Map, SubscriptionCallback, SubscriptionConfig } from 'Types'
+import { MapResponse } from './MapQuery'
 import { pinFragment } from 'Queries/Pin/fragments'
+import { mapFragment } from 'Queries/Map/fragments'
 
-type PinSubscriptionResponse<key> = {
-	[key]: { pin: PinType },
+interface MapUpdatedResponse {
+	mapUpdated: { map: Map }
 }
 
-export const pinAddedToMap: SubscriptionConfig<MapResponse, PinSubscriptionResponse<'pinAddedToMap'>> = {
+export const mapUpdated: SubscriptionConfig<MapResponse, MapUpdatedResponse> = ({ refetch }) => ({
+	name: 'mapUpdated',
+	document: gql`
+		subscription mapUpdated($mapUid: String!) {
+			mapUpdated(input: { mapUid: $mapUid }) {
+				map {
+					...MapFragment
+				}
+			}
+		}
+		${mapFragment}
+	`,
+	updateQuery: (callback: SubscriptionCallback | false = false) => (previous, { subscriptionData }) => {
+		refetch()
+		return previous
+		// console.log(previous, subscriptionData)
+		// if (callback) callback(previous, map)
+		// return Object.assign({}, previous, {
+		// 	map: {
+		// 		...map,
+		// 	},
+		// })
+	},
+})
+
+interface PinAddedResponse {
+	pinAddedToMap: { pin: Pin }
+}
+
+export const pinAddedToMap: SubscriptionConfig<MapResponse, PinAddedResponse> = {
 	name: 'pinAddedToMap',
 	document: gql`
 		subscription pinAddedToMap($mapUid: String!) {
@@ -38,7 +66,11 @@ export const pinAddedToMap: SubscriptionConfig<MapResponse, PinSubscriptionRespo
 	},
 }
 
-export const pinUpdated: SubscriptionConfig<MapResponse, PinSubscriptionResponse<'pinUpdated'>> = {
+interface PinUpdatedResponse {
+	pinUpdated: { pin: Pin }
+}
+
+export const pinUpdated: SubscriptionConfig<MapResponse, PinUpdatedResponse> = {
 	name: 'pinUpdated',
 	document: gql`
 		subscription pinUpdated($mapUid: String!) {
@@ -74,7 +106,11 @@ export const pinUpdated: SubscriptionConfig<MapResponse, PinSubscriptionResponse
 	},
 }
 
-export const pinDeleted: SubscriptionConfig<MapResponse, PinSubscriptionResponse<'pinDeleted'>> = {
+interface PinDeletedResponse {
+	pinDeleted: { pin: Pin }
+}
+
+export const pinDeleted: SubscriptionConfig<MapResponse, PinDeletedResponse> = {
 	name: 'pinDeleted',
 	document: gql`
 		subscription pinDeleted($mapUid: String!) {

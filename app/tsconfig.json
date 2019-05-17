@@ -10,7 +10,7 @@
 		"target": "es5",
 		"sourceMap": true,
 		"jsx": "react",
-		"rootDir": "./src",
+		// "rootDir": "./src",
 		"lib": ["es6", "es7", "dom"],
 		"outDir": "./dist",
 		"esModuleInterop": true,
@@ -37,5 +37,6 @@
 		}
 	},
 	"include": ["./src"],
-	"exclude": ["node_modules", "**/*.spec.ts", "**/*.test.ts", "dist"]
+	"exclude": ["node_modules", "**/*.spec.ts", "**/*.test.ts", "**/__tests__/*", "dist", "build"]
+	// "exclude": ["node_modules", "**/*.spec.ts", "**/*.test.ts", "dist"]
 }
