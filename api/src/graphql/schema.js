@@ -3,7 +3,7 @@ import { merge } from 'lodash'
 import { coreTypes, coreTypeResolvers, coreQueryResolvers } from './core'
 import { scalarTypes, scalarResolvers } from './Scalars'
 import { ClassroomSchema, ClassroomQueryResolvers, ClassroomMutationResolvers } from './Classroom'
-import { MapSchema, MapQueryResolvers, MapMutationResolvers } from './Map'
+import { MapSchema, MapQueryResolvers, MapMutationResolvers, MapSubscriptionResolvers } from './Map'
 import { PinSchema, PinQueryResolvers, PinMutationResolvers, PinSubscriptionResolvers } from './Pin'
 import { RouteSchema, RouteQueryResolvers, RouteMutationResolvers } from './Route'
 import { UserSchema, UserQueryResolvers, UserMutationResolvers } from './User'
@@ -56,6 +56,7 @@ export const resolvers = merge(
 	 * Subscriptions
 	 */
 	PinSubscriptionResolvers,
+	MapSubscriptionResolvers,
 )
 
 export const typeDefs = [

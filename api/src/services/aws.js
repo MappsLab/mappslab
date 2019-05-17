@@ -10,8 +10,6 @@ const credentials = {
 	secretAccessKey: config.get('aws.secretKey'),
 }
 
-const useLocal = !/staging|production/.test(config.get('env'))
-
 const s3client = new AWS.S3({
 	credentials,
 	endpoint: config.get('aws.endpoint'),

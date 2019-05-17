@@ -1,6 +1,6 @@
 // @flow
 import Joi from '@hapi/joi'
-import { merge } from 'ramda'
+// import { merge } from 'ramda'
 import type { TilesetType } from 'Types/TileTypes'
 
 /**
@@ -9,11 +9,8 @@ import type { TilesetType } from 'Types/TileTypes'
 
 export const tilesetSchema = (isNew: boolean = true) =>
 	Joi.object().keys({
-		tileId: isNew
-			? Joi.string()
-					.length(36)
-					.required()
-			: Joi.any.forbidden(),
+		baseUri: isNew ? Joi.string().required() : Joi.any.forbidden(),
+		maxZoom: Joi.number().required(),
 		createdAt: isNew ? Joi.date().default(new Date()) : Joi.any().forbidden(),
 		updatedAt: Joi.date().default(new Date()),
 		type: Joi.any()
@@ -30,7 +27,9 @@ export const validateNew = (data: NewTilesetData) => Joi.validate(data, tilesetS
 export const publicFields = [
 	//
 	'uid',
-	'tileId',
+	'baseUri',
+	'maxZoom',
+	'deleted',
 ].join('\n')
 
 /**

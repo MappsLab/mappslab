@@ -3,6 +3,8 @@ import MapSlicer from 'mapslice'
 import fs from 'fs'
 import batchPromises from 'batch-promises'
 import uuidv1 from 'uuid/v1'
+import rimraf from 'rimraf'
+
 import path from 'path'
 import { walkDir } from 'smart-fs'
 import { createNodeWithEdges } from 'Database'
@@ -45,39 +47,58 @@ const createSlices = async (file: string, outputDir: string): Promise<void> =>
 	})
 
 const tileDir = config.get('aws.tileDirectory')
+const bucketName = config.get('aws.bucketName')
 
-const uploadSlices = async (dirpath: string, uid: string): Promise<void> => {
-	const files = walkDir(dirpath)
+const uploadSlices = async (sourceDir: string, baseUri: string): Promise<void> => {
+	const files = walkDir(sourceDir)
 	await batchPromises(5, files, (file) => {
-		const buffer = fs.readFileSync(path.join(dirpath, file))
-		const filename = path.join(tileDir, uid, file)
+		const buffer = fs.readFileSync(path.join(sourceDir, file))
+		const filename = path.join(baseUri, file)
 		return upload(buffer, filename)
 	})
 	//
 }
 
+const isDirectory = (source) => fs.lstatSync(source).isDirectory()
+
+const getMaxZoom = async (source: string): Promise<number> =>
+	fs
+		.readdirSync(source)
+		.map((name) => path.join(source, name))
+		.filter(isDirectory)
+		.map((fullPath) => fullPath.split('/').slice(-1)[0])
+		.reduce((prev, next) => Math.max(prev, parseInt(next, 10)), 0)
+
 const cleanup = async (dirpath: string): Promise<void> => {
-	//
+	rimraf(dirpath, (err) => {
+		if (err) throw err
+	})
 }
 
 export const createTileSet = async (imageUpload: ImageUpload, imageNode: ImageType): Promise<TilesetType> => {
 	const { createReadStream, filename } = await imageUpload
 	const buffer = await streamToBuffer(createReadStream())
-	const tileId = uuidv1()
-	const dir = path.join('.temp', tileId)
-	fs.mkdirSync(dir, { recursive: true })
+	const uuid = uuidv1()
+	const tempDir = '.temp'
+	if (!fs.existsSync(tempDir)) {
+		fs.mkdirSync(tempDir)
+	}
+	const tempFileDir = path.join(tempDir, uuid)
+	const originalFileName = path.join(tempFileDir, filename)
+	fs.mkdirSync(tempFileDir)
+	fs.writeFileSync(originalFileName, buffer)
 
-	const outputDir = path.join(dir, 'output')
-	fs.mkdirSync(outputDir)
-	const filePath = path.join(dir, filename)
-	fs.writeFileSync(filePath, buffer)
-
-	await createSlices(filePath, outputDir)
-	await uploadSlices(outputDir, tileId)
+	await createSlices(originalFileName, tempFileDir)
+	const uploadTo = [tileDir, uuid].join('/')
+	await uploadSlices(tempFileDir, uploadTo)
+	const maxZoom = await getMaxZoom(path.join(tempDir, uuid))
 	// const { maxZoom,}
-	await cleanup(dir)
+	await cleanup(path.join(tempDir, uuid))
+	const baseUri = path.join(bucketName, uploadTo)
+
 	const tileset = {
-		tileId,
+		baseUri,
+		maxZoom,
 	}
 	const validated = await validateNew(tileset)
 	const imageEdge = [

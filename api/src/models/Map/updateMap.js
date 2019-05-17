@@ -5,7 +5,7 @@ import { clean, validateUpdate } from './mapDBSchema'
 import Image from '../Image'
 import Tileset from '../Tileset'
 
-export const updateMap = async (args: UpdateMapData): Promise<MapType> => {
+export const updateMap = async (args: UpdateMapData, dispatchUpdate: () => Promise<void>): Promise<MapType> => {
 	const { uid, baseImage, ...mapData } = args
 	const cleaned = await clean(mapData)
 	const validatedMapData = validateUpdate(cleaned)
@@ -14,7 +14,9 @@ export const updateMap = async (args: UpdateMapData): Promise<MapType> => {
 
 	if (baseImage) {
 		const mapBaseImage = await Image.createImage(baseImage)
-		Tileset.createTileSet(baseImage, mapBaseImage)
+		Tileset.createTileSet(baseImage, mapBaseImage).then(() => {
+			dispatchUpdate()
+		})
 		await createEdge({ fromUid: uid, pred: 'has_image', toUid: mapBaseImage.uid }, { unique: true })
 	} else if (baseImage === null) {
 		await removeEdge({ fromUid: uid, pred: 'has_image', toUid: '*' })

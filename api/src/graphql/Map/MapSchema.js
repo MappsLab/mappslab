@@ -58,6 +58,14 @@ const Map = /* GraphQL */ `
 		where: MapFilterParameter
 	}
 
+	input MapUpdatedInput {
+		mapUid: String!
+	}
+
+	type MapSubscription {
+		map: Map!
+	}
+
 	# Queries & Mutations
 
 	extend type Query {
@@ -70,6 +78,10 @@ const Map = /* GraphQL */ `
 		updateMap(input: UpdateMapInput!): Map!
 		deleteMap(input: GetMapInput!): Boolean!
 		# moveMap(input: GetNodeInput!): Map!
+	}
+
+	extend type Subscription {
+		mapUpdated(input: MapUpdatedInput!): MapSubscription!
 	}
 `
 

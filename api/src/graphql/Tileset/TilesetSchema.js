@@ -3,7 +3,8 @@
 const Tileset = /* GraphQL */ `
 	type Tileset implements Node {
 		uid: String!
-		tileId: String!
+		baseUri: String!
+		maxZoom: Int!
 	}
 `
 
