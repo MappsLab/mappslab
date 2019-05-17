@@ -164,6 +164,10 @@ class Mapp extends React.Component<Props, State> {
 			this.map.panTo(newCenter)
 		}
 
+		const setZoom = (zoom: number) => {
+			if (this.map) this.map.setZoom(zoom)
+		}
+
 		const zoom = (diff: number): void => {
 			const currentZoom = this.map.getZoom()
 			const newZoom = currentZoom + diff
@@ -184,8 +188,7 @@ class Mapp extends React.Component<Props, State> {
 				...defaultBaseImageOptions,
 				...options,
 			}
-			console.log(all)
-			const { getTileUrl, tileSize, maxZoom, minZoom, radius, name } = all
+			const { getTileUrl, tileSize, maxZoom, minZoom, name } = all
 			const baseImage = new google.maps.ImageMapType({
 				getTileUrl,
 				tileSize: new google.maps.Size(tileSize, tileSize),
@@ -202,6 +205,7 @@ class Mapp extends React.Component<Props, State> {
 		return {
 			panTo,
 			fitBounds,
+			setZoom,
 			zoom,
 			zoomIn,
 			zoomOut,
