@@ -9,6 +9,7 @@ const Map = /* GraphQL */ `
 		classroom: Classroom
 		pins: PinConnection
 		routes: RouteConnection
+		baseImage: Image
 	}
 
 	# Relationships
@@ -35,9 +36,11 @@ const Map = /* GraphQL */ `
 		addToClassrooms: [String!]
 	}
 
-	input ModifyMapInput {
+	input UpdateMapInput {
+		uid: String!
 		title: String
 		description: String
+		baseImage: Upload
 	}
 
 	input MapSortParameter {
@@ -55,6 +58,14 @@ const Map = /* GraphQL */ `
 		where: MapFilterParameter
 	}
 
+	input MapUpdatedInput {
+		mapUid: String!
+	}
+
+	type MapSubscription {
+		map: Map!
+	}
+
 	# Queries & Mutations
 
 	extend type Query {
@@ -64,9 +75,13 @@ const Map = /* GraphQL */ `
 
 	extend type Mutation {
 		createMap(input: CreateMapInput!): Map!
-		updateMap(input: ModifyMapInput!): Map!
+		updateMap(input: UpdateMapInput!): Map!
 		deleteMap(input: GetMapInput!): Boolean!
 		# moveMap(input: GetNodeInput!): Map!
+	}
+
+	extend type Subscription {
+		mapUpdated(input: MapUpdatedInput!): MapSubscription!
 	}
 `
 

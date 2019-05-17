@@ -1,6 +1,6 @@
 // @flow
 import { map, maps } from './fetchMaps'
-import { classroom, pins, routes } from './fetchMapRelationships'
+import { classroom, pins, routes, baseImage } from './fetchMapRelationships'
 
 export default {
 	Query: {
@@ -11,5 +11,6 @@ export default {
 		classroom,
 		pins,
 		routes,
+		baseImage,
 	},
 }

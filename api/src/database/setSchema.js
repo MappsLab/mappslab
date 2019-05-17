@@ -67,6 +67,11 @@ export const setSchema = async () => {
 		'has_pin: uid @reverse @count . ',
 		'has_route: uid @reverse @count . ',
 		'has_group: uid @reverse @count . ',
+
+		/**
+		 * Image Indices
+		 */
+		'has_tileset: uid @reverse . ',
 	].join('\n')
 	debug(schema)
 	const op = new dgraph.Operation()

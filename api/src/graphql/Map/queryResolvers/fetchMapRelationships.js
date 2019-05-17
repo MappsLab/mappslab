@@ -31,6 +31,12 @@ export const pins = async (fetchedMap: MapType, { input }: PaginationInput, ctx:
 	return assemblePage(fetchedPins, input)
 }
 
+export const baseImage = async (fetchedMap: MapType, _: any, ctx: GraphQLContext): Promise<ImageType> => {
+	const filter = { where: { hasImage: { eq: fetchedMap.uid } } }
+	const result = await ctx.models.Image.getImages(filter)
+	return result && result[0]
+}
+
 export const routes = async (
 	fetchedMap: MapType,
 	{ input }: PaginationInput,

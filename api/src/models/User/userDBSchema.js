@@ -1,5 +1,5 @@
 // @flow
-import Joi from 'joi'
+import Joi from '@hapi/joi'
 import { when, prop, assoc } from 'ramda'
 import bcrypt from 'bcrypt'
 import { promisePipe } from 'Utils'

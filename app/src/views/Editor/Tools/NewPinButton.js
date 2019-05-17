@@ -28,7 +28,7 @@ const NewPinButton = ({ onClick }: Props) => (
 			return (
 				<Wrapper active={dropMode}>
 					<RoundButton
-						toolTip={dropMode ? 'Cancel' : 'Add a New Pin'}
+						tooltip={dropMode ? 'Cancel' : 'Add a New Pin'}
 						onClick={onClick}
 						label="Add a new Pin"
 						icon={dropMode ? '' : '📍'}

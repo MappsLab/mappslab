@@ -5,6 +5,7 @@ const Image = /* GraphQL */ `
 		uid: String!
 		sizes: [ImageSize]
 		original: ImageSize
+		tileset: Tileset
 	}
 
 	type ImageSize {

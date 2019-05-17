@@ -33,6 +33,23 @@ module.exports = {
 			plugins: ['@babel/plugin-transform-runtime'],
 		},
 	},
+	overrides: [
+		{
+			test: ['./src/**/*.tsx?'],
+			presets: [
+				'@babel/preset-typescript',
+				[
+					'@babel/preset-env',
+					{
+						targets: {
+							node: 'current',
+						},
+					},
+				],
+				'@babel/preset-react',
+			],
+		},
+	],
 	plugins: [
 		[
 			'babel-plugin-module-resolver',
@@ -45,6 +62,7 @@ module.exports = {
 					Utils: './src/utils',
 					Queries: './src/queries',
 					Types: './src/types',
+					Providers: './src/providers',
 					Styles: './src/theme',
 					Test: './src/__tests__',
 					Jest: './jest',

@@ -64,7 +64,7 @@ describe('queries', () => {
 		const result = await request(uidLogin, { variables })
 		const { jwt, viewer } = result.data.loginViewer
 		expect(/^Bearer/.test(jwt.token)).toBe(true)
-		expect(jwt.expires).toBeGreaterThan(1)
+		expect(new Date(jwt.expires) - new Date()).toBeGreaterThan(1)
 		expect(viewer.name).toBe(admin.name)
 	})
 
@@ -73,7 +73,7 @@ describe('queries', () => {
 		const result = await request(uidLogin, { variables })
 		const { jwt, viewer } = result.data.loginViewer
 		expect(/^Bearer/.test(jwt.token)).toBe(true)
-		expect(jwt.expires).toBeGreaterThan(1)
+		expect(new Date(jwt.expires) - new Date()).toBeGreaterThan(1)
 		expect(viewer.name).toBe(admin.name)
 	})
 
@@ -149,7 +149,7 @@ describe('queries', () => {
 		expect(viewer.uid).toBe(teacher.uid)
 		expect(viewer.email).toBe(teacher.email)
 		expect(jwt.token).toMatch(/^Bearer /)
-		expect(jwt.expires).toBe(86400)
+		expect(new Date(jwt.expires) - new Date()).toBeGreaterThan(0)
 	})
 
 	describe('JWT creation & verification', () => {

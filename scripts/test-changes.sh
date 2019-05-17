@@ -51,6 +51,7 @@ echo "DEPLOY_ENV: $DEPLOY_ENV"
 	echo "*     * * *     *"
 	echo "⚗️  Testing App"
 	echo "*     * * *     *"
+	yarn workspace @mappslab/mapp build 
 	npm run test:app
 
 	echo "*     * * *     *"

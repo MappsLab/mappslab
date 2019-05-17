@@ -14,7 +14,7 @@ const User = /* GraphQL */ `
 
 	type Token {
 		token: String!
-		expires: Int!
+		expires: String!
 	}
 
 	union LoginResult = LoginSuccess | RequiresReset

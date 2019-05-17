@@ -6,11 +6,13 @@
   "author": "Joseph Thomas | Good Idea Studio",
   "license": "ISC",
   "scripts": {
-    "start": "cross-env DEBUG=api node ./dist/server.js",
+    "start": "cross-env NODE_ENV=staging cross-env DEBUG=api node ./dist/server.js",
     "build": "yarn build:clean && yarn build:compile",
     "build:clean": "rimraf ./dist",
     "build:compile": "cross-env NODE_ENV=production cross-env ENV=production babel ./src -d ./dist",
     "dev": "yarn docker:dev:up && yarn dev:watch",
+    "dev:staging:build": "docker build --tag mappslab-api .",
+    "dev:staging": "docker run -p 3000:3000 mappslab-api",
     "dev:watch": "cross-env ENV=development cross-env DEBUG=api,db nodemon --watch ./src ./src/server.js --exec babel-node",
     "test": "cross-env ENV=test cross-env DEBUG=test cross-env TEST_DB=true jest",
     "test:coverage": "cross-env ENV=test cross-env DEBUG=test cross-env TEST_DB=true jest --coverage",
@@ -24,17 +26,21 @@
     "db:test:stop": "docker stop mappslab-test_dgraph-zero mappslab-test_dgraph-server mappslab-test_dgraph-ratel",
     "docker:dev:up": "docker-compose -p mappslab-dev -f ./docker-compose.dev.yml up -d",
     "docker:dev:start": "docker start mappslab-dev_dgraph-zero mappslab-dev_dgraph-server mappslab-dev_dgraph-ratel",
+    "db:dev:schema": "cross-env NODE_ENV=development cross-env DEBUG=api,db babel-node ./src/database/scripts/updateSchema.js",
     "db:dev:seed": "cross-env NODE_ENV=development cross-env DEBUG=seed,db babel-node ./src/__tests__/scripts/seedNewDatabase.js",
     "db:dev:stop": "docker stop mappslab-dev_dgraph-zero mappslab-dev_dgraph-server mappslab-dev_dgraph-ratel",
-    "db:staging:seed": "cli-confirm 'Do you really want to reset the staging database?' && cross-env ENV=staging cross-env DEBUG=seed,db babel-node ./src/__tests__/scripts/seedNewDatabase.js",
+    "db:staging:seed": "cli-confirm 'Do you really want to reset the staging database?' && cross-env NODE_ENV=staging cross-env DEBUG=seed,db babel-node ./src/__tests__/scripts/seedNewDatabase.js",
+    "db:staging:schema": "cross-env NODE_ENV=staging cross-env DEBUG=api,db babel-node ./src/database/scripts/updateSchema.js",
     "localstack:setup": "aws --endpoint-url=http://localhost:4572 s3 mb s3://mappslab-beta && aws --endpoint-url=http://localhost:4572 s3api put-bucket-acl --bucket mappslab-beta --acl public-read",
-    "deploy:dev": "yarn build && now && now alias",
-    "deploy": "yarn build && now -t $ZEIT_TOKEN && now alias -t $ZEIT_TOKEN"
+    "deploy:dev": "yarn build && now --docker && now alias",
+    "deploy": "yarn build && now -t $ZEIT_TOKEN --docker && now alias -t $ZEIT_TOKEN"
   },
   "dependencies": {
+    "@hapi/joi": "^15.0.3",
     "apollo-server": "^2.4.8",
     "apollo-server-express": "^2.4.8",
     "aws-sdk": "^2.421.0",
+    "batch-promises": "^0.0.3",
     "bcrypt": "^3.0.4",
     "convict": "^4.4.1",
     "cors": "^2.8.5",
@@ -45,18 +51,21 @@
     "dotenv": "^7.0.0",
     "express": "^4.16.4",
     "flat": "^4.1.0",
+    "gm": "^1.23.1",
     "graphql": "^14.1.1",
     "graphql-subscriptions": "^1.0.0",
     "graphql-tools": "^4.0.4",
     "grpc": "^1.19.0",
-    "joi": "^14.3.1",
     "json5": "^2.1.0",
     "jsonwebtoken": "^8.5.0",
     "lodash": "^4.17.11",
+    "mapslice": "^2.0.0",
     "prop-types": "^15.7.2",
     "ramda": "^0.26.1",
     "sharp": "^0.21.3",
+    "smart-fs": "^1.7.6",
     "stream-to-array": "^2.3.0",
+    "temp-dir": "^2.0.0",
     "uuid": "^3.3.2",
     "validator": "^10.11.0"
   },
@@ -93,8 +102,5 @@
     "flow-typed": "^2.5.1",
     "nodemon": "^1.18.10",
     "rimraf": "^2.6.3"
-  },
-  "resolutions": {
-    "graphql": "14.1.1"
   }
 }

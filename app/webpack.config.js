@@ -12,6 +12,11 @@ const common = merge([
 					exclude: /node_modules/,
 					use: ['babel-loader'],
 				},
+				{
+					test: /\.tsx?$/,
+					exclude: /node_modules/,
+					use: ['ts-loader'],
+				},
 			],
 		},
 		resolve: {
@@ -29,7 +34,7 @@ const common = merge([
 				Jest: path.resolve(__dirname, 'jest'),
 				mapp: path.resolve(__dirname, '../packages/mapp/dist'),
 			},
-			extensions: ['.js'],
+			extensions: ['.mjs', '.js', '.jsx', '.ts', '.tsx'],
 		},
 	},
 ])
@@ -42,7 +47,7 @@ const development = merge([
 			'react-hot-loader/patch',
 			'webpack-dev-server/client?http://localhost:8080',
 			'webpack/hot/only-dev-server',
-			'./src/index.js',
+			'./src/index.tsx',
 		],
 		module: {
 			rules: [
@@ -84,6 +89,7 @@ const development = merge([
 		resolve: {
 			alias: {
 				mapp: path.resolve(__dirname, '../packages/mapp/src'),
+				'react-dom': '@hot-loader/react-dom',
 			},
 			extensions: ['.js'],
 		},
@@ -106,7 +112,7 @@ const development = merge([
 const production = merge([
 	{
 		mode: 'production',
-		entry: ['@babel/polyfill', './src/index.js'],
+		entry: ['@babel/polyfill', './src/index.tsx'],
 		output: {
 			path: path.resolve(__dirname, 'public', 'js'),
 			filename: 'app.js',

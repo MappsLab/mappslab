@@ -14,16 +14,19 @@ export const updateRoute = async (args: UpdateRouteData, ownerUid: string): Prom
 	const cleaned = await clean(routeData)
 	const validatedRouteData = await validateUpdate(cleaned)
 
-	const edges = pins.map((pinUid, order) => [
-		{
-			toUid: pinUid,
-			pred: 'includes_pin',
-			facets: {
-				order,
-			},
-		},
-		{},
-	])
+	const edges =
+		pins && pins.length
+			? pins.map((pinUid, order) => [
+					{
+						toUid: pinUid,
+						pred: 'includes_pin',
+						facets: {
+							order,
+						},
+					},
+					{},
+			  ])
+			: []
 
 	if (args.video === null) await removeEdge({ fromUid: uid, pred: 'video', toUid: '*' })
 

@@ -18,6 +18,37 @@ export const query = gql`
 				uid
 				name
 				roles
+				classrooms {
+					edges {
+						node {
+							uid
+							title
+							slug
+							maps {
+								edges {
+									node {
+										uid
+										title
+										classroom {
+											uid
+											title
+											slug
+										}
+									}
+								}
+							}
+							teachers {
+								edges {
+									node {
+										uid
+										name
+										roles
+									}
+								}
+							}
+						}
+					}
+				}
 			}
 		}
 	}

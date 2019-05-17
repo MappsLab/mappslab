@@ -20,10 +20,11 @@ export const createToken = (): Promise<string> =>
 	})
 
 export const createJWT = (user: UserType): JWT => {
-	const expires = 1 * 24 * 60 * 60 // 1 day
+	const expiresIn = 1 * 24 * 60 * 60 // 1 day
 	const { name, uid, roles } = user
 	if (!name || !uid || !roles || !roles.length) throw new Error(`createJWT requires a name, uid, and roles`)
-	const token = jwt.sign({ name, uid, roles }, JWT_KEY || 'abc', { expiresIn: expires })
+	const token = jwt.sign({ name, uid, roles }, JWT_KEY || 'abc', { expiresIn })
+	const expires = new Date(Date.now() + expiresIn * 1000).toISOString() // send an actual date
 	return {
 		token: `Bearer ${token}`,
 		expires,

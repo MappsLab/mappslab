@@ -1,0 +1,19 @@
+{
+	"name": "mappslab-api",
+	"alias": "mappslab-api",
+	"version": 2,
+	"builds": [
+		{
+			"src": "dist/server.js", 
+			"use": "@now/node-server",
+			"config": { "maxLambdaSize": "50mb" }
+		}
+	
+	],
+	"routes": [{ "src": "/.*", "dest": "dist/server.js" }],
+	"env": {
+		"JWT_KEY": "PGroGm8NZiG^p2*kwatz",
+		"DATABASE_ADDRESS": "167.99.175.140:9080",
+		"NODE_ENV": "staging"
+	}
+}

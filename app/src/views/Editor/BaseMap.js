@@ -19,10 +19,13 @@ type Props = {
 
 const defaultOptions = {
 	center: { lat: 40.65, lng: -111.85 },
-	zoom: 10,
+	// zoom: 6,
 	disableDefaultUI: true,
 	zoomControlOptions: false,
 	streetViewControlOptions: false,
+	mapTypeControlOptions: {
+		mapTypeIds: ['baseImage'],
+	},
 }
 
 const WrappedMap = ({ APIKey, initialOptions, render }: Props) => (
