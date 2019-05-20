@@ -23,15 +23,15 @@ interface ContextType {
 	inspectItem: InspectItem
 }
 
-const Context = React.createContext<ContextType | undefined>(undefined)
+const InspectorContext = React.createContext<ContextType | undefined>(undefined)
 
 export const useInspector = () => {
-	const ctx = useContext(Context)
+	const ctx = useContext(InspectorContext)
 	if (!ctx) throw new Error('`useInspector` must be used within a InspectorProvider')
 	return ctx
 }
 
-export const InspectorConsumer = Context.Consumer
+export const InspectorConsumer = InspectorContext.Consumer
 
 /**
  * InspectorProvider
@@ -135,7 +135,7 @@ class InspectorProviderBase extends React.Component<Props, State> {
 		}
 
 		return (
-			<Context.Provider value={value}>
+			<InspectorContext.Provider value={value}>
 				{currentItem && (
 					<Inspector
 						viewer={viewer}
@@ -146,7 +146,7 @@ class InspectorProviderBase extends React.Component<Props, State> {
 					/>
 				)}
 				{children}
-			</Context.Provider>
+			</InspectorContext.Provider>
 		)
 	}
 }

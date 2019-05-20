@@ -58,15 +58,15 @@ const initialState: ViewerState = {
 	loading: true,
 }
 
-const Context = React.createContext<ContextValue | undefined>(undefined)
+const ViewerContext = React.createContext<ContextValue | undefined>(undefined)
 
 export const useCurrentViewer = () => {
-	const ctx = useContext(Context)
+	const ctx = useContext(ViewerContext)
 	if (!ctx) throw new Error('`useCurrentViewer` must be used within the context of the CurrentViewer provider')
 	return ctx
 }
 
-export const CurrentViewerConsumer = Context.Consumer
+export const CurrentViewerConsumer = ViewerContext.Consumer
 
 /**
  * State
@@ -172,5 +172,5 @@ export const CurrentViewer = ({ children }: Props) => {
 		logoutUser,
 		resetPassword,
 	}
-	return <Context.Provider value={value}>{children}</Context.Provider>
+	return <ViewerContext.Provider value={value}>{children}</ViewerContext.Provider>
 }
