@@ -3,7 +3,7 @@ import React from 'react'
 import merge from 'deepmerge'
 import { UsersQuery } from 'Queries'
 import { LiveSelector, SelectorItem } from 'Components/Selector'
-
+import { unwindEdges } from '../../utils/graphql'
 /**
  * UserSelector
  */
@@ -35,7 +35,7 @@ const UserSelector = ({ disabled, onSelect, delayQuery, variables }: Props) => (
 			}
 			const items =
 				data && data.users
-					? data.users.map((user) => ({
+					? unwindEdges(data.users)[0].map((user) => ({
 							value: user.uid,
 							label: user.name,
 							render: ({ highlighted, selected }) => <SelectorItem title={user.name} active={highlighted || selected} />,
