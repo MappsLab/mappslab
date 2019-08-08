@@ -1,6 +1,11 @@
 {
 	"version": 1,
-
 	"name": "mappslab-api",
-	"alias": "mappslab-api"
+	"alias": "mappslab-api",
+	"scale": {
+    "sfo1": {
+      "min": 1,
+      "max": "auto"
+    }
+	}
 }
