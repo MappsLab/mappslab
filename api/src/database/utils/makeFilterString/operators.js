@@ -1,4 +1,5 @@
 // @flow
+import escapeStringRegexp from 'escape-string-regexp'
 import type { Range } from './index'
 import type { FilterStrings } from '../dbUtils'
 
@@ -25,7 +26,7 @@ const filterStringCreators = {
 	 * types: strings
 	 */
 
-	contains: (field: string, value: string): string => `regexp(${field}, /${value}/i)`,
+	contains: (field: string, value: string): string => `regexp(${field}, /${escapeStringRegexp(value)}/i)`,
 
 	/**
 	 * lt / gt / lte / gte / between
