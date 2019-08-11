@@ -65,7 +65,7 @@ const UserListMain = ({
 			render: (answer) => <Prompt answer={answer} name="temporaryPassword" label="Temporary Password" />,
 		})
 		if (!tempPassQuestion) return
-		const email = emailQuestion ? emailQuestion.email : {}
+		const email = emailQuestion ? emailQuestion.email : undefined
 		const { temporaryPassword } = tempPassQuestion
 		create({ name, email, temporaryPassword })
 	}
