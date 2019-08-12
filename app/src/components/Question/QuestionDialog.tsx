@@ -51,7 +51,6 @@ type QuestionDialogProps = QuestionContext
 const QuestionDialogBase = ({ currentQuestion, cancelQuestion, answer }: QuestionDialogProps) => {
 	if (!currentQuestion) return null
 	const { title: paneTitle, message, options, render } = currentQuestion
-	console.log(currentQuestion, options)
 	return (
 		<Background data-testid="alert">
 			<BackgroundCancelButton onClick={cancelQuestion} />

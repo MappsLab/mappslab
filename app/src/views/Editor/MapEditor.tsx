@@ -53,6 +53,14 @@ class MapEditorMain extends React.Component<EditorProps> {
 			const [pins] = unwindEdges(this.props.mapData.pins)
 			const bounds = getMapBounds(pins)
 			this.props.fitBounds(bounds)
+			/* Set a max zoom */
+			const imageMaxZoom = this.props.mapData.baseImage ? this.props.mapData.baseImage.tileset.maxZoom : undefined
+			const currentZoom = this.props.getZoom()
+			console.log(imageMaxZoom, currentZoom)
+			console.log(Math.min(currentZoom, imageMaxZoom || 10))
+			this.props.setZoom(Math.min(currentZoom, imageMaxZoom || 10))
+
+			// if (this.props.getZoom() > 10) this.props.setZoom(10)
 		}
 		this.setBaseImage()
 		this.addEventListeners()
@@ -96,7 +104,7 @@ class MapEditorMain extends React.Component<EditorProps> {
 			if (zoom > 4) return null
 			return url
 		}
-		setBaseImage({ getTileUrl, maxZoom })
+		setBaseImage({ getTileUrl, maxZoom: maxZoom + 3 })
 	}
 
 	componentWillUpdate(nextProps: EditorProps) {

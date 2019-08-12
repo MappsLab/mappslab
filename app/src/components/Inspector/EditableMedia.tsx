@@ -64,6 +64,24 @@ interface Props {
 	label?: string
 }
 
+const validateImageDimensions = (file: File): Promise<string | void> =>
+	new Promise((resolve) => {
+		// @ts-ignore
+		const img = new window.Image()
+
+		img.onload = (e) => {
+			if (e.target.naturalWidth < 1024 || e.target.naturalHeight < 1024) {
+				resolve('Base map images must be at 1024px wide and 1024px tall')
+			} else {
+				resolve(undefined)
+			}
+		}
+		img.onerror = () => {
+			resolve('Sorry, there was an error uploading your image.')
+		}
+		img.src = window.URL.createObjectURL(file)
+	})
+
 export const EditableMedia = ({
 	image,
 	enableImage,
@@ -100,6 +118,7 @@ export const EditableMedia = ({
 
 	const removeLabel = image ? 'Remove Image' : 'Remove Video'
 	const removeFn = image ? remove(imageName || 'image') : remove('video')
+
 	return (
 		<React.Fragment>
 			{label && <Header2>{label}</Header2>}
@@ -114,19 +133,9 @@ export const EditableMedia = ({
 					</ButtonWrapper>
 				) : null}
 				{image && enableImage ? (
-					<Image
-						//
-						image={image}
-						alt={alt}
-						size={600}
-						submitUpdate={submitUpdate}
-					/>
+					<Image image={image} alt={alt} size={600} submitUpdate={submitUpdate} />
 				) : video && enableVideo ? (
-					<Video
-						//
-						video={video}
-						submitUpdate={submitUpdate}
-					/>
+					<Video video={video} submitUpdate={submitUpdate} />
 				) : null}
 				{viewerCanEdit && !video && !image ? (
 					<MediaButtons>
@@ -136,6 +145,7 @@ export const EditableMedia = ({
 								accept="image/*"
 								name={imageName}
 								Icon={FaRegImage}
+								validate={validateImageDimensions}
 								label={loading ? 'Loading..' : 'Add Image'}
 							/>
 						)}

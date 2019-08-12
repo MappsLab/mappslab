@@ -97,12 +97,10 @@ export class QuestionProvider extends React.Component<Props, State> {
 			const options = suppliedOptions || defaultOptions
 
 			/* Add a promise to each question that resolves the `returnValue` */
-			console.log(options)
 			const promisedOptions = options.map((option) => ({
 				...option,
 				answerQuestion: answerHandler(option.returnValue),
 			}))
-			console.log(newQuestion, options)
 			this.setState({
 				currentQuestion: {
 					...restOfQuestionConfig,
