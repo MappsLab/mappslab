@@ -168,6 +168,11 @@ class Mapp extends React.Component<Props, State> {
 			if (this.map) this.map.setZoom(zoom)
 		}
 
+		const getZoom = () => {
+			if (this.map) return this.map.getZoom()
+			return undefined
+		}
+
 		const zoom = (diff: number): void => {
 			const currentZoom = this.map.getZoom()
 			const newZoom = currentZoom + diff
@@ -206,6 +211,7 @@ class Mapp extends React.Component<Props, State> {
 			panTo,
 			fitBounds,
 			setZoom,
+			getZoom,
 			zoom,
 			zoomIn,
 			zoomOut,
