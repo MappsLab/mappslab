@@ -100,7 +100,7 @@ class MapEditorMain extends React.Component<EditorProps> {
 			if (zoom > 4) return null
 			return url
 		}
-		setBaseImage({ getTileUrl, maxZoom: maxZoom + 3 })
+		setBaseImage({ getTileUrl, maxZoom })
 	}
 
 	componentWillUpdate(nextProps: EditorProps) {
