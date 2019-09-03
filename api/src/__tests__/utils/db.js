@@ -3,7 +3,7 @@ import { graphql } from 'graphql'
 import { makeExecutableSchema } from 'graphql-tools'
 import models from 'Models'
 import { typeDefs, resolvers } from '../../graphql/schema'
-// import { joseph, john, waverly } from '../scripts/testDatabase/fixtures/users'
+// import { joseph, john, alex } from '../scripts/testDatabase/fixtures/users'
 
 /*
  * Get stubs from Test DB
@@ -13,7 +13,7 @@ import { typeDefs, resolvers } from '../../graphql/schema'
 
 // export const getViewerForContext = async (userName: string = 'joseph') => {
 // 	const users = await getUsers
-// 	const fixtureUsers = { joseph, john, waverly }
+// 	const fixtureUsers = { joseph, john, alex }
 // 	const user = users.find((u) => u.name === fixtureUsers[userName].name)
 // 	return user
 // }
@@ -33,7 +33,7 @@ export const createAdminUsers = async () => {
 	const john = {
 		name: 'John Schaefer',
 		roles: ['admin', 'teacher'],
-		email: 'john@cmwworld.com',
+		email: 'john@cmwworld.org',
 		temporaryPassword: 'temporary',
 		disabled: false,
 	}
@@ -51,7 +51,7 @@ export const createTestAdminUsers = async () => {
 	const john = {
 		name: 'John Schaefer',
 		roles: ['admin', 'teacher'],
-		email: 'john@cmwworld.com',
+		email: 'john@cmwworld.org',
 		password: 'Password#1',
 		disabled: false,
 	}

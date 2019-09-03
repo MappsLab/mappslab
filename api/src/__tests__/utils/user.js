@@ -84,7 +84,7 @@ export const getUser = async (uid: string): Promise<UserType> => {
 let teacherCount = 0
 const teacherFixtures = [
 	{
-		email: 'john@cmwworld.com',
+		email: 'john@cmwworld.org',
 		name: 'John Schaefer',
 		temporaryPassword: 'temporary',
 	},
