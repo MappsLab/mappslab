@@ -25,6 +25,24 @@ interface Props extends BaseProps {
 	updateMap: Mutation
 }
 
+const validateImageDimensions = (file: File): Promise<string | void> =>
+	new Promise((resolve) => {
+		// @ts-ignore
+		const img = new window.Image()
+
+		img.onload = (e) => {
+			if (e.target.naturalWidth < 1024 || e.target.naturalHeight < 1024) {
+				resolve('Base map images must be at 1024px wide and 1024px tall')
+			} else {
+				resolve(undefined)
+			}
+		}
+		img.onerror = () => {
+			resolve('Sorry, there was an error uploading your image.')
+		}
+		img.src = window.URL.createObjectURL(file)
+	})
+
 const MapInspectorMain = ({ map, viewer, inspectItem, mapQueryConfig, updateMap }: Props) => {
 	const { ask } = useQuestion()
 	const [teachers] = unwindEdges(map.classroom.teachers)
@@ -70,6 +88,7 @@ const MapInspectorMain = ({ map, viewer, inspectItem, mapQueryConfig, updateMap 
 			<EditableMedia
 				submitUpdate={submitUpdate}
 				enableVideo={false}
+				validateImage={validateImageDimensions}
 				imageName="baseImage"
 				image={map.baseImage}
 				label="Base Image"

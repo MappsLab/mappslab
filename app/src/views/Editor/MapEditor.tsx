@@ -54,6 +54,7 @@ class MapEditorMain extends React.Component<EditorProps> {
 			const bounds = getMapBounds(pins)
 			this.props.fitBounds(bounds)
 			/* Set a max zoom */
+			console.log(this.props)
 			const imageMaxZoom = this.props.mapData.baseImage ? this.props.mapData.baseImage.tileset.maxZoom : undefined
 			const currentZoom = this.props.getZoom()
 			this.props.setZoom(Math.min(currentZoom, imageMaxZoom || 10))

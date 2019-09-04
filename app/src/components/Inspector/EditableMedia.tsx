@@ -55,6 +55,7 @@ interface Props {
 	image?: Image
 	imageName?: string
 	enableImage?: boolean
+	validateImage?: (file: File) => Promise<string | void>
 	video?: Video
 	videoName?: string
 	enableVideo?: boolean
@@ -64,28 +65,11 @@ interface Props {
 	label?: string
 }
 
-const validateImageDimensions = (file: File): Promise<string | void> =>
-	new Promise((resolve) => {
-		// @ts-ignore
-		const img = new window.Image()
-
-		img.onload = (e) => {
-			if (e.target.naturalWidth < 1024 || e.target.naturalHeight < 1024) {
-				resolve('Base map images must be at 1024px wide and 1024px tall')
-			} else {
-				resolve(undefined)
-			}
-		}
-		img.onerror = () => {
-			resolve('Sorry, there was an error uploading your image.')
-		}
-		img.src = window.URL.createObjectURL(file)
-	})
-
 export const EditableMedia = ({
 	image,
 	enableImage,
 	imageName,
+	validateImage,
 	video,
 	videoName,
 	enableVideo,
@@ -145,7 +129,7 @@ export const EditableMedia = ({
 								accept="image/*"
 								name={imageName}
 								Icon={FaRegImage}
-								validate={validateImageDimensions}
+								validate={validateImage}
 								label={loading ? 'Loading..' : 'Add Image'}
 							/>
 						)}
