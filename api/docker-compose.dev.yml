@@ -1,7 +1,7 @@
 version: '3.2'
 services:
   zero:
-    image: dgraph/dgraph:latest
+    image: dgraph/dgraph:v1.0.17
     container_name: mappslab-dev_dgraph-zero
     volumes:
       - type: volume
@@ -16,7 +16,7 @@ services:
     command: dgraph zero --my=zero:5080
   server:
     container_name: mappslab-dev_dgraph-server
-    image: dgraph/dgraph:latest
+    image: dgraph/dgraph:v1.0.17
     volumes:
       - type: volume
         source: dgraph-mappslab
@@ -30,7 +30,7 @@ services:
     command: dgraph alpha --my=server:7080 --lru_mb=2048 --zero=zero:5080
   ratel:
     container_name: mappslab-dev_dgraph-ratel
-    image: dgraph/dgraph:latest
+    image: dgraph/dgraph:v1.0.17
     volumes:
       - type: volume
         source: dgraph-mappslab

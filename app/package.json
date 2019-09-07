@@ -15,6 +15,7 @@
     "test:coverage": "cross-env ENV=development cross-env DEBUG=test cross-env TEST_DB=true jest ",
     "test:watch": "cross-env ENV=development cross-env DEBUG=test cross-env TEST_DB=true jest --watch",
     "deploy": "yarn build && cd public && now -t $ZEIT_TOKEN && now alias -t $ZEIT_TOKEN",
+    "deploy:dev": "yarn build && cd public && now && now alias",
     "update-mock-schema": "graphql get-schema mappslab"
   },
   "dependencies": {

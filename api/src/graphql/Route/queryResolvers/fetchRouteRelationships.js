@@ -17,7 +17,7 @@ export const pins = async (
 	ctx: GraphQLContext,
 ): Promise<PageType<PinType>> => {
 	// TODO this doesn't look very performant. Find a way to do this with Pin.getPins instead
-	const fetchedPins = await Promise.all(fetchedRoute.pins.map((pin) => ctx.models.Pin.getPin(pin.uid)))
+	const fetchedPins = fetchedRoute.pins ? await Promise.all(fetchedRoute.pins.map((pin) => ctx.models.Pin.getPin(pin.uid))) : []
 	return assemblePage(fetchedPins, input)
 }
 
