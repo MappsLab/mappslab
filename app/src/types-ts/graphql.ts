@@ -10,11 +10,6 @@ export interface PageInfo {
 	hasPrevPage: boolean
 }
 
-export interface Paginated<T> {
-	pageInfo: PageInfo
-	edges: Edge<T>[]
-}
-
 /**
  * The subscription as it is returned to the component
  */

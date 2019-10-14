@@ -1,7 +1,8 @@
 const path = require('path')
 
 module.exports = {
-	parser: 'babel-eslint',
+	parser: '@typescript-eslint/parser',
+	plugins: ['@typescript-eslint'],
 	env: {
 		browser: true,
 		node: true,

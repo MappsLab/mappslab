@@ -1,6 +1,6 @@
+import { Paginated } from '@good-idea/unwind-edges'
 import { User } from './user'
 import { Map } from './map'
-import { Paginated } from './graphql'
 
 export interface Classroom {
 	uid: string

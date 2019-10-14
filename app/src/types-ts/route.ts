@@ -1,6 +1,6 @@
+import { Paginated } from '@good-idea/unwind-edges'
 import { Pin } from './pin'
 import { User } from './user'
-import { Paginated } from './graphql'
 
 export interface Route {
 	__typename: 'Route'

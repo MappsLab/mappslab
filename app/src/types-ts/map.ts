@@ -1,8 +1,8 @@
+import { Paginated } from '@good-idea/unwind-edges'
 import { Pin } from './pin'
 import { Route } from './route'
 import { Classroom } from './classroom'
 import { Image } from './media'
-import { Paginated } from './graphql'
 
 export interface Map {
 	title: string

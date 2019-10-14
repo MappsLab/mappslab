@@ -1,11 +1,13 @@
 import * as React from 'react'
 import { EditableText, EditableMedia } from 'Components/Inspector'
+import { Header5 } from '../../../components/Text'
 import NativeListener from 'react-native-listener'
 import { Route, Viewer, Mutation } from 'Types'
 import { FaPencilAlt } from 'react-icons/fa'
 import { Button } from 'Components/Buttons'
 import { UpdateRouteMutation } from 'Queries/Route'
 import { query as mapQuery } from 'Queries/Map/MapQuery'
+import { getRouteDistance } from '../../../utils/maps'
 
 const { useState } = React
 
@@ -37,6 +39,8 @@ const RouteInspector = ({ route, viewer, updateRoute, mapUid }: Props) => {
 
 		updateRoute({ variables, refetchQueries: [{ query: mapQuery, variables: { uid: mapUid } }] })
 	}
+	console.log(route)
+	const distance = getRouteDistance(route)
 
 	return (
 		<React.Fragment>
@@ -62,6 +66,7 @@ const RouteInspector = ({ route, viewer, updateRoute, mapUid }: Props) => {
 				autoFocus
 			/>
 			<EditableMedia submitUpdate={submitUpdate} image={route.image} video={route.video} viewerCanEdit={canEdit} />
+			<Header5 color="darkGray">{distance} miles</Header5>
 			{viewerIsOwner && canEdit === false ? (
 				<NativeListener onClick={enterEdit}>
 					<Button level="tertiary">

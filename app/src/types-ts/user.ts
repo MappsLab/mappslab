@@ -1,6 +1,6 @@
+import { Paginated } from '@good-idea/unwind-edges'
 import { Pin } from './Pin'
 import { Classroom } from './Classroom'
-import { Paginated } from './graphql'
 
 type Role = 'teacher' | 'student' | 'admin'
 
