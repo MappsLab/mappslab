@@ -16,7 +16,8 @@
 		"outDir": "./dist",
 		"esModuleInterop": true,
 		"types": ["node", "jest"],
-		"strictNullChecks": true,
+		// "strictNullChecks": true,
+
 		/*
 		TODO: Tighten these up once development is rolling
 		"noImplicitReturns": true,

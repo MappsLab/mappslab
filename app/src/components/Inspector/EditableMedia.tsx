@@ -53,11 +53,11 @@ type MediaSubmission = (data: { [key: string]: any }) => void | Promise<void>
 
 interface Props {
 	image?: Image
-	imageName?: string
+	imageName: string
 	enableImage?: boolean
 	validateImage?: (file: File) => Promise<string | void>
 	video?: Video
-	videoName?: string
+	videoName: string
 	enableVideo?: boolean
 	submitUpdate: (formData: any) => void | Promise<void>
 	viewerCanEdit?: boolean
@@ -90,7 +90,7 @@ export const EditableMedia = ({
 	const askForVideo = async () => {
 		const result = await ask({
 			message: 'Enter the URL of a Youtube or Vimeo Video',
-			render: (answer) => <Prompt answer={answer} name="video" label="Video URL" type="url" />,
+			render: (answer: () => Promise<void>) => <Prompt answer={answer} name="video" label="Video URL" type="url" />,
 		})
 		if (!result.video) return
 		submitUpdate({ [videoName]: result.video })

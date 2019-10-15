@@ -1,5 +1,6 @@
 import React from 'react'
 import { PolyLine } from 'mapp'
+import { unwindEdges } from '@good-idea/unwind-edges'
 import { LatLng, polylineEventNames } from 'mapp'
 import { Pin, Route as RouteType } from 'Types'
 import { getStateString } from 'Utils/data'
@@ -8,7 +9,6 @@ import { ItemInspectorProviderProps } from '../ItemInspector'
 import { MapConsumer } from '../Provider'
 import { ProviderProps } from '../Provider'
 import RouteHoverPopup from './RouteHoverPopup'
-import { unwindEdges } from '../../../utils/graphql'
 
 const getPathFromPins = (pins: Array<Pin | LatLng>): Array<LatLng> =>
 	pins.map(({ lat, lng }) => ({

@@ -1,9 +1,9 @@
 // @flow
 import React from 'react'
 import merge from 'deepmerge'
+import { unwindEdges } from '@good-idea/unwind-edges'
 import { UsersQuery } from 'Queries'
 import { LiveSelector, SelectorItem } from 'Components/Selector'
-import { unwindEdges } from '../../utils/graphql'
 /**
  * UserSelector
  */

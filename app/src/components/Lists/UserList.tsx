@@ -1,11 +1,11 @@
 import * as React from 'react'
 import { User } from 'Types/User'
+import { unwindEdges } from '@good-idea/unwind-edges'
 import { UsersQuery } from '../../queries/User'
 import { QuestionConsumer, QuestionContext } from '../Question'
 import { Prompt } from '../Forms'
 import { List } from './List'
 import { ListOfTypeProps, ListOfTypeBaseProps } from './utils'
-import { unwindEdges } from '../../utils/graphql'
 
 const { useState } = React
 

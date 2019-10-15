@@ -1,7 +1,6 @@
 import * as React from 'react'
 import styled from 'styled-components'
 import { ValidationError, HelpText } from './Forms'
-
 import { Button } from './Buttons'
 
 const { useState } = React
@@ -22,7 +21,7 @@ const Input = styled.input`
 type ValidationError = string | void
 
 interface Props {
-	onSubmit: (any) => void | Promise<void>
+	onSubmit: (formData: any) => void | Promise<void>
 	name: string
 	label: string
 	accept: string
@@ -36,6 +35,7 @@ export const FileUpload = ({ onSubmit, validate, multiple, name, accept, label, 
 	const [validationError, setValidationError] = useState<void | string>(undefined)
 
 	const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+		if (!e || !e.target || !e.target.files) return
 		setIsLoading(true)
 		const inputFile = e.target.files[0]
 		const error = validate ? await validate(inputFile) : undefined

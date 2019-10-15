@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo } from 'react'
+import { unwindEdges } from '@good-idea/unwind-edges'
 import { Action } from 'react-automata'
 import { Header1, Header2, Header4 } from '../../components/Text'
 import { ViewerType } from '../../types/User'
@@ -6,7 +7,6 @@ import { MapChip } from '../../components/Map'
 import { Button } from '../../components/Buttons'
 import { useCurrentViewer } from '../../providers/CurrentViewer'
 import { SHOW_NEWPW_SUCCESS, LOGOUT } from './statechart'
-import { unwindEdges } from '../../utils/graphql'
 import { Classroom, Map } from '../../types-ts'
 
 /**

@@ -1,9 +1,9 @@
 import * as React from 'react'
 import { Map } from 'Types'
+import { unwindEdges } from '@good-idea/unwind-edges'
 import { MapsQuery } from '../../queries/Map'
 import { List } from './List'
 import { ListOfTypeProps, ListOfTypeBaseProps } from './utils'
-import { unwindEdges } from '../../utils/graphql'
 
 const { useState } = React
 

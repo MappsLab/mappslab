@@ -69,16 +69,29 @@ interface Props {
 	to?: null | string
 }
 
-export const Chip = ({ title, subtitle, size, active, to, onClick }: Props) => {
+const noop = () => {}
+
+export const Chip = ({ title, subtitle, size: sizeProp, active, to, onClick: onClickProp }: Props) => {
 	const as = to
 		? // if 'to', use a Link
 		  Link
 		: // else, if 'onClick', use a button
-		onClick
+		onClickProp
 		? 'button'
 		: undefined
+	const size = sizeProp || 'small'
+
+	const onClick = onClickProp || noop
+
 	return (
-		<Wrapper size={size} active={active || undefined} withBorders={Boolean(to || onClick)} as={as} to={to} onClick={onClick}>
+		<Wrapper
+			size={size}
+			active={active || undefined}
+			withBorders={Boolean(to || onClickProp)}
+			as={as}
+			to={to || undefined}
+			onClick={onClick}
+		>
 			<TitleWrapper>
 				<Title size={size}>{title}</Title>
 				<Subtitle size={size}>{subtitle}</Subtitle>

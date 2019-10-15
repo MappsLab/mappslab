@@ -20,9 +20,10 @@ const client = createClient({
 	url: config.apiRoot,
 	fetchOptions: (...args) => {
 		const cookie = getCookie(VIEWER_COOKIE_TOKEN)
-		const headers = cookie ? { Authorization: cookie } : {}
 		return {
-			headers,
+			headers: {
+				Authorization: cookie,
+			},
 		}
 	},
 })

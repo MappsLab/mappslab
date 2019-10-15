@@ -1,9 +1,9 @@
 import * as React from 'react'
 import { Classroom } from 'Types'
+import { unwindEdges } from '@good-idea/unwind-edges'
 import { ClassroomsQuery } from '../../queries/Classroom'
 import { List } from './List'
 import { ListOfTypeProps, ListOfTypeBaseProps } from './utils'
-import { unwindEdges } from '../../utils/graphql'
 
 /**
  * ClassroomList

@@ -1,6 +1,7 @@
 import React from 'react'
 import { path } from 'ramda'
 import { mapEventNames } from 'mapp'
+import { unwindEdges } from '@good-idea/unwind-edges'
 import { State } from 'react-automata'
 import { Subscription } from 'Types'
 import { $PropertyType } from 'utility-types'
@@ -21,7 +22,6 @@ import WelcomeDialog from './WelcomeDialog'
 import MapNavigation from './MapNavigation'
 import MapNotifications from './MapNotifications'
 import { mapEvents } from './mapEventHandlers'
-import { unwindEdges } from '../../utils/graphql'
 import config from '../../config'
 
 export type EditorProps = ProviderProps & {

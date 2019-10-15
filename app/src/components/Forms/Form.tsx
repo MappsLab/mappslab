@@ -9,13 +9,13 @@ import { FormWrapper, FormError } from './styles'
  */
 
 type Props = {
-	onSubmit: (Object) => Promise<Object | void | Error>
+	onSubmit: (formData: any) => Promise<any | void | Error>
 	message?: string | null
 	errorMessage?: string | null
 	submitButtonText?: string
 	showSubmitButton?: boolean
 	disabled?: boolean
-	validate?: (values: Object) => Object | Promise<Object>
+	validate?: (values: any) => any | Promise<Object>
 	children?: React.ReactNode
 	render?: (formProps: Object) => React.ReactNode
 	initialValues?: { [key: string]: string | number }
@@ -31,7 +31,7 @@ export const Form = (props: Props) => (
 			const submitFailedAndNotDirty = submitFailed && submitErrors && !dirtySinceLastSubmit
 			const buttonDisabled = props.disabled || pristine || submitFailedAndNotDirty || submitting || false
 			return (
-				<FormWrapper disabled={props.disabled} onSubmit={handleSubmit}>
+				<FormWrapper disabled={Boolean(props.disabled)} onSubmit={handleSubmit}>
 					{props.children || (props.render && props.render(formProps))}
 					{message ? <Header4>{message}</Header4> : null}
 					{error && !submitting && !dirtySinceLastSubmit ? <FormError>{error}</FormError> : null}

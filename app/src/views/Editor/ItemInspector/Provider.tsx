@@ -1,8 +1,8 @@
 import * as React from 'react'
+import { unwindEdges } from '@good-idea/unwind-edges'
 import { LatLng } from 'mapp'
 import { Route, Pin } from 'Types'
 import { ProviderProps as MapProviderProps } from '../Provider'
-import { unwindEdges } from '../../../utils/graphql'
 
 const { useContext, useReducer } = React
 

@@ -1,8 +1,8 @@
 // @flow
 import React from 'react'
+import { unwindEdges } from '@good-idea/unwind-edges'
 import { ClassroomsQuery } from 'Queries'
 import { LiveSelector, SelectorItem } from 'Components/Selector'
-import { unwindEdges } from '../../utils/graphql'
 
 /**
  * LiveClassroomSelector

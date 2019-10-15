@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { unwindEdges } from '@good-idea/unwind-edges'
 import { Classroom, Viewer, Mutation, QueryConfig, User } from '../../../types-ts'
 import { UpdateClassroomMutation, ClassroomQuery } from '../../../queries/Classroom'
 import { CreateMapMutation } from '../../../queries/Map'
@@ -6,7 +7,6 @@ import { CreateStudentMutation, CreateTeacherMutation } from '../../../queries/U
 import { MapList, UserList } from '../../Lists'
 import { InspectItem } from '../InspectorProvider'
 import InspectorSkeleton from '../InspectorSkeleton'
-import { unwindEdges } from '../../../utils/graphql'
 
 /**
  * ClassroomInspector
@@ -96,9 +96,9 @@ const ClassroomInspectorMain = ({
 		await mutate({ variables, refetchQueries: [classroomQueryConfig] })
 	}
 
-	const [teachers] = unwindEdges<User>(classroom.teachers)
-	const [maps] = unwindEdges(classroom.maps)
-	const [students] = unwindEdges(classroom.students)
+	const teachers = classroom.teachers && classroom.teachers.edges.length ? unwindEdges<User>(classroom.teachers)[0] : []
+	const maps = classroom.maps && classroom.maps.edges.length ? unwindEdges(classroom.maps)[0] : []
+	const students = classroom.students && classroom.students.edges.length ? unwindEdges(classroom.students)[0] : []
 
 	const viewerCanAdd = Boolean(
 		viewer &&

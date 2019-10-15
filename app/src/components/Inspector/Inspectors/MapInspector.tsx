@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { unwindEdges } from '@good-idea/unwind-edges'
 import { Map, Viewer, Mutation, QueryConfig } from '../../../types-ts'
 import { MapQuery, UpdateMapMutation } from '../../../queries/Map'
 import { Button } from '../../Buttons'
@@ -7,7 +8,6 @@ import { InspectItem } from '../InspectorProvider'
 import EditableText from '../EditableText'
 import { EditableMedia } from '../EditableMedia'
 import InspectorSkeleton from '../InspectorSkeleton'
-import { unwindEdges } from '../../../utils/graphql'
 import { useQuestion } from '../../../components/Question'
 
 /**
@@ -45,7 +45,7 @@ const validateImageDimensions = (file: File): Promise<string | void> =>
 
 const MapInspectorMain = ({ map, viewer, inspectItem, mapQueryConfig, updateMap }: Props) => {
 	const { ask } = useQuestion()
-	const [teachers] = unwindEdges(map.classroom.teachers)
+	const teachers = map.classroom.teachers && map.classroom.teachers.edges ? unwindEdges(map.classroom.teachers)[0] : []
 	const viewerIsOwner = Boolean(viewer && teachers.find((t) => t.uid === viewer.uid))
 	const updateMapClassrooms = (classroom) => {
 		const variables = {

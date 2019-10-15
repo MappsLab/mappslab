@@ -74,8 +74,9 @@ class InspectorProviderBase extends React.Component<Props, State> {
 		const { initialItem } = props
 
 		/* Initialize the history with the first item, filtering out a `null` inspectorItem */
+		const inspectorHistory = initialItem ? [initialItem] : []
 		this.state = {
-			inspectorHistory: [initialItem].filter(Boolean),
+			inspectorHistory,
 		}
 	}
 
