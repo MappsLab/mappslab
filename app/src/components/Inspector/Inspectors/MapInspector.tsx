@@ -66,7 +66,7 @@ const MapInspectorMain = ({ map, viewer, inspectItem, mapQueryConfig, updateMap 
 		})
 
 		const url = kmlUrlQuestion.url.trim()
-		if (/^https:\/\/(.*)\.kml$/.test(url)) {
+		if (/^https?:\/\/(.*)\.kml$/.test(url)) {
 			const variables = {
 				uid: map.uid,
 				dataLayer: {

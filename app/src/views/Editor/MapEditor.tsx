@@ -44,20 +44,30 @@ class MapEditorMain extends React.Component<EditorProps> {
 	mapListeners: {} = {}
 
 	componentDidMount() {
-		const { mapUid, setMap } = this.props
+		const { mapData, mapUid, setMap } = this.props
 		if (mapUid) {
 			setMap(mapUid)
 			this.startSubscriptions()
 		}
-		if (this.props.mapData && this.props.mapData.pins && this.props.mapData.pins.edges.length > 0) {
-			const [pins] = unwindEdges(this.props.mapData.pins)
+		if (mapData && mapData.pins && mapData.pins.edges.length > 0) {
+			const [pins] = unwindEdges(mapData.pins)
 			const bounds = getMapBounds(pins)
 			this.props.fitBounds(bounds)
 			/* Set a max zoom */
-			console.log(this.props)
-			const imageMaxZoom = this.props.mapData.baseImage ? this.props.mapData.baseImage.tileset.maxZoom : undefined
+			const imageMaxZoom = mapData.baseImage ? mapData.baseImage.tileset.maxZoom : undefined
 			const currentZoom = this.props.getZoom()
 			this.props.setZoom(Math.min(currentZoom, imageMaxZoom || 10))
+		}
+
+		if (mapData && mapData.dataLayers && mapData.dataLayers.edges.length) {
+			const [dataLayers] = unwindEdges(mapData.dataLayers)
+			console.log(dataLayers)
+			dataLayers.forEach((dataLayer) => {
+				if (/^https?:\/\/(.*)\.kml$/.test(dataLayer.url)) {
+					console.log(dataLayer.url)
+					this.props.applyDataLayer(dataLayer.url)
+				}
+			})
 		}
 		this.setBaseImage()
 		this.addEventListeners()
