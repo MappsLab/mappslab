@@ -1,0 +1,8 @@
+node_modules
+_working
+.temp
+.tmp
+coverage
+dist
+build
+.localstack
