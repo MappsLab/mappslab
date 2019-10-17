@@ -168,6 +168,19 @@ class Mapp extends React.Component<Props, State> {
 			if (this.map) this.map.setZoom(zoom)
 		}
 
+		const applyDataLayer = (src: string) => {
+			const kmlLayer = new google.maps.KmlLayer(src, {
+				// suppressInfoWindows: true,
+				preserveViewport: false,
+				map: this.map,
+			})
+			// kmlLayer.addListener('click', function(event) {
+			//   const content = event.featureData.infoWindowHtml;
+			//   const testimonial = document.getElementById('capture');
+			//   testimonial.innerHTML = content;
+			// });
+		}
+
 		const getZoom = () => {
 			if (this.map) return this.map.getZoom()
 			return undefined
@@ -209,6 +222,7 @@ class Mapp extends React.Component<Props, State> {
 
 		return {
 			panTo,
+			applyDataLayer,
 			fitBounds,
 			setZoom,
 			getZoom,

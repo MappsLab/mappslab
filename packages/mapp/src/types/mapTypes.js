@@ -33,6 +33,7 @@ export type Map = MVCObject & {
 	setStreetView(panorama: StreetViewPanorama): void,
 	setTilt(tilt: number): void,
 	setZoom(zoom: number): void,
+	applyDataLayer(src: string): void,
 	// This causes a PropType error, controls[0] is undefined
 	// controls: MVCArray<Node>[],
 	data: Data,
