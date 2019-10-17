@@ -4,13 +4,21 @@ import { mutateNode, createEdge, removeEdge } from 'Database'
 import { clean, validateUpdate } from './mapDBSchema'
 import Image from '../Image'
 import Tileset from '../Tileset'
+import DataLayer from '../DataLayer'
 
 export const updateMap = async (args: UpdateMapData, dispatchUpdate: () => Promise<void>): Promise<MapType> => {
-	const { uid, baseImage, ...mapData } = args
+	const { uid, baseImage, dataLayer, ...mapData } = args
 	const cleaned = await clean(mapData)
 	const validatedMapData = validateUpdate(cleaned)
 	// $FlowFixMe
 	const updatedMap: MapType = await mutateNode(uid, { data: validatedMapData })
+
+	if (dataLayer) {
+		await DataLayer.createDataLayer({
+			...dataLayer,
+			addToMaps: [uid],
+		})
+	}
 
 	if (baseImage) {
 		const mapBaseImage = await Image.createImage(baseImage)

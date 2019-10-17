@@ -7,6 +7,7 @@ import Route from './Route'
 import User from './User'
 import Image from './Image'
 import Tileset from './Tileset'
+import DataLayer from './DataLayer'
 
 const models = {
 	Classroom,
@@ -17,6 +18,7 @@ const models = {
 	User,
 	Image,
 	Tileset,
+	DataLayer,
 }
 
 export default models

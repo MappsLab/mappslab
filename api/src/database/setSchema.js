@@ -52,6 +52,8 @@ export const setSchema = async () => {
 		'has_pin: uid @reverse @count . ',
 		/* <map> <has_pin> <pin> */
 		'has_pin: uid @reverse @count . ',
+		/* <map> <has_dataLayer> <dataLayer> */
+		'has_dataLayer: uid @reverse @count . ',
 
 		/**
 		 * Route Indices

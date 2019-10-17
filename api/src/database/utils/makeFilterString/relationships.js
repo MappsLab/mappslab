@@ -41,6 +41,7 @@ const relationshipStringCreators = {
 
 	// Map-first relationships
 	mapHasPin: genericRelationship('has_pin'),
+	mapHasDataLayer: genericRelationship('has_dataLayer'),
 	mapBelongsToClassroom: genericRelationship('~has_map'),
 
 	// Pin-first relationships
@@ -51,6 +52,9 @@ const relationshipStringCreators = {
 	// Route-first relationships
 	routeContainsPin: genericRelationship('includes_pin'),
 	routeWithinMap,
+
+	// Datalayer-first relationships
+	dataLayerInMap: genericRelationship('~has_dataLayer'),
 
 	// Image-first relationships
 	hasImage: genericRelationship('~has_image'),

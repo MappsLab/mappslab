@@ -4,6 +4,8 @@ import type { MapType } from 'Types/MapTypes'
 import type { ClassroomType } from 'Types/ClassroomTypes'
 import type { PinType } from 'Types/PinTypes'
 import type { RouteType } from 'Types/RouteTypes'
+import type { ImageType } from 'Types/ImageTypes'
+import type { DataLayerType } from 'Types/DataLayerTypes'
 import type { GraphQLContext, PageType, PaginationInput, GetNodeArgs } from 'Types/sharedTypes'
 import { assemblePage } from 'Utils/graphql'
 
@@ -29,6 +31,25 @@ export const pins = async (fetchedMap: MapType, { input }: PaginationInput, ctx:
 	const fetchedPins = await ctx.models.Pin.getPins(mergedInput)
 
 	return assemblePage(fetchedPins, input)
+}
+
+export const dataLayers = async (
+	fetchedMap: MapType,
+	{ input }: PaginationInput,
+	ctx: GraphQLContext,
+): Promise<PageType<DataLayerType>> => {
+	const mapFilter = {
+		where: {
+			dataLayerInMap: {
+				eq: fetchedMap.uid,
+			},
+		},
+	}
+
+	const mergedInput = deepMerge(input || {}, mapFilter)
+	const fetchedDataLayers = await ctx.models.DataLayer.getDataLayers(mergedInput)
+
+	return assemblePage(fetchedDataLayers, input)
 }
 
 export const baseImage = async (fetchedMap: MapType, _: any, ctx: GraphQLContext): Promise<ImageType> => {

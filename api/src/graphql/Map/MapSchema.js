@@ -9,6 +9,7 @@ const Map = /* GraphQL */ `
 		classroom: Classroom
 		pins: PinConnection
 		routes: RouteConnection
+		dataLayers: DataLayerConnection
 		baseImage: Image
 	}
 
@@ -41,6 +42,7 @@ const Map = /* GraphQL */ `
 		title: String
 		description: String
 		baseImage: Upload
+		dataLayer: DataLayerInput
 	}
 
 	input MapSortParameter {
