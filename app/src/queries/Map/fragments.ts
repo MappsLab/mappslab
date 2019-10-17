@@ -18,6 +18,19 @@ export const mapFragment = gql/* GraphQL */ `
 			}
 		}
 		description
+		dataLayers {
+			pageInfo {
+				lastCursor
+				hasNextPage
+			}
+			edges {
+				node {
+					uid
+					title
+					url
+				}
+			}
+		}
 		classroom {
 			uid
 			title

@@ -99,7 +99,7 @@ export const UserList = (baseProps: BaseProps) => (
 					<UserListMain
 						question={question}
 						searchQuery={refetch}
-						searchResults={data ? unwindEdges<User>(data.users)[0] || [] : []}
+						searchResults={data && data.users ? unwindEdges<User>(data.users)[0] || [] : []}
 						{...baseProps}
 					/>
 				)}

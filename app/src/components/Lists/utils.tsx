@@ -17,9 +17,9 @@ export interface ListOfTypeBaseProps<Type> {
 	title: string
 	items: Array<Type>
 	viewerCanAdd: boolean
-	update: (Type) => void | Promise<void>
+	update: (node: Node) => void | Promise<void>
 	onItemClick: ListItemHandler
-	create: (any) => Promise<void> | void
+	create: (args: any) => Promise<void> | void
 }
 
 export interface ListOfTypeProps<Type> extends ListOfTypeBaseProps<Type> {

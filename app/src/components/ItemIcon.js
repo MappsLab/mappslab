@@ -11,7 +11,15 @@ const IconSpan = styled.span`
  */
 
 const ItemIcon = ({ type }: { type: string }) => {
-	const emoji = /User/i.test(type) ? '👤' : /Map/i.test(type) ? '🗺' : /Classroom/i.test(type) ? '🎓' : '❓'
+	const emoji = /User/i.test(type)
+		? '👤'
+		: /Map/i.test(type)
+		? '🗺'
+		: /Classroom/i.test(type)
+		? '🎓'
+		: /DataLayer/i.test(type)
+		? '🚩'
+		: '❓'
 	return (
 		<IconSpan role="img" aria-label={type}>
 			{emoji}

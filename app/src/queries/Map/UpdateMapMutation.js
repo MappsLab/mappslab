@@ -6,12 +6,25 @@ import type { MutationWrapper } from '../Mutation'
 import { pinFragment } from '../Pin/fragments'
 
 const mutation = gql`
-	mutation UpdateMap($uid: String!, $title: String, $description: String, $baseImage: Upload) {
-		updateMap(input: { uid: $uid, title: $title, description: $description, baseImage: $baseImage }) {
+	mutation UpdateMap($uid: String!, $title: String, $description: String, $baseImage: Upload, $dataLayer: DataLayerInput) {
+		updateMap(input: { uid: $uid, title: $title, description: $description, baseImage: $baseImage, dataLayer: $dataLayer }) {
 			title
 			uid
 			slug
 			description
+			dataLayers {
+				pageInfo {
+					lastCursor
+					hasNextPage
+				}
+				edges {
+					node {
+						uid
+						title
+						url
+					}
+				}
+			}
 			classroom {
 				uid
 				title

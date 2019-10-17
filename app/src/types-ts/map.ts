@@ -12,6 +12,7 @@ export interface Map {
 	description?: string
 	// lessons?: any[]
 	pins?: Paginated<Pin>
+	dataLayers?: Paginated<DataLayer>
 	routes?: Paginated<Route>
 	baseImage?: Image
 }

@@ -49,7 +49,11 @@ const ClassroomListMain = ({
 export const ClassroomList = (baseProps: ListOfTypeBaseProps<Classroom>) => (
 	<ClassroomsQuery delayQuery>
 		{({ data, refetch }) => (
-			<ClassroomListMain searchQuery={refetch} searchResults={data ? unwindEdges(data.classrooms)[0] || [] : []} {...baseProps} />
+			<ClassroomListMain
+				searchQuery={refetch}
+				searchResults={data && data.classrooms ? unwindEdges(data.classrooms)[0] || [] : []}
+				{...baseProps}
+			/>
 		)}
 	</ClassroomsQuery>
 )

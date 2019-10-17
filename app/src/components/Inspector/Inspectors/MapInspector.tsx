@@ -3,8 +3,9 @@ import { unwindEdges } from '@good-idea/unwind-edges'
 import { Map, Viewer, Mutation, QueryConfig } from '../../../types-ts'
 import { MapQuery, UpdateMapMutation } from '../../../queries/Map'
 import { Button } from '../../Buttons'
-import { ClassroomList } from '../../Lists'
+import { DataLayerList, ClassroomList } from '../../Lists'
 import { InspectItem } from '../InspectorProvider'
+import { Prompt } from '../../Forms'
 import EditableText from '../EditableText'
 import { EditableMedia } from '../EditableMedia'
 import InspectorSkeleton from '../InspectorSkeleton'
@@ -46,6 +47,7 @@ const validateImageDimensions = (file: File): Promise<string | void> =>
 const MapInspectorMain = ({ map, viewer, inspectItem, mapQueryConfig, updateMap }: Props) => {
 	const { ask } = useQuestion()
 	const teachers = map.classroom.teachers && map.classroom.teachers.edges ? unwindEdges(map.classroom.teachers)[0] : []
+	const dataLayers = map.dataLayers && map.dataLayers.edges ? unwindEdges(map.dataLayers)[0] : []
 	const viewerIsOwner = Boolean(viewer && teachers.find((t) => t.uid === viewer.uid))
 	const updateMapClassrooms = (classroom) => {
 		const variables = {
@@ -55,6 +57,29 @@ const MapInspectorMain = ({ map, viewer, inspectItem, mapQueryConfig, updateMap 
 			},
 		}
 		updateMap({ variables, refetchQueries: [mapQueryConfig] })
+	}
+
+	const addNewDataLayer = async (title: string) => {
+		const kmlUrlQuestion = await ask({
+			message: 'Enter a URL for this Data layer. (must be a .kml file)',
+			render: (answer) => <Prompt answer={answer} name="url" label="KML URL" type="url" />,
+		})
+
+		const url = kmlUrlQuestion.url.trim()
+		if (/^https:\/\/(.*)\.kml$/.test(url)) {
+			const variables = {
+				uid: map.uid,
+				dataLayer: {
+					title,
+					url,
+				},
+			}
+			updateMap({ variables, refetchQueries: [mapQueryConfig] })
+		} else {
+			ask({
+				message: 'The URL of the data file must end in .kml',
+			})
+		}
 	}
 
 	const submitUpdate = async (args) => {
@@ -94,6 +119,7 @@ const MapInspectorMain = ({ map, viewer, inspectItem, mapQueryConfig, updateMap 
 				label="Base Image"
 				viewerCanEdit={viewerIsOwner}
 			/>
+			<DataLayerList dataLayers={dataLayers} addNewDataLayer={addNewDataLayer} viewerCanAdd={viewerIsOwner} title="Data Layers" />
 		</React.Fragment>
 	)
 }

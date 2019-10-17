@@ -59,7 +59,11 @@ const MapListMain = ({
 export const MapList = (baseProps: ListOfTypeBaseProps<Map>) => (
 	<MapsQuery delayQuery>
 		{({ data, refetch }) => (
-			<MapListMain searchQuery={refetch} searchResults={data ? unwindEdges(data.maps)[0] || [] : []} {...baseProps} />
+			<MapListMain
+				searchQuery={refetch}
+				searchResults={data && data.maps ? unwindEdges(data.maps)[0] || [] : []}
+				{...baseProps}
+			/>
 		)}
 	</MapsQuery>
 )

@@ -25,7 +25,7 @@ type Props = {
 export const ListAddEntry = ({ addLabel, searchName, search, type, searchResults, onSearchResultClick, create }: Props) => {
 	const [isOpen, setIsOpen] = useState(false)
 	const [inputValue, setInputValue] = useState('')
-	const inputRef = useRef(null)
+	const inputRef = useRef<HTMLInputElement>(null)
 
 	const reset = () => {
 		setIsOpen(false)
