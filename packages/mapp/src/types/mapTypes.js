@@ -11,6 +11,8 @@ import type { Data } from './dataTypes'
  * Map Types
  */
 
+type RemoveDataLayer = () => void
+
 export type Map = MVCObject & {
 	constructor(mapDiv: Element | null, opts?: MapOptions): void,
 	fitBounds(bounds: LatLngBounds | LatLngBoundsLiteral, padding?: number | Padding): void,
@@ -33,7 +35,7 @@ export type Map = MVCObject & {
 	setStreetView(panorama: StreetViewPanorama): void,
 	setTilt(tilt: number): void,
 	setZoom(zoom: number): void,
-	applyDataLayer(src: string): void,
+	applyDataLayer(src: string): RemoveDataLayer,
 	// This causes a PropType error, controls[0] is undefined
 	// controls: MVCArray<Node>[],
 	data: Data,

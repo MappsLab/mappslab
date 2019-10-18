@@ -169,11 +169,13 @@ class Mapp extends React.Component<Props, State> {
 		}
 
 		const applyDataLayer = (src: string) => {
-			const kmlLayer = new google.maps.KmlLayer(src, {
+			const layer = new google.maps.KmlLayer(src, {
 				// suppressInfoWindows: true,
 				preserveViewport: false,
 				map: this.map,
 			})
+
+			return () => layer.setMap(null)
 			// kmlLayer.addListener('click', function(event) {
 			//   const content = event.featureData.infoWindowHtml;
 			//   const testimonial = document.getElementById('capture');
