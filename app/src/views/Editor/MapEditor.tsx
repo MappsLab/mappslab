@@ -13,6 +13,7 @@ import { getMapBounds } from 'Utils/maps'
 import { InspectorProvider, ItemInspector, InspectorConsumer } from './ItemInspector'
 import { ItemInspectorProviderProps } from './ItemInspector'
 import Pin from './Pin'
+import { DataLayer } from './DataLayer'
 import { Route } from './Route'
 import NewRoute from './Route/NewRoute'
 import Tools from './Tools'
@@ -59,26 +60,33 @@ class MapEditorMain extends React.Component<EditorProps> {
 			this.props.setZoom(Math.min(currentZoom, imageMaxZoom || 10))
 		}
 
-		if (mapData && mapData.dataLayers && mapData.dataLayers.edges.length) {
-			const [dataLayers] = unwindEdges(mapData.dataLayers)
-			console.log(dataLayers)
-			dataLayers.forEach((dataLayer) => {
-				if (/^https?:\/\/(.*)\.kml$/.test(dataLayer.url)) {
-					console.log(dataLayer.url)
-					this.props.applyDataLayer(dataLayer.url)
-				}
-			})
-		}
 		this.setBaseImage()
 		this.addEventListeners()
 	}
 
-	componentWillReceiveProps(nextProps: EditorProps) {
-		const tileset = path(['mapData', 'baseImage', 'tileset'], nextProps)
-		if (tileset) this.setBaseImage(nextProps)
+	componentWillUpdate(nextProps: EditorProps) {
+		if (nextProps.mapUid && nextProps.mapUid !== this.props.mapUid) {
+			this.props.setMap(nextProps.mapUid)
+			this.stopSubscriptions()
+			this.startSubscriptions()
+
+			const tileset = path(['mapData', 'baseImage', 'tileset'], nextProps)
+			if (tileset) this.setBaseImage(nextProps)
+		}
 	}
 
-	setBaseImage({ setBaseImage, mapData, setZoom }: EditorProps = this.props) {
+	componentDidUpdate(prevProps: EditorProps) {
+		if (prevProps.machineState.value !== this.props.machineState.value) {
+			this.handleEvent('onEntry')()
+		}
+	}
+
+	componentWillUnmount() {
+		this.removeEventListeners()
+		this.stopSubscriptions()
+	}
+
+	setBaseImage({ setBaseImage, mapData }: EditorProps = this.props) {
 		if (!(mapData && mapData.baseImage && mapData.baseImage.tileset)) return
 		const { baseUri, maxZoom } = mapData.baseImage.tileset
 
@@ -114,25 +122,6 @@ class MapEditorMain extends React.Component<EditorProps> {
 		setBaseImage({ getTileUrl, maxZoom })
 	}
 
-	componentWillUpdate(nextProps: EditorProps) {
-		if (nextProps.mapUid && nextProps.mapUid !== this.props.mapUid) {
-			this.props.setMap(nextProps.mapUid)
-			this.stopSubscriptions()
-			this.startSubscriptions()
-		}
-	}
-
-	componentDidUpdate(prevProps: EditorProps) {
-		if (prevProps.machineState.value !== this.props.machineState.value) {
-			this.handleEvent('onEntry')()
-		}
-	}
-
-	componentWillUnmount() {
-		this.removeEventListeners()
-		this.stopSubscriptions()
-	}
-
 	/**
 	 * Factory function to create smart handlers for each type of event.
 	 * If the current mode has a handler for this event,
@@ -154,10 +143,6 @@ class MapEditorMain extends React.Component<EditorProps> {
 			if (state) this.setState(state)
 		}
 	}
-
-	// logSubscriptionUpdate = (previous, updated) => {
-	// 	// console.log(previous, updated)
-	// }
 
 	addEventListeners() {
 		const { addEventListeners } = this.props
@@ -225,10 +210,12 @@ class MapEditorMain extends React.Component<EditorProps> {
 		if (!mapData) return null
 		const [pins] = unwindEdges(mapData.pins)
 		const [routes] = unwindEdges(mapData.routes)
+		const [dataLayers] = unwindEdges(mapData.dataLayers)
 		return (
 			<React.Fragment>
 				{pins && pins.map((p) => <Pin key={p.uid} pin={p} />)}
 				{routes && routes.map((r) => <Route key={r.uid} route={r} />)}
+				{dataLayers && dataLayers.map((l) => <DataLayer key={l.uid} dataLayer={l} applyDataLayer={this.props.applyDataLayer} />)}
 				{connectToPin && userLatLng && (
 					<State is="Lesson.DropPin.DropMode.Connect">
 						<NewRoute connectToPin={connectToPin} userLatLng={userLatLng} />

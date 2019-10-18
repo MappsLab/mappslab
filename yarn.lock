@@ -1703,10 +1703,10 @@
   resolved "https://registry.yarnpkg.com/@ericgio/distance-utils/-/distance-utils-0.1.1.tgz#2a9400fdacb1a653153c70a6a895098cbc135419"
   integrity sha512-R5J/d/0OivreRS9+aUvqq1kMXn8hHEWNGav4juUyFmFOa3k5Bu0BVpKSL0B4RIyhsexu1zA31ZgfTlXdoa0KKQ==
 
-"@good-idea/unwind-edges@^1.1.3":
-  version "1.1.3"
-  resolved "https://registry.yarnpkg.com/@good-idea/unwind-edges/-/unwind-edges-1.1.3.tgz#a2ab0983e058f564f6f3ac8c945c68268108a664"
-  integrity sha512-ByjYtF3KfWZzGtXjKhoeFwWVGFAwxPetAxfhRLOdy2mWeVVOEOOfR61i5KvlRH069HlPie1D3GDnYecquNq7aw==
+"@good-idea/unwind-edges@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@good-idea/unwind-edges/-/unwind-edges-1.2.0.tgz#26701fe585b64034f350decd2cf7a0d84a56c4c0"
+  integrity sha512-e72nR+L+/Bz0KhAlqQ4Rcy1NlTm/pote5ejsuwSJUiFO2YifDHXQMdQSWe1MLe1JIo033lwVw6i1id6qbyzvOg==
 
 "@hapi/address@2.x.x":
   version "2.0.0"

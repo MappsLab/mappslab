@@ -101,7 +101,7 @@ class RouteMain extends React.Component<RouteProps, RouteState> {
 		const { route, active, machineState } = this.props
 		const { mouseOver } = this.state
 		const [pins] = unwindEdges(route.pins)
-		const path = route.pins ? getPathFromPins(pins) : []
+		const path = pins && pins.length ? getPathFromPins(pins) : []
 		const stateString = getStateString(machineState.value)
 		const clickable = !/Lesson.DropPin.DropMode/.test(stateString)
 		return {

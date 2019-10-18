@@ -76,6 +76,7 @@ const Logout = styled.div`
 	width: 100%;
 	left: 0;
 	display: flex;
+	flex-direction: column;
 	justify-content: center;
 `
 
@@ -108,6 +109,10 @@ const MapNavigation = ({ map }: Props) => {
 			<Background visible={open} onClick={closeMenu} />
 			<Navigation open={open}>
 				<Logout>
+					<Button to="/dashboard" level="tertiary">
+						Manage my classrooms
+					</Button>
+
 					<Button level="tertiary">Log Out</Button>
 				</Logout>
 			</Navigation>

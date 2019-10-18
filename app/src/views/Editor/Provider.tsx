@@ -55,6 +55,7 @@ export type ProviderProps = Utils & {
 	setBaseImage: (args: any) => void
 	setZoom: (z: number) => void
 	getZoom: () => number
+	applyDataLayer: (url: string) => () => void
 }
 
 // const defaults = {
