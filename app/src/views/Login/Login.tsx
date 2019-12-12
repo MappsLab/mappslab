@@ -75,6 +75,7 @@ class Login extends React.Component<Props, State> {
 
 	render() {
 		const childProps = this.props
+		console.log(this.props)
 		return (
 			<Centered>
 				<Pane size="normal" title="Welcome to Mappslab!" allowOverflow>

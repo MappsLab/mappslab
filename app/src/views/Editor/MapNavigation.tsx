@@ -5,6 +5,7 @@ import { Map } from 'Types'
 import { Header2, Header4 } from 'Components/Text'
 import Burger from 'Components/Burger'
 import { Button } from 'Components/Buttons'
+import { useCurrentViewer } from '../../providers/CurrentViewer'
 
 const { useState } = React
 
@@ -87,6 +88,7 @@ type Props = {
 
 const MapNavigation = ({ map }: Props) => {
 	const [open, setOpen] = useState(false)
+	const { logoutUser } = useCurrentViewer()
 	const { title, classroom } = map
 
 	const toggleMenu = () => setOpen(!open)
@@ -113,7 +115,9 @@ const MapNavigation = ({ map }: Props) => {
 						Manage my classrooms
 					</Button>
 
-					<Button level="tertiary">Log Out</Button>
+					<Button onClick={logoutUser} level="tertiary">
+						Log Out
+					</Button>
 				</Logout>
 			</Navigation>
 		</React.Fragment>

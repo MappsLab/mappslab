@@ -39,7 +39,12 @@ const UserLogin = ({ user, transition }: Props) => {
 			<Header4>Please enter your password to log in.</Header4>
 			<Field label="uid" name="uid" type="hidden" value="UID" />
 			<Field label="Password" name="password" type="password" />
-			{error ? <ErrorMessage>{error.message}</ErrorMessage> : null}
+			{error ? (
+				<>
+					<ErrorMessage>{error.message}</ErrorMessage>
+					<Header4>If you forgot your password, ask your teacher to reset it.</Header4>
+				</>
+			) : null}
 		</Form>
 	)
 }
