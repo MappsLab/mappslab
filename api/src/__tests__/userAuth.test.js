@@ -104,7 +104,7 @@ describe('queries', () => {
 	it('[loginViewer] should return a validation error with invalid credentials', async () => {
 		const variables = { email: admin.email, password: 'wrongPassword' }
 		const result = await request(uidLogin, { variables })
-		expect(result.errors[0].message).toBe('Email and password do not match')
+		expect(result.errors[0].message).toBe('Incorrect password.')
 	})
 
 	it('[loginViewer] should return a validation error if user does not exist', async () => {
@@ -122,7 +122,7 @@ describe('queries', () => {
 		`
 		const variables = { email: 'nobody@nowhere.com', password: 'password' }
 		const result = await request(uidQuery, { variables })
-		expect(result.errors[0].message).toBe('Email and password do not match')
+		expect(result.errors[0].message).toBe('Incorrect password.')
 	})
 
 	it('[viewer] should return full user data given a JWT-parsed user in the context', async () => {

@@ -24,7 +24,7 @@ export const loginViewer = async (
 		const { token } = await ctx.models.User.createResetToken(viewer.uid)
 		return { resetToken: token }
 	}
-	throw new ValidationError('Email and password do not match')
+	throw new ValidationError('Incorrect password.')
 }
 
 export const requestPasswordReset = async (
