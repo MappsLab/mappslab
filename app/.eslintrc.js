@@ -36,6 +36,7 @@ module.exports = {
 		'no-underscore-dangle': 0,
 		'no-nested-ternary': 0,
 		'jsx-a11y/anchor-is-valid': 0,
+		'react/sort-comp': 0,
 		'react/destructuring-assignment': 0,
 		'react/jsx-indent': [2, 'tab'],
 		'react/jsx-indent-props': [2, 'tab'],
@@ -43,7 +44,7 @@ module.exports = {
 		'react/jsx-filename-extension': [
 			1,
 			{
-				extensions: ['.js', '.jsx'],
+				extensions: ['.js', '.jsx', '.tsx'],
 			},
 		],
 		'import/prefer-default-export': 0,

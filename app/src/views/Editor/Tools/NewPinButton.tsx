@@ -1,13 +1,17 @@
 // @flow
 import React from 'react'
-import styled, { css } from 'styled-components'
+import styled, { css, DefaultTheme } from 'styled-components'
 import { RoundButton } from 'Components/Buttons'
 import { State } from 'react-automata'
 
 const PIN_CURSOR = 'url("/images/newPin.svg") 18 49, crosshair'
 
+interface WrapperProps {
+	active: boolean
+	theme: DefaultTheme
+}
 const Wrapper = styled.div`
-	${({ active }) => css`
+	${({ active }: WrapperProps) => css`
 		& button {
 			cursor: ${active ? PIN_CURSOR : ''};
 		}
@@ -18,7 +22,7 @@ const Wrapper = styled.div`
  */
 
 type Props = {
-	onClick: () => void,
+	onClick: () => void
 }
 
 const NewPinButton = ({ onClick }: Props) => (

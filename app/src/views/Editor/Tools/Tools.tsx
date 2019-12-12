@@ -1,16 +1,23 @@
 // @flow
 import React from 'react'
 import { State } from 'react-automata'
-import type { ProviderProps } from '../Provider'
+import { ProviderProps } from '../Provider'
 import NewPinButton from './NewPinButton'
 import ZoomButton from './ZoomButton'
 import Toolbar from './Toolbar'
+import { DataLayerSelector } from './DataLayerSelector'
 
 /**
  * Tools
  */
 
-const Tools = (props: ProviderProps) => {
+export interface ToolsProps extends ProviderProps {
+	disableLayer: (id: string) => void
+	enableLayer: (id: string) => void
+	enabledLayers: string[]
+}
+
+const Tools = (props: ToolsProps) => {
 	const { zoomIn, zoomOut, transition } = props
 	const onNewPinClick = () => {
 		transition('clickedDropPin')
@@ -21,6 +28,7 @@ const Tools = (props: ProviderProps) => {
 			<Toolbar>
 				<NewPinButton onClick={onNewPinClick} />
 			</Toolbar>
+			<DataLayerSelector {...props} />
 			<Toolbar align="right">
 				<ZoomButton direction="in" onClick={() => zoomIn()} />
 				<ZoomButton direction="out" onClick={() => zoomOut()} />

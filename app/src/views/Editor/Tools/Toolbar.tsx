@@ -1,9 +1,13 @@
-// @flow
 import * as React from 'react'
-import styled from 'styled-components'
+import styled, { css, DefaultTheme } from 'styled-components'
+
+interface WrapperProps {
+	theme: DefaultTheme
+	align: string
+}
 
 const Wrapper = styled.div`
-	${({ theme }) => `
+	${({ theme }: WrapperProps) => `
 		position: absolute;
 		z-index: ${theme.layout.z.mapTool};
 		bottom: ${theme.layout.spacing.double};
@@ -14,7 +18,7 @@ const Wrapper = styled.div`
 			pointer-events: initial;
 		}
 	`}
-	${({ align }) => {
+	${({ align }: WrapperProps) => {
 		switch (align) {
 			case 'left':
 				return `
@@ -41,8 +45,8 @@ const Wrapper = styled.div`
  */
 
 type Props = {
-	children: React.Node,
-	align?: 'left' | 'center' | 'right',
+	children: React.ReactNode
+	align?: 'left' | 'center' | 'right'
 }
 
 const Toolbar = ({ children, align }: Props) => <Wrapper align={align}>{children}</Wrapper>
@@ -50,5 +54,21 @@ const Toolbar = ({ children, align }: Props) => <Wrapper align={align}>{children
 Toolbar.defaultProps = {
 	align: 'center',
 }
+
+export const DataLayerSelectorPane = styled.div`
+	${({ theme }) => css`
+		z-index: ${theme.layout.z.mapTool};
+		position: fixed;
+		bottom: 90px;
+		right: 20px;
+		background-color: white;
+		box-shadow: ${theme.mixins.boxShadow.heavy};
+		border-radius: 2px;
+		border: 1px solid ${theme.color.darkGray};
+		padding: ${theme.layout.spacing.half};
+		display: flex;
+		flex-direction: column;
+	`}
+`
 
 export default Toolbar

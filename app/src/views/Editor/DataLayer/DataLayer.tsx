@@ -11,7 +11,6 @@ interface DataLayerProps {
 export const DataLayer = ({ dataLayer, applyDataLayer }: DataLayerProps) => {
 	useEffect(() => {
 		const removeLayer = applyDataLayer(dataLayer.url)
-		console.log(removeLayer)
 		return () => removeLayer()
 	}, [])
 

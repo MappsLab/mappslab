@@ -35,11 +35,22 @@ export type EditorProps = ProviderProps & {
 
 const domEventNames = ['keyup']
 
-class MapEditorMain extends React.Component<EditorProps> {
+interface MapEditorState {
+	enabledLayers: string[]
+}
+
+class MapEditorMain extends React.Component<EditorProps, MapEditorState> {
 	static defaultProps = {
 		viewer: null,
 		mapData: null,
 		connectToPin: null,
+	}
+
+	constructor(props: EditorProps) {
+		super(props)
+		this.state = {
+			enabledLayers: [],
+		}
 	}
 
 	mapListeners: {} = {}
@@ -120,6 +131,18 @@ class MapEditorMain extends React.Component<EditorProps> {
 			return url
 		}
 		setBaseImage({ getTileUrl, maxZoom })
+	}
+
+	enableLayer = (id: string) => {
+		this.setState((currentState) => ({
+			enabledLayers: [...currentState.enabledLayers, id],
+		}))
+	}
+
+	disableLayer = (id: string) => {
+		this.setState((currentState) => ({
+			enabledLayers: currentState.enabledLayers.filter((layerId) => layerId !== id),
+		}))
 	}
 
 	/**
@@ -207,6 +230,7 @@ class MapEditorMain extends React.Component<EditorProps> {
 
 	renderMapData() {
 		const { mapData, connectToPin, userLatLng } = this.props
+		const { enabledLayers } = this.state
 		if (!mapData) return null
 		const [pins] = unwindEdges(mapData.pins)
 		const [routes] = unwindEdges(mapData.routes)
@@ -215,7 +239,10 @@ class MapEditorMain extends React.Component<EditorProps> {
 			<React.Fragment>
 				{pins && pins.map((p) => <Pin key={p.uid} pin={p} />)}
 				{routes && routes.map((r) => <Route key={r.uid} route={r} />)}
-				{dataLayers && dataLayers.map((l) => <DataLayer key={l.uid} dataLayer={l} applyDataLayer={this.props.applyDataLayer} />)}
+				{dataLayers &&
+					dataLayers
+						.filter((l) => enabledLayers.includes(l.uid))
+						.map((l) => <DataLayer key={l.uid} dataLayer={l} applyDataLayer={this.props.applyDataLayer} />)}
 				{connectToPin && userLatLng && (
 					<State is="Lesson.DropPin.DropMode.Connect">
 						<NewRoute connectToPin={connectToPin} userLatLng={userLatLng} />
@@ -227,6 +254,8 @@ class MapEditorMain extends React.Component<EditorProps> {
 
 	render() {
 		const { mapData, transition, viewer } = this.props
+		const { enabledLayers } = this.state
+		const { enableLayer, disableLayer } = this
 		if (!mapData) return null
 		return (
 			<React.Fragment>
@@ -234,7 +263,11 @@ class MapEditorMain extends React.Component<EditorProps> {
 					<WelcomeDialog map={mapData} transition={transition} />
 				</State>
 				<MapNavigation map={mapData} />
-				{viewer ? <Tools {...this.props} /> : <NotLoggedIn />}
+				{viewer ? (
+					<Tools {...this.props} enabledLayers={enabledLayers} enableLayer={enableLayer} disableLayer={disableLayer} />
+				) : (
+					<NotLoggedIn />
+				)}
 				<MapNotifications />
 				<ItemInspector />
 				{this.renderMapData()}

@@ -35,7 +35,7 @@ export type ProviderProps = Utils & {
 	viewer?: Viewer
 	setMap: (id: string) => void
 	mapData?: Map
-	transition: (string, {}) => void
+	transition: (name: string, extra?: { [key: string]: any }) => void
 	updateMapState: (string: string, state: Partial<State>) => void
 	createPin: Mutation
 	connectToPin?: {
@@ -44,7 +44,7 @@ export type ProviderProps = Utils & {
 	}
 	userLatLng?: LatLng
 	refetch: () => Promise<void>
-	subscribeToMore: (SubscriptionConfig) => () => void
+	subscribeToMore: (config: SubscriptionConfig<any, any>) => () => void
 	machineState: MachineState
 	panTo: (ll: LatLng) => void
 	fitBounds: (bounds: any) => void
@@ -55,6 +55,8 @@ export type ProviderProps = Utils & {
 	setBaseImage: (args: any) => void
 	setZoom: (z: number) => void
 	getZoom: () => number
+	zoomIn: () => void
+	zoomOut: () => void
 	applyDataLayer: (url: string) => () => void
 }
 
