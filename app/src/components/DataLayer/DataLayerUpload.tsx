@@ -6,13 +6,25 @@ const { useState } = React
 
 interface DataLayerUploadProps {
 	/* */
+	onComplete: () => void
+	handleUpload: (file: File) => Promise<void>
 }
 
-export const DataLayerUpload = (props: DataLayerUploadProps) => {
+interface KMLUploadFormData {
+	kmlfile: File
+}
+
+export const DataLayerUpload = ({
+	onComplete,
+	handleUpload,
+}: DataLayerUploadProps) => {
 	const [submitting, setSubmitting] = useState(false)
 
-	const handleSubmit = (data: any) => {
+	const handleSubmit = async ({ kmlfile }: KMLUploadFormData) => {
 		setSubmitting(true)
+		await handleUpload(kmlfile)
+		setSubmitting(false)
+		onComplete()
 	}
 
 	return (

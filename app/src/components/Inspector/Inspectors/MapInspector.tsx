@@ -74,28 +74,23 @@ const MapInspectorMain = ({
 	}
 
 	const addNewDataLayer = async (title: string) => {
-		const kmlUrlQuestion = await ask({
-			message: 'Upload a Data Layer (KML) file',
-			render: (answer) => <DataLayerUpload />,
-
-			// <Prompt answer={answer} name="url" label="KML URL" type="url" />,
-		})
-
-		const url = kmlUrlQuestion.url.trim()
-		if (/^https?:\/\/(.*)\.kml$/.test(url)) {
+		const handleUpload = async (kml: File) => {
 			const variables = {
 				uid: map.uid,
 				dataLayer: {
 					title,
-					url,
+					kml,
 				},
 			}
-			updateMap({ variables, refetchQueries: [mapQueryConfig] })
-		} else {
-			ask({
-				message: 'The URL of the data file must end in .kml',
-			})
+			await updateMap({ variables, refetchQueries: [mapQueryConfig] })
 		}
+
+		await ask({
+			message: 'Upload a Data Layer (KML) file',
+			render: (answer) => (
+				<DataLayerUpload onComplete={answer} handleUpload={handleUpload} />
+			),
+		})
 	}
 
 	const submitUpdate = async (args) => {
