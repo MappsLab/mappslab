@@ -7,7 +7,15 @@ export interface DBNode {
 	uid: string;
 }
 
-type Operator = 'contains' | 'eq' | 'notEq' | 'lt' | 'lte' | 'gt' | 'gte' | 'between'
+type Operator =
+	| 'contains'
+	| 'eq'
+	| 'notEq'
+	| 'lt'
+	| 'lte'
+	| 'gt'
+	| 'gte'
+	| 'between'
 
 export type Filter = {
 	[key: Operator]: string | Date | number | boolean,

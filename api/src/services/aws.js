@@ -22,7 +22,10 @@ type PutResponse = {
 	Bucket: string,
 }
 
-export const upload = async (data: Buffer | ReadStream, name: string): Promise<PutResponse> =>
+export const upload = async (
+	data: Buffer | ReadStream,
+	name: string,
+): Promise<PutResponse> =>
 	new Promise((resolve) => {
 		const bucketName = config.get('aws.bucketName')
 		s3client.upload(

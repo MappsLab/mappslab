@@ -19,7 +19,9 @@ export const getPin = async (uid: string): Promise<PinType | null> => {
 	return pin
 }
 
-export const getPins = async (args?: PaginationFilterArgs = {}): Promise<Array<PinType>> => {
+export const getPins = async (
+	args?: PaginationFilterArgs = {},
+): Promise<Array<PinType>> => {
 	const { varBlocks, filterString, paginationString } = createQueryStrings(args)
 
 	const q = /* GraphQL */ `

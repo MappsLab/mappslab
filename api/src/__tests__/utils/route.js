@@ -32,7 +32,10 @@ const createRouteMutation = /* GraphQL */ `
 	}
 `
 
-export const createRoute = async (input: NewRouteData, { viewer }: { viewer: UserType }): Promise<RouteType> => {
+export const createRoute = async (
+	input: NewRouteData,
+	{ viewer }: { viewer: UserType },
+): Promise<RouteType> => {
 	const context = { viewer }
 	const variables = {
 		input: {

@@ -3,7 +3,9 @@ import type { ClassroomType, UpdateClassroomInput } from 'Types/ClassroomTypes'
 import { mutateNode, createEdge } from 'Database'
 import { clean, validateUpdate } from './classroomDBSchema'
 
-export const updateClassroom = async (args: UpdateClassroomInput): Promise<ClassroomType> => {
+export const updateClassroom = async (
+	args: UpdateClassroomInput,
+): Promise<ClassroomType> => {
 	const { uid, addStudents, addTeachers, addMaps, ...classroomData } = args
 	const cleaned = await clean(classroomData)
 	const validatedClassroomData = await validateUpdate(cleaned)
@@ -45,8 +47,13 @@ export const updateClassroom = async (args: UpdateClassroomInput): Promise<Class
 			: []
 
 	const addEdges = [...addStudentEdges, ...addTeacherEdges, ...addMapEdges]
-	if (addEdges.length) await Promise.all(addEdges.map(([edge, config]) => createEdge(edge, config)))
+	if (addEdges.length)
+		await Promise.all(
+			addEdges.map(([edge, config]) => createEdge(edge, config)),
+		)
 
-	const updatedClassroom = await mutateNode(uid, { data: validatedClassroomData })
+	const updatedClassroom = await mutateNode(uid, {
+		data: validatedClassroomData,
+	})
 	return updatedClassroom
 }

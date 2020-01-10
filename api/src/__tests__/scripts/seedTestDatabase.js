@@ -28,7 +28,13 @@ const dropAll = async () => {
 }
 
 const promiseSerial = (funcs) =>
-	funcs.reduce((promise, func) => promise.then((result) => func().then(Array.prototype.concat.bind(result))), Promise.resolve([]))
+	funcs.reduce(
+		(promise, func) =>
+			promise.then((result) =>
+				func().then(Array.prototype.concat.bind(result)),
+			),
+		Promise.resolve([]),
+	)
 
 const seedDatabase = async () => {
 	debug('🌻 🌻 🌻 Seeding Test Database... 🌻 🌻 🌻 ')
@@ -38,8 +44,12 @@ const seedDatabase = async () => {
 	const [admin] = await createTestAdminUsers()
 	debug('👶  Creating and inserting users...')
 
-	const teachers = await promiseSerial(R.times(() => async () => createTeacher({}, { viewer: admin }), 3))
-	const students = await promiseSerial(R.times(() => async () => createStudent({}, { viewer: admin }), 36))
+	const teachers = await promiseSerial(
+		R.times(() => async () => createTeacher({}, { viewer: admin }), 3),
+	)
+	const students = await promiseSerial(
+		R.times(() => async () => createStudent({}, { viewer: admin }), 36),
+	)
 
 	debug('🏫  Adding some classrooms..')
 	const teacherClassrooms = await Promise.all(
@@ -59,24 +69,43 @@ const seedDatabase = async () => {
 		),
 	)
 
-	const classrooms = teacherClassrooms.reduce((acc, rooms) => [...acc, ...rooms], [])
-	debug(`🏫  Made ${classrooms.length} classrooms for ${teachers.length} teachers`)
+	const classrooms = teacherClassrooms.reduce(
+		(acc, rooms) => [...acc, ...rooms],
+		[],
+	)
+	debug(
+		`🏫  Made ${classrooms.length} classrooms for ${teachers.length} teachers`,
+	)
 
 	debug('🏫  Assigning students to classrooms..')
 	await promiseSerial(
 		students.map((student, index) => async () => {
 			const classroomIndex = index % classrooms.length
 			const classroom = classrooms[classroomIndex]
-			return assignUser({ input: { addToClassrooms: [classroom.uid], uid: student.uid } }, { viewer: classroom.teacher })
+			return assignUser(
+				{ input: { addToClassrooms: [classroom.uid], uid: student.uid } },
+				{ viewer: classroom.teacher },
+			)
 		}),
 	)
-	debug(`🏫  Assigned ${students.length} students to ${classrooms.length} classrooms.`)
+	debug(
+		`🏫  Assigned ${students.length} students to ${
+			classrooms.length
+		} classrooms.`,
+	)
 
 	debug('🗺  Adding maps to classrooms')
 	const maps = await Promise.all(
 		classrooms.map(async (classroom) =>
 			promiseSerial(
-				R.times(() => async () => createGeneratedMap({ addToClassrooms: [classroom.uid] }, { viewer: classroom.teacher }), 1),
+				R.times(
+					() => async () =>
+						createGeneratedMap(
+							{ addToClassrooms: [classroom.uid] },
+							{ viewer: classroom.teacher },
+						),
+					1,
+				),
 			),
 		),
 	)
@@ -100,14 +129,28 @@ const seedDatabase = async () => {
 			const PIN_COUNT = 6
 			const newPinsByClassroom = await Promise.all(
 				userClassroomMapIds.map((id) =>
-					promiseSerial(R.times(() => async () => createGeneratedPin({ addToMaps: [id] }, { viewer: currentUser }), PIN_COUNT)),
+					promiseSerial(
+						R.times(
+							() => async () =>
+								createGeneratedPin(
+									{ addToMaps: [id] },
+									{ viewer: currentUser },
+								),
+							PIN_COUNT,
+						),
+					),
 				),
 			)
 
 			const newRoutes = await Promise.all(
 				newPinsByClassroom.map(async (pins) => {
-					const addPins = pins.slice(0, Math.round(PIN_COUNT / 2)).map((p) => p.uid)
-					const route = await createRoute({ pins: addPins }, { viewer: currentUser })
+					const addPins = pins
+						.slice(0, Math.round(PIN_COUNT / 2))
+						.map((p) => p.uid)
+					const route = await createRoute(
+						{ pins: addPins },
+						{ viewer: currentUser },
+					)
 					return route
 					// createRoute({})
 				}),

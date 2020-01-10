@@ -1,5 +1,9 @@
 // @flow
-import type { PaginationInput, PageType, GraphQLContext } from 'Types/sharedTypes'
+import type {
+	PaginationInput,
+	PageType,
+	GraphQLContext,
+} from 'Types/sharedTypes'
 import type { ClassroomType } from 'Types/ClassroomTypes'
 import type { MapType } from 'Types/MapTypes'
 import type { UserType } from 'Types/UserTypes'
@@ -15,7 +19,10 @@ export const classroomStudents = async (
 	{ input }: PaginationInput,
 	ctx: GraphQLContext,
 ): Promise<PageType<UserType>> => {
-	const fetchedUsers = await ctx.models.User.getClassroomStudents(fetchedClassroom.uid, input)
+	const fetchedUsers = await ctx.models.User.getClassroomStudents(
+		fetchedClassroom.uid,
+		input,
+	)
 	return assemblePage(fetchedUsers, input)
 }
 
@@ -24,7 +31,10 @@ export const classroomTeachers = async (
 	{ input }: PaginationInput,
 	ctx: GraphQLContext,
 ): Promise<PageType<UserType>> => {
-	const fetchedUsers = await ctx.models.User.getClassroomTeachers(fetchedClassroom.uid, input)
+	const fetchedUsers = await ctx.models.User.getClassroomTeachers(
+		fetchedClassroom.uid,
+		input,
+	)
 	return assemblePage(fetchedUsers, input)
 }
 
@@ -33,7 +43,9 @@ export const classroomMaps = async (
 	{ input }: PaginationInput,
 	ctx: GraphQLContext,
 ): Promise<PageType<MapType> | null> => {
-	const filter = { where: { mapBelongsToClassroom: { eq: fetchedClassroom.uid } } }
+	const filter = {
+		where: { mapBelongsToClassroom: { eq: fetchedClassroom.uid } },
+	}
 	const result = await ctx.models.Map.getMaps(filter)
 	return assemblePage(result, input)
 }

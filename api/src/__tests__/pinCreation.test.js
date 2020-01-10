@@ -15,8 +15,22 @@ beforeAll(async (done) => {
 })
 
 const q = /* GraphQL */ `
-	mutation createPin($title: String!, $lat: Float!, $lng: Float!, $addToMaps: [String]!, $lessonUids: [String]) {
-		createPin(input: { title: $title, lat: $lat, lng: $lng, addToMaps: $addToMaps, lessonUids: $lessonUids }) {
+	mutation createPin(
+		$title: String!
+		$lat: Float!
+		$lng: Float!
+		$addToMaps: [String]!
+		$lessonUids: [String]
+	) {
+		createPin(
+			input: {
+				title: $title
+				lat: $lat
+				lng: $lng
+				addToMaps: $addToMaps
+				lessonUids: $lessonUids
+			}
+		) {
 			uid
 			title
 			lat
@@ -46,7 +60,11 @@ const pinsToRemove = []
 const removeNewPins = async () => {
 	if (pinsToRemove.length)
 		pinsToRemove.map(async (pin) => {
-			await removeEdge({ fromUid: pin.owner.uid, pred: 'pinned', toUid: pin.uid })
+			await removeEdge({
+				fromUid: pin.owner.uid,
+				pred: 'pinned',
+				toUid: pin.uid,
+			})
 			await removeNode(pin.uid)
 		})
 }

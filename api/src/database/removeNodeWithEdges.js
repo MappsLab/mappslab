@@ -15,7 +15,11 @@ const debug = require('debug')('api')
 
 type Relationships = Array<DBEdge>
 
-const removeNodeWithEdges = async (uid: string, relationships: Relationships, existingTxn?: Txn): Promise<boolean> => {
+const removeNodeWithEdges = async (
+	uid: string,
+	relationships: Relationships,
+	existingTxn?: Txn,
+): Promise<boolean> => {
 	const txn = existingTxn || dbClient.newTxn()
 	try {
 		debug(`Removing node ${uid} and edges:`)

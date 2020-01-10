@@ -21,7 +21,8 @@ export const dataLayerSchema = () =>
 
 type NewDataLayerData = $Rest<DataLayerType, {| uid: string |}>
 
-export const validateNew = (data: NewDataLayerData) => Joi.validate(data, dataLayerSchema(true))
+export const validateNew = (data: NewDataLayerData) =>
+	Joi.validate(data, dataLayerSchema(true))
 // export const validateUpdate = (mapData: UpdateMapData) => Joi.validate(mapData, mapSchema(false))
 
 export const publicFields = [

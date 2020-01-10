@@ -29,21 +29,35 @@ const query = /* GraphQL */ `
 
 beforeAll(async (done) => {
 	const firstClassrooms = await getDBClassrooms()
-	const result = await request(query, { variables: { uid: firstClassrooms[0].uid } })
+	const result = await request(query, {
+		variables: { uid: firstClassrooms[0].uid },
+	})
 	// eslint-disable-next-line
 	classroom = result.data.classroom
 	const users = await getDBUsers()
 	const classroomTeachers = classroom.teachers.edges.map((edge) => edge.node)
 	// eslint-disable-next-line
 	teacher = classroomTeachers[0]
-	otherTeacher = users.find((u) => u.roles.includes('teacher') && !classroomTeachers.find((ct) => ct.uid === u.uid))
-	student = users.find((u) => !u.roles.includes('teacher') && u.roles.includes('student'))
+	otherTeacher = users.find(
+		(u) =>
+			u.roles.includes('teacher') &&
+			!classroomTeachers.find((ct) => ct.uid === u.uid),
+	)
+	student = users.find(
+		(u) => !u.roles.includes('teacher') && u.roles.includes('student'),
+	)
 	done()
 })
 
 const mutation = /* GraphQL */ `
-	mutation UpdateClassroom($uid: String!, $title: String, $description: String) {
-		updateClassroom(input: { uid: $uid, title: $title, description: $description }) {
+	mutation UpdateClassroom(
+		$uid: String!
+		$title: String
+		$description: String
+	) {
+		updateClassroom(
+			input: { uid: $uid, title: $title, description: $description }
+		) {
 			uid
 			title
 			description
@@ -86,7 +100,10 @@ describe('[updateClassroom]', () => {
 		const result = await request(mutation, { variables, context })
 		expect(result.data.updateClassroom.description).toBe(variables.description)
 		expect(result.data.updateClassroom.title).toBe(originalTitle)
-		const restore = await request(mutation, { variables: { ...variables, description: originalDescription }, context })
+		const restore = await request(mutation, {
+			variables: { ...variables, description: originalDescription },
+			context,
+		})
 		expect(restore.data.updateClassroom.description).toBe(originalDescription)
 		expect(result.data.updateClassroom.title).toBe(originalTitle)
 	})

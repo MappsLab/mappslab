@@ -4,8 +4,18 @@ import { getDBUsers } from './utils/user'
 import { getDBClassrooms } from './utils/classroom'
 
 const q = /* GraphQL */ `
-	mutation createMap($title: String!, $description: String, $addToClassrooms: [String!]) {
-		createMap(input: { title: $title, description: $description, addToClassrooms: $addToClassrooms }) {
+	mutation createMap(
+		$title: String!
+		$description: String
+		$addToClassrooms: [String!]
+	) {
+		createMap(
+			input: {
+				title: $title
+				description: $description
+				addToClassrooms: $addToClassrooms
+			}
+		) {
 			uid
 			title
 			description
@@ -37,7 +47,11 @@ afterEach(async (done) => {
 		await Promise.all(
 			mapsToRemove.map(async (map) => {
 				if (map.classroom) {
-					await removeEdge({ fromUid: map.classroom.uid, pred: 'has_map', toUid: map.uid })
+					await removeEdge({
+						fromUid: map.classroom.uid,
+						pred: 'has_map',
+						toUid: map.uid,
+					})
 				}
 				await removeNode(map.uid)
 			}),

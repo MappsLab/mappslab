@@ -25,7 +25,9 @@ export const getUser = async (args: GetUserInput): Promise<UserType | null> => {
 	return user
 }
 
-export const getUsers = async (args?: PaginationFilterArgs = {}): Promise<Array<UserType>> => {
+export const getUsers = async (
+	args?: PaginationFilterArgs = {},
+): Promise<Array<UserType>> => {
 	const { varBlocks, filterString, paginationString } = createQueryStrings(args)
 
 	const q = /* GraphQL */ `
@@ -42,7 +44,9 @@ export const getUsers = async (args?: PaginationFilterArgs = {}): Promise<Array<
 	return result.getUsers
 }
 
-export const getViewer = async (args: { uid: string }): Promise<UserType | null> => {
+export const getViewer = async (args: {
+	uid: string,
+}): Promise<UserType | null> => {
 	const { uid } = args
 	const q = `query getUser($uid: string) {
 		getUser(func: uid(${uid})) {

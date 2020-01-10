@@ -47,7 +47,11 @@ export const getClassroomUsers = (userType: string): Function => async (
 export const getClassroomStudents = getClassroomUsers('students')
 export const getClassroomTeachers = getClassroomUsers('teachers')
 
-const userInClassroomQuery = (userUid: string, pred: '~learns_in' | '~teaches_in', classroomUid: string): string => `
+const userInClassroomQuery = (
+	userUid: string,
+	pred: '~learns_in' | '~teaches_in',
+	classroomUid: string,
+): string => `
 query getUser {
 	classroom(func: uid(${classroomUid})) @filter(uid_in(${pred}, ${userUid})) {
 		uid
@@ -56,14 +60,20 @@ query getUser {
 }
 `
 
-export const userLearnsInClassroom = async (userUid: string, classroomUid: string): Promise<boolean> => {
+export const userLearnsInClassroom = async (
+	userUid: string,
+	classroomUid: string,
+): Promise<boolean> => {
 	const q = userInClassroomQuery(userUid, '~learns_in', classroomUid)
 	const result = await query(q)
 	if (!result || !result.classroom) return false
 	return result.classroom.length >= 1
 }
 
-export const userTeachesInClassroom = async (userUid: string, classroomUid: string): Promise<boolean> => {
+export const userTeachesInClassroom = async (
+	userUid: string,
+	classroomUid: string,
+): Promise<boolean> => {
 	const q = userInClassroomQuery(userUid, '~teaches_in', classroomUid)
 	const result = await query(q)
 	if (!result || !result.classroom) return false

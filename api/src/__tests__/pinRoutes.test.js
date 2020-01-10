@@ -11,7 +11,11 @@ const removeNewPins = async () => {
 	if (pinsToRemove.length)
 		await Promise.all(
 			pinsToRemove.map(async (pin) => {
-				await removeEdge({ fromUid: pin.owner.uid, pred: 'pinned', toUid: pin.uid })
+				await removeEdge({
+					fromUid: pin.owner.uid,
+					pred: 'pinned',
+					toUid: pin.uid,
+				})
 				await removeNode(pin.uid)
 			}),
 		)
@@ -21,7 +25,11 @@ const removeNewRoutes = async () => {
 	if (routesToRemove.length) {
 		await Promise.all(
 			routesToRemove.map(async (route) => {
-				await removeEdge({ fromUid: route.uid, pred: 'includes_pin', toUid: '*' })
+				await removeEdge({
+					fromUid: route.uid,
+					pred: 'includes_pin',
+					toUid: '*',
+				})
 				await removeNode(route.uid)
 			}),
 		)
@@ -67,7 +75,8 @@ describe('[addPin]', () => {
 			viewer,
 		}
 
-		const pinRouteNames = (pin) => pin.route.route.pins.edges.map((e) => e.node.title)
+		const pinRouteNames = (pin) =>
+			pin.route.route.pins.edges.map((e) => e.node.title)
 
 		/**
 		 Create the first pin.
@@ -78,7 +87,10 @@ describe('[addPin]', () => {
 			lng: 111.333,
 			addToMaps: [maps[0].uid],
 		}
-		const pin1result = await request(addMutation, { context, variables: { input: firstPinInput } })
+		const pin1result = await request(addMutation, {
+			context,
+			variables: { input: firstPinInput },
+		})
 		const pin1 = pin1result.data.createPin
 		pinsToRemove.push(pin1)
 
@@ -94,7 +106,10 @@ describe('[addPin]', () => {
 				connectToPin: pin1.uid,
 			},
 		}
-		const pin2result = await request(addMutation, { context, variables: { input: pin2input } })
+		const pin2result = await request(addMutation, {
+			context,
+			variables: { input: pin2input },
+		})
 		const pin2 = pin2result.data.createPin
 		pinsToRemove.push(pin2)
 		routesToRemove.push(pin2.route)
@@ -114,7 +129,10 @@ describe('[addPin]', () => {
 				connectToPin: pin1.uid,
 			},
 		}
-		const pin3result = await request(addMutation, { context, variables: { input: pin3input } })
+		const pin3result = await request(addMutation, {
+			context,
+			variables: { input: pin3input },
+		})
 		const pin3 = pin3result.data.createPin
 		pinsToRemove.push(pin3)
 		expect(pin3.route.route.pins.edges).toHaveLength(3)
@@ -135,7 +153,10 @@ describe('[addPin]', () => {
 			},
 		}
 
-		const pin4result = await request(addMutation, { context, variables: { input: pin4input } })
+		const pin4result = await request(addMutation, {
+			context,
+			variables: { input: pin4input },
+		})
 		const pin4 = pin4result.data.createPin
 		expect(pin4.route.route.pins.edges).toHaveLength(4)
 

@@ -64,15 +64,23 @@ export const publicFields = [
 
 const singleFields = ['owner', 'route.route']
 
-export const validateNew = (pinData: NewPinData): Promise<NewPinData> => Joi.validate(pinData, pinSchema(true))
-export const validateUpdate = (pinData: UpdatePinData): Promise<UpdatePinData> => Joi.validate(pinData, pinSchema(false))
+export const validateNew = (pinData: NewPinData): Promise<NewPinData> =>
+	Joi.validate(pinData, pinSchema(true))
+export const validateUpdate = (
+	pinData: UpdatePinData,
+): Promise<UpdatePinData> => Joi.validate(pinData, pinSchema(false))
 
 /**
  * Clean
  */
 
 export const clean = async <T>(pinData: T): Promise<T> =>
-	promisePipe(filterNullAndUndefined, dissoc('addToMaps'), dissoc('addToLessons'), assoc('updatedAt', new Date()))(pinData)
+	promisePipe(
+		filterNullAndUndefined,
+		dissoc('addToMaps'),
+		dissoc('addToLessons'),
+		assoc('updatedAt', new Date()),
+	)(pinData)
 
 /**
  * Parse

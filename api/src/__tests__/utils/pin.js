@@ -65,14 +65,20 @@ const createPinMutation = /* GraphQL */ `
 	}
 `
 
-export const createPin = async ({ input }: { input: NewPinData }, { viewer }: { viewer: UserType } = {}): Promise<PinType> => {
+export const createPin = async (
+	{ input }: { input: NewPinData },
+	{ viewer }: { viewer: UserType } = {},
+): Promise<PinType> => {
 	const context = { viewer }
 	const variables = { input }
 	const result = await request(createPinMutation, { variables, context })
 	return result.data.createPin
 }
 
-export const createGeneratedPin = (pinArgs: { addToMaps: Array<string> }, { viewer }: { viewer: UserType }) =>
+export const createGeneratedPin = (
+	pinArgs: { addToMaps: Array<string> },
+	{ viewer }: { viewer: UserType },
+) =>
 	createPin(
 		{
 			input: {

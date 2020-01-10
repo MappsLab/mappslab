@@ -5,7 +5,9 @@ import type { TilesetType } from 'Types/TilesetTypes'
 import type { PaginationFilterArgs } from 'Types/sharedTypes'
 import { publicFields } from './tilesetDBSchema'
 
-export const getTileset = async (args?: PaginationFilterArgs = {}): Promise<TilesetType | null> => {
+export const getTileset = async (
+	args?: PaginationFilterArgs = {},
+): Promise<TilesetType | null> => {
 	const { varBlocks, filterString, paginationString } = createQueryStrings(args)
 	const q = /* GraphQL */ `
 		query getTileset {

@@ -7,9 +7,14 @@ import type { FilterStrings } from '../dbUtils'
 
 type FilterTuple = [string, ?string]
 
-const genericRelationship = (predicate: string) => (operator: 'eq' | 'notEq', uid: string): FilterTuple => {
+const genericRelationship = (predicate: string) => (
+	operator: 'eq' | 'notEq',
+	uid: string,
+): FilterTuple => {
 	if (operator !== 'eq' && operator !== 'notEq')
-		throw new Error(`"${operator}" is an invalid operator. Relationship operator may only be "eq" or "notEq"`)
+		throw new Error(
+			`"${operator}" is an invalid operator. Relationship operator may only be "eq" or "notEq"`,
+		)
 	const maybeNot = operator === 'notEq' ? 'NOT ' : ''
 	return [`${maybeNot}uid_in(${predicate}, ${uid})`, '']
 }
@@ -63,11 +68,18 @@ const relationshipStringCreators = {
 	hasTileset: genericRelationship('~has_tileset'),
 }
 
-const createRelationshipFilter = (operator: string, field: string, value: any): FilterStrings | void => {
+const createRelationshipFilter = (
+	operator: string,
+	field: string,
+	value: any,
+): FilterStrings | void => {
 	// If the field is not a relationship field, return undefined so we
 	// can create a field filter
 	if (!relationshipStringCreators[field]) return undefined
-	const [filterString, varBlocks] = relationshipStringCreators[field](operator, value)
+	const [filterString, varBlocks] = relationshipStringCreators[field](
+		operator,
+		value,
+	)
 	return {
 		varBlocks,
 		filterString,

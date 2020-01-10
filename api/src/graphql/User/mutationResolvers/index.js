@@ -1,5 +1,10 @@
 // @flow
-import { loginViewer, requestPasswordReset, resetPassword, setTemporaryPassword } from './userAuth'
+import {
+	loginViewer,
+	requestPasswordReset,
+	resetPassword,
+	setTemporaryPassword,
+} from './userAuth'
 import { createTeacher, createStudent, createAdmin } from './createUser'
 import { updateUser } from './updateUser'
 

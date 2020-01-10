@@ -9,11 +9,19 @@ import { publicFields } from './classroomDBSchema'
 
 const debug = require('debug')('api')
 
-export const getClassroom = async (args: GetNodeArgs, viewer?: ViewerType): Promise<ClassroomType | null> => {
+export const getClassroom = async (
+	args: GetNodeArgs,
+	viewer?: ViewerType,
+): Promise<ClassroomType | null> => {
 	const key = head(Object.keys(args))
-	if (!key || (key !== 'slug' && key !== 'uid')) throw new Error('getClassroom must be called with a `uid` or a `slug`')
-	if (typeof args.uid === 'string' && key === 'uid' && !validateUid(args.uid)) throw new Error(`Uid ${args.uid} is malformed`)
-	const func = key === 'uid' && typeof args.uid === 'string' ? `uid(${args.uid})` : `eq(${key}, $${key})`
+	if (!key || (key !== 'slug' && key !== 'uid'))
+		throw new Error('getClassroom must be called with a `uid` or a `slug`')
+	if (typeof args.uid === 'string' && key === 'uid' && !validateUid(args.uid))
+		throw new Error(`Uid ${args.uid} is malformed`)
+	const func =
+		key === 'uid' && typeof args.uid === 'string'
+			? `uid(${args.uid})`
+			: `eq(${key}, $${key})`
 	const q = /* GraphQL */ `
 		query getClassroom($${key}: string, $viewerUid: string) {
 			getClassroom(func: ${func}) {
@@ -29,7 +37,10 @@ export const getClassroom = async (args: GetNodeArgs, viewer?: ViewerType): Prom
 	return classroom
 }
 
-export const getClassrooms = async (args?: PaginationFilterArgs = {}, viewer: ViewerType): Promise<Array<ClassroomType>> => {
+export const getClassrooms = async (
+	args?: PaginationFilterArgs = {},
+	viewer: ViewerType,
+): Promise<Array<ClassroomType>> => {
 	const { varBlocks, filterString, paginationString } = createQueryStrings(args)
 	const q = /* GraphQL */ `
 		query getClassrooms($viewerUid: string) {

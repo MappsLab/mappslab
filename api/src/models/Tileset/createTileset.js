@@ -35,10 +35,14 @@ const createSlices = async (file: string, outputDir: string): Promise<void> =>
 			// gm, // (optional) Alternative way to specify the GraphicsMagic library
 		})
 
-		mapSlicer.on('start', (files) => debug(`Starting to process ${files} files.`))
+		mapSlicer.on('start', (files) =>
+			debug(`Starting to process ${files} files.`),
+		)
 		mapSlicer.on('error', (err) => debug(err))
 		mapSlicer.on('warning', (err) => debug(err))
-		mapSlicer.on('progress', (progress) => debug(`Progress: ${Math.round(progress * 100)}%`))
+		mapSlicer.on('progress', (progress) =>
+			debug(`Progress: ${Math.round(progress * 100)}%`),
+		)
 		mapSlicer.on('end', () => {
 			debug('Finished processing slices.')
 			resolve()
@@ -49,7 +53,10 @@ const createSlices = async (file: string, outputDir: string): Promise<void> =>
 const tileDir = config.get('aws.tileDirectory')
 const bucketName = config.get('aws.bucketName')
 
-const uploadSlices = async (sourceDir: string, baseUri: string): Promise<void> => {
+const uploadSlices = async (
+	sourceDir: string,
+	baseUri: string,
+): Promise<void> => {
 	const files = walkDir(sourceDir)
 	await batchPromises(5, files, (file) => {
 		const buffer = fs.readFileSync(path.join(sourceDir, file))
@@ -75,7 +82,10 @@ const cleanup = async (dirpath: string): Promise<void> => {
 	})
 }
 
-export const createTileSet = async (imageUpload: ImageUpload, imageNode: ImageType): Promise<TilesetType> => {
+export const createTileSet = async (
+	imageUpload: ImageUpload,
+	imageNode: ImageType,
+): Promise<TilesetType> => {
 	const { createReadStream, filename } = await imageUpload
 	const buffer = await streamToBuffer(createReadStream())
 	const uuid = uuidv1()

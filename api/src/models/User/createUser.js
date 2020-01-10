@@ -11,9 +11,15 @@ type NewUserDataWithRoles = NewUserData & {
 	roles?: Array<string>,
 }
 
-export const createUser = async (args: NewUserDataWithRoles): Promise<UserType> => {
+export const createUser = async (
+	args: NewUserDataWithRoles,
+): Promise<UserType> => {
 	const { addToClassrooms, ...userData } = args
-	const cleaned = await clean({ ...defaultValues, ...userData, createdAt: new Date() })
+	const cleaned = await clean({
+		...defaultValues,
+		...userData,
+		createdAt: new Date(),
+	})
 	const validatedUserData = await validateNew(cleaned).catch((err) => {
 		debug(err.details)
 		debug(err._object)
@@ -26,7 +32,8 @@ export const createUser = async (args: NewUserDataWithRoles): Promise<UserType> 
 			: args.roles && args.roles.includes('student')
 			? 'learns_in'
 			: null
-	if (addToClassrooms && pred) edges.push(...addToClassrooms.map((toUid) => [{ pred, toUid }, {}]))
+	if (addToClassrooms && pred)
+		edges.push(...addToClassrooms.map((toUid) => [{ pred, toUid }, {}]))
 	const newUser: UserType = await createNodeWithEdges(validatedUserData, edges)
 	const fetched = await getUser({ uid: newUser.uid })
 	if (!fetched) throw new Error('There was a problem creating this user')

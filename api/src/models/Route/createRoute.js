@@ -3,7 +3,10 @@ import type { RouteType, NewRouteData } from 'Types/RouteTypes'
 import { createNodeWithEdges } from 'Database'
 import { clean, validateNew } from './routeDBSchema'
 
-export const createRoute = async (args: NewRouteData, ownerUid: string): Promise<RouteType> => {
+export const createRoute = async (
+	args: NewRouteData,
+	ownerUid: string,
+): Promise<RouteType> => {
 	const { pins } = args
 	const cleaned = await clean(args)
 	const validated = await validateNew(cleaned)

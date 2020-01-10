@@ -103,7 +103,11 @@ describe('[user]', () => {
 
 describe('[users]', () => {
 	const q = /* GraphQL */ `
-		query UsersListQuery($first: Int, $after: String, $where: UserFilterParameter) {
+		query UsersListQuery(
+			$first: Int
+			$after: String
+			$where: UserFilterParameter
+		) {
 			users(input: { first: $first, after: $after, where: $where }) {
 				pageInfo {
 					hasNextPage

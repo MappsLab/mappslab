@@ -15,7 +15,11 @@ type RouteSubscriptionPayload = {
 	},
 }
 
-const routeIsInSubscribedMap = (payload: RouteSubscriptionPayload, mapUid: string, key: string): boolean => {
+const routeIsInSubscribedMap = (
+	payload: RouteSubscriptionPayload,
+	mapUid: string,
+	key: string,
+): boolean => {
 	const maps = path([key, 'route', 'maps'])(payload)
 	if (!maps) return false
 	return maps && Boolean(maps.find((m) => m.uid === mapUid))

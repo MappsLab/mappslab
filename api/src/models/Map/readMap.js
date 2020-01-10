@@ -10,9 +10,14 @@ import { publicFields, parseMapResult, parseMapResults } from './mapDBSchema'
 
 export const getMap = async (args: GetNodeArgs): Promise<MapType | null> => {
 	const key = Object.keys(args)[0]
-	if (!key || (key !== 'slug' && key !== 'uid')) throw new Error('getMap must be called with a `uid` or a `slug`')
-	if (typeof args.uid === 'string' && key === 'uid' && !validateUid(args.uid)) throw new Error(`Uid ${args.uid} is malformed`)
-	const func = key === 'uid' && typeof args.uid === 'string' ? `uid(${args.uid})` : `eq(${key}, $${key})`
+	if (!key || (key !== 'slug' && key !== 'uid'))
+		throw new Error('getMap must be called with a `uid` or a `slug`')
+	if (typeof args.uid === 'string' && key === 'uid' && !validateUid(args.uid))
+		throw new Error(`Uid ${args.uid} is malformed`)
+	const func =
+		key === 'uid' && typeof args.uid === 'string'
+			? `uid(${args.uid})`
+			: `eq(${key}, $${key})`
 	const q = /* GraphQL */ `
 		query getMap($${key}: string) {
 			getMap(func: ${func}) {
@@ -24,7 +29,9 @@ export const getMap = async (args: GetNodeArgs): Promise<MapType | null> => {
 	return parseMapResult(result.getMap)
 }
 
-export const getMaps = async (args?: PaginationFilterArgs = {}): Promise<Array<MapType>> => {
+export const getMaps = async (
+	args?: PaginationFilterArgs = {},
+): Promise<Array<MapType>> => {
 	const { varBlocks, filterString, paginationString } = createQueryStrings(args)
 
 	const q = /* GraphQL */ `
@@ -40,7 +47,9 @@ export const getMaps = async (args?: PaginationFilterArgs = {}): Promise<Array<M
 	return parseMapResults(result.getMaps)
 }
 
-export const getMapsByUser = async (user: UserType /* args?: PaginationFilterArgs */): Promise<Array<MapType>> => {
+export const getMapsByUser = async (
+	user: UserType /* args?: PaginationFilterArgs */,
+): Promise<Array<MapType>> => {
 	const q = /* GraphQL */ `
 		query getMapsByUser {
 			Maps(func: eq(type, "Map")) @filter(uid_in(~learns_in, ${user.uid})) {

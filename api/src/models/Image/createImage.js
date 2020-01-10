@@ -10,10 +10,18 @@ import config from '../../config'
 const defaultWidths = [100, 600, 1200]
 const imageDirectory = config.get('aws.imageDirectory')
 
-const parseAndUpload = async (source: Buffer, name: string, size?: number): Promise<ImageSize> => {
-	const parsed = size ? await resizeImage(source, size) : await parseImage(source)
+const parseAndUpload = async (
+	source: Buffer,
+	name: string,
+	size?: number,
+): Promise<ImageSize> => {
+	const parsed = size
+		? await resizeImage(source, size)
+		: await parseImage(source)
 	const { info, data } = parsed
-	const fileName = `${imageDirectory}/${name}/w_${size || 'original'}.${info.format}`
+	const fileName = `${imageDirectory}/${name}/w_${size || 'original'}.${
+		info.format
+	}`
 	const uploaded = await upload(data, fileName)
 	const { width, height, format } = info
 	return {

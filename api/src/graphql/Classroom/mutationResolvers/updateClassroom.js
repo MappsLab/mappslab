@@ -8,8 +8,12 @@ export const updateClassroom = async (
 	{ input }: { input: UpdateClassroomInput },
 	ctx: GraphQLContext,
 ): Promise<ClassroomType> => {
-	if (!ctx.viewer) throw Error('You must be logged in to create a new classroom. Please log in and try again.')
-	if (ctx.viewer.roles && !ctx.viewer.roles.includes('teacher')) throw new Error('You must be a teacher to create a classroom')
+	if (!ctx.viewer)
+		throw Error(
+			'You must be logged in to create a new classroom. Please log in and try again.',
+		)
+	if (ctx.viewer.roles && !ctx.viewer.roles.includes('teacher'))
+		throw new Error('You must be a teacher to create a classroom')
 
 	const userClassrooms = await ctx.models.Classroom.getClassrooms(
 		{ where: { classroomHasTeacher: { eq: ctx.viewer.uid } } },
@@ -20,7 +24,10 @@ export const updateClassroom = async (
 		throw new Error('You can only modify classrooms that you teach in.')
 
 	await ctx.models.Classroom.updateClassroom(input)
-	const classroom = await ctx.models.Classroom.getClassroom({ uid: input.uid }, ctx.viewer)
+	const classroom = await ctx.models.Classroom.getClassroom(
+		{ uid: input.uid },
+		ctx.viewer,
+	)
 	if (!classroom) throw new Error('There was a problem updating your classroom')
 	return classroom
 }

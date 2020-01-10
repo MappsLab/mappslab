@@ -10,7 +10,9 @@ import makeFilterString from './makeFilterString'
  */
 
 const isValidDate = (date): boolean =>
-	typeof date === 'object' && Object.prototype.toString.call(date) === '[object Date]' && !Number.isNaN(date)
+	typeof date === 'object' &&
+	Object.prototype.toString.call(date) === '[object Date]' &&
+	!Number.isNaN(date)
 
 const toString = (val: mixed) => {
 	switch (typeof val) {
@@ -63,7 +65,10 @@ export const createVariables = R.pipe(
  */
 export const DEFAULT_PAGE_COUNT = 50
 
-const makePaginationString = (first?: number = DEFAULT_PAGE_COUNT, after?: string): string => {
+const makePaginationString = (
+	first?: number = DEFAULT_PAGE_COUNT,
+	after?: string,
+): string => {
 	return [
 		'', // include a blank string so we start it with a comma
 		first // if a 'first' value is present, include it +1 so we can tell if there is a 'nextPage'
@@ -93,7 +98,10 @@ type QueryStrings = FilterStrings & {
 	paginationString: string,
 }
 
-export const createQueryStrings = (args: PaginationFilterArgs, filterDeleted?: boolean = true): QueryStrings => {
+export const createQueryStrings = (
+	args: PaginationFilterArgs,
+	filterDeleted?: boolean = true,
+): QueryStrings => {
 	if (!args)
 		return {
 			paginationString: '',
@@ -120,4 +128,5 @@ export const createQueryStrings = (args: PaginationFilterArgs, filterDeleted?: b
 
 export const validateUid = (uid: string): boolean => /^0x[\d\w]+$/.test(uid)
 
-export const validateUidOrWildcard = (uid: string): boolean => uid === '*' || validateUid(uid)
+export const validateUidOrWildcard = (uid: string): boolean =>
+	uid === '*' || validateUid(uid)

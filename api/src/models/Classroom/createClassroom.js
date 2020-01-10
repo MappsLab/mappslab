@@ -11,9 +11,15 @@ type ClassroomEdge = DBEdge & {
 	pred: 'teaches_in' | 'learns_in',
 }
 
-export const createClassroom = async (args: NewClassroomInput): Promise<ClassroomType> => {
+export const createClassroom = async (
+	args: NewClassroomInput,
+): Promise<ClassroomType> => {
 	const { addTeachers, ...classroomData } = args
-	const cleaned = await clean({ ...defaultValues, ...classroomData, createdAt: new Date() })
+	const cleaned = await clean({
+		...defaultValues,
+		...classroomData,
+		createdAt: new Date(),
+	})
 	const validatedClassroomData = await validateNew(cleaned).catch((err) => {
 		debug(err.details)
 		debug(err._object)
@@ -34,10 +40,20 @@ export const createClassroom = async (args: NewClassroomInput): Promise<Classroo
 	return createNodeWithEdges(validatedClassroomData, [...addTeacherEdges])
 }
 
-const createClassroomConnection = async (connection: ClassroomEdge): Promise<boolean> => createEdge(connection, {})
+const createClassroomConnection = async (
+	connection: ClassroomEdge,
+): Promise<boolean> => createEdge(connection, {})
 
 export const assignStudent = (classroomUid: string, studentUid: string) =>
-	createClassroomConnection({ fromUid: studentUid, pred: 'learns_in', toUid: classroomUid })
+	createClassroomConnection({
+		fromUid: studentUid,
+		pred: 'learns_in',
+		toUid: classroomUid,
+	})
 
 export const assignTeacher = (classroomUid: string, teacherUid: string) =>
-	createClassroomConnection({ fromUid: teacherUid, pred: 'teaches_in', toUid: classroomUid })
+	createClassroomConnection({
+		fromUid: teacherUid,
+		pred: 'teaches_in',
+		toUid: classroomUid,
+	})

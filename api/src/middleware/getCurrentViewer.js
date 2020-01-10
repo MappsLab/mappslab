@@ -4,7 +4,11 @@ import { verifyJWT } from 'Utils/auth'
 
 const debug = require('debug')('api')
 
-const getCurrentViewer = async (req: express$Request, res: express$Response, next: express$Next) => {
+const getCurrentViewer = async (
+	req: express$Request,
+	res: express$Response,
+	next: express$Next,
+) => {
 	if (!req.headers.authorization) {
 		req.viewer = null
 		next()

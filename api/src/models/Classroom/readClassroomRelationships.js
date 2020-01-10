@@ -5,7 +5,9 @@ import { publicFields } from './classroomDBSchema'
 
 // const debug = require('debug')('api')
 
-export const getMapClassroom = async (classroomUid: string): Promise<ClassroomType | null> => {
+export const getMapClassroom = async (
+	classroomUid: string,
+): Promise<ClassroomType | null> => {
 	const q = /* GraphQL */ `
 		query getClassroom($classroomUid: string) {
 			getClassroom(func: eq(type, "classroom")) @filter(uid_in(has_map, ${classroomUid})) {

@@ -5,7 +5,9 @@ import type { ImageType } from 'Types/ImageTypes'
 import type { PaginationFilterArgs } from 'Types/sharedTypes'
 import { publicFields } from './imageDBSchema'
 
-export const getImages = async (args?: PaginationFilterArgs = {}): Promise<Array<ImageType>> => {
+export const getImages = async (
+	args?: PaginationFilterArgs = {},
+): Promise<Array<ImageType>> => {
 	const { varBlocks, filterString, paginationString } = createQueryStrings(args)
 	const q = /* GraphQL */ `
 		query getImages {

@@ -55,14 +55,18 @@ export const publicFields = [
     viewerIsTeacher: math(teacherRooms == 1)`,
 ].join('\n')
 
-export const validateNew = (classroomData: ClassroomInput) => Joi.validate(classroomData, classroomSchema(true))
-export const validateUpdate = (classroomData: ClassroomInput) => Joi.validate(classroomData, classroomSchema(false))
+export const validateNew = (classroomData: ClassroomInput) =>
+	Joi.validate(classroomData, classroomSchema(true))
+export const validateUpdate = (classroomData: ClassroomInput) =>
+	Joi.validate(classroomData, classroomSchema(false))
 
 /**
  * Clean
  */
 
-export const clean = async (classroomData: ClassroomInput = {}): Promise<ClassroomInput> =>
+export const clean = async (
+	classroomData: ClassroomInput = {},
+): Promise<ClassroomInput> =>
 	promisePipe(
 		// When a title is supplied without a slug, make a slug from it
 		when((o) => prop('title')(o) && !prop('slug')(o), createSlugFrom('title')),

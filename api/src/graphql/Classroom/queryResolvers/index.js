@@ -1,6 +1,10 @@
 // @flow
 import { classroom, classrooms } from './classroomQueries'
-import { classroomStudents, classroomTeachers, classroomMaps } from './classroomConnectionQueries'
+import {
+	classroomStudents,
+	classroomTeachers,
+	classroomMaps,
+} from './classroomConnectionQueries'
 
 export default {
 	Query: {

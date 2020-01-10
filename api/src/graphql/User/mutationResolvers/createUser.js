@@ -8,24 +8,47 @@ export const createStudent = async (
 	{ input }: { input: NewUserData, assignToClassrooms: Array<string> },
 	ctx: GraphQLContext,
 ): Promise<UserType> => {
-	if (!ctx.viewer || (!ctx.viewer.roles.includes('teacher') && !ctx.viewer.roles.includes('admin'))) {
+	if (
+		!ctx.viewer ||
+		(!ctx.viewer.roles.includes('teacher') &&
+			!ctx.viewer.roles.includes('admin'))
+	) {
 		throw new UserError('You must be an admin or teacher to add new students')
 	}
-	const user = await ctx.models.User.createUser({ ...input, roles: ['student'] })
+	const user = await ctx.models.User.createUser({
+		...input,
+		roles: ['student'],
+	})
 	return user
 }
 
-export const createTeacher = async (_: mixed, args: { input: NewUserData }, ctx: GraphQLContext): Promise<UserType> => {
-	if (!ctx.viewer || (!ctx.viewer.roles.includes('teacher') && !ctx.viewer.roles.includes('admin'))) {
+export const createTeacher = async (
+	_: mixed,
+	args: { input: NewUserData },
+	ctx: GraphQLContext,
+): Promise<UserType> => {
+	if (
+		!ctx.viewer ||
+		(!ctx.viewer.roles.includes('teacher') &&
+			!ctx.viewer.roles.includes('admin'))
+	) {
 		throw new UserError('You must be an admin or teacher to add new teachers')
 	}
 	const { input } = args || {}
-	const user = await ctx.models.User.createUser({ ...input, roles: ['teacher'] })
+	const user = await ctx.models.User.createUser({
+		...input,
+		roles: ['teacher'],
+	})
 	return user
 }
 
-export const createAdmin = async (_: mixed, args: { input: NewUserData }, ctx: GraphQLContext): Promise<UserType> => {
-	if (!ctx.viewer || !ctx.viewer.roles.includes('admin')) throw new UserError('You must be an admin to add new admins')
+export const createAdmin = async (
+	_: mixed,
+	args: { input: NewUserData },
+	ctx: GraphQLContext,
+): Promise<UserType> => {
+	if (!ctx.viewer || !ctx.viewer.roles.includes('admin'))
+		throw new UserError('You must be an admin to add new admins')
 	const { input } = args || {}
 	const user = await ctx.models.User.createUser({ ...input, roles: ['admin'] })
 	return user

@@ -3,7 +3,11 @@ import { query } from 'Database'
 import type { RouteType } from 'Types/RouteTypes'
 import type { PaginationFilterArgs } from 'Types/sharedTypes'
 import { createQueryStrings } from 'Database/utils'
-import { publicFields, parseRouteResult, parseRouteResults } from './routeDBSchema'
+import {
+	publicFields,
+	parseRouteResult,
+	parseRouteResults,
+} from './routeDBSchema'
 
 export const getRoute = async (uid: string): Promise<RouteType | null> => {
 	const q = /* GraphQL */ `
@@ -34,7 +38,9 @@ export const getRoute = async (uid: string): Promise<RouteType | null> => {
 // 	}
 // }
 
-export const getRoutes = async (args?: PaginationFilterArgs = {}): Promise<Array<RouteType>> => {
+export const getRoutes = async (
+	args?: PaginationFilterArgs = {},
+): Promise<Array<RouteType>> => {
 	const { varBlocks, filterString, paginationString } = createQueryStrings(args)
 	const q = /* GraphQL */ `
 		query getRoutes {

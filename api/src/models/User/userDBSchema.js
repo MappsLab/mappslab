@@ -65,8 +65,10 @@ export const defaultValues = {
 	updatedAt: new Date(),
 }
 
-export const validateNew = (userData: NewUserData) => Joi.validate(userData, userSchema(true))
-export const validateUpdate = (userData: UpdateUserData) => Joi.validate(userData, userSchema(false))
+export const validateNew = (userData: NewUserData) =>
+	Joi.validate(userData, userSchema(true))
+export const validateUpdate = (userData: UpdateUserData) =>
+	Joi.validate(userData, userSchema(false))
 
 export const publicFields = ['name', 'roles', 'type', 'uid'].join('\n')
 export const viewerFields = ['email', 'disabled'].join('\n')

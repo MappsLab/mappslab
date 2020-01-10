@@ -1,6 +1,13 @@
 // @flow
 import type { GraphQLContext, Success } from 'Types/sharedTypes'
-import type { Credentials, ViewerType, PasswordResetInput, JWT, GetUserInput, SetTemporaryPasswordInput } from 'Types/UserTypes'
+import type {
+	Credentials,
+	ViewerType,
+	PasswordResetInput,
+	JWT,
+	GetUserInput,
+	SetTemporaryPasswordInput,
+} from 'Types/UserTypes'
 import { createJWT } from 'Utils/auth'
 import { ValidationError } from 'Errors'
 

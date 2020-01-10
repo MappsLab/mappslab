@@ -31,8 +31,10 @@ const defaultValues = {
 	updatedAt: new Date(),
 }
 
-export const validateNew = (mapData: NewMapData) => Joi.validate(mapData, mapSchema(true))
-export const validateUpdate = (mapData: UpdateMapData) => Joi.validate(mapData, mapSchema(false))
+export const validateNew = (mapData: NewMapData) =>
+	Joi.validate(mapData, mapSchema(true))
+export const validateUpdate = (mapData: UpdateMapData) =>
+	Joi.validate(mapData, mapSchema(false))
 
 export const publicFields = [
 	//
@@ -55,7 +57,9 @@ export const publicFields = [
  * Clean
  */
 
-export const clean = async (mapData: $Shape<UpdateMapData>): Promise<UpdateMapData> =>
+export const clean = async (
+	mapData: $Shape<UpdateMapData>,
+): Promise<UpdateMapData> =>
 	promisePipe(merge(defaultValues), filterNullAndUndefined)(mapData)
 
 /**

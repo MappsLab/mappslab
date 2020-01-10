@@ -10,7 +10,10 @@ const debug = require('debug')('api')
  * @todo make polymorphic type input for createNode
  */
 
-const createNode = async <NodeType>(data: Object, existingTxn?: Txn): Promise<NodeType> => {
+const createNode = async <NodeType>(
+	data: Object,
+	existingTxn?: Txn,
+): Promise<NodeType> => {
 	const txn = existingTxn || dbClient.newTxn()
 	try {
 		const mu = new dgraph.Mutation()

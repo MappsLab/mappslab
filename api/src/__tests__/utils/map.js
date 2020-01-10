@@ -34,12 +34,17 @@ const createMapMutation = /* GraphQL */ `
 	}
 `
 
-export const createMap = async ({ input }: { input: NewMapData }, { viewer }: { viewer: UserType } = {}): Promise<MapType> => {
+export const createMap = async (
+	{ input }: { input: NewMapData },
+	{ viewer }: { viewer: UserType } = {},
+): Promise<MapType> => {
 	const variables = { input }
 	const context = { viewer }
 	const result = await request(createMapMutation, { variables, context })
 	return result.data.createMap
 }
 
-export const createGeneratedMap = (mapArgs: { addToClassrooms: Array<string> }, { viewer }: { viewer: UserType }) =>
-	createMap({ input: { ...generateMap(), ...mapArgs } }, { viewer })
+export const createGeneratedMap = (
+	mapArgs: { addToClassrooms: Array<string> },
+	{ viewer }: { viewer: UserType },
+) => createMap({ input: { ...generateMap(), ...mapArgs } }, { viewer })

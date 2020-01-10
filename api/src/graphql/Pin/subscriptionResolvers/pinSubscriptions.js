@@ -17,7 +17,11 @@ type PinSubscriptionPayload = {
 	},
 }
 
-const pinIsInSubscribedMap = (payload: PinSubscriptionPayload, mapUid: string, key: string): boolean => {
+const pinIsInSubscribedMap = (
+	payload: PinSubscriptionPayload,
+	mapUid: string,
+	key: string,
+): boolean => {
 	const maps = path([key, 'pin', 'maps'], payload)
 	if (!maps) return false
 	return maps && Boolean(maps.find((m) => m.uid === mapUid))

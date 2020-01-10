@@ -37,7 +37,10 @@ export const createAdminUsers = async () => {
 		temporaryPassword: 'temporary',
 		disabled: false,
 	}
-	return Promise.all([models.User.createUser(joseph), models.User.createUser(john)])
+	return Promise.all([
+		models.User.createUser(joseph),
+		models.User.createUser(john),
+	])
 }
 
 export const createTestAdminUsers = async () => {
@@ -55,7 +58,10 @@ export const createTestAdminUsers = async () => {
 		password: 'Password#1',
 		disabled: false,
 	}
-	return Promise.all([models.User.createUser(joseph), models.User.createUser(john)])
+	return Promise.all([
+		models.User.createUser(joseph),
+		models.User.createUser(john),
+	])
 }
 
 /**
@@ -65,7 +71,10 @@ export const createTestAdminUsers = async () => {
 /* Apollo Server includes this by default, but we aren't using that here so we need to add it manually */
 const uploadScalar = `scalar Upload`
 
-const schema = makeExecutableSchema({ typeDefs: [typeDefs, uploadScalar].join(','), resolvers })
+const schema = makeExecutableSchema({
+	typeDefs: [typeDefs, uploadScalar].join(','),
+	resolvers,
+})
 
 type Options = {
 	context?: {
@@ -75,7 +84,10 @@ type Options = {
 }
 
 // Nice little helper function for tests
-export const request = (query: mixed, options: Options = {}): Promise<Object> => {
+export const request = (
+	query: mixed,
+	options: Options = {},
+): Promise<Object> => {
 	const { context, variables } = options
 	Object.keys(options).forEach((key) => {
 		if (key !== 'context' && key !== 'variables') {

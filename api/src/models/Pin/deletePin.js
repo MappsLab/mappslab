@@ -6,9 +6,14 @@ import { query, mutateNode, removeEdges } from 'Database'
 import { UserError } from 'Errors'
 import { clean, validateUpdate } from './pinDBSchema'
 
-export const deletePin = async ({ uid }: RemovePinInput, viewer: UserType): Promise<Success> => {
+export const deletePin = async (
+	{ uid }: RemovePinInput,
+	viewer: UserType,
+): Promise<Success> => {
 	// Make sure the user owns the pin (skip if viewer is admin)
-	const filter = viewer.roles.includes('admin') ? '' : `@filter(uid_in(~pinned, ${viewer.uid}))`
+	const filter = viewer.roles.includes('admin')
+		? ''
+		: `@filter(uid_in(~pinned, ${viewer.uid}))`
 	const q = /* GraphQL */ `
 		query getPin {
 			getPin(func: uid(${uid})) ${filter} {
@@ -31,7 +36,9 @@ export const deletePin = async ({ uid }: RemovePinInput, viewer: UserType): Prom
 	const pin = result.getPin[0]
 	const cleaned = await clean({ uid, deleted: true })
 	const validatedPinData = await validateUpdate(cleaned)
-	const mutationResult = await mutateNode(pin.uid, { data: { uid: pin.uid, ...validatedPinData } })
+	const mutationResult = await mutateNode(pin.uid, {
+		data: { uid: pin.uid, ...validatedPinData },
+	})
 	await removeEdges({ fromUid: pin.uid })
 
 	return {

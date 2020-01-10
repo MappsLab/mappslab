@@ -1,4 +1,3 @@
-
 import { assemblePage } from 'Utils/graphql'
 import { getDBUsers } from './utils/user'
 
@@ -34,17 +33,27 @@ describe('[assemblePage]', () => {
 		expect(page1.pageInfo.hasPrevPage).toBe(false)
 		expect(page1.pageInfo.lastCursor).toBe(twentyFiveUsers[9].uid)
 
-		let lastIndex = twentyFiveUsers.findIndex((u) => u.uid === page1.pageInfo.lastCursor)
+		let lastIndex = twentyFiveUsers.findIndex(
+			(u) => u.uid === page1.pageInfo.lastCursor,
+		)
 		const second10 = twentyFiveUsers.slice(lastIndex + 1)
-		const page2 = assemblePage(second10, { first: 10, after: page1.pageInfo.lastCursor })
+		const page2 = assemblePage(second10, {
+			first: 10,
+			after: page1.pageInfo.lastCursor,
+		})
 		expect(page2.edges.length).toBe(10)
 		expect(page2.pageInfo.hasNextPage).toBe(true)
 		expect(page2.pageInfo.hasPrevPage).toBe(true)
 		expect(page2.pageInfo.lastCursor).toBe(twentyFiveUsers[19].uid)
 
-		lastIndex = twentyFiveUsers.findIndex((u) => u.uid === page2.pageInfo.lastCursor)
+		lastIndex = twentyFiveUsers.findIndex(
+			(u) => u.uid === page2.pageInfo.lastCursor,
+		)
 		const third10 = twentyFiveUsers.slice(lastIndex + 1)
-		const page3 = assemblePage(third10, { first: 10, after: page2.pageInfo.lastCursor })
+		const page3 = assemblePage(third10, {
+			first: 10,
+			after: page2.pageInfo.lastCursor,
+		})
 		expect(page3.edges.length).toBe(5)
 		expect(page3.pageInfo.hasNextPage).toBe(false)
 		expect(page3.pageInfo.hasPrevPage).toBe(true)

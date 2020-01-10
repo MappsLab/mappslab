@@ -12,7 +12,9 @@ const createGraphQLErrorFormatter = (error: GraphQLError) => {
 	debug(error)
 	debug('-------------------\n')
 	// $FlowFixMe
-	const isUserError = error.originalError ? error.originalError[IsUserError] === true : error[IsUserError] === true
+	const isUserError = error.originalError
+		? error.originalError[IsUserError] === true
+		: error[IsUserError] === true
 	const sentryId =
 		!isUserError && process.env.NODE_ENV === 'production'
 			? // ? sentryId = Raven.captureException(error, req && Raven.parsers.parseRequest(req))
@@ -22,7 +24,8 @@ const createGraphQLErrorFormatter = (error: GraphQLError) => {
 	return {
 		message: isUserError ? error.message : serverErrorMessage,
 		// Hide the stack trace in production mode
-		stack: !process.env.NODE_ENV === 'production' ? error.stack.split('\n') : null,
+		stack:
+			!process.env.NODE_ENV === 'production' ? error.stack.split('\n') : null,
 	}
 }
 

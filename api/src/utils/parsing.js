@@ -20,7 +20,9 @@ const makeFieldSingle = (fieldPath: Array<string | number>, obj: any) =>
 		: // otherwise, return as-is. (This prevents the reation of { prop: { prop: undefined }})
 		  obj
 
-export const parseSingularFields = (singularFields: Array<string>) => (obj: any): any =>
+export const parseSingularFields = (singularFields: Array<string>) => (
+	obj: any,
+): any =>
 	singularFields.reduce(
 		(acc, fieldPath) =>
 			// apply the lens fn to each field path

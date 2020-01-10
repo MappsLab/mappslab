@@ -21,7 +21,8 @@ export const tilesetSchema = (isNew: boolean = true) =>
 
 type NewTilesetData = $Rest<TilesetType, {| uid: string |}>
 
-export const validateNew = (data: NewTilesetData) => Joi.validate(data, tilesetSchema(true))
+export const validateNew = (data: NewTilesetData) =>
+	Joi.validate(data, tilesetSchema(true))
 // export const validateUpdate = (mapData: UpdateMapData) => Joi.validate(mapData, mapSchema(false))
 
 export const publicFields = [

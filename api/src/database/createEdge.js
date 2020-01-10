@@ -13,7 +13,11 @@ const defaultConfig = {
 	unique: false,
 }
 
-const createEdge = async ({ fromUid, pred, toUid, facets }: DBEdge, opts: EdgeConfig, existingTxn?: Txn): Promise<true> => {
+const createEdge = async (
+	{ fromUid, pred, toUid, facets }: DBEdge,
+	opts: EdgeConfig,
+	existingTxn?: Txn,
+): Promise<true> => {
 	const config = { ...defaultConfig, ...opts }
 	const txn = existingTxn || dbClient.newTxn()
 	try {

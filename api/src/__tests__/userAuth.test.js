@@ -21,7 +21,9 @@ beforeAll(async (done) => {
 	admin = await getDBUser(users.find((u) => u.roles.includes('admin')).uid)
 	teacher = await getDBUser(users.find((u) => u.roles.includes('teacher')).uid)
 	student1 = await getDBUser(users.find((u) => u.roles.includes('student')).uid)
-	student2 = await getDBUser(users.find((u) => !u.roles.includes('admin') && u.uid !== student1.uid).uid)
+	student2 = await getDBUser(
+		users.find((u) => !u.roles.includes('admin') && u.uid !== student1.uid).uid,
+	)
 	done()
 })
 
@@ -89,8 +91,13 @@ describe('queries', () => {
 		`
 
 		const context = { viewer: admin }
-		const createVariables = { input: { name: 'Some Name', temporaryPassword: 'qwerty1' } }
-		const createResult = await request(createUserMutation, { variables: createVariables, context })
+		const createVariables = {
+			input: { name: 'Some Name', temporaryPassword: 'qwerty1' },
+		}
+		const createResult = await request(createUserMutation, {
+			variables: createVariables,
+			context,
+		})
 		const newUser = createResult.data.createStudent
 		/* Try logging in with the temporary password */
 		const variables = { uid: newUser.uid, password: 'qwerty1' }
@@ -142,7 +149,9 @@ describe('queries', () => {
 			}
 		`
 		const originalViewer = createJWT(teacher)
-		const JWTviewer = await verifyJWT(originalViewer.token.replace(/^Bearer /, ''))
+		const JWTviewer = await verifyJWT(
+			originalViewer.token.replace(/^Bearer /, ''),
+		)
 		const context = { viewer: JWTviewer }
 		const result = await request(currentViewerQuery, { context })
 		const { viewer, jwt } = result.data.currentViewer
@@ -191,7 +200,9 @@ describe('[requestReset]', () => {
 
 const setTempPassMutation = /* GraphQL */ `
 	mutation SetTemporaryPassword($uid: String!, $temporaryPassword: String!) {
-		setTemporaryPassword(input: { uid: $uid, temporaryPassword: $temporaryPassword }) {
+		setTemporaryPassword(
+			input: { uid: $uid, temporaryPassword: $temporaryPassword }
+		) {
 			success
 			messages
 		}
@@ -207,7 +218,10 @@ const setTemporaryPassword = async (user, viewer) => {
 describe('[setTemporaryPassword]', () => {
 	it('should allow teachers and admins to set temporary passwords for students', async () => {
 		/* Arrange */
-		const [result1, result2] = await Promise.all([setTemporaryPassword(student1, teacher), setTemporaryPassword(student2, admin)])
+		const [result1, result2] = await Promise.all([
+			setTemporaryPassword(student1, teacher),
+			setTemporaryPassword(student2, admin),
+		])
 		expect(result1.data.setTemporaryPassword.success).toBe(true)
 		expect(result2.data.setTemporaryPassword.success).toBe(true)
 	})

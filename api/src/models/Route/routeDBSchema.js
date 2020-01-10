@@ -35,8 +35,10 @@ export const defaultValues = {
 	updatedAt: new Date(),
 }
 
-export const validateNew = (routeData: NewRouteData) => Joi.validate(routeData, routeSchema(true))
-export const validateUpdate = (routeData: UpdateRouteData) => Joi.validate(routeData, routeSchema(false))
+export const validateNew = (routeData: NewRouteData) =>
+	Joi.validate(routeData, routeSchema(true))
+export const validateUpdate = (routeData: UpdateRouteData) =>
+	Joi.validate(routeData, routeSchema(false))
 
 export const publicFields = [
 	//
@@ -61,7 +63,9 @@ const singleFields = ['owner']
  * Clean
  */
 
-export const clean = <T: UpdateRouteData | NewRouteData>(routeData: T): Promise<T> =>
+export const clean = <T: UpdateRouteData | NewRouteData>(
+	routeData: T,
+): Promise<T> =>
 	promisePipe(merge(defaultValues), filterNullAndUndefined)(routeData)
 
 /**
@@ -70,7 +74,9 @@ export const clean = <T: UpdateRouteData | NewRouteData>(routeData: T): Promise<
 
 const sortPins = (obj) => {
 	const { pins } = obj
-	const sortedPins = [...pins].sort((a, b) => (a['pins|order'] < b['pins|order'] ? -1 : 1))
+	const sortedPins = [...pins].sort((a, b) =>
+		a['pins|order'] < b['pins|order'] ? -1 : 1,
+	)
 	return {
 		...obj,
 		pins: sortedPins,

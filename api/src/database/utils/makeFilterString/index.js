@@ -13,7 +13,8 @@ export type FilterObject = {
 	[key: string]: Filter,
 }
 
-const joinStrings = (connect: string) => (a: string, b: string): string => `${a}${a.length && b.length ? connect : ''}${b}`
+const joinStrings = (connect: string) => (a: string, b: string): string =>
+	`${a}${a.length && b.length ? connect : ''}${b}`
 
 const andJoin = joinStrings(' AND ')
 const nJoin = joinStrings('\n')
@@ -41,9 +42,14 @@ const joinFilterStrings = (filters: Array<FilterStrings>) => {
  * makeFilterPartial
  * returns joined filterStrings and varBlocks for a single field
  */
-const makeFilterPartial = (field: string) => ([operator, value]: [string, string]): FilterStrings => {
+const makeFilterPartial = (field: string) => ([operator, value]: [
+	string,
+	string,
+]): FilterStrings => {
 	// const r = createOperatorFilter
-	const filters = createRelationshipFilter(operator, field, value) || createOperatorFilter(operator, field, value)
+	const filters =
+		createRelationshipFilter(operator, field, value) ||
+		createOperatorFilter(operator, field, value)
 	return filters
 }
 

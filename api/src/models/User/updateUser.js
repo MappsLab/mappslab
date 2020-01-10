@@ -18,12 +18,23 @@ export const updateUser = async (args: UpdateUserData): Promise<UserType> => {
 			? 'learns_in'
 			: null
 
-	const edgesToCreate = addToClassrooms && pred ? addToClassrooms.map((toUid) => [{ fromUid: uid, pred, toUid }, {}]) : []
+	const edgesToCreate =
+		addToClassrooms && pred
+			? addToClassrooms.map((toUid) => [{ fromUid: uid, pred, toUid }, {}])
+			: []
 	const edgesToRemove =
-		removeFromClassrooms && pred ? removeFromClassrooms.map((toUid) => [{ fromUid: uid, pred, toUid }, {}]) : []
+		removeFromClassrooms && pred
+			? removeFromClassrooms.map((toUid) => [{ fromUid: uid, pred, toUid }, {}])
+			: []
 	await mutateNode(uid, { data: validated })
-	if (edgesToCreate.length) await Promise.all(edgesToCreate.map(([edge, config]) => createEdge(edge, config)))
-	if (edgesToRemove.length) await Promise.all(edgesToRemove.map(([edge, config]) => removeEdge(edge, config)))
+	if (edgesToCreate.length)
+		await Promise.all(
+			edgesToCreate.map(([edge, config]) => createEdge(edge, config)),
+		)
+	if (edgesToRemove.length)
+		await Promise.all(
+			edgesToRemove.map(([edge, config]) => removeEdge(edge, config)),
+		)
 	return {
 		...fetchedUser,
 		...validated,

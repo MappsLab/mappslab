@@ -3,7 +3,12 @@ import { getUser, getUsers, getViewer } from './readUser'
 import { updateUser } from './updateUser'
 import { createUser } from './createUser'
 import { deleteUser } from './deleteUser'
-import { checkPassword, createResetToken, resetPassword, setTemporaryPassword } from './userAuth'
+import {
+	checkPassword,
+	createResetToken,
+	resetPassword,
+	setTemporaryPassword,
+} from './userAuth'
 import {
 	userTeachesInClassroom,
 	userLearnsInClassroom,

@@ -33,8 +33,24 @@ const query = /* GraphQL */ `
 `
 
 const mutation = /* GraphQL */ `
-	mutation UpdatePin($uid: String!, $title: String, $lat: Float, $lng: Float, $addToMaps: [String], $lessonUids: [String]) {
-		updatePin(input: { uid: $uid, title: $title, lat: $lat, lng: $lng, addToMaps: $addToMaps, lessonUids: $lessonUids }) {
+	mutation UpdatePin(
+		$uid: String!
+		$title: String
+		$lat: Float
+		$lng: Float
+		$addToMaps: [String]
+		$lessonUids: [String]
+	) {
+		updatePin(
+			input: {
+				uid: $uid
+				title: $title
+				lat: $lat
+				lng: $lng
+				addToMaps: $addToMaps
+				lessonUids: $lessonUids
+			}
+		) {
 			uid
 			title
 			lat
@@ -70,7 +86,9 @@ describe('[updatePin]', () => {
 
 	it('should properly update a pin', async () => {
 		// save the original pin so we can reset
-		const originalPinResult = await request(query, { variables: { uid: firstPins[0].uid } })
+		const originalPinResult = await request(query, {
+			variables: { uid: firstPins[0].uid },
+		})
 		const originalPin = originalPinResult.data.pin
 
 		// Attempt updating

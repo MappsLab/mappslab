@@ -9,7 +9,10 @@ let admin
 beforeAll(async (done) => {
 	const users = await getDBUsers()
 	student1 = await getUser(users.find((u) => u.roles.includes('student')).uid)
-	student2 = await getUser(users.find((u) => u.roles.includes('student') && u.uid !== student1.uid).uid)
+	student2 = await getUser(
+		users.find((u) => u.roles.includes('student') && u.uid !== student1.uid)
+			.uid,
+	)
 	admin = await getUser(users.find((u) => u.roles.includes('admin')).uid)
 	done()
 })
@@ -25,7 +28,10 @@ const mutation = /* GraphQL */ `
 
 const createPin = async (user) => {
 	const firstMapUid = user.classrooms.edges[0].node.maps.edges[0].node.uid
-	const newPin = await createGeneratedPin({ addToMaps: [firstMapUid] }, { viewer: user })
+	const newPin = await createGeneratedPin(
+		{ addToMaps: [firstMapUid] },
+		{ viewer: user },
+	)
 	return newPin
 }
 

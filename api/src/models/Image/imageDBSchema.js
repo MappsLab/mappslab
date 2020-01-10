@@ -34,9 +34,18 @@ export const imageSchema = Joi.object().keys({
 
 type NewImageData = $Rest<ImageType, {| uid: string |}>
 
-export const validateNew = (imageData: NewImageData): NewImageData => Joi.validate(imageData, imageSchema)
+export const validateNew = (imageData: NewImageData): NewImageData =>
+	Joi.validate(imageData, imageSchema)
 
-const sizeFields = ['uri', 'width', 'height', 'label', 'format', 'createdAt', 'updatedAt']
+const sizeFields = [
+	'uri',
+	'width',
+	'height',
+	'label',
+	'format',
+	'createdAt',
+	'updatedAt',
+]
 
 export const publicFields = [
 	'uid',

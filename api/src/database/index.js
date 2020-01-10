@@ -39,7 +39,10 @@ all functions accept input, or a function that:
 
 */
 
-export const query = async (queryString: string, vars?: Object): Promise<Object | null> => {
+export const query = async (
+	queryString: string,
+	vars?: Object,
+): Promise<Object | null> => {
 	try {
 		const q = vars
 			? // if we have vars, parse them
@@ -47,7 +50,9 @@ export const query = async (queryString: string, vars?: Object): Promise<Object 
 			: // Otherwise, normal query
 			  dbClient.newTxn().query(queryString)
 		const result = await q
-		return result ? mapObjIndexed((value) => value.map(unflatten))(result.getJson()) : null
+		return result
+			? mapObjIndexed((value) => value.map(unflatten))(result.getJson())
+			: null
 	} catch (err) {
 		debug('--------- Dgraph query error:')
 		debug(err)

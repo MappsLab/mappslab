@@ -55,7 +55,9 @@ describe.only('[serializeFacets]', () => {
 	it('should throw an error if unsupported data types are used', async () => {
 		const facets = { dogs: ['frank', 'ursa'] }
 		const serialize = () => serializeFacets(facets)
-		expect(serialize).toThrow('Facet value must be a string, boolean, number, or Date')
+		expect(serialize).toThrow(
+			'Facet value must be a string, boolean, number, or Date',
+		)
 	})
 })
 
@@ -63,8 +65,12 @@ describe('[makeFilterString]', () => {
 	const assertFilters = (filters) =>
 		filters.forEach(({ where, expected }) => {
 			const result = createQueryStrings({ where })
-			if (expected.filterString) expect(result.filterString).toBe(expected.filterString)
-			if (expected.varBlocks) expect(stripNsandTs(result.varBlocks)).toBe(stripNsandTs(expected.varBlocks))
+			if (expected.filterString)
+				expect(result.filterString).toBe(expected.filterString)
+			if (expected.varBlocks)
+				expect(stripNsandTs(result.varBlocks)).toBe(
+					stripNsandTs(expected.varBlocks),
+				)
 		})
 
 	it('should properly format string operators', async () => {
@@ -76,7 +82,8 @@ describe('[makeFilterString]', () => {
 					},
 				},
 				expected: {
-					filterString: '@filter((eq(deleted, false)) AND (regexp(title, /word/i)))',
+					filterString:
+						'@filter((eq(deleted, false)) AND (regexp(title, /word/i)))',
 				},
 			},
 			{
@@ -86,7 +93,8 @@ describe('[makeFilterString]', () => {
 					},
 				},
 				expected: {
-					filterString: '@filter((eq(deleted, false)) AND (NOT eq(slug, "nothing")))',
+					filterString:
+						'@filter((eq(deleted, false)) AND (NOT eq(slug, "nothing")))',
 				},
 			},
 			{
@@ -96,7 +104,8 @@ describe('[makeFilterString]', () => {
 					},
 				},
 				expected: {
-					filterString: '@filter((eq(deleted, false)) AND (eq(slug, "something")))',
+					filterString:
+						'@filter((eq(deleted, false)) AND (eq(slug, "something")))',
 				},
 			},
 		]
@@ -174,7 +183,8 @@ describe('[makeFilterString]', () => {
 					},
 				},
 				expected: {
-					filterString: '@filter((eq(deleted, false)) AND ((ge(studentCount, 5) AND le(studentCount, 5))))',
+					filterString:
+						'@filter((eq(deleted, false)) AND ((ge(studentCount, 5) AND le(studentCount, 5))))',
 				},
 			},
 		]
@@ -196,13 +206,15 @@ describe('[makeFilterString]', () => {
 			{
 				where: { userTeachesIn: { eq: '0x123' } },
 				expected: {
-					filterString: '@filter((eq(deleted, false)) AND (uid_in(teaches_in, 0x123)))',
+					filterString:
+						'@filter((eq(deleted, false)) AND (uid_in(teaches_in, 0x123)))',
 				},
 			},
 			{
 				where: { userLearnsIn: { eq: '0x123' } },
 				expected: {
-					filterString: '@filter((eq(deleted, false)) AND (uid_in(learns_in, 0x123)))',
+					filterString:
+						'@filter((eq(deleted, false)) AND (uid_in(learns_in, 0x123)))',
 				},
 			},
 
@@ -210,13 +222,15 @@ describe('[makeFilterString]', () => {
 			{
 				where: { classroomHasStudent: { eq: '0x123' } },
 				expected: {
-					filterString: '@filter((eq(deleted, false)) AND (uid_in(~learns_in, 0x123)))',
+					filterString:
+						'@filter((eq(deleted, false)) AND (uid_in(~learns_in, 0x123)))',
 				},
 			},
 			{
 				where: { classroomHasTeacher: { eq: '0x123' } },
 				expected: {
-					filterString: '@filter((eq(deleted, false)) AND (uid_in(~teaches_in, 0x123)))',
+					filterString:
+						'@filter((eq(deleted, false)) AND (uid_in(~teaches_in, 0x123)))',
 				},
 			},
 
@@ -224,13 +238,15 @@ describe('[makeFilterString]', () => {
 			{
 				where: { pinnedByUser: { eq: '0x123' } },
 				expected: {
-					filterString: '@filter((eq(deleted, false)) AND (uid_in(~pinned, 0x123)))',
+					filterString:
+						'@filter((eq(deleted, false)) AND (uid_in(~pinned, 0x123)))',
 				},
 			},
 			{
 				where: { pinnedInMap: { eq: '0x123' } },
 				expected: {
-					filterString: '@filter((eq(deleted, false)) AND (uid_in(~has_pin, 0x123)))',
+					filterString:
+						'@filter((eq(deleted, false)) AND (uid_in(~has_pin, 0x123)))',
 				},
 			},
 
@@ -252,8 +268,11 @@ describe('[makeFilterString]', () => {
 	})
 
 	it('should return an error when a relationship filter is used without "eq" or "notEq"', async () => {
-		const makeString = () => createQueryStrings({ where: { userTeachesIn: { contains: '0x123' } } })
-		expect(makeString).toThrow('"contains" is an invalid operator. Relationship operator may only be "eq" or "notEq"')
+		const makeString = () =>
+			createQueryStrings({ where: { userTeachesIn: { contains: '0x123' } } })
+		expect(makeString).toThrow(
+			'"contains" is an invalid operator. Relationship operator may only be "eq" or "notEq"',
+		)
 	})
 
 	it('should return an empty string when the filter is undefined or empty', async () => {

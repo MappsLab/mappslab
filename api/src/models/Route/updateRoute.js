@@ -5,11 +5,15 @@ import { getRoute } from './readRoute'
 import { clean, validateUpdate } from './routeDBSchema'
 import Image from '../Image'
 
-export const updateRoute = async (args: UpdateRouteData, ownerUid: string): Promise<RouteType> => {
+export const updateRoute = async (
+	args: UpdateRouteData,
+	ownerUid: string,
+): Promise<RouteType> => {
 	const { uid, pins, image, ...routeData } = args
 	const route = await getRoute(uid)
 	if (!route) throw new Error(`No route with a uid of ${uid} was found`)
-	if (route.owner.uid !== ownerUid) throw new Error('You can only update routes that you own')
+	if (route.owner.uid !== ownerUid)
+		throw new Error('You can only update routes that you own')
 
 	const cleaned = await clean(routeData)
 	const validatedRouteData = await validateUpdate(cleaned)
@@ -28,11 +32,15 @@ export const updateRoute = async (args: UpdateRouteData, ownerUid: string): Prom
 			  ])
 			: []
 
-	if (args.video === null) await removeEdge({ fromUid: uid, pred: 'video', toUid: '*' })
+	if (args.video === null)
+		await removeEdge({ fromUid: uid, pred: 'video', toUid: '*' })
 
 	if (image) {
 		const pinImage = await Image.createImage(image)
-		await createEdge({ fromUid: uid, pred: 'has_image', toUid: pinImage.uid }, { unique: true })
+		await createEdge(
+			{ fromUid: uid, pred: 'has_image', toUid: pinImage.uid },
+			{ unique: true },
+		)
 	} else if (image === null) {
 		await removeEdge({ fromUid: uid, pred: 'has_image', toUid: '*' })
 	}
@@ -57,9 +65,14 @@ export const addPin = async (
 	const originalPins = route.pins ? route.pins.map((p) => p.uid) : []
 	// Create an updated array of edges with the proper sort order
 	const connectedPinIndex = originalPins.findIndex((p) => p === connectToPin)
-	const sliceIndex = position === 'BEFORE' ? connectedPinIndex : connectedPinIndex + 1
+	const sliceIndex =
+		position === 'BEFORE' ? connectedPinIndex : connectedPinIndex + 1
 
-	const pins = [...originalPins.slice(0, sliceIndex), pinUid, ...originalPins.slice(sliceIndex)]
+	const pins = [
+		...originalPins.slice(0, sliceIndex),
+		pinUid,
+		...originalPins.slice(sliceIndex),
+	]
 	const updated = await updateRoute({ uid, pins }, ownerUid)
 	return updated
 }

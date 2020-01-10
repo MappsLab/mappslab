@@ -8,7 +8,11 @@ const debug = require('debug')('api')
 
 export const createMap = async (input: NewMapData): Promise<MapType> => {
 	const { addToClassrooms, ...mapData } = input
-	const cleaned = await clean({ ...defaultValues, ...mapData, createdAt: new Date() })
+	const cleaned = await clean({
+		...defaultValues,
+		...mapData,
+		createdAt: new Date(),
+	})
 	// $FlowFixMe
 	const validatedMapData = await validateNew(cleaned).catch((err) => {
 		debug(err.details)
@@ -26,7 +30,9 @@ export const createMap = async (input: NewMapData): Promise<MapType> => {
 					{},
 			  ])
 			: []
-	const newMap = await createNodeWithEdges(validatedMapData, [...classroomEdges])
+	const newMap = await createNodeWithEdges(validatedMapData, [
+		...classroomEdges,
+	])
 
 	return newMap
 }

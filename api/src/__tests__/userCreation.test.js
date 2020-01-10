@@ -42,7 +42,9 @@ describe('[createUser]', () => {
 		`
 		const variables = { input: newAdmin }
 		const badResult = await request(mu, { variables })
-		expect(badResult.errors[0].message).toBe('You must be an admin to add new admins')
+		expect(badResult.errors[0].message).toBe(
+			'You must be an admin to add new admins',
+		)
 		/* Create a new admin, while logged in as an admin */
 		const context = { viewer: admin }
 		const goodResult = await request(mu, { variables, context })
@@ -78,7 +80,9 @@ describe('[createUser]', () => {
 		`
 		const variables = { input: newTeacher }
 		const badResult = await request(mu, { variables })
-		expect(badResult.errors[0].message).toBe('You must be an admin or teacher to add new teachers')
+		expect(badResult.errors[0].message).toBe(
+			'You must be an admin or teacher to add new teachers',
+		)
 		/* Create a new admin, while logged in as an admin */
 		const context = { viewer: admin }
 		const goodResult = await request(mu, { variables, context })
@@ -115,7 +119,9 @@ describe('[createUser]', () => {
 		`
 		const variables = { input: newStudentData }
 		const badResult = await request(mu, { variables })
-		expect(badResult.errors[0].message).toBe('You must be an admin or teacher to add new students')
+		expect(badResult.errors[0].message).toBe(
+			'You must be an admin or teacher to add new students',
+		)
 		/* Create a new admin, while logged in as an admin */
 		const context = { viewer: teacher }
 		const goodResult = await request(mu, { variables, context })
