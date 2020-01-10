@@ -2,9 +2,21 @@
 /* eslint-disable no-use-before-define */
 
 import type { MVCObject, MVCArray } from './coreTypes'
-import type { LatLng, LatLngLiteral, LatLngBounds, LatLngBoundsLiteral, Point } from './latLngTypes'
+import type {
+	LatLng,
+	LatLngLiteral,
+	LatLngBounds,
+	LatLngBoundsLiteral,
+	Point,
+} from './latLngTypes'
 import type { Projection } from './projectionTypes'
-import type { StreetViewPanorama, Size, FullscreenControlOptions, ControlPosition, ZoomControlOptions } from './viewTypes'
+import type {
+	StreetViewPanorama,
+	Size,
+	FullscreenControlOptions,
+	ControlPosition,
+	ZoomControlOptions,
+} from './viewTypes'
 import type { Data } from './dataTypes'
 
 /**
@@ -15,7 +27,10 @@ type RemoveDataLayer = () => void
 
 export type Map = MVCObject & {
 	constructor(mapDiv: Element | null, opts?: MapOptions): void,
-	fitBounds(bounds: LatLngBounds | LatLngBoundsLiteral, padding?: number | Padding): void,
+	fitBounds(
+		bounds: LatLngBounds | LatLngBoundsLiteral,
+		padding?: number | Padding,
+	): void,
 	getBounds(): LatLngBounds | null | void,
 	getCenter(): LatLng,
 	getDiv(): Element,
@@ -27,7 +42,10 @@ export type Map = MVCObject & {
 	getZoom(): number,
 	panBy(x: number, y: number): void,
 	panTo(latLng: LatLng | LatLngLiteral): void,
-	panToBounds(latLngBounds: LatLngBounds | LatLngBoundsLiteral, padding?: number | Padding): void,
+	panToBounds(
+		latLngBounds: LatLngBounds | LatLngBoundsLiteral,
+		padding?: number | Padding,
+	): void,
 	setCenter(latlng: LatLng | LatLngLiteral): void,
 	setHeading(heading: number): void,
 	setMapTypeId(mapTypeId: MapTypeId | string): void,

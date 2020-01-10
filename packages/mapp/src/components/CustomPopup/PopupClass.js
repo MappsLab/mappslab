@@ -21,7 +21,11 @@ const defaultOptions = {
 	maxWidth: '800px',
 }
 
-type OverlayCreator = (position: LatLng, content: HTMLElement, opts: Options) => OverlayView
+type OverlayCreator = (
+	position: LatLng,
+	content: HTMLElement,
+	opts: Options,
+) => OverlayView
 
 const definePopup = (): OverlayView => {
 	Popup = function(position: LatLng, content: HTMLElement, opts: Options) {
@@ -58,7 +62,8 @@ const definePopup = (): OverlayView => {
 	}
 
 	// $FlowFixMe
-	if (!google) throw new Error('You are creating a popup before the API has been loaded.')
+	if (!google)
+		throw new Error('You are creating a popup before the API has been loaded.')
 
 	Popup.prototype = Object.create(google.maps.OverlayView.prototype)
 
@@ -78,10 +83,16 @@ const definePopup = (): OverlayView => {
 	}
 
 	Popup.prototype.draw = function() {
-		const latLng = typeof this.position.lat === 'function' ? this.position : new google.maps.LatLng(this.position)
+		const latLng =
+			typeof this.position.lat === 'function'
+				? this.position
+				: new google.maps.LatLng(this.position)
 		const divPosition = this.getProjection().fromLatLngToDivPixel(latLng)
 
-		const display = Math.abs(divPosition.x) < 4000 && Math.abs(divPosition.y) < 4000 ? 'block' : 'none'
+		const display =
+			Math.abs(divPosition.x) < 4000 && Math.abs(divPosition.y) < 4000
+				? 'block'
+				: 'none'
 		if (display === 'block') {
 			this.anchorDiv.style.left = `${divPosition.x}px`
 			this.anchorDiv.style.top = `${divPosition.y}px`
@@ -95,7 +106,15 @@ const definePopup = (): OverlayView => {
 	Popup.prototype.stopEventPropagation = function() {
 		const { anchorDiv, container } = this
 		anchorDiv.style.cursor = 'auto'
-		const events = ['click', 'dblclick', 'contextmenu', 'wheel', 'mousedown', 'touchstart', 'pointerdown']
+		const events = [
+			'click',
+			'dblclick',
+			'contextmenu',
+			'wheel',
+			'mousedown',
+			'touchstart',
+			'pointerdown',
+		]
 		events.forEach((eventName) => {
 			container.addEventListener(eventName, (e) => {
 				e.stopPropagation()

@@ -3,7 +3,11 @@
 import type { MVCObject } from '../types/coreTypes'
 import type { MapsEventListener, NamedEventListeners } from '../types/mapTypes'
 
-export const addListeners = (entity: MVCObject, events: Object, handlers: NamedEventListeners): Array<MapsEventListener> =>
+export const addListeners = (
+	entity: MVCObject,
+	events: Object,
+	handlers: NamedEventListeners,
+): Array<MapsEventListener> =>
 	Object.keys(handlers)
 		.map((eventName) => {
 			const googleEvent = events[eventName]

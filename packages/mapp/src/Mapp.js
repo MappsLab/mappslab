@@ -7,7 +7,11 @@ import loadGoogleMaps from './services/googleMaps'
 import { addListeners, removeListeners } from './utils/listeners'
 import type { LatLng, LatLngBoundsLiteral } from './types/latLngTypes'
 import type { OverlayView } from './types/overlayTypes'
-import type { Map, MapsEventListener, NamedEventListeners } from './types/mapTypes'
+import type {
+	Map,
+	MapsEventListener,
+	NamedEventListeners,
+} from './types/mapTypes'
 import { mappedMapEventNames } from './eventNames'
 /**
  * Context Setup
@@ -156,11 +160,18 @@ class Mapp extends React.Component<Props, State> {
 				y: 0,
 				...offset,
 			}
-			const latLng = typeof position.lat === 'function' ? position : new google.maps.LatLng(position)
-			const actual = this.overlay.getProjection().fromLatLngToContainerPixel(latLng)
+			const latLng =
+				typeof position.lat === 'function'
+					? position
+					: new google.maps.LatLng(position)
+			const actual = this.overlay
+				.getProjection()
+				.fromLatLngToContainerPixel(latLng)
 			const newX = actual.x + x
 			const newY = actual.y + y
-			const newCenter = this.overlay.getProjection().fromContainerPixelToLatLng(new google.maps.Point(newX, newY))
+			const newCenter = this.overlay
+				.getProjection()
+				.fromContainerPixelToLatLng(new google.maps.Point(newX, newY))
 			this.map.panTo(newCenter)
 		}
 

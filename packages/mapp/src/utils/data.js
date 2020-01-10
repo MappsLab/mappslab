@@ -5,7 +5,10 @@ import { fromPairs, toPairs, without, assoc } from 'ramda'
  * separateOptionsAndEvents
  */
 
-export const separateOptionsAndEvents = (props: {}, _eventNames: {}): { options: {}, events: {} } => {
+export const separateOptionsAndEvents = (
+	props: {},
+	_eventNames: {},
+): { options: {}, events: {} } => {
 	const eventNames = Object.keys(_eventNames)
 	// $FlowFixMe
 	return Object.entries(props).reduce(

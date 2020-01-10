@@ -21,7 +21,9 @@ export type StreetViewPanorama = MVCObject & {
 	getStatus(): StreetViewStatus,
 	getVisible(): boolean,
 	getZoom(): number,
-	registerPanoProvider(provider: (input: string) => StreetViewPanoramaData): void,
+	registerPanoProvider(
+		provider: (input: string) => StreetViewPanoramaData,
+	): void,
 	setLinks(links: Array<StreetViewLink>): void,
 	setMotionTracking(motionTracking: boolean): void,
 	setOptions(options: StreetViewPanoramaOptions): void,
@@ -164,7 +166,12 @@ export type StreetViewLocation = {
 	shortDescription?: string,
 }
 export type StreetViewTileData = {
-	getTileUrl(pano: string, tileZoom: number, tileX: number, tileY: number): string,
+	getTileUrl(
+		pano: string,
+		tileZoom: number,
+		tileX: number,
+		tileY: number,
+	): string,
 	centerHeading?: number,
 	tileSize?: Size,
 	worldSize?: Size,
@@ -181,7 +188,12 @@ export type StreetViewPreference = 'BEST' | 'NEAREST'
 export type StreetViewSource = 'DEFAULT' | 'OUTDOOR'
 
 export type Size = {
-	constructor(width: number, height: number, widthUnit?: string, heightUnit?: string): void,
+	constructor(
+		width: number,
+		height: number,
+		widthUnit?: string,
+		heightUnit?: string,
+	): void,
 	height: number,
 	width: number,
 	equals(other: Size): boolean,
@@ -198,12 +210,18 @@ export type StreetViewService = {
 	): void,
 	getPanoramaById(
 		pano: string,
-		callback: (streetViewPanoramaData: StreetViewPanoramaData, streetViewStatus: StreetViewStatus) => void,
+		callback: (
+			streetViewPanoramaData: StreetViewPanoramaData,
+			streetViewStatus: StreetViewStatus,
+		) => void,
 	): void,
 	getPanoramaByLocation(
 		latlng: LatLng | LatLngLiteral,
 		radius: number,
-		callback: (streetViewPanoramaData: StreetViewPanoramaData, streetViewStatus: StreetViewStatus) => void,
+		callback: (
+			streetViewPanoramaData: StreetViewPanoramaData,
+			streetViewStatus: StreetViewStatus,
+		) => void,
 	): void,
 }
 
@@ -213,25 +231,25 @@ export type StreetViewCoverageLayer = MVCObject & {
 }
 
 export interface Attribution {
-	iosDeepLinkId?: string,
-		 source?: string,
-		 webUrl?: string
+	iosDeepLinkId?: string;
+	source?: string;
+	webUrl?: string;
 }
 export interface Place {
-	location?: LatLng | LatLngLiteral,
-		 placeId?: string,
-		 query?: string
+	location?: LatLng | LatLngLiteral;
+	placeId?: string;
+	query?: string;
 }
 
 export type SaveWidget = {
-	constructor(container: Node, opts?: SaveWidgetOptions): void;
-	getAttribution(): Attribution;
-	getPlace(): Place;
-	setAttribution(attribution: Attribution): void;
-	setOptions(opts: SaveWidgetOptions): void;
-	setPlace(place: Place): void
+	constructor(container: Node, opts?: SaveWidgetOptions): void,
+	getAttribution(): Attribution,
+	getPlace(): Place,
+	setAttribution(attribution: Attribution): void,
+	setOptions(opts: SaveWidgetOptions): void,
+	setPlace(place: Place): void,
 }
 export interface SaveWidgetOptions {
-	attribution?: Attribution,
-		 place?: Place
+	attribution?: Attribution;
+	place?: Place;
 }

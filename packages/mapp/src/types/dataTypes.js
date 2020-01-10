@@ -24,7 +24,11 @@ export type Data = MVCObject & {
 	getFeatureById(id: number | string): Data$Feature,
 	getMap(): Map,
 	getStyle(): Data$StylingFunction | Data$StyleOptions,
-	loadGeoJson(url: string, options?: Data$GeoJsonOptions, callback?: (features: Data$Feature[]) => void): void,
+	loadGeoJson(
+		url: string,
+		options?: Data$GeoJsonOptions,
+		callback?: (features: Data$Feature[]) => void,
+	): void,
 	overrideStyle(feature: Data$Feature, style: Data$StyleOptions): void,
 	remove(feature: Data$Feature): void,
 	revertStyle(feature?: Data$Feature): void,
@@ -124,7 +128,12 @@ type Data$Polygon = Data$Geometry & {
 	getLength(): number,
 }
 type Data$MultiPolygon = Data$Geometry & {
-	constructor(elements: (Data$Polygon | (Data$LinearRing | (LatLng | LatLngLiteral)[])[])[]): void,
+	constructor(
+		elements: (
+			| Data$Polygon
+			| (Data$LinearRing | (LatLng | LatLngLiteral)[])[]
+		)[],
+	): void,
 	getArray(): Data$Polygon[],
 	getAt(n: number): Data$Polygon,
 	getLength(): number,

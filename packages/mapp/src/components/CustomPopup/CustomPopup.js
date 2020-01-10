@@ -38,8 +38,14 @@ class CustomPopup extends React.Component<Props, State> {
 
 	constructor(props: Props) {
 		super(props)
-		if (!props.position && !props.anchor) throw new Error('CustomPopup must have either a `anchor` or `position` prop')
-		if (props.position && props.anchor) throw new Error('CustomPopup must have either a `anchor` or `position` prop, not both')
+		if (!props.position && !props.anchor)
+			throw new Error(
+				'CustomPopup must have either a `anchor` or `position` prop',
+			)
+		if (props.position && props.anchor)
+			throw new Error(
+				'CustomPopup must have either a `anchor` or `position` prop, not both',
+			)
 	}
 
 	state = {
@@ -72,7 +78,9 @@ class CustomPopup extends React.Component<Props, State> {
 	render() {
 		const { children } = this.props
 		const { ready } = this.state
-		return !ready ? null : ReactDOM.createPortal(React.Children.only(children), this.container)
+		return !ready
+			? null
+			: ReactDOM.createPortal(React.Children.only(children), this.container)
 	}
 }
 

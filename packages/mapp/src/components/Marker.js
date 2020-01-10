@@ -37,7 +37,9 @@ class Marker extends React.Component<MarkerProps, State> {
 		const { events, map, options } = props
 		// const { options } = separateOptionsAndEvents(this.props, markerEventNames)
 		this.entity = new window.google.maps.Marker({ map, ...options })
-		this.listeners = events ? addListeners(this.entity, markerEvents, events) : []
+		this.listeners = events
+			? addListeners(this.entity, markerEvents, events)
+			: []
 	}
 
 	componentDidUpdate() {

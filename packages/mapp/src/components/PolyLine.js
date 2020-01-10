@@ -1,6 +1,9 @@
 // @flow
 import * as React from 'react'
-import type { Polyline as PolylineType, PolylineOptions } from '../types/overlayTypes'
+import type {
+	Polyline as PolylineType,
+	PolylineOptions,
+} from '../types/overlayTypes'
 import type { Map } from '../types/mapTypes'
 import { getNewValues } from '../utils/data'
 import { addListeners, removeListeners } from '../utils/listeners'

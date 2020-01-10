@@ -11,7 +11,11 @@ const scriptExists = (): boolean => {
 	return scripts.length > 0
 }
 
-const appendScript = (src: string, onSuccess: () => void, onFailure: (string) => void): void => {
+const appendScript = (
+	src: string,
+	onSuccess: () => void,
+	onFailure: (string) => void,
+): void => {
 	if (!element.src) {
 		element.src = src
 		element.async = true
@@ -47,7 +51,10 @@ const createSrc = (params: Params): string =>
 			.join('&'),
 	].join('')
 
-const loadGoogleMaps = (APIKey: string, params: Params = {}): Promise<void | Error> =>
+const loadGoogleMaps = (
+	APIKey: string,
+	params: Params = {},
+): Promise<void | Error> =>
 	new Promise(async (resolve, reject) => {
 		if (scriptLoaded || scriptExists()) resolve()
 		if (!APIKey || APIKey.length === 0) {

@@ -19,12 +19,20 @@ export type MVCObject = {
 	 * Adds the given listener function to the given event name. Returns an identifier for this listener
 	 * that can be used with google.maps.event.removeListener.
 	 */
-	addListener(eventName: string, handler: (...args: any[]) => void): MapsEventListener,
+	addListener(
+		eventName: string,
+		handler: (...args: any[]) => void,
+	): MapsEventListener,
 
 	/**
 	 * Binds a View to a Model.
 	 */
-	bindTo(key: string, target: MVCObject, targetKey?: string, noNotify?: boolean): void,
+	bindTo(
+		key: string,
+		target: MVCObject,
+		targetKey?: string,
+		noNotify?: boolean,
+	): void,
 	changed(key: string): void,
 
 	/**

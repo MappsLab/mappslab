@@ -2,7 +2,13 @@
 /* eslint-disable no-use-before-define */
 
 import type { MVCObject, MVCArray } from './coreTypes'
-import type { LatLng, LatLngLiteral, Point, LatLngBounds, LatLngBoundsLiteral } from './latLngTypes'
+import type {
+	LatLng,
+	LatLngLiteral,
+	Point,
+	LatLngBounds,
+	LatLngBoundsLiteral,
+} from './latLngTypes'
 import type { Map } from './mapTypes'
 import type { Size, StreetViewPanorama, Attribution, Place } from './viewTypes'
 
@@ -496,7 +502,13 @@ export type Polygon = MVCObject & {
 	setOptions(options: PolygonOptions): void,
 	setPath(path: MVCArray<LatLng> | LatLng[] | LatLngLiteral[]): void,
 	setPaths(
-		paths: MVCArray<MVCArray<LatLng>> | MVCArray<LatLng> | LatLng[][] | LatLngLiteral[][] | LatLng[] | LatLngLiteral[],
+		paths:
+			| MVCArray<MVCArray<LatLng>>
+			| MVCArray<LatLng>
+			| LatLng[][]
+			| LatLngLiteral[][]
+			| LatLng[]
+			| LatLngLiteral[],
 	): void,
 	setVisible(visible: boolean): void,
 }
@@ -553,7 +565,13 @@ export interface PolygonOptions {
 	converted into MVCArrays. Inserting or removing LatLngs from the MVCArray
 	will automatically update the polygon on the map.
 	*/
-	paths?: MVCArray<MVCArray<LatLng>> | MVCArray<LatLng> | LatLng[][] | LatLngLiteral[][] | LatLng[] | LatLngLiteral[];
+	paths?:
+		| MVCArray<MVCArray<LatLng>>
+		| MVCArray<LatLng>
+		| LatLng[][]
+		| LatLngLiteral[][]
+		| LatLng[]
+		| LatLngLiteral[];
 
 	/**
 	 * The stroke color.
@@ -799,7 +817,11 @@ export type CircleLiteral = {
 } & CircleOptions
 
 export type GroundOverlay = MVCObject & {
-	constructor(url: string, bounds: LatLngBounds | LatLngBoundsLiteral, opts?: GroundOverlayOptions): void,
+	constructor(
+		url: string,
+		bounds: LatLngBounds | LatLngBoundsLiteral,
+		opts?: GroundOverlayOptions,
+	): void,
 	getBounds(): LatLngBounds,
 	getMap(): Map,
 	getOpacity(): number,

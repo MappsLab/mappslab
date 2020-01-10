@@ -1,7 +1,13 @@
 // @flow
 import * as React from 'react'
 import { addListeners, removeListeners } from '../utils/listeners'
-import type { LatLng, Map, Marker, InfoWindow as InfoWindowType, InfoWindowOptions } from '../types'
+import type {
+	LatLng,
+	Map,
+	Marker,
+	InfoWindow as InfoWindowType,
+	InfoWindowOptions,
+} from '../types'
 import { MappConsumer } from '../Mapp'
 import type { MapContextType as MapContext } from '../Mapp'
 
@@ -46,15 +52,22 @@ class InfoWindow extends React.Component<Props, State> {
 
 	constructor(props: Props) {
 		super(props)
-		if (!props.position && !props.anchor) throw new Error('InfoWindow must have either a `anchor` or `position` prop')
-		if (props.position && props.anchor) throw new Error('InfoWindow must have either a `anchor` or `position` prop, not both')
+		if (!props.position && !props.anchor)
+			throw new Error(
+				'InfoWindow must have either a `anchor` or `position` prop',
+			)
+		if (props.position && props.anchor)
+			throw new Error(
+				'InfoWindow must have either a `anchor` or `position` prop, not both',
+			)
 	}
 
 	componentDidMount() {
 		const { map, anchor, options, events } = this.props
 		this.entity = new window.google.maps.InfoWindow(options)
 		this.entity.open(map, anchor)
-		if (this.entity !== null) this.listeners = addListeners(this.entity, infoWindowEventNames, events)
+		if (this.entity !== null)
+			this.listeners = addListeners(this.entity, infoWindowEventNames, events)
 	}
 
 	// componentWillReceiveProps(nextProps: Props) {
