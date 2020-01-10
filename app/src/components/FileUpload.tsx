@@ -1,6 +1,6 @@
 import * as React from 'react'
 import styled from 'styled-components'
-import { ValidationError, HelpText } from './Forms'
+import { ValidationError } from './Forms'
 import { Button } from './Buttons'
 
 const { useState } = React
@@ -25,12 +25,13 @@ interface Props {
 	name: string
 	label: string
 	accept: string
+	disabled?: boolean
 	validate?: (file: File) => ValidationError | Promise<ValidationError>
 	multiple?: boolean
-	Icon?: React.ComponentType<any>
+	icon?: React.ComponentType<any>
 }
 
-export const FileUpload = ({ onSubmit, validate, multiple, name, accept, label, Icon }: Props) => {
+export const FileUpload = ({ onSubmit, validate, disabled, multiple, name, accept, label, icon }: Props) => {
 	const [isLoading, setIsLoading] = useState(false)
 	const [validationError, setValidationError] = useState<void | string>(undefined)
 
@@ -48,9 +49,10 @@ export const FileUpload = ({ onSubmit, validate, multiple, name, accept, label, 
 		}
 	}
 
+	const Icon = icon
 	return (
 		<Wrapper>
-			<Button as="label" disabled={isLoading} htmlFor={name} level="tertiary">
+			<Button as="label" disabled={disabled || isLoading} htmlFor={name} level="tertiary">
 				{Icon ? (
 					<React.Fragment>
 						<Icon />{' '}

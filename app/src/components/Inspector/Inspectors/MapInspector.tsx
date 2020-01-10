@@ -5,6 +5,7 @@ import { MapQuery, UpdateMapMutation } from '../../../queries/Map'
 import { Button } from '../../Buttons'
 import { DataLayerList, ClassroomList } from '../../Lists'
 import { InspectItem } from '../InspectorProvider'
+import { DataLayerUpload } from '../../DataLayer'
 import { Prompt } from '../../Forms'
 import EditableText from '../EditableText'
 import { EditableMedia } from '../EditableMedia'
@@ -49,6 +50,7 @@ const MapInspectorMain = ({ map, viewer, inspectItem, mapQueryConfig, updateMap 
 	const teachers = map.classroom.teachers && map.classroom.teachers.edges ? unwindEdges(map.classroom.teachers)[0] : []
 	const dataLayers = map.dataLayers && map.dataLayers.edges ? unwindEdges(map.dataLayers)[0] : []
 	const viewerIsOwner = Boolean(viewer && teachers.find((t) => t.uid === viewer.uid))
+
 	const updateMapClassrooms = (classroom) => {
 		const variables = {
 			input: {
@@ -61,8 +63,10 @@ const MapInspectorMain = ({ map, viewer, inspectItem, mapQueryConfig, updateMap 
 
 	const addNewDataLayer = async (title: string) => {
 		const kmlUrlQuestion = await ask({
-			message: 'Enter a URL for this Data layer. (must be a .kml file)',
-			render: (answer) => <Prompt answer={answer} name="url" label="KML URL" type="url" />,
+			message: 'Upload a Data Layer (KML) file',
+			render: (answer) => <DataLayerUpload />,
+
+			// <Prompt answer={answer} name="url" label="KML URL" type="url" />,
 		})
 
 		const url = kmlUrlQuestion.url.trim()

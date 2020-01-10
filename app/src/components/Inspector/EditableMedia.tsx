@@ -84,7 +84,7 @@ export const EditableMedia = ({
 
 	const handleImageSubmit = async (args: MediaSubmission) => {
 		setLoading(true)
-		const result = await submitUpdate(args)
+		await submitUpdate(args)
 		setLoading(false)
 	}
 	const askForVideo = async () => {
@@ -128,7 +128,7 @@ export const EditableMedia = ({
 								onSubmit={handleImageSubmit}
 								accept="image/*"
 								name={imageName}
-								Icon={FaRegImage}
+								icon={FaRegImage}
 								validate={validateImage}
 								label={loading ? 'Loading..' : 'Add Image'}
 							/>
