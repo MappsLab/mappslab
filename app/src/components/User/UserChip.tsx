@@ -11,4 +11,6 @@ type Props = ChipProps & {
 	user: User
 }
 
-export const UserChip = ({ size, active, user }: Props) => <Chip size={size || 'large'} active={active} title={user.name} />
+export const UserChip = ({ size, active, user }: Props) => (
+	<Chip size={size || 'large'} active={active} title={user.name} />
+)

@@ -51,7 +51,9 @@ export const ClassroomList = (baseProps: ListOfTypeBaseProps<Classroom>) => (
 		{({ data, refetch }) => (
 			<ClassroomListMain
 				searchQuery={refetch}
-				searchResults={data && data.classrooms ? unwindEdges(data.classrooms)[0] || [] : []}
+				searchResults={
+					data && data.classrooms ? unwindEdges(data.classrooms)[0] || [] : []
+				}
 				{...baseProps}
 			/>
 		)}

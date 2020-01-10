@@ -81,7 +81,9 @@ class Login extends React.Component<Props, State> {
 				<Pane size="normal" title="Welcome to Mappslab!" allowOverflow>
 					<Content>
 						<State is={WELCOME}>
-							<Button onClick={this.transitionEvent(SELECTED_STUDENT_FLOW)}>Find Your Classroom →</Button>
+							<Button onClick={this.transitionEvent(SELECTED_STUDENT_FLOW)}>
+								Find Your Classroom →
+							</Button>
 						</State>
 
 						<Action is={SHOW_ERROR}>
@@ -96,7 +98,9 @@ class Login extends React.Component<Props, State> {
 							<TeacherLogin {...childProps} />
 						</State>
 
-						<State is={ENTER_PASSWORD}>{childProps.userUid ? <UserLogin {...childProps} /> : null}</State>
+						<State is={ENTER_PASSWORD}>
+							{childProps.userUid ? <UserLogin {...childProps} /> : null}
+						</State>
 
 						<State is={SET_NEW_PASSWORD}>
 							<SetNewPassword {...childProps} />
@@ -107,12 +111,18 @@ class Login extends React.Component<Props, State> {
 						</State>
 
 						<State is={[WELCOME, STUDENT_FLOW]}>
-							<Button level="tertiary" onClick={this.transitionEvent(SELECTED_TEACHER_FLOW)}>
+							<Button
+								level="tertiary"
+								onClick={this.transitionEvent(SELECTED_TEACHER_FLOW)}
+							>
 								Login as a teacher
 							</Button>
 						</State>
 						<State is={[TEACHER_FLOW]}>
-							<Button level="tertiary" onClick={this.transitionEvent(SELECTED_STUDENT_FLOW)}>
+							<Button
+								level="tertiary"
+								onClick={this.transitionEvent(SELECTED_STUDENT_FLOW)}
+							>
 								Login as a student
 							</Button>
 						</State>

@@ -62,7 +62,10 @@ const ViewerContext = React.createContext<ContextValue | undefined>(undefined)
 
 export const useCurrentViewer = () => {
 	const ctx = useContext(ViewerContext)
-	if (!ctx) throw new Error('`useCurrentViewer` must be used within the context of the CurrentViewer provider')
+	if (!ctx)
+		throw new Error(
+			'`useCurrentViewer` must be used within the context of the CurrentViewer provider',
+		)
 	return ctx
 }
 
@@ -107,9 +110,15 @@ const reducer = (state: ViewerState, action: Action): ViewerState => {
 
 export const CurrentViewer = ({ children }: Props) => {
 	const [state, dispatch] = useReducer(reducer, initialState)
-	const [currentViewerQuery] = useQuery<CurrentViewerResponse>({ query: CURRENT_VIEWER_QUERY })
-	const [loginMutationState, loginMutation] = useMutation<LoginResponse>(LOGIN_MUTATION)
-	const [resetMutationState, resetMutation] = useMutation<ResetResponse>(RESET_MUTATION)
+	const [currentViewerQuery] = useQuery<CurrentViewerResponse>({
+		query: CURRENT_VIEWER_QUERY,
+	})
+	const [loginMutationState, loginMutation] = useMutation<LoginResponse>(
+		LOGIN_MUTATION,
+	)
+	const [resetMutationState, resetMutation] = useMutation<ResetResponse>(
+		RESET_MUTATION,
+	)
 	const client = useContext(ClientContext)
 	/* Query for the current viewer on mount */
 	useEffect(() => {
@@ -172,5 +181,7 @@ export const CurrentViewer = ({ children }: Props) => {
 		logoutUser,
 		resetPassword,
 	}
-	return <ViewerContext.Provider value={value}>{children}</ViewerContext.Provider>
+	return (
+		<ViewerContext.Provider value={value}>{children}</ViewerContext.Provider>
+	)
 }

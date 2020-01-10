@@ -47,7 +47,11 @@ describe('[eventsReducer]', () => {
 		}
 		const result = eventsReducer(obj, 'first.second.third', 'fn')({})
 
-		expect(result).toEqual({ first: 'should', second: 'be', third: 'lowercase' })
+		expect(result).toEqual({
+			first: 'should',
+			second: 'be',
+			third: 'lowercase',
+		})
 		/* Arrange */
 		// const { container, getByTestId } = render( ... )
 		/* Act */
@@ -100,7 +104,9 @@ describe('[eventsReducer]', () => {
 			},
 		}
 		const initial = { props: mockProps, state: { zero: true } }
-		const result = eventsReducer(obj, 'first.second.third', 'onMouseOver')(initial)
+		const result = eventsReducer(obj, 'first.second.third', 'onMouseOver')(
+			initial,
+		)
 		expect(result.props.transition.mock.calls.length).toBe(2)
 		expect(result.props.transition.mock.calls[0][0]).toBe('mousedOverFirst')
 		expect(result.props.transition.mock.calls[1][0]).toBe('mousedOverThird')

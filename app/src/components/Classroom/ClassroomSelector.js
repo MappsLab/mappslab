@@ -16,9 +16,13 @@ const ClassroomSelector = ({ classrooms, label, ...props }: Props) => {
 	const items = classrooms.map((c) => ({
 		value: c.uid,
 		label: c.title,
-		render: ({ highlighted, selected }) => <SelectorItem title={c.title} active={highlighted || selected} />,
+		render: ({ highlighted, selected }) => (
+			<SelectorItem title={c.title} active={highlighted || selected} />
+		),
 	}))
-	return <Selector items={items} label={label || 'Select a Classroom'} {...props} />
+	return (
+		<Selector items={items} label={label || 'Select a Classroom'} {...props} />
+	)
 }
 
 ClassroomSelector.defaultProps = {

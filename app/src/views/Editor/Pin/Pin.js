@@ -51,7 +51,8 @@ class Pin extends React.Component<PinProps, PinState> {
 		const currentStateString = getStateString(this.props.machineState.value)
 		const nextStateString = getStateString(nextProps.machineState.value)
 
-		if (currentStateString !== nextStateString) this.setState({ mouseOver: false })
+		if (currentStateString !== nextStateString)
+			this.setState({ mouseOver: false })
 	}
 
 	onClick = () => {
@@ -142,7 +143,9 @@ const Wrapper = ({ pin }: BaseProps) => (
 					<Pin
 						pin={pin}
 						inspectItem={inspectItem}
-						isInspected={Boolean(inspectedItem && pin.uid === inspectedItem.uid)}
+						isInspected={Boolean(
+							inspectedItem && pin.uid === inspectedItem.uid,
+						)}
 						{...contextValue}
 					/>
 				)}

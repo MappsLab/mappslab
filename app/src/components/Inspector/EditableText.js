@@ -2,7 +2,16 @@
 import * as React from 'react'
 import styled, { css } from 'styled-components'
 import NativeListener from 'react-native-listener'
-import { Header1, Header2, Header3, Header4, Header5, P, TextArea, Input } from 'Components/Text'
+import {
+	Header1,
+	Header2,
+	Header3,
+	Header4,
+	Header5,
+	P,
+	TextArea,
+	Input,
+} from 'Components/Text'
 
 const StyledInput = styled(Input)`
 	${({ theme, fontSize }) => css`
@@ -138,7 +147,13 @@ class EditableText extends React.Component<Props, State> {
 	}
 
 	render() {
-		const { viewerCanEdit, fontSize, placeholder, multiline, autoFocus } = this.props
+		const {
+			viewerCanEdit,
+			fontSize,
+			placeholder,
+			multiline,
+			autoFocus,
+		} = this.props
 		const { value, focused } = this.state
 		const Text = textComponentsMap[fontSize || 'p'] || textComponentsMap.p
 		if (!viewerCanEdit) {

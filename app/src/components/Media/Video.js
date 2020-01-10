@@ -27,7 +27,12 @@ type Props = {
 
 const Video = ({ video, title, ratio }: Props) => (
 	<VideoFrame ratio={ratio}>
-		<iframe title={title || ''} src={getVideoInfo(video).src} width="100%" height="100%" />
+		<iframe
+			title={title || ''}
+			src={getVideoInfo(video).src}
+			width="100%"
+			height="100%"
+		/>
 	</VideoFrame>
 )
 

@@ -27,7 +27,10 @@ export interface ListOfTypeProps<Type> extends ListOfTypeBaseProps<Type> {
 	searchResults: Array<Type>
 }
 
-export const nodeToListItem = (node: Node, handler: ListItemHandler): ListItem => {
+export const nodeToListItem = (
+	node: Node,
+	handler: ListItemHandler,
+): ListItem => {
 	const { uid } = node
 	return {
 		key: uid,

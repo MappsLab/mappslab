@@ -49,7 +49,9 @@ type Props = {
 	align?: 'left' | 'center' | 'right'
 }
 
-const Toolbar = ({ children, align }: Props) => <Wrapper align={align}>{children}</Wrapper>
+const Toolbar = ({ children, align }: Props) => (
+	<Wrapper align={align}>{children}</Wrapper>
+)
 
 Toolbar.defaultProps = {
 	align: 'center',

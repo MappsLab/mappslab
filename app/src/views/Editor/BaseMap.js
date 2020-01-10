@@ -35,7 +35,9 @@ const WrappedMap = ({ APIKey, initialOptions, render }: Props) => (
 		initialOptions={initialOptions || defaultOptions}
 		render={(mappRenderProps) => (
 			<MapProvider {...mappRenderProps}>
-				<MapConsumer>{(mapTools) => (render ? render(mapTools) : null)}</MapConsumer>
+				<MapConsumer>
+					{(mapTools) => (render ? render(mapTools) : null)}
+				</MapConsumer>
 			</MapProvider>
 		)}
 	/>

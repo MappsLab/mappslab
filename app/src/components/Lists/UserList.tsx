@@ -56,13 +56,26 @@ const UserListMain = ({
 			userType === 'teacher'
 				? await question.ask({
 						message: 'Enter an email address for this teacher',
-						render: (answer) => <Prompt answer={answer} name="email" label="Teacher Email" type="email" />,
+						render: (answer) => (
+							<Prompt
+								answer={answer}
+								name="email"
+								label="Teacher Email"
+								type="email"
+							/>
+						),
 				  })
 				: undefined
 		if (userType === 'teacher' && !emailQuestion) return
 		const tempPassQuestion = await question.ask({
 			message: 'Enter a temporary password for this user',
-			render: (answer) => <Prompt answer={answer} name="temporaryPassword" label="Temporary Password" />,
+			render: (answer) => (
+				<Prompt
+					answer={answer}
+					name="temporaryPassword"
+					label="Temporary Password"
+				/>
+			),
 		})
 		if (!tempPassQuestion) return
 		const email = emailQuestion ? emailQuestion.email : undefined
@@ -99,7 +112,9 @@ export const UserList = (baseProps: BaseProps) => (
 					<UserListMain
 						question={question}
 						searchQuery={refetch}
-						searchResults={data && data.users ? unwindEdges<User>(data.users)[0] || [] : []}
+						searchResults={
+							data && data.users ? unwindEdges<User>(data.users)[0] || [] : []
+						}
 						{...baseProps}
 					/>
 				)}

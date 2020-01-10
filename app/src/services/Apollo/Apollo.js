@@ -17,7 +17,10 @@ const debug = require('debug')('_app')
 
 debug(`Using API endpoint: ${config.apiRoot}`)
 
-const uploadLink = createUploadLink({ uri: config.apiRoot, credentials: 'same-origin' })
+const uploadLink = createUploadLink({
+	uri: config.apiRoot,
+	credentials: 'same-origin',
+})
 
 const wsLink = new WebSocketLink({
 	uri: config.wsUri,
@@ -53,6 +56,8 @@ const link = ApolloLink.from([setAuthHeader, logQueries, logErrors, apiLink])
 
 const client = new ApolloClient({ link, cache })
 
-const ApolloWrapper = (props: { children: Node }) => <ApolloProvider client={client}>{props.children}</ApolloProvider>
+const ApolloWrapper = (props: { children: Node }) => (
+	<ApolloProvider client={client}>{props.children}</ApolloProvider>
+)
 
 export default ApolloWrapper

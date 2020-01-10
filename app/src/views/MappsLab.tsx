@@ -27,7 +27,10 @@ export const MappsLab = () => (
 							<Route path="/sandbox" component={Sandbox} />
 							<Route path="/login" exact component={Login} />
 							<ViewerRoute path="/dashboard" component={Dashboard} />
-							<Route path="/maps/:uid" render={({ match }) => <MapEditor mapUid={match.params.uid} />} />
+							<Route
+								path="/maps/:uid"
+								render={({ match }) => <MapEditor mapUid={match.params.uid} />}
+							/>
 							<Redirect to="/login" />
 						</Switch>
 					</InspectorProvider>

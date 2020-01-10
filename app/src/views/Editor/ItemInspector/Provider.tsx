@@ -38,7 +38,9 @@ type Props = MapProviderProps & {
  * Context Setup
  */
 
-const InspectorContext = React.createContext<ItemInspectorProviderProps | undefined>(undefined)
+const InspectorContext = React.createContext<
+	ItemInspectorProviderProps | undefined
+>(undefined)
 
 export const InspectorConsumer = InspectorContext.Consumer
 
@@ -59,7 +61,10 @@ type ReducerArgs = ItemInspectorState & {
 	type: typeof INSPECT_ITEM | typeof CLOSE_INSPECTOR
 }
 
-const inspectorReducer = (state: ItemInspectorState, { type, item, position }: ReducerArgs) => {
+const inspectorReducer = (
+	state: ItemInspectorState,
+	{ type, item, position }: ReducerArgs,
+) => {
 	switch (type) {
 		case INSPECT_ITEM:
 			return { item, position }
@@ -82,9 +87,11 @@ export const InspectorProvider = ({ children, mapData, panTo }: Props) => {
 		const [pins] = unwindEdges(mapData.pins)
 		const [routes] = unwindEdges(mapData.routes)
 
-		if (__typename === 'Pin') return pins ? pins.find((p) => p.uid === uid) : undefined
+		if (__typename === 'Pin')
+			return pins ? pins.find((p) => p.uid === uid) : undefined
 		// $FlowFixMe
-		if (__typename === 'Route') return routes ? routes.find((r) => r.uid === uid) : undefined
+		if (__typename === 'Route')
+			return routes ? routes.find((r) => r.uid === uid) : undefined
 		throw new Error(`Cannot inspect item of type "${__typename}"`)
 	}
 
@@ -102,5 +109,9 @@ export const InspectorProvider = ({ children, mapData, panTo }: Props) => {
 		panTo,
 		mapUid: mapData ? mapData.uid : '',
 	}
-	return <InspectorContext.Provider value={value}>{children}</InspectorContext.Provider>
+	return (
+		<InspectorContext.Provider value={value}>
+			{children}
+		</InspectorContext.Provider>
+	)
 }

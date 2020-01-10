@@ -8,7 +8,13 @@ import { getNetworkStatus, unwindEdges } from './utils'
 
 const { useState } = React
 
-export type LoadingState = 'loading' | 'refetching' | 'passivelyRefetching' | 'fetchingMore' | 'ready' | 'errors'
+export type LoadingState =
+	| 'loading'
+	| 'refetching'
+	| 'passivelyRefetching'
+	| 'fetchingMore'
+	| 'ready'
+	| 'errors'
 
 type LoadingProps<T> = QueryRenderProps<T> & {
 	status: LoadingState,
@@ -45,11 +51,18 @@ type QueryProps<T> = QueryConfig<T> & {
 const Query = <T: GenericResponse>(props: QueryProps<T>) => {
 	const [fetchedAfterSkip, setFetchAfterSkip] = useState(false)
 	const [fetchAfterSkipVariables, setFetchAfterSkipVariables] = useState(null)
-	const { children, skip, delayQuery, variables: originalVariables, ...queryProps } = props
+	const {
+		children,
+		skip,
+		delayQuery,
+		variables: originalVariables,
+		...queryProps
+	} = props
 	if (!queryProps.query) throw new Error('No query was supplied.')
 	const variables = fetchAfterSkipVariables || originalVariables || {}
 
-	const shouldSkip = (skip === true || delayQuery === true) && fetchedAfterSkip === false
+	const shouldSkip =
+		(skip === true || delayQuery === true) && fetchedAfterSkip === false
 	return (
 		<ApolloQuery {...queryProps} variables={variables} skip={shouldSkip}>
 			{(response: QueryRenderProps<T>) => {
@@ -62,9 +75,15 @@ const Query = <T: GenericResponse>(props: QueryProps<T>) => {
 				const status = getNetworkStatus(networkStatus)
 				const { LoadingComponent, ErrorComponent } = props
 				if (!delayQuery && LoadingComponent !== false && status === 'loading')
-					return LoadingComponent && <LoadingComponent status={status} {...response} />
+					return (
+						LoadingComponent && (
+							<LoadingComponent status={status} {...response} />
+						)
+					)
 				if (error && ErrorComponent !== false) {
-					return ErrorComponent && <ErrorComponent status={status} {...response} />
+					return (
+						ErrorComponent && <ErrorComponent status={status} {...response} />
+					)
 				}
 
 				const { data, refetch } = response
@@ -99,9 +118,13 @@ Query.defaultProps = {
 
 export default Query
 
-export type QueryWrapper<Response> = (props: QueryProps<Response>) => React.Element<typeof Query>
+export type QueryWrapper<Response> = (
+	props: QueryProps<Response>,
+) => React.Element<typeof Query>
 
 export const withDefaultQuery = <ResponseType: GenericResponse>(
 	defaultQuery: DocumentNode,
 	config?: QueryConfig<ResponseType>,
-) => (props: QueryProps<ResponseType>) => <Query query={props.query || defaultQuery} {...props} {...config} />
+) => (props: QueryProps<ResponseType>) => (
+	<Query query={props.query || defaultQuery} {...props} {...config} />
+)

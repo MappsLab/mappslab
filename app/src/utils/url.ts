@@ -17,7 +17,10 @@ export const buildQueryString = (params: SearchParams): string =>
 	encodeURI(
 		Object.entries(params)
 			.reduce(
-				(acc, [key, val]) => (typeof val === 'string' || typeof val === 'number' ? `${acc}${key}=${val.toString()}&` : acc),
+				(acc, [key, val]) =>
+					typeof val === 'string' || typeof val === 'number'
+						? `${acc}${key}=${val.toString()}&`
+						: acc,
 				'?',
 			)
 			.replace(/&$/, ''),

@@ -30,7 +30,14 @@ describe('List Component', () => {
 			const items = result[type]
 			const onItemClick = jest.fn()
 
-			const { queryByText } = render(<List type="classroom" onItemClick={onItemClick} title="My List" items={items} />)
+			const { queryByText } = render(
+				<List
+					type="classroom"
+					onItemClick={onItemClick}
+					title="My List"
+					items={items}
+				/>,
+			)
 			items.forEach((item) => {
 				const text = item.title || item.name
 				expect(queryByText(text)).toBeTruthy()
@@ -43,7 +50,14 @@ describe('List Component', () => {
 			const result = await getTypes()
 			const items = result[type]
 			const onItemClick = jest.fn()
-			const { getByText } = render(<List onItemClick={onItemClick} type={type} title="My List" items={items} />)
+			const { getByText } = render(
+				<List
+					onItemClick={onItemClick}
+					type={type}
+					title="My List"
+					items={items}
+				/>,
+			)
 
 			/* click on each item */
 			items.forEach((item) => {
@@ -52,9 +66,17 @@ describe('List Component', () => {
 				const itemButton = getByText(itemTitle)
 				fireEvent.click(itemButton)
 				if (__typename === 'User') {
-					expect(onItemClick).toHaveBeenCalledWith({ uid, name: itemTitle, __typename })
+					expect(onItemClick).toHaveBeenCalledWith({
+						uid,
+						name: itemTitle,
+						__typename,
+					})
 				} else {
-					expect(onItemClick).toHaveBeenCalledWith({ uid, title: itemTitle, __typename })
+					expect(onItemClick).toHaveBeenCalledWith({
+						uid,
+						title: itemTitle,
+						__typename,
+					})
 				}
 			})
 		})
@@ -63,7 +85,14 @@ describe('List Component', () => {
 	it('should by default not display the + Add button', async () => {
 		const onItemClick = jest.fn()
 		const { classrooms } = await getTypes()
-		const { queryByText } = render(<List onItemClick={onItemClick} type="Classrooms" title="My Classrooms" items={classrooms} />)
+		const { queryByText } = render(
+			<List
+				onItemClick={onItemClick}
+				type="Classrooms"
+				title="My Classrooms"
+				items={classrooms}
+			/>,
+		)
 		expect(queryByText('+ Add')).toBeFalsy()
 	})
 
@@ -135,7 +164,9 @@ describe('List Component', () => {
 				/>
 			)
 		}
-		const { container, getByText, queryByText, getByTestId } = render(<SampleList search={mockSearch} create={mockCreate} />)
+		const { container, getByText, queryByText, getByTestId } = render(
+			<SampleList search={mockSearch} create={mockCreate} />,
+		)
 
 		let addButton = getByTestId('list-addButton')
 		/* expect a search input to appear after clicking the add button */
@@ -174,7 +205,11 @@ describe('List Component', () => {
 
 		/* Expect the click handler to have been called */
 		const { uid, __typename, title } = class1
-		expect(onSearchResultClick.mock.calls[0][0]).toEqual({ uid, __typename, title })
+		expect(onSearchResultClick.mock.calls[0][0]).toEqual({
+			uid,
+			__typename,
+			title,
+		})
 
 		/* Expect the form to have been reset */
 		addButton = getByTestId('list-addButton')
@@ -223,7 +258,16 @@ describe('List Component', () => {
 		}).toThrowErrorMatchingSnapshot()
 
 		expect(() => {
-			render(<List onItemClick={noop} type="Classrooms" title="My Classrooms" viewerCanAdd search={noop} items={classrooms} />)
+			render(
+				<List
+					onItemClick={noop}
+					type="Classrooms"
+					title="My Classrooms"
+					viewerCanAdd
+					search={noop}
+					items={classrooms}
+				/>,
+			)
 		}).toThrowErrorMatchingSnapshot()
 
 		expect(() => {

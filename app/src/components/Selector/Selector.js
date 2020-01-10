@@ -2,7 +2,17 @@
 import * as React from 'react'
 import type { GetItemPropsReturn } from 'downshift'
 import Downshift from 'downshift'
-import { LabelWrapper, Wrapper, ItemContainer, Input, MenuWrapper, List, SelectorListItem, MenuArrow, Label } from './styled'
+import {
+	LabelWrapper,
+	Wrapper,
+	ItemContainer,
+	Input,
+	MenuWrapper,
+	List,
+	SelectorListItem,
+	MenuArrow,
+	Label,
+} from './styled'
 
 export type SelectorRenderProps = GetItemPropsReturn & {
 	onMouseMove: (e: SyntheticEvent<Element>) => void,
@@ -44,11 +54,18 @@ export type SelectorProps = {
 
 const defaultItemToString = (i) => (i ? i.label : '')
 const defaultInputFilter = (inputValue) => (item) =>
-	!inputValue || inputValue.length < 2 || item.label.toLowerCase().includes(inputValue.toLowerCase())
+	!inputValue ||
+	inputValue.length < 2 ||
+	item.label.toLowerCase().includes(inputValue.toLowerCase())
 
-const getSelectedItemByValue = (value: string, items: Array<SelectorItem>): SelectorItem | void =>
-	items.find((i) => i.value === value)
-const getSelectedItem = (selectedItem: SelectorItem, items: Array<SelectorItem>): SelectorItem | void => {
+const getSelectedItemByValue = (
+	value: string,
+	items: Array<SelectorItem>,
+): SelectorItem | void => items.find((i) => i.value === value)
+const getSelectedItem = (
+	selectedItem: SelectorItem,
+	items: Array<SelectorItem>,
+): SelectorItem | void => {
 	if (!selectedItem) return undefined
 	return getSelectedItemByValue(selectedItem.value, items)
 }
@@ -112,7 +129,10 @@ const Selector = ({
 			}) => {
 				const filterItems = inputFilter || defaultInputFilter
 				const currentItem = getSelectedItem(selectedItem, items)
-				const renderItem = ({ render, ...item }: SelectorItem, index: number): React.Node => {
+				const renderItem = (
+					{ render, ...item }: SelectorItem,
+					index: number,
+				): React.Node => {
 					const itemProps = {
 						...getItemProps({
 							key: item.value,
@@ -123,14 +143,22 @@ const Selector = ({
 						}),
 					}
 
-					return <SelectorListItem {...itemProps}>{render ? render(itemProps) : <span>{item.label}</span>}</SelectorListItem>
+					return (
+						<SelectorListItem {...itemProps}>
+							{render ? render(itemProps) : <span>{item.label}</span>}
+						</SelectorListItem>
+					)
 				}
 				return (
 					<div>
 						<Wrapper disabled={disabled} isOpen={isOpen}>
 							<LabelWrapper {...getLabelProps} onClick={openMenu}>
 								<MenuArrow down={isOpen} />
-								{currentItem && currentItem.render ? renderItem(currentItem, 0) : <Label {...getLabelProps()}>{label}</Label>}
+								{currentItem && currentItem.render ? (
+									renderItem(currentItem, 0)
+								) : (
+									<Label {...getLabelProps()}>{label}</Label>
+								)}
 							</LabelWrapper>
 							<MenuWrapper visible={isOpen}>
 								<List {...getMenuProps()}>
@@ -138,7 +166,11 @@ const Selector = ({
 										// if nothing is selected, render the input and the filtered items
 										<React.Fragment>
 											<ItemContainer>
-												<Input autoFocus {...getInputProps()} placeholder="start typing.." />
+												<Input
+													autoFocus
+													{...getInputProps()}
+													placeholder="start typing.."
+												/>
 											</ItemContainer>
 											{items.filter(filterItems(inputValue)).map(renderItem)}
 										</React.Fragment>

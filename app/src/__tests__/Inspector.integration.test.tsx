@@ -11,8 +11,20 @@ const mockClassrooms = jest.fn().mockResolvedValue(
 	/* mock the 'filtered' classrooms */
 	{
 		edges: [
-			{ node: { __typename: 'Classroom', uid: '0x1234', title: 'Social Studies' } },
-			{ node: { __typename: 'Classroom', uid: '0x5678', title: 'Socialism 101' } },
+			{
+				node: {
+					__typename: 'Classroom',
+					uid: '0x1234',
+					title: 'Social Studies',
+				},
+			},
+			{
+				node: {
+					__typename: 'Classroom',
+					uid: '0x5678',
+					title: 'Socialism 101',
+				},
+			},
 		],
 	},
 )
@@ -32,7 +44,13 @@ const mockUserClassrooms = jest
 			{ node: { __typename: 'Classroom', uid: '0x1111', title: 'History' } },
 			{ node: { __typename: 'Classroom', uid: '0x2222', title: 'Ceramics' } },
 			{ node: { __typename: 'Classroom', uid: '0x3333', title: 'Math' } },
-			{ node: { __typename: 'Classroom', uid: '0x5678', title: 'Socialism 101' } },
+			{
+				node: {
+					__typename: 'Classroom',
+					uid: '0x5678',
+					title: 'Socialism 101',
+				},
+			},
 		],
 	})
 	.mockResolvedValueOnce({
@@ -41,7 +59,13 @@ const mockUserClassrooms = jest
 			{ node: { __typename: 'Classroom', uid: '0x1111', title: 'History' } },
 			{ node: { __typename: 'Classroom', uid: '0x2222', title: 'Ceramics' } },
 			{ node: { __typename: 'Classroom', uid: '0x3333', title: 'Math' } },
-			{ node: { __typename: 'Classroom', uid: '0x5678', title: 'Socialism 101' } },
+			{
+				node: {
+					__typename: 'Classroom',
+					uid: '0x5678',
+					title: 'Socialism 101',
+				},
+			},
 			{ node: { __typename: 'Classroom', uid: '0x9999', title: 'English' } },
 		],
 	})

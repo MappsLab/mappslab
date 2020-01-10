@@ -31,7 +31,9 @@ export const LoginSuccess = ({ transition }: Props) => {
 
 	const [classrooms] = unwindEdges<Classroom>(viewer.classrooms)
 	const maps = classrooms
-		.map((classroom) => (classroom.maps ? unwindEdges<Map>(classroom.maps) : [[]]))
+		.map((classroom) =>
+			classroom.maps ? unwindEdges<Map>(classroom.maps) : [[]],
+		)
 		.reduce((acc, [maps]) => (maps ? [...acc, ...maps] : acc), [])
 		.filter(Boolean)
 
@@ -47,7 +49,10 @@ export const LoginSuccess = ({ transition }: Props) => {
 				<Header4>Your new password is set.</Header4>
 			</Action>
 			{!isTeacher && !isAdmin && (!classrooms || !classrooms.length) ? (
-				<Header4>You are currently not assigned to any classrooms. Ask your teacher to add you to their classroom.</Header4>
+				<Header4>
+					You are currently not assigned to any classrooms. Ask your teacher to
+					add you to their classroom.
+				</Header4>
 			) : maps && maps.length ? (
 				<React.Fragment>
 					<Header2>Go to a map:</Header2>

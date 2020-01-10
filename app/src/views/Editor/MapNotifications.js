@@ -39,5 +39,7 @@ const MapNotifications = ({ notifications }: Props) => {
 }
 
 export default () => (
-	<NotificationsConsumer>{({ notifications }) => <MapNotifications notifications={notifications} />}</NotificationsConsumer>
+	<NotificationsConsumer>
+		{({ notifications }) => <MapNotifications notifications={notifications} />}
+	</NotificationsConsumer>
 )

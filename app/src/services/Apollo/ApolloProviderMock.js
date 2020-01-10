@@ -13,7 +13,10 @@ import typeResolvers from 'Shared/mockedResolvers/typeResolvers'
 
 import { logQueries, logErrors } from './middleware'
 
-export const schema = makeExecutableSchema({ typeDefs, resolvers: typeResolvers })
+export const schema = makeExecutableSchema({
+	typeDefs,
+	resolvers: typeResolvers,
+})
 
 // const mockUtilsSchema = makeExecutableSchema({ typeDefs: mockTypeDefs })
 
@@ -28,6 +31,8 @@ const client = new ApolloClient({
 	cache: new InMemoryCache(),
 })
 
-const ApolloWrapper = ({ children }: { children: React.Node }) => <ApolloProvider client={client}>{children}</ApolloProvider>
+const ApolloWrapper = ({ children }: { children: React.Node }) => (
+	<ApolloProvider client={client}>{children}</ApolloProvider>
+)
 
 export default ApolloWrapper

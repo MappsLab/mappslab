@@ -37,7 +37,9 @@ const groupPairs = <T>(arr: T[]): Array<Pair<T>> =>
 			const firstSet = lastPair ? [lastPair[0], second] : undefined
 			const nextSet = [second]
 
-			return firstSet ? [...pairs.slice(0, pairs.length - 1), firstSet, nextSet] : [...pairs.slice(0, pairs.length - 1), nextSet]
+			return firstSet
+				? [...pairs.slice(0, pairs.length - 1), firstSet, nextSet]
+				: [...pairs.slice(0, pairs.length - 1), nextSet]
 		}, [])
 		.filter((pair: Pair<T>) => pair.length === 2)
 
@@ -54,4 +56,3 @@ export const getRouteDistance = (route: Route): number => {
 	if (!pins || pins.length < 2) return 0
 	return metersToMiles(getDistance(pinsToLatLngs(pins)), 2)
 }
-

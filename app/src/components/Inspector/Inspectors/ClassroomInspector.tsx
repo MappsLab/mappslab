@@ -1,9 +1,21 @@
 import * as React from 'react'
 import { unwindEdges } from '@good-idea/unwind-edges'
-import { Classroom, Viewer, Mutation, QueryConfig, User } from '../../../types-ts'
-import { UpdateClassroomMutation, ClassroomQuery } from '../../../queries/Classroom'
+import {
+	Classroom,
+	Viewer,
+	Mutation,
+	QueryConfig,
+	User,
+} from '../../../types-ts'
+import {
+	UpdateClassroomMutation,
+	ClassroomQuery,
+} from '../../../queries/Classroom'
 import { CreateMapMutation } from '../../../queries/Map'
-import { CreateStudentMutation, CreateTeacherMutation } from '../../../queries/User'
+import {
+	CreateStudentMutation,
+	CreateTeacherMutation,
+} from '../../../queries/User'
 import { MapList, UserList } from '../../Lists'
 import { InspectItem } from '../InspectorProvider'
 import InspectorSkeleton from '../InspectorSkeleton'
@@ -47,7 +59,9 @@ const ClassroomInspectorMain = ({
 	createMap,
 }: Props) => {
 	const updateClassroomUsers = (user) => {
-		const addKey = user.roles.includes('teacher') ? 'addTeachers' : 'addStudents'
+		const addKey = user.roles.includes('teacher')
+			? 'addTeachers'
+			: 'addStudents'
 		const variables = {
 			input: {
 				uid: classroom.uid,
@@ -77,13 +91,20 @@ const ClassroomInspectorMain = ({
 		await createMap({ variables, refetchQueries: [classroomQueryConfig] })
 	}
 
-	const createUserInClassroom = (role: 'student' | 'teacher') => async ({ name, email, temporaryPassword }: CreateUserFnArgs) => {
+	const createUserInClassroom = (role: 'student' | 'teacher') => async ({
+		name,
+		email,
+		temporaryPassword,
+	}: CreateUserFnArgs) => {
 		const mutationByRole = {
 			student: createStudent,
 			teacher: createTeacher,
 		}
 		const mutate = mutationByRole[role]
-		if (!mutate) throw new Error(`There is no mutation for creating a user with the role "${role}"`)
+		if (!mutate)
+			throw new Error(
+				`There is no mutation for creating a user with the role "${role}"`,
+			)
 		// const addKey = role === 'student' ? 'addStudents' | 'addTeacher'
 		const variables = {
 			input: {
@@ -96,14 +117,26 @@ const ClassroomInspectorMain = ({
 		await mutate({ variables, refetchQueries: [classroomQueryConfig] })
 	}
 
-	const teachers = classroom.teachers && classroom.teachers.edges.length ? unwindEdges<User>(classroom.teachers)[0] : []
-	const maps = classroom.maps && classroom.maps.edges.length ? unwindEdges(classroom.maps)[0] : []
-	const students = classroom.students && classroom.students.edges.length ? unwindEdges(classroom.students)[0] : []
+	const teachers =
+		classroom.teachers && classroom.teachers.edges.length
+			? unwindEdges<User>(classroom.teachers)[0]
+			: []
+	const maps =
+		classroom.maps && classroom.maps.edges.length
+			? unwindEdges(classroom.maps)[0]
+			: []
+	const students =
+		classroom.students && classroom.students.edges.length
+			? unwindEdges(classroom.students)[0]
+			: []
 
 	const viewerCanAdd = Boolean(
 		viewer &&
 			(viewer.roles.includes('admin') ||
-				(viewer.roles.includes('teacher') || (teachers && teachers.length && teachers.map((t) => t.uid).includes(viewer.uid)))),
+				(viewer.roles.includes('teacher') ||
+					(teachers &&
+						teachers.length &&
+						teachers.map((t) => t.uid).includes(viewer.uid)))),
 	)
 
 	return (
@@ -138,7 +171,10 @@ const ClassroomInspectorMain = ({
 	)
 }
 
-export const ClassroomInspector = ({ uid, ...baseProps }: BaseProps & { uid: string }) => (
+export const ClassroomInspector = ({
+	uid,
+	...baseProps
+}: BaseProps & { uid: string }) => (
 	<ClassroomQuery LoadingComponent={false} variables={{ uid }}>
 		{({ data, loading, queryConfig }) =>
 			loading ? (

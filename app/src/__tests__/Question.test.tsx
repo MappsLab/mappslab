@@ -3,9 +3,18 @@
 import * as React from 'react'
 import { fireEvent, wait } from 'react-testing-library'
 import { render } from '../../jest/utils'
-import { QuestionProvider, QuestionContext, QuestionConsumer, QuestionDialog } from '../components/Question'
+import {
+	QuestionProvider,
+	QuestionContext,
+	QuestionConsumer,
+	QuestionDialog,
+} from '../components/Question'
 
-const QuestionWrapper = ({ children }: { children: (QuestionContext) => React.ReactNode }) => (
+const QuestionWrapper = ({
+	children,
+}: {
+	children: (QuestionContext) => React.ReactNode
+}) => (
 	<QuestionProvider>
 		<QuestionConsumer>{children}</QuestionConsumer>
 	</QuestionProvider>
@@ -20,7 +29,10 @@ const BasicQuestion = () => (
 					type="button"
 					data-testid="button"
 					onClick={() => {
-						ask({ message: 'are you sure?', options: [{ title: 'YES' }, { title: 'NO', level: 'secondary' }] })
+						ask({
+							message: 'are you sure?',
+							options: [{ title: 'YES' }, { title: 'NO', level: 'secondary' }],
+						})
 					}}
 				>
 					click?
@@ -47,7 +59,9 @@ describe('Question Component', () => {
 	})
 
 	it('should render an <QuestionDialog> when a consumer calls `ask`', async () => {
-		const { queryByTestId, queryByText, getByTestId } = render(<BasicQuestion />)
+		const { queryByTestId, queryByText, getByTestId } = render(
+			<BasicQuestion />,
+		)
 		const button = getByTestId('button')
 		expect(queryByTestId('alert')).toBeFalsy()
 		fireEvent.click(button)
@@ -68,12 +82,19 @@ describe('Question Component', () => {
 								if (!currentQuestion || !currentQuestion.options) return null
 								return (
 									<React.Fragment>
-										{currentQuestion.options.map(({ answerQuestion, title, testId }) => (
-											/* Here we are also testing that custom props like testId can be passed through */
-											<button key={testId} type="button" data-testid={testId} onClick={answerQuestion}>
-												{title}
-											</button>
-										))}
+										{currentQuestion.options.map(
+											({ answerQuestion, title, testId }) => (
+												/* Here we are also testing that custom props like testId can be passed through */
+												<button
+													key={testId}
+													type="button"
+													data-testid={testId}
+													onClick={answerQuestion}
+												>
+													{title}
+												</button>
+											),
+										)}
 									</React.Fragment>
 								)
 							}}

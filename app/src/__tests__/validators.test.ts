@@ -44,11 +44,15 @@ describe('Validator: maxLength', () => {
 
 describe('Validator: minMaxLength', () => {
 	it('Validates minimum length of strings', () => {
-		expect(minMaxLength(5, 10)('a')).toBe('Must be between 5 and 10 characters long')
+		expect(minMaxLength(5, 10)('a')).toBe(
+			'Must be between 5 and 10 characters long',
+		)
 		expect(minMaxLength(5, 10)('abcde')).toBe(undefined)
 		expect(minMaxLength(5, 10)('abcdefgh')).toBe(undefined)
 		expect(minMaxLength(5, 10)('abcdefghij')).toBe(undefined)
-		expect(minMaxLength(5, 10)('abcefghhijk')).toBe('Must be between 5 and 10 characters long')
+		expect(minMaxLength(5, 10)('abcefghhijk')).toBe(
+			'Must be between 5 and 10 characters long',
+		)
 	})
 })
 
@@ -92,13 +96,23 @@ describe('Validator: minMmaxValue', () => {
 
 describe('Validator: URL', () => {
 	it('Validates urls', () => {
-		expect(mustBeUrl('foo')).toBe('Must be a valid URL. Be sure to include "http://"')
-		expect(mustBeUrl('http://userid@example.com')).toBe('Must be a valid URL. Be sure to include "http://"')
-		expect(mustBeUrl('http://userid:password@example.com/')).toBe('Must be a valid URL. Be sure to include "http://"')
+		expect(mustBeUrl('foo')).toBe(
+			'Must be a valid URL. Be sure to include "http://"',
+		)
+		expect(mustBeUrl('http://userid@example.com')).toBe(
+			'Must be a valid URL. Be sure to include "http://"',
+		)
+		expect(mustBeUrl('http://userid:password@example.com/')).toBe(
+			'Must be a valid URL. Be sure to include "http://"',
+		)
 		expect(mustBeUrl('http://1337.net')).toBe(undefined)
 		expect(mustBeUrl('https://1337.net')).toBe(undefined)
-		expect(mustBeUrl('http://foo.com/blah_blah_(wikipedia)_(again)')).toBe(undefined)
-		expect(mustBeUrl('https://www.example.com/foo/?bar=baz&inga=42&quux')).toBe(undefined)
+		expect(mustBeUrl('http://foo.com/blah_blah_(wikipedia)_(again)')).toBe(
+			undefined,
+		)
+		expect(mustBeUrl('https://www.example.com/foo/?bar=baz&inga=42&quux')).toBe(
+			undefined,
+		)
 		expect(mustBeUrl('')).toBe(undefined)
 	})
 })
@@ -120,8 +134,12 @@ describe('Validator: email', () => {
 
 describe('Validator: alphaNumDash', () => {
 	it('Must be letters, numbers, or hyphens', () => {
-		expect(alphaNumDash('With Spaces')).toBe('May only be letters, numbers, and hyphens')
-		expect(alphaNumDash('withCh@rs')).toBe('May only be letters, numbers, and hyphens')
+		expect(alphaNumDash('With Spaces')).toBe(
+			'May only be letters, numbers, and hyphens',
+		)
+		expect(alphaNumDash('withCh@rs')).toBe(
+			'May only be letters, numbers, and hyphens',
+		)
 		expect(alphaNumDash('abcXYZ123')).toBe(undefined)
 		expect(alphaNumDash('')).toBe(undefined)
 	})
@@ -145,10 +163,18 @@ describe('Validator: noDoubleDash', () => {
 
 describe('Validator: startEndAlphaNum', () => {
 	it('Must start and end with a letter or number', () => {
-		expect(startEndAlphaNum('@abc')).toBe('Must start and end with a letter or number')
-		expect(startEndAlphaNum('abc@')).toBe('Must start and end with a letter or number')
-		expect(startEndAlphaNum(' abc')).toBe('Must start and end with a letter or number')
-		expect(startEndAlphaNum('abc ')).toBe('Must start and end with a letter or number')
+		expect(startEndAlphaNum('@abc')).toBe(
+			'Must start and end with a letter or number',
+		)
+		expect(startEndAlphaNum('abc@')).toBe(
+			'Must start and end with a letter or number',
+		)
+		expect(startEndAlphaNum(' abc')).toBe(
+			'Must start and end with a letter or number',
+		)
+		expect(startEndAlphaNum('abc ')).toBe(
+			'Must start and end with a letter or number',
+		)
 		expect(startEndAlphaNum('abc')).toBe(undefined)
 		expect(startEndAlphaNum('')).toBe(undefined)
 	})
@@ -156,12 +182,22 @@ describe('Validator: startEndAlphaNum', () => {
 
 describe('Validator: validUsername', () => {
 	it('Must validate with all composed validators', () => {
-		expect(validUsername('jose')).toBe('Must be between 5 and 25 characters long')
-		expect(validUsername('IsabellaFiorellaElettraGiovannaRossellini')).toBe('Must be between 5 and 25 characters long')
-		expect(validUsername('joseph#1')).toBe('May only be letters, numbers, and hyphens')
+		expect(validUsername('jose')).toBe(
+			'Must be between 5 and 25 characters long',
+		)
+		expect(validUsername('IsabellaFiorellaElettraGiovannaRossellini')).toBe(
+			'Must be between 5 and 25 characters long',
+		)
+		expect(validUsername('joseph#1')).toBe(
+			'May only be letters, numbers, and hyphens',
+		)
 		expect(validUsername('Joseph')).toBe('Must be all lower case')
-		expect(validUsername('joseph--thomas')).toBe('May not contain sequential hyphens')
-		expect(validUsername('-joseph')).toBe('Must start and end with a letter or number')
+		expect(validUsername('joseph--thomas')).toBe(
+			'May not contain sequential hyphens',
+		)
+		expect(validUsername('-joseph')).toBe(
+			'Must start and end with a letter or number',
+		)
 		expect(validUsername('joseph')).toBe(undefined)
 		expect(validUsername('joseph-thomas')).toBe(undefined)
 		expect(validUsername('joseph-thomas-1')).toBe(undefined)

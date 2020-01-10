@@ -85,7 +85,11 @@ export class QuestionProvider extends React.Component<Props, State> {
 		new Promise<any>((resolve) => {
 			const answer = (value: any) => {
 				resolve(value)
-				this.setState({ answered: true, currentQuestion: undefined, cancelQuestion: noop })
+				this.setState({
+					answered: true,
+					currentQuestion: undefined,
+					cancelQuestion: noop,
+				})
 			}
 
 			const answerHandler = (value: any) => () => answer(value)

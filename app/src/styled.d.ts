@@ -36,7 +36,10 @@ declare module 'styled-components' {
 		}
 		mixins: {
 			boxShadow: { [key: string]: string }
-			[key: string]: string | FlattenSimpleInterpolation | { [key: string]: string }
+			[key: string]:
+				| string
+				| FlattenSimpleInterpolation
+				| { [key: string]: string }
 		}
 	}
 }

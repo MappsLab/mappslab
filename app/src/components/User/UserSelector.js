@@ -16,7 +16,11 @@ type Props = {
 }
 
 const UserSelector = ({ disabled, onSelect, delayQuery, variables }: Props) => (
-	<UsersQuery variables={variables} delayQuery={delayQuery} LoadingComponent={false}>
+	<UsersQuery
+		variables={variables}
+		delayQuery={delayQuery}
+		LoadingComponent={false}
+	>
 		{({ data, refetch }) => {
 			const refetchQuery = (input: string) => {
 				if (input.length < 3) {
@@ -38,7 +42,12 @@ const UserSelector = ({ disabled, onSelect, delayQuery, variables }: Props) => (
 					? unwindEdges(data.users)[0].map((user) => ({
 							value: user.uid,
 							label: user.name,
-							render: ({ highlighted, selected }) => <SelectorItem title={user.name} active={highlighted || selected} />,
+							render: ({ highlighted, selected }) => (
+								<SelectorItem
+									title={user.name}
+									active={highlighted || selected}
+								/>
+							),
 					  }))
 					: []
 			return (

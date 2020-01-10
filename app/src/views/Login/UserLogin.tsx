@@ -34,7 +34,12 @@ const UserLogin = ({ user, transition }: Props) => {
 	const handleSubmit = (variables: Credentials) => loginUser(variables)
 
 	return (
-		<Form disabled={loading} onSubmit={handleSubmit} initialValues={{ uid }} submitButtonText="login">
+		<Form
+			disabled={loading}
+			onSubmit={handleSubmit}
+			initialValues={{ uid }}
+			submitButtonText="login"
+		>
 			{viewer ? 'Loading...' : <Header2>Hi, {name}</Header2>}
 			<Header4>Please enter your password to log in.</Header4>
 			<Field label="uid" name="uid" type="hidden" value="UID" />
@@ -42,7 +47,9 @@ const UserLogin = ({ user, transition }: Props) => {
 			{error ? (
 				<>
 					<ErrorMessage>{error.message}</ErrorMessage>
-					<Header4>If you forgot your password, ask your teacher to reset it.</Header4>
+					<Header4>
+						If you forgot your password, ask your teacher to reset it.
+					</Header4>
 				</>
 			) : null}
 		</Form>
@@ -55,7 +62,11 @@ interface WrapperProps extends BaseProps {
 
 const WithUser = ({ userUid, ...props }: WrapperProps) => {
 	if (!userUid) throw new Error('You must supply a `userUid`')
-	return <UserQuery variables={{ uid: userUid }}>{({ data }) => <UserLogin user={data.user} {...props} />}</UserQuery>
+	return (
+		<UserQuery variables={{ uid: userUid }}>
+			{({ data }) => <UserLogin user={data.user} {...props} />}
+		</UserQuery>
+	)
 }
 
 export default WithUser

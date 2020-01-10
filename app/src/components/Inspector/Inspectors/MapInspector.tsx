@@ -45,11 +45,23 @@ const validateImageDimensions = (file: File): Promise<string | void> =>
 		img.src = window.URL.createObjectURL(file)
 	})
 
-const MapInspectorMain = ({ map, viewer, inspectItem, mapQueryConfig, updateMap }: Props) => {
+const MapInspectorMain = ({
+	map,
+	viewer,
+	inspectItem,
+	mapQueryConfig,
+	updateMap,
+}: Props) => {
 	const { ask } = useQuestion()
-	const teachers = map.classroom.teachers && map.classroom.teachers.edges ? unwindEdges(map.classroom.teachers)[0] : []
-	const dataLayers = map.dataLayers && map.dataLayers.edges ? unwindEdges(map.dataLayers)[0] : []
-	const viewerIsOwner = Boolean(viewer && teachers.find((t) => t.uid === viewer.uid))
+	const teachers =
+		map.classroom.teachers && map.classroom.teachers.edges
+			? unwindEdges(map.classroom.teachers)[0]
+			: []
+	const dataLayers =
+		map.dataLayers && map.dataLayers.edges ? unwindEdges(map.dataLayers)[0] : []
+	const viewerIsOwner = Boolean(
+		viewer && teachers.find((t) => t.uid === viewer.uid),
+	)
 
 	const updateMapClassrooms = (classroom) => {
 		const variables = {
@@ -104,7 +116,11 @@ const MapInspectorMain = ({ map, viewer, inspectItem, mapQueryConfig, updateMap 
 
 	return (
 		<React.Fragment>
-			<EditableText label="Description" name="description" initialValue={map.description} />
+			<EditableText
+				label="Description"
+				name="description"
+				initialValue={map.description}
+			/>
 			<Button to={`/maps/${map.uid}`}>Go to map →</Button>
 			<ClassroomList
 				title="Classroom"
@@ -123,19 +139,34 @@ const MapInspectorMain = ({ map, viewer, inspectItem, mapQueryConfig, updateMap 
 				label="Base Image"
 				viewerCanEdit={viewerIsOwner}
 			/>
-			<DataLayerList dataLayers={dataLayers} addNewDataLayer={addNewDataLayer} viewerCanAdd={viewerIsOwner} title="Data Layers" />
+			<DataLayerList
+				dataLayers={dataLayers}
+				addNewDataLayer={addNewDataLayer}
+				viewerCanAdd={viewerIsOwner}
+				title="Data Layers"
+			/>
 		</React.Fragment>
 	)
 }
 
-export const MapInspector = ({ uid, ...baseProps }: BaseProps & { uid: string }) => (
+export const MapInspector = ({
+	uid,
+	...baseProps
+}: BaseProps & { uid: string }) => (
 	<MapQuery LoadingComponent={false} variables={{ uid }}>
 		{({ data, loading, queryConfig }) =>
 			loading ? (
 				<InspectorSkeleton />
 			) : (
 				<UpdateMapMutation>
-					{(updateMap) => <MapInspectorMain map={data.map} mapQueryConfig={queryConfig} updateMap={updateMap} {...baseProps} />}
+					{(updateMap) => (
+						<MapInspectorMain
+							map={data.map}
+							mapQueryConfig={queryConfig}
+							updateMap={updateMap}
+							{...baseProps}
+						/>
+					)}
 				</UpdateMapMutation>
 			)
 		}

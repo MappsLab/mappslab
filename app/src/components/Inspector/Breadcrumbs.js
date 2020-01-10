@@ -36,7 +36,8 @@ const Breadcrumbs = (props: Props) => {
 	return (
 		<Wrapper>
 			<Button onClick={goBackToItem(previousItem)} level="tertiary">
-				← <ItemIcon type={previousItem.__typename} /> {previousItem.title || previousItem.name}
+				← <ItemIcon type={previousItem.__typename} />{' '}
+				{previousItem.title || previousItem.name}
 			</Button>
 		</Wrapper>
 	)

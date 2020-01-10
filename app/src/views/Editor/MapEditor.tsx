@@ -6,11 +6,23 @@ import { State } from 'react-automata'
 import { Subscription } from 'Types'
 import { $PropertyType } from 'utility-types'
 import { startSubscription } from 'Queries/startSubscription'
-import { pinAddedToMap, pinDeleted, pinUpdated, mapUpdated } from 'Queries/Map/mapSubscriptions'
-import { NewNotification, NotificationsConsumer } from 'Components/Notifications'
+import {
+	pinAddedToMap,
+	pinDeleted,
+	pinUpdated,
+	mapUpdated,
+} from 'Queries/Map/mapSubscriptions'
+import {
+	NewNotification,
+	NotificationsConsumer,
+} from 'Components/Notifications'
 import { eventsReducer, isFunc } from 'Utils/data'
 import { getMapBounds } from 'Utils/maps'
-import { InspectorProvider, ItemInspector, InspectorConsumer } from './ItemInspector'
+import {
+	InspectorProvider,
+	ItemInspector,
+	InspectorConsumer,
+} from './ItemInspector'
 import { ItemInspectorProviderProps } from './ItemInspector'
 import Pin from './Pin'
 import { DataLayer } from './DataLayer'
@@ -66,7 +78,9 @@ class MapEditorMain extends React.Component<EditorProps, MapEditorState> {
 			const bounds = getMapBounds(pins)
 			this.props.fitBounds(bounds)
 			/* Set a max zoom */
-			const imageMaxZoom = mapData.baseImage ? mapData.baseImage.tileset.maxZoom : undefined
+			const imageMaxZoom = mapData.baseImage
+				? mapData.baseImage.tileset.maxZoom
+				: undefined
 			const currentZoom = this.props.getZoom()
 			this.props.setZoom(Math.min(currentZoom, imageMaxZoom || 10))
 		}
@@ -141,7 +155,9 @@ class MapEditorMain extends React.Component<EditorProps, MapEditorState> {
 
 	disableLayer = (id: string) => {
 		this.setState((currentState) => ({
-			enabledLayers: currentState.enabledLayers.filter((layerId) => layerId !== id),
+			enabledLayers: currentState.enabledLayers.filter(
+				(layerId) => layerId !== id,
+			),
 		}))
 	}
 
@@ -242,7 +258,13 @@ class MapEditorMain extends React.Component<EditorProps, MapEditorState> {
 				{dataLayers &&
 					dataLayers
 						.filter((l) => enabledLayers.includes(l.uid))
-						.map((l) => <DataLayer key={l.uid} dataLayer={l} applyDataLayer={this.props.applyDataLayer} />)}
+						.map((l) => (
+							<DataLayer
+								key={l.uid}
+								dataLayer={l}
+								applyDataLayer={this.props.applyDataLayer}
+							/>
+						))}
 				{connectToPin && userLatLng && (
 					<State is="Lesson.DropPin.DropMode.Connect">
 						<NewRoute connectToPin={connectToPin} userLatLng={userLatLng} />
@@ -264,7 +286,12 @@ class MapEditorMain extends React.Component<EditorProps, MapEditorState> {
 				</State>
 				<MapNavigation map={mapData} />
 				{viewer ? (
-					<Tools {...this.props} enabledLayers={enabledLayers} enableLayer={enableLayer} disableLayer={disableLayer} />
+					<Tools
+						{...this.props}
+						enabledLayers={enabledLayers}
+						enableLayer={enableLayer}
+						disableLayer={disableLayer}
+					/>
 				) : (
 					<NotLoggedIn />
 				)}

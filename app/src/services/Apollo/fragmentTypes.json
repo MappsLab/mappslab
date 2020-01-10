@@ -1,1 +1,49 @@
-{"__schema":{"types":[{"kind":"INTERFACE","name":"Node","possibleTypes":[{"name":"Classroom"},{"name":"User"},{"name":"Map"},{"name":"Pin"},{"name":"Route"},{"name":"Viewer"},{"name":"Teacher"}]},{"kind":"INTERFACE","name":"Connection","possibleTypes":[{"name":"UserConnection"},{"name":"ClassroomConnection"},{"name":"MapConnection"},{"name":"PinConnection"},{"name":"RouteConnection"}]},{"kind":"INTERFACE","name":"Edge","possibleTypes":[{"name":"UserEdge"},{"name":"ClassroomEdge"},{"name":"MapEdge"},{"name":"PinEdge"},{"name":"RouteEdge"}]},{"kind":"UNION","name":"LoginResult","possibleTypes":[{"name":"LoginSuccess"},{"name":"RequiresReset"}]}]}}
+{
+	"__schema": {
+		"types": [
+			{
+				"kind": "INTERFACE",
+				"name": "Node",
+				"possibleTypes": [
+					{ "name": "Classroom" },
+					{ "name": "User" },
+					{ "name": "Map" },
+					{ "name": "Pin" },
+					{ "name": "Route" },
+					{ "name": "Viewer" },
+					{ "name": "Teacher" }
+				]
+			},
+			{
+				"kind": "INTERFACE",
+				"name": "Connection",
+				"possibleTypes": [
+					{ "name": "UserConnection" },
+					{ "name": "ClassroomConnection" },
+					{ "name": "MapConnection" },
+					{ "name": "PinConnection" },
+					{ "name": "RouteConnection" }
+				]
+			},
+			{
+				"kind": "INTERFACE",
+				"name": "Edge",
+				"possibleTypes": [
+					{ "name": "UserEdge" },
+					{ "name": "ClassroomEdge" },
+					{ "name": "MapEdge" },
+					{ "name": "PinEdge" },
+					{ "name": "RouteEdge" }
+				]
+			},
+			{
+				"kind": "UNION",
+				"name": "LoginResult",
+				"possibleTypes": [
+					{ "name": "LoginSuccess" },
+					{ "name": "RequiresReset" }
+				]
+			}
+		]
+	}
+}

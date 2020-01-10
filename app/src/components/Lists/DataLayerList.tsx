@@ -17,7 +17,12 @@ interface DataLayerListProps {
 const noResults = async () => undefined
 const handleClick = async () => undefined
 
-export const DataLayerList = ({ title, dataLayers, viewerCanAdd, addNewDataLayer }: DataLayerListProps) => {
+export const DataLayerList = ({
+	title,
+	dataLayers,
+	viewerCanAdd,
+	addNewDataLayer,
+}: DataLayerListProps) => {
 	return (
 		<List
 			search={noResults}

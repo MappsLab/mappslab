@@ -26,7 +26,9 @@ const RouteInspector = ({ route, viewer, updateRoute, mapUid }: Props) => {
 	const enterEdit = () => setEditMode(true)
 	const exitEdit = () => setEditMode(false)
 
-	const viewerIsOwner = Boolean(viewer && route.owner && route.owner.uid === viewer.uid)
+	const viewerIsOwner = Boolean(
+		viewer && route.owner && route.owner.uid === viewer.uid,
+	)
 	const canEdit = Boolean(viewerIsOwner && editMode)
 
 	const submitUpdate = async (args) => {
@@ -37,7 +39,10 @@ const RouteInspector = ({ route, viewer, updateRoute, mapUid }: Props) => {
 			...args,
 		}
 
-		updateRoute({ variables, refetchQueries: [{ query: mapQuery, variables: { uid: mapUid } }] })
+		updateRoute({
+			variables,
+			refetchQueries: [{ query: mapQuery, variables: { uid: mapUid } }],
+		})
 	}
 	console.log(route)
 	const distance = getRouteDistance(route)
@@ -65,7 +70,12 @@ const RouteInspector = ({ route, viewer, updateRoute, mapUid }: Props) => {
 				viewerCanEdit={canEdit}
 				autoFocus
 			/>
-			<EditableMedia submitUpdate={submitUpdate} image={route.image} video={route.video} viewerCanEdit={canEdit} />
+			<EditableMedia
+				submitUpdate={submitUpdate}
+				image={route.image}
+				video={route.video}
+				viewerCanEdit={canEdit}
+			/>
 			<Header5 color="darkGray">{distance} miles</Header5>
 			{viewerIsOwner && canEdit === false ? (
 				<NativeListener onClick={enterEdit}>
@@ -91,7 +101,11 @@ RouteInspector.defaultProps = {
 }
 
 const RouteInspectorWrapper = (baseProps: BaseProps) => (
-	<UpdateRouteMutation>{(updateRoute) => <RouteInspector {...baseProps} updateRoute={updateRoute} />}</UpdateRouteMutation>
+	<UpdateRouteMutation>
+		{(updateRoute) => (
+			<RouteInspector {...baseProps} updateRoute={updateRoute} />
+		)}
+	</UpdateRouteMutation>
 )
 
 export default RouteInspectorWrapper

@@ -1,7 +1,13 @@
 // @flow
 import * as React from 'react'
 import type { DocumentNode } from 'graphql'
-import type { FetchResult, ApolloError, DataProxy, MutationResult, MutationFunction } from 'react-apollo'
+import type {
+	FetchResult,
+	ApolloError,
+	DataProxy,
+	MutationResult,
+	MutationFunction,
+} from 'react-apollo'
 import { Mutation as ApolloMutation } from 'react-apollo'
 import { unwindEdges } from './utils'
 
@@ -11,12 +17,17 @@ type Variables = {
 
 type MutationProps<Response> = {
 	mutation: DocumentNode,
-	children: (MutationFunction<Response>, MutationResult<Response>) => React.Node,
+	children: (
+		MutationFunction<Response>,
+		MutationResult<Response>,
+	) => React.Node,
 	variables?: Variables,
 	update?: (DataProxy, FetchResult<any>) => void,
 	ignoreResults?: boolean,
 	optimisticResponse?: void | {},
-	refetchQueries?: (FetchResult<any>) => Array<{ query: DocumentNode, variables?: {} }>,
+	refetchQueries?: (
+		FetchResult<any>,
+	) => Array<{ query: DocumentNode, variables?: {} }>,
 	awaitRefetchQueries?: boolean,
 	onCompleted?: void | ((any) => void),
 	onError?: void | ((ApolloError) => void),
@@ -24,7 +35,10 @@ type MutationProps<Response> = {
 
 type GenericResponse = { [key: string]: any }
 
-export const Mutation = <T: GenericResponse>({ children, ...mutationProps }: MutationProps<T>) => (
+export const Mutation = <T: GenericResponse>({
+	children,
+	...mutationProps
+}: MutationProps<T>) => (
 	<ApolloMutation {...mutationProps}>
 		{(mutate, { data, ...response }: MutationResult<T>) => {
 			const responseProps = {
@@ -47,8 +61,11 @@ Mutation.defaultProps = {
 	onError: undefined,
 }
 
-export type MutationWrapper<Response> = (props: MutationProps<Response>) => React.Element<typeof Mutation>
+export type MutationWrapper<Response> = (
+	props: MutationProps<Response>,
+) => React.Element<typeof Mutation>
 
-export const withDefaultMutation = <T: GenericResponse>(mutation: DocumentNode, options: MutationProps<T> | {} = {}) => (
-	props: any,
-) => <Mutation mutation={mutation} {...options} {...props} />
+export const withDefaultMutation = <T: GenericResponse>(
+	mutation: DocumentNode,
+	options: MutationProps<T> | {} = {},
+) => (props: any) => <Mutation mutation={mutation} {...options} {...props} />

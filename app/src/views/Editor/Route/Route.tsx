@@ -122,7 +122,9 @@ class RouteMain extends React.Component<RouteProps, RouteState> {
 		// { mouseOver && <RouteHoverPopup />}
 		return (
 			<React.Fragment>
-				{mouseOver && mouseLatLng && <RouteHoverPopup position={mouseLatLng} route={route} />}
+				{mouseOver && mouseLatLng && (
+					<RouteHoverPopup position={mouseLatLng} route={route} />
+				)}
 				<PolyLine events={this.eventHandlers} options={options} />
 			</React.Fragment>
 		)
@@ -137,7 +139,9 @@ export const Route = (props: BaseProps) => (
 	<MapConsumer>
 		{(contextValue) => (
 			<InspectorConsumer>
-				{({ inspectItem }) => <RouteMain {...props} {...contextValue} inspectItem={inspectItem} />}
+				{({ inspectItem }) => (
+					<RouteMain {...props} {...contextValue} inspectItem={inspectItem} />
+				)}
 			</InspectorConsumer>
 		)}
 	</MapConsumer>

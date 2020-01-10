@@ -90,7 +90,9 @@ export const EditableMedia = ({
 	const askForVideo = async () => {
 		const result = await ask({
 			message: 'Enter the URL of a Youtube or Vimeo Video',
-			render: (answer: () => Promise<void>) => <Prompt answer={answer} name="video" label="Video URL" type="url" />,
+			render: (answer: () => Promise<void>) => (
+				<Prompt answer={answer} name="video" label="Video URL" type="url" />
+			),
 		})
 		if (!result.video) return
 		submitUpdate({ [videoName]: result.video })
@@ -117,7 +119,12 @@ export const EditableMedia = ({
 					</ButtonWrapper>
 				) : null}
 				{image && enableImage ? (
-					<Image image={image} alt={alt} size={600} submitUpdate={submitUpdate} />
+					<Image
+						image={image}
+						alt={alt}
+						size={600}
+						submitUpdate={submitUpdate}
+					/>
 				) : video && enableVideo ? (
 					<Video video={video} submitUpdate={submitUpdate} />
 				) : null}

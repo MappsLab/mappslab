@@ -23,7 +23,9 @@ const Dot = styled.div`
 		margin-right: 5px;
 		border: 2px solid ${theme.color.primary.accent};
 		border-radius: 10px;
-		background-color: ${enabled ? theme.color.primary.normal : theme.color.primary.muted};
+		background-color: ${enabled
+			? theme.color.primary.normal
+			: theme.color.primary.muted};
 	`}
 `
 
@@ -47,7 +49,11 @@ export const DataLayerSelector = (props: ToolsProps) => {
 			{validLayers.map((layer) => (
 				<LayerButton onClick={toggle(layer.uid)} key={layer.uid}>
 					<Dot enabled={enabledLayers.includes(layer.uid)} />
-					<Header5 color={enabledLayers.includes(layer.uid) ? 'gray' : 'middleGray'}>{layer.title}</Header5>
+					<Header5
+						color={enabledLayers.includes(layer.uid) ? 'gray' : 'middleGray'}
+					>
+						{layer.title}
+					</Header5>
 				</LayerButton>
 			))}
 		</DataLayerSelectorPane>

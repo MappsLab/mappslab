@@ -9,10 +9,18 @@ type SearchConfig = {
 	defaults?: NestedObject
 }
 
-export const createObjectSearchByState = ({ chart, searchKey, defaults }: SearchConfig) => (values: NestedObject) => {
+export const createObjectSearchByState = ({
+	chart,
+	searchKey,
+	defaults,
+}: SearchConfig) => (values: NestedObject) => {
 	const getByPath = (paths) => path([...paths, searchKey])(chart)
 
-	const getOptions = (value: any, previousValues: {} = {}, parentPath: Array<string> = []) => {
+	const getOptions = (
+		value: any,
+		previousValues: {} = {},
+		parentPath: Array<string> = [],
+	) => {
 		if (typeof value === 'string') {
 			return {
 				...previousValues,

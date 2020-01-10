@@ -32,7 +32,8 @@ const config = {
 		if (viewer && jwt) {
 			const { token, expires } = jwt
 			const cookieExpiration = expires / 24 / 60 / 60
-			if (token) setCookie(VIEWER_COOKIE_TOKEN, token, { expires: cookieExpiration })
+			if (token)
+				setCookie(VIEWER_COOKIE_TOKEN, token, { expires: cookieExpiration })
 			// Instead of making another call for the ViewerQuery, write the results of it here
 			proxy.writeQuery({
 				query: currentViewerQuery,

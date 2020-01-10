@@ -16,8 +16,18 @@ const Wrapper = styled.div`
 		display: inline-flex;
 		justify-content: flex-start;
 		align-items: center;	
-		margin: ${size === 'large' ? theme.layout.spacing.half : theme.layout.spacing.half} 0;
-		padding: ${withBorders ? `0 ${size === 'large' ? theme.layout.spacing.single : theme.layout.spacing.half}` : ``};
+		margin: ${
+			size === 'large' ? theme.layout.spacing.half : theme.layout.spacing.half
+		} 0;
+		padding: ${
+			withBorders
+				? `0 ${
+						size === 'large'
+							? theme.layout.spacing.single
+							: theme.layout.spacing.half
+				  }`
+				: ``
+		};
 		background-color: ${active ? theme.color.primary.muted : 'white'};
 		border: ${withBorders ? `1px solid ${theme.color.primary.normal}` : ''};
 		border-radius: 2px;
@@ -39,7 +49,9 @@ interface TitleProps {
 const Title = styled.span`
 	${({ theme, size }: TitleProps) => `
 		font-size: ${size === 'small' ? theme.font.size.h5 : theme.font.size.h4};
-		font-weight: ${size === 'small' ? theme.font.weight.semi : theme.font.weight.semi};
+		font-weight: ${
+			size === 'small' ? theme.font.weight.semi : theme.font.weight.semi
+		};
 	`};
 `
 
@@ -71,7 +83,14 @@ interface Props {
 
 const noop = () => {}
 
-export const Chip = ({ title, subtitle, size: sizeProp, active, to, onClick: onClickProp }: Props) => {
+export const Chip = ({
+	title,
+	subtitle,
+	size: sizeProp,
+	active,
+	to,
+	onClick: onClickProp,
+}: Props) => {
 	const as = to
 		? // if 'to', use a Link
 		  Link

@@ -20,7 +20,13 @@ interface Props {
 }
 
 // $FlowFixMe -- Flow doesn't like us using the keyword 'Component' as a normal variable
-export const ViewerRoute = ({ render, children, component: Component, redirectTo, ...rest }: Props) => {
+export const ViewerRoute = ({
+	render,
+	children,
+	component: Component,
+	redirectTo,
+	...rest
+}: Props) => {
 	const { viewer, loading } = useCurrentViewer()
 	return (
 		<Route

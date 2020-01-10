@@ -13,7 +13,7 @@ export const query = gql/* GraphQL */ `
 `
 
 export type MapResponse = {
-	map: Map,
+	map: Map
 }
 
 const MapQuery: QueryWrapper<MapResponse> = withDefaultQuery(query)

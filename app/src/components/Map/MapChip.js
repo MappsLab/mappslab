@@ -13,7 +13,13 @@ type Props = ChipProps & {
 }
 
 const MapChip = ({ size, active, map, ...rest }: Props) => (
-	<Chip size={size || 'large'} active={active} title={map.title} subtitle={map.classroom && map.classroom.title} {...rest} />
+	<Chip
+		size={size || 'large'}
+		active={active}
+		title={map.title}
+		subtitle={map.classroom && map.classroom.title}
+		{...rest}
+	/>
 )
 
 export default MapChip

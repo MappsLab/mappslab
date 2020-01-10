@@ -53,9 +53,16 @@ const LogLine = styled.h4`
 	word-wrap: none;
 `
 
-const Property = ({ title, value }: { title: string, value: boolean | string }): React.Node => (
+const Property = ({
+	title,
+	value,
+}: {
+	title: string,
+	value: boolean | string,
+}): React.Node => (
 	<PropertyWrapper>
-		<Title>{title}:</Title> <Value isBoolean={typeof value === 'boolean'}>{value.toString()}</Value>
+		<Title>{title}:</Title>{' '}
+		<Value isBoolean={typeof value === 'boolean'}>{value.toString()}</Value>
 	</PropertyWrapper>
 )
 

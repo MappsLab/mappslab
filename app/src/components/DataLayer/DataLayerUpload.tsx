@@ -16,6 +16,13 @@ export const DataLayerUpload = (props: DataLayerUploadProps) => {
 	}
 
 	return (
-		<FileUpload name="kmlfile" label="Browse" disabled={submitting} icon={FaFolderOpen} accept=".kml" onSubmit={handleSubmit} />
+		<FileUpload
+			name="kmlfile"
+			label="Browse"
+			disabled={submitting}
+			icon={FaFolderOpen}
+			accept=".kml"
+			onSubmit={handleSubmit}
+		/>
 	)
 }

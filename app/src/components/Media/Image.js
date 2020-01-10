@@ -11,9 +11,12 @@ type Props = {
 	alt?: string,
 }
 
-const getSrc = (image, size) => `${config.imageBucketRoot}${getBestSize(image, size).uri}`
+const getSrc = (image, size) =>
+	`${config.imageBucketRoot}${getBestSize(image, size).uri}`
 
-const Image = ({ image, size, alt }: Props) => <img alt={alt || ''} src={getSrc(image, size)} />
+const Image = ({ image, size, alt }: Props) => (
+	<img alt={alt || ''} src={getSrc(image, size)} />
+)
 
 Image.defaultProps = {
 	alt: undefined,

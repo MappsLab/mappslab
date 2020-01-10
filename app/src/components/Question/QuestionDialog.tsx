@@ -48,7 +48,11 @@ const Message = styled.div`
 
 type QuestionDialogProps = QuestionContext
 
-const QuestionDialogBase = ({ currentQuestion, cancelQuestion, answer }: QuestionDialogProps) => {
+const QuestionDialogBase = ({
+	currentQuestion,
+	cancelQuestion,
+	answer,
+}: QuestionDialogProps) => {
 	if (!currentQuestion) return null
 	const { title: paneTitle, message, options, render } = currentQuestion
 	return (
@@ -77,5 +81,7 @@ const QuestionDialogBase = ({ currentQuestion, cancelQuestion, answer }: Questio
 }
 
 export const QuestionDialog = () => (
-	<QuestionConsumer>{(questionProps) => <QuestionDialogBase {...questionProps} />}</QuestionConsumer>
+	<QuestionConsumer>
+		{(questionProps) => <QuestionDialogBase {...questionProps} />}
+	</QuestionConsumer>
 )

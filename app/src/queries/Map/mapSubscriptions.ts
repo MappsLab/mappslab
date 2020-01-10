@@ -9,7 +9,10 @@ interface MapUpdatedResponse {
 	mapUpdated: { map: Map }
 }
 
-export const mapUpdated: SubscriptionConfig<MapResponse, MapUpdatedResponse> = ({ refetch }) => ({
+export const mapUpdated: SubscriptionConfig<
+	MapResponse,
+	MapUpdatedResponse
+> = ({ refetch }) => ({
 	name: 'mapUpdated',
 	document: gql`
 		subscription mapUpdated($mapUid: String!) {
@@ -21,7 +24,10 @@ export const mapUpdated: SubscriptionConfig<MapResponse, MapUpdatedResponse> = (
 		}
 		${mapFragment}
 	`,
-	updateQuery: (callback: SubscriptionCallback | false = false) => (previous, { subscriptionData }) => {
+	updateQuery: (callback: SubscriptionCallback | false = false) => (
+		previous,
+		{ subscriptionData },
+	) => {
 		refetch()
 		return previous
 		// console.log(previous, subscriptionData)
@@ -38,7 +44,10 @@ interface PinAddedResponse {
 	pinAddedToMap: { pin: Pin }
 }
 
-export const pinAddedToMap: SubscriptionConfig<MapResponse, PinAddedResponse> = {
+export const pinAddedToMap: SubscriptionConfig<
+	MapResponse,
+	PinAddedResponse
+> = {
 	name: 'pinAddedToMap',
 	document: gql`
 		subscription pinAddedToMap($mapUid: String!) {
@@ -50,12 +59,18 @@ export const pinAddedToMap: SubscriptionConfig<MapResponse, PinAddedResponse> = 
 		}
 		${pinFragment}
 	`,
-	updateQuery: (callback: SubscriptionCallback | false = false) => (previous, { subscriptionData }) => {
+	updateQuery: (callback: SubscriptionCallback | false = false) => (
+		previous,
+		{ subscriptionData },
+	) => {
 		const newPin = subscriptionData.data.pinAddedToMap.pin
 		const { edges } = previous.map.pins
 
 		// Create an updated array of edges
-		const newEdges = R.uniqBy(R.path(['node', 'uid']))([...edges, { node: newPin, __typename: 'PinEdge' }])
+		const newEdges = R.uniqBy(R.path(['node', 'uid']))([
+			...edges,
+			{ node: newPin, __typename: 'PinEdge' },
+		])
 		// update it into the previous map
 		const map = R.assocPath(['pins', 'edges'], newEdges)(previous.map)
 		if (callback) callback(previous, newPin)
@@ -82,7 +97,10 @@ export const pinUpdated: SubscriptionConfig<MapResponse, PinUpdatedResponse> = {
 		}
 		${pinFragment}
 	`,
-	updateQuery: (callback: SubscriptionCallback | false = false) => (previous, { subscriptionData }) => {
+	updateQuery: (callback: SubscriptionCallback | false = false) => (
+		previous,
+		{ subscriptionData },
+	) => {
 		const updatedPin = subscriptionData.data.pinUpdated
 		const { edges } = previous.map.pins
 		const updatedEdges = edges.map((e) =>
@@ -122,10 +140,15 @@ export const pinDeleted: SubscriptionConfig<MapResponse, PinDeletedResponse> = {
 		}
 		${pinFragment}
 	`,
-	updateQuery: (callback: SubscriptionCallback | false = false) => (previous, { subscriptionData }) => {
+	updateQuery: (callback: SubscriptionCallback | false = false) => (
+		previous,
+		{ subscriptionData },
+	) => {
 		const deletedPin = subscriptionData.data.pinDeleted.pin
 		const { edges } = previous.map.pins
-		const updatedEdges = edges.filter((edge) => edge.node.uid !== deletedPin.uid)
+		const updatedEdges = edges.filter(
+			(edge) => edge.node.uid !== deletedPin.uid,
+		)
 
 		const map = R.assocPath(['pins', 'edges'], updatedEdges)(previous.map)
 

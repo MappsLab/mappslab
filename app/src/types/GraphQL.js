@@ -56,7 +56,10 @@ type SubscribeToMoreOptions = {
 	variables: {},
 }
 
-export type StartSubscriptionOptions<PreviousResponse, ResponseData> = SubscriptionConfig<PreviousResponse, ResponseData> & {
+export type StartSubscriptionOptions<
+	PreviousResponse,
+	ResponseData,
+> = SubscriptionConfig<PreviousResponse, ResponseData> & {
 	variables?: {},
 	subscribeToMore: (SubscribeToMoreOptions) => Subscription,
 	callback?: SubscriptionCallback,

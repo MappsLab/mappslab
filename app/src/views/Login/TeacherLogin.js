@@ -45,7 +45,11 @@ const TeacherLogin = ({ teacherEmail, transition }: Props) => {
 						<Action
 							is={DISABLE_INPUT}
 							render={(disabled) => (
-								<Form disabled={isLoading || disabled} onSubmit={handleSubmit} initialValues={{ email: teacherEmail }}>
+								<Form
+									disabled={isLoading || disabled}
+									onSubmit={handleSubmit}
+									initialValues={{ email: teacherEmail }}
+								>
 									<Field label="Email" name="email" type="email" />
 								</Form>
 							)}

@@ -41,6 +41,8 @@ type Response = {
 	updateClassroom: ClassroomType,
 }
 
-const UpdateClassroomMutation: MutationWrapper<Response> = withDefaultMutation(mutation)
+const UpdateClassroomMutation: MutationWrapper<Response> = withDefaultMutation(
+	mutation,
+)
 
 export default UpdateClassroomMutation

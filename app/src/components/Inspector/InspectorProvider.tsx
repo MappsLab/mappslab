@@ -27,7 +27,8 @@ const InspectorContext = React.createContext<ContextType | undefined>(undefined)
 
 export const useInspector = () => {
 	const ctx = useContext(InspectorContext)
-	if (!ctx) throw new Error('`useInspector` must be used within a InspectorProvider')
+	if (!ctx)
+		throw new Error('`useInspector` must be used within a InspectorProvider')
 	return ctx
 }
 
@@ -56,7 +57,9 @@ type State = {
 	inspectorHistory: Array<InspectorItem>
 }
 
-const getItemFromQueryString = (locationSearch: string): InspectorItem | null => {
+const getItemFromQueryString = (
+	locationSearch: string,
+): InspectorItem | null => {
 	if (!locationSearch.length) return null
 	const { inspect } = parseQueryString(decodeURI(locationSearch))
 	if (!inspect) return null
@@ -97,13 +100,18 @@ class InspectorProviderBase extends React.Component<Props, State> {
 	}
 
 	inspectItem = async (nextItem: InspectorItem) => {
-		await this.setState(({ inspectorHistory }) => ({ inspectorHistory: [...inspectorHistory, nextItem] }))
+		await this.setState(({ inspectorHistory }) => ({
+			inspectorHistory: [...inspectorHistory, nextItem],
+		}))
 		this.updateLocation(nextItem)
 	}
 
 	goBackTo = async (item: InspectorItem) => {
 		await this.setState(({ inspectorHistory }) => {
-			const index = findLastIndex<InspectorItem>(inspectorHistory, (i) => i.uid === item.uid)
+			const index = findLastIndex<InspectorItem>(
+				inspectorHistory,
+				(i) => i.uid === item.uid,
+			)
 			return {
 				inspectorHistory: inspectorHistory.slice(0, index + 1),
 			}
@@ -116,7 +124,8 @@ class InspectorProviderBase extends React.Component<Props, State> {
 		const { __typename, uid, title, name } = item
 		const { inspect, ...searchParams } = parseQueryString(location.search)
 		const label = title || name
-		if (!label) throw new Error('The current item does not have a name or a title')
+		if (!label)
+			throw new Error('The current item does not have a name or a title')
 		const newQueryString = buildQueryString({
 			inspect: `${__typename}-${uid}-${label}`,
 			...searchParams,

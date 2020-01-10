@@ -23,7 +23,14 @@ interface Props extends BaseProps {
 	createClassroom: Mutation
 }
 
-const UserInspectorMain = ({ user, viewer, updateUser, inspectItem, userQueryConfig, createClassroom }: Props) => {
+const UserInspectorMain = ({
+	user,
+	viewer,
+	updateUser,
+	inspectItem,
+	userQueryConfig,
+	createClassroom,
+}: Props) => {
 	const updateUserClassrooms = (classroom) => {
 		const variables = {
 			input: {
@@ -44,7 +51,10 @@ const UserInspectorMain = ({ user, viewer, updateUser, inspectItem, userQueryCon
 		createClassroom({ variables, refetchQueries: [userQueryConfig] })
 	}
 
-	const classrooms = user.classrooms && user.classrooms.edges.length ? unwindEdges(user.classrooms)[0] : []
+	const classrooms =
+		user.classrooms && user.classrooms.edges.length
+			? unwindEdges(user.classrooms)[0]
+			: []
 
 	return (
 		<React.Fragment>
@@ -60,7 +70,10 @@ const UserInspectorMain = ({ user, viewer, updateUser, inspectItem, userQueryCon
 	)
 }
 
-export const UserInspector = ({ uid, ...baseProps }: BaseProps & { uid: string }) => (
+export const UserInspector = ({
+	uid,
+	...baseProps
+}: BaseProps & { uid: string }) => (
 	<CreateClassroomMutation>
 		{(createClassroom) => (
 			<UpdateUserMutation>

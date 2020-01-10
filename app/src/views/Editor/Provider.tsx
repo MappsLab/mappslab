@@ -4,7 +4,14 @@ import { withStateMachine, MachineState } from 'react-automata'
 import { MapQuery } from '../../queries'
 import CreatePinMutation from '../../queries/Pin/createPinMutation'
 import { CurrentViewerConsumer } from '../../providers/CurrentViewer'
-import { Pin, Map, Route, Viewer, Mutation, SubscriptionConfig } from '../../types-ts'
+import {
+	Pin,
+	Map,
+	Route,
+	Viewer,
+	Mutation,
+	SubscriptionConfig,
+} from '../../types-ts'
 import { getOptionsForState } from './mapOptions'
 import statechart from './statechart'
 
@@ -51,7 +58,9 @@ export type ProviderProps = Utils & {
 	// TODO: remove the below after converting mapp to TS - these are included in
 	// the 'Utils' provided by Mapp
 	addEventListeners: (listeners: { [key: string]: (args: any) => void }) => void
-	removeEventListeners: (listeners: { [key: string]: (args: any) => void }) => void
+	removeEventListeners: (listeners: {
+		[key: string]: (args: any) => void
+	}) => void
 	setBaseImage: (args: any) => void
 	setZoom: (z: number) => void
 	getZoom: () => number
@@ -72,7 +81,9 @@ export type ProviderProps = Utils & {
 // 	machineState: 'none',
 // }
 
-const { Provider, Consumer } = React.createContext<ProviderProps | undefined>(undefined)
+const { Provider, Consumer } = React.createContext<ProviderProps | undefined>(
+	undefined,
+)
 export const MapConsumer = Consumer
 
 class MapProviderClass extends React.Component<Props, State> {
@@ -116,7 +127,14 @@ class MapProviderClass extends React.Component<Props, State> {
 	}
 
 	render() {
-		const { children, utils, transition, machineState, inspectedItem, connectToPin } = this.props
+		const {
+			children,
+			utils,
+			transition,
+			machineState,
+			inspectedItem,
+			connectToPin,
+		} = this.props
 		const { mapUid, userLatLng } = this.state
 		const value = {
 			inspectedItem,
@@ -134,7 +152,10 @@ class MapProviderClass extends React.Component<Props, State> {
 					<CurrentViewerConsumer>
 						{({ viewer }) => {
 							return (
-								<MapQuery variables={{ uid: mapUid }} delayQuery={mapUid === null}>
+								<MapQuery
+									variables={{ uid: mapUid }}
+									delayQuery={mapUid === null}
+								>
 									{({ data: mapQueryData, subscribeToMore, ...rest }) => (
 										<Provider
 											value={{

@@ -17,15 +17,19 @@ const VIMEO_MATCH_RE = /^(?:\/video|\/channels\/[\w-]+|\/groups\/[\w-]+\/videos)
 
 const getVideoType = (url: ParsedURL): VideoType => {
 	if (url.hostname.indexOf('vimeo.com') > -1) return VIMEO
-	if (url.hostname.indexOf('youtube.com') > -1 || url.hostname === 'youtu.be') return YOUTUBE
+	if (url.hostname.indexOf('youtube.com') > -1 || url.hostname === 'youtu.be')
+		return YOUTUBE
 	if (url.hostname.indexOf('dailymotion.com') > -1) return DAILYMOTION
-	throw new Error(`URL "${url.href}" is not a Youtube, Vimeo, or DailyMotion video`)
+	throw new Error(
+		`URL "${url.href}" is not a Youtube, Vimeo, or DailyMotion video`,
+	)
 }
 
 const getVideoId = (type: VideoType, url: ParsedURL): string => {
 	if (type === VIMEO) {
 		const match = VIMEO_MATCH_RE.exec(url.pathname)
-		if (!match || !match[1]) throw new Error(`No match for vimeo url ${url.pathname}`)
+		if (!match || !match[1])
+			throw new Error(`No match for vimeo url ${url.pathname}`)
 		return match[1]
 	}
 	if (type === YOUTUBE) {
@@ -80,7 +84,8 @@ export type VideoInfo = {
 
 export const getVideoInfo = (url: string): VideoInfo => {
 	const parsedURL = parseUrl(url, true)
-	if (!parsedURL || !parsedURL.hostname || !parsedURL.pathname) throw new Error('!!')
+	if (!parsedURL || !parsedURL.hostname || !parsedURL.pathname)
+		throw new Error('!!')
 	if (parsedURL.hostname === undefined) throw new Error('?')
 	const type = getVideoType(parsedURL)
 	const id = getVideoId(type, parsedURL)

@@ -34,11 +34,21 @@ const Loader = (props: Props) => {
 	const renderInner = () => {
 		switch (__typename.toLowerCase()) {
 			case 'user':
-				return <UserInspector uid={uid} viewer={viewer} inspectItem={inspectItem} />
+				return (
+					<UserInspector uid={uid} viewer={viewer} inspectItem={inspectItem} />
+				)
 			case 'classroom':
-				return <ClassroomInspector viewer={viewer} uid={uid} inspectItem={inspectItem} />
+				return (
+					<ClassroomInspector
+						viewer={viewer}
+						uid={uid}
+						inspectItem={inspectItem}
+					/>
+				)
 			case 'map':
-				return <MapInspector viewer={viewer} uid={uid} inspectItem={inspectItem} />
+				return (
+					<MapInspector viewer={viewer} uid={uid} inspectItem={inspectItem} />
+				)
 			default:
 				throw new Error(`There is no inspector for type "${__typename}"`)
 		}

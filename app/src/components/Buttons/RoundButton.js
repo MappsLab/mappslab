@@ -40,7 +40,14 @@ type BaseProps = {
 	size: 'normal' | 'large',
 }
 
-const RoundButtonBase = ({ onClick, isActive, label, disabled, icon, size }: BaseProps) => (
+const RoundButtonBase = ({
+	onClick,
+	isActive,
+	label,
+	disabled,
+	icon,
+	size,
+}: BaseProps) => (
 	<Wrapper size={size} onClick={onClick} active={isActive} disabled={disabled}>
 		<span role="img" aria-label={label}>
 			{icon}

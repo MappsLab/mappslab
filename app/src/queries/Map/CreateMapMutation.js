@@ -34,6 +34,8 @@ type Response = {
 	updateMap: MapType,
 }
 
-const CreateMapMutation: MutationWrapper<Response> = withDefaultMutation(mutation)
+const CreateMapMutation: MutationWrapper<Response> = withDefaultMutation(
+	mutation,
+)
 
 export default CreateMapMutation

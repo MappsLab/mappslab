@@ -27,7 +27,13 @@ type Props = BaseProps & {
 	question: QuestionContext,
 }
 
-const PinMedia = ({ pin, viewerCanEdit, submitUpdate, alt, question }: Props) => {
+const PinMedia = ({
+	pin,
+	viewerCanEdit,
+	submitUpdate,
+	alt,
+	question,
+}: Props) => {
 	// this is kind of bad. here we're getting the 'middle' image. Instead, make a `getImageBySize` which gets the best match
 	if (!viewerCanEdit && !pin.image) return null
 
@@ -38,7 +44,9 @@ const PinMedia = ({ pin, viewerCanEdit, submitUpdate, alt, question }: Props) =>
 	const askForVideo = async () => {
 		const result = await question.ask({
 			message: 'Enter the URL of a Youtube or Vimeo Video',
-			render: (answer) => <Prompt answer={answer} name="video" label="Video URL" type="url" />,
+			render: (answer) => (
+				<Prompt answer={answer} name="video" label="Video URL" type="url" />
+			),
 		})
 		const { video } = result
 		if (!video) return
@@ -64,10 +72,18 @@ const PinMedia = ({ pin, viewerCanEdit, submitUpdate, alt, question }: Props) =>
 				</ButtonWrapper>
 			)}
 			{pin.image ? (
-				<img alt={alt} src={`${config.imageBucketRoot}${getBestSize(pin.image, 600).uri}`} />
+				<img
+					alt={alt}
+					src={`${config.imageBucketRoot}${getBestSize(pin.image, 600).uri}`}
+				/>
 			) : pin.video ? (
 				<VideoFrame>
-					<iframe title={pin.title} src={getVideoSrc(pin.video).src} width="100%" height="100%" />
+					<iframe
+						title={pin.title}
+						src={getVideoSrc(pin.video).src}
+						width="100%"
+						height="100%"
+					/>
 				</VideoFrame>
 			) : null}
 		</MediaWrapper>
@@ -87,5 +103,7 @@ PinMedia.defaultProps = {
 }
 
 export default (baseProps: BaseProps) => (
-	<QuestionConsumer>{(question) => <PinMedia {...baseProps} question={question} />}</QuestionConsumer>
+	<QuestionConsumer>
+		{(question) => <PinMedia {...baseProps} question={question} />}
+	</QuestionConsumer>
 )

@@ -5,7 +5,11 @@ import { Header4 } from '../../components/Text'
 import { Form, Field } from '../../components/Forms'
 import { ResetPasswordMutation } from '../../queries/User'
 import { SUCCESS, LOGOUT } from './statechart'
-import { useCurrentViewer, Credentials, ResetCredentials } from '../../providers/CurrentViewer'
+import {
+	useCurrentViewer,
+	Credentials,
+	ResetCredentials,
+} from '../../providers/CurrentViewer'
 
 /**
  * SetNewPassword
@@ -31,9 +35,18 @@ const SetNewPassword = ({ transition }: Props) => {
 	}
 
 	return (
-		<Form disabled={loading} onSubmit={handleSubmit} initialValues={{ resetToken }}>
+		<Form
+			disabled={loading}
+			onSubmit={handleSubmit}
+			initialValues={{ resetToken }}
+		>
 			<Header4>Create a new password</Header4>
-			<Field label="resetToken" name="resetToken" type="hidden" value="resetPasswordToken" />
+			<Field
+				label="resetToken"
+				name="resetToken"
+				type="hidden"
+				value="resetPasswordToken"
+			/>
 			<Field label="New Password" name="password" type="password" />
 		</Form>
 	)

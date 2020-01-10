@@ -15,7 +15,8 @@ type MapEvent<EventType> = {
 export const mapEvents = {
 	Welcome: {
 		keyup: ({ payload, props }: MapEvent<KeyboardEvent>) => {
-			const transition = payload.key === 'Enter' ? () => props.transition('enterLesson') : null
+			const transition =
+				payload.key === 'Enter' ? () => props.transition('enterLesson') : null
 			return {
 				actions: {
 					transition,
@@ -44,7 +45,10 @@ export const mapEvents = {
 		DropPin: {
 			DropMode: {
 				keyup: ({ payload, props }: MapEvent<KeyboardEvent>) => {
-					const transition = payload.key === 'Escape' || payload.key === ' ' ? () => props.transition('enterLesson') : null
+					const transition =
+						payload.key === 'Escape' || payload.key === ' '
+							? () => props.transition('enterLesson')
+							: null
 					return transition
 						? {
 								actions: {
@@ -54,7 +58,14 @@ export const mapEvents = {
 						: null
 				},
 				onClick: ({ payload, props }: MapEvent<MouseEvent>) => {
-					const { createPin, mapUid, lessonUid, transition, connectToPin, inspectItem } = props
+					const {
+						createPin,
+						mapUid,
+						lessonUid,
+						transition,
+						connectToPin,
+						inspectItem,
+					} = props
 					const createNewPin = async () => {
 						const addToRoute = connectToPin
 							? {
@@ -73,7 +84,9 @@ export const mapEvents = {
 						}
 						const result = await createPin({
 							variables,
-							refetchQueries: [{ query: mapQuery, variables: { uid: props.mapData.uid } }],
+							refetchQueries: [
+								{ query: mapQuery, variables: { uid: props.mapData.uid } },
+							],
 						})
 						const newPin = result.data.createPin
 
@@ -110,7 +123,10 @@ export const mapEvents = {
 		},
 		Inspect: {
 			keyup: ({ payload, props }: MapEvent<KeyboardEvent>) => {
-				const transition = payload.key === 'Escape' ? () => props.transition('close', { inspectedItem: null }) : null
+				const transition =
+					payload.key === 'Escape'
+						? () => props.transition('close', { inspectedItem: null })
+						: null
 				return {
 					actions: {
 						transition,

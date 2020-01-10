@@ -7,10 +7,10 @@ import { RoundButton } from 'Components/Buttons'
  */
 
 type Props = {
-	onClick: () => void,
-	isActive?: boolean,
-	disabled?: boolean,
-	direction: 'in' | 'out',
+	onClick: () => void
+	isActive?: boolean
+	disabled?: boolean
+	direction: 'in' | 'out'
 }
 
 const ZoomButton = ({ direction, ...rest }: Props) => (

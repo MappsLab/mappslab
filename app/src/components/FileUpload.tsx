@@ -31,9 +31,20 @@ interface Props {
 	icon?: React.ComponentType<any>
 }
 
-export const FileUpload = ({ onSubmit, validate, disabled, multiple, name, accept, label, icon }: Props) => {
+export const FileUpload = ({
+	onSubmit,
+	validate,
+	disabled,
+	multiple,
+	name,
+	accept,
+	label,
+	icon,
+}: Props) => {
 	const [isLoading, setIsLoading] = useState(false)
-	const [validationError, setValidationError] = useState<void | string>(undefined)
+	const [validationError, setValidationError] = useState<void | string>(
+		undefined,
+	)
 
 	const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
 		if (!e || !e.target || !e.target.files) return
@@ -52,7 +63,12 @@ export const FileUpload = ({ onSubmit, validate, disabled, multiple, name, accep
 	const Icon = icon
 	return (
 		<Wrapper>
-			<Button as="label" disabled={disabled || isLoading} htmlFor={name} level="tertiary">
+			<Button
+				as="label"
+				disabled={disabled || isLoading}
+				htmlFor={name}
+				level="tertiary"
+			>
 				{Icon ? (
 					<React.Fragment>
 						<Icon />{' '}
@@ -60,8 +76,18 @@ export const FileUpload = ({ onSubmit, validate, disabled, multiple, name, accep
 				) : null}
 				{isLoading ? 'Loading..' : label}
 			</Button>
-			<Input type="file" accept={accept} id={name} name={name} required onChange={handleChange} multiple={multiple} />
-			{validationError ? <ValidationError>{validationError}</ValidationError> : null}
+			<Input
+				type="file"
+				accept={accept}
+				id={name}
+				name={name}
+				required
+				onChange={handleChange}
+				multiple={multiple}
+			/>
+			{validationError ? (
+				<ValidationError>{validationError}</ValidationError>
+			) : null}
 		</Wrapper>
 	)
 }

@@ -44,11 +44,19 @@ const StudentLogin = ({ transition, classroomUid }: Props) => {
 
 	return (
 		<div>
-			<State is={SELECT_CLASSROOM} render={() => <LiveClassroomSelector onSelect={selectClassroom} />} />
+			<State
+				is={SELECT_CLASSROOM}
+				render={() => <LiveClassroomSelector onSelect={selectClassroom} />}
+			/>
 			<State
 				is={SELECT_STUDENT}
 				render={(active) => (
-					<UserSelector delayQuery={!active} disabled={!active} onSelect={selectUser} variables={userVariables} />
+					<UserSelector
+						delayQuery={!active}
+						disabled={!active}
+						onSelect={selectUser}
+						variables={userVariables}
+					/>
 				)}
 			/>
 		</div>

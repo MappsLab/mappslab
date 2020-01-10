@@ -31,7 +31,10 @@ const MyComponent = () => (
 					onClick={async () => {
 						const answer = await ask({
 							message: 'are you sure?',
-							options: [{ title: 'YES', returnValue: true }, { title: 'NO', returnValue: false }],
+							options: [
+								{ title: 'YES', returnValue: true },
+								{ title: 'NO', returnValue: false },
+							],
 						})
 						console.log(answer)
 					}}

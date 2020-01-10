@@ -51,6 +51,8 @@ type ViewerResponse = {
 	viewer: ViewerType,
 }
 
-const ViewerClassroomsQuery: QueryWrapper<ViewerResponse> = withDefaultQuery(query)
+const ViewerClassroomsQuery: QueryWrapper<ViewerResponse> = withDefaultQuery(
+	query,
+)
 
 export default ViewerClassroomsQuery

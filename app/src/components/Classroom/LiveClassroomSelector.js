@@ -17,7 +17,11 @@ type Props = {
 // @todo Abstract the query implementation into LiveSelector
 
 const LiveClassroomSelector = ({ disabled, delayQuery, onSelect }: Props) => (
-	<ClassroomsQuery variables={{ first: 25 }} delayQuery={delayQuery} LoadingComponent={false}>
+	<ClassroomsQuery
+		variables={{ first: 25 }}
+		delayQuery={delayQuery}
+		LoadingComponent={false}
+	>
 		{({ data, refetch }) => {
 			const refetchQuery = (input: string) => {
 				if (input.length < 3) {
@@ -32,11 +36,16 @@ const LiveClassroomSelector = ({ disabled, delayQuery, onSelect }: Props) => (
 					},
 				})
 			}
-			const classrooms = data && data.classrooms && data.classrooms.edges ? unwindEdges(data.classrooms)[0] : []
+			const classrooms =
+				data && data.classrooms && data.classrooms.edges
+					? unwindEdges(data.classrooms)[0]
+					: []
 			const items = classrooms.map((c) => ({
 				value: c.uid,
 				label: c.title,
-				render: ({ highlighted, selected }) => <SelectorItem title={c.title} active={highlighted || selected} />,
+				render: ({ highlighted, selected }) => (
+					<SelectorItem title={c.title} active={highlighted || selected} />
+				),
 			}))
 			return (
 				<LiveSelector

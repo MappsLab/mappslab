@@ -67,6 +67,9 @@ const config = {
 	},
 }
 
-const CurrentViewerQuery: QueryWrapper<ViewerResponse> = withDefaultQuery(query, config)
+const CurrentViewerQuery: QueryWrapper<ViewerResponse> = withDefaultQuery(
+	query,
+	config,
+)
 
 export default CurrentViewerQuery

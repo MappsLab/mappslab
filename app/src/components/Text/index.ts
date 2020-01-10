@@ -8,7 +8,13 @@ interface TextProps {
 	fontStyle?: string
 }
 
-const commonTextStyles = ({ theme, align, weight, color, fontStyle }: TextProps) => css`
+const commonTextStyles = ({
+	theme,
+	align,
+	weight,
+	color,
+	fontStyle,
+}: TextProps) => css`
 	font-family: ${theme.font.family.sans};
 	font-weight: ${weight ? theme.font.weight[weight] : theme.font.weight.semi};
 	text-align: ${align || 'left'};

@@ -26,14 +26,29 @@ export const Field = (props: Props) => {
 			render={({ input, meta }) => (
 				<FieldWrapper hidden={props.type === 'hidden'}>
 					{props.label && (
-						<Label active={meta.active} aria-labelledby={input.name} htmlFor={input.name} required={props.required}>
+						<Label
+							active={meta.active}
+							aria-labelledby={input.name}
+							htmlFor={input.name}
+							required={props.required}
+						>
 							{props.label}
 						</Label>
 					)}
-					<Input id={input.name} {...input} type={props.type} active={meta.active} required={props.required} />
+					<Input
+						id={input.name}
+						{...input}
+						type={props.type}
+						active={meta.active}
+						required={props.required}
+					/>
 					<HelpText>{props.helpText}</HelpText>
-					{meta.error && meta.touched ? <ValidationError>{meta.error}</ValidationError> : null}
-					{meta.submitError && !meta.dirtySinceLastSubmit ? <ValidationError>{meta.submitError}</ValidationError> : null}
+					{meta.error && meta.touched ? (
+						<ValidationError>{meta.error}</ValidationError>
+					) : null}
+					{meta.submitError && !meta.dirtySinceLastSubmit ? (
+						<ValidationError>{meta.submitError}</ValidationError>
+					) : null}
 				</FieldWrapper>
 			)}
 		/>

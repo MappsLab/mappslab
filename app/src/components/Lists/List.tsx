@@ -39,9 +39,12 @@ export const List = ({
 	onSearchResultClick,
 	searchResults,
 }: Props) => {
-	const itemToListItem = (node) => nodeToListItem(node, onItemClick || defaultOnItemClick)
+	const itemToListItem = (node) =>
+		nodeToListItem(node, onItemClick || defaultOnItemClick)
 	if (viewerCanAdd && (!search || !onSearchResultClick || !create))
-		throw new Error('You must provide `search`, `onSearchResultClick`, and `create` functions')
+		throw new Error(
+			'You must provide `search`, `onSearchResultClick`, and `create` functions',
+		)
 	return (
 		<ListWrapper>
 			<ListTitle>

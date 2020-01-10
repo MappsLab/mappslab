@@ -27,7 +27,9 @@ const PinInspector = ({ pin, viewer, updatePin, deletePin, mapUid }: Props) => {
 	const { ask } = useQuestion()
 	const [editMode, setEditMode] = useState(false)
 
-	const viewerIsOwner = Boolean(viewer && pin.owner && pin.owner.uid === viewer.uid)
+	const viewerIsOwner = Boolean(
+		viewer && pin.owner && pin.owner.uid === viewer.uid,
+	)
 	const canEdit = Boolean(viewerIsOwner && editMode)
 
 	const enterEdit = () => setEditMode(true)
@@ -41,7 +43,10 @@ const PinInspector = ({ pin, viewer, updatePin, deletePin, mapUid }: Props) => {
 			...args,
 		}
 
-		updatePin({ variables, refetchQueries: [{ query: mapQuery, variables: { uid: mapUid } }] })
+		updatePin({
+			variables,
+			refetchQueries: [{ query: mapQuery, variables: { uid: mapUid } }],
+		})
 	}
 
 	const removePin = async () => {
@@ -84,7 +89,12 @@ const PinInspector = ({ pin, viewer, updatePin, deletePin, mapUid }: Props) => {
 				initialValue={pin.description}
 				viewerCanEdit={canEdit}
 			/>
-			<EditableMedia submitUpdate={submitUpdate} image={pin.image} video={pin.video} viewerCanEdit={canEdit} />
+			<EditableMedia
+				submitUpdate={submitUpdate}
+				image={pin.image}
+				video={pin.video}
+				viewerCanEdit={canEdit}
+			/>
 			{viewerIsOwner && canEdit === false ? (
 				<NativeListener onClick={enterEdit}>
 					<Button level="tertiary">
@@ -118,7 +128,13 @@ const PinInspectorWrapper = (baseProps: BaseProps) => (
 	<UpdatePinMutation>
 		{(updatePin) => (
 			<DeletePinMutation>
-				{(deletePin) => <PinInspector {...baseProps} deletePin={deletePin} updatePin={updatePin} />}
+				{(deletePin) => (
+					<PinInspector
+						{...baseProps}
+						deletePin={deletePin}
+						updatePin={updatePin}
+					/>
+				)}
 			</DeletePinMutation>
 		)}
 	</UpdatePinMutation>

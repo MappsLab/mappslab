@@ -2,7 +2,10 @@ import * as R from 'ramda'
 
 export const objEquals = R.equals
 
-export const findLastIndex = <T>(array: Array<T>, fn: (T) => boolean): number => {
+export const findLastIndex = <T>(
+	array: Array<T>,
+	fn: (T) => boolean,
+): number => {
 	const reverseIndex = [...array].reverse().findIndex(fn)
 	return array.length - reverseIndex - 1
 }
@@ -19,7 +22,8 @@ export const findNextInArray = <T>(array: T[], item: T): T | void => {
 
 export const arrayify = R.flatten
 
-export const minMax = (min: number, max: number) => (num: number): number => Math.min(Math.max(num, min), max)
+export const minMax = (min: number, max: number) => (num: number): number =>
+	Math.min(Math.max(num, min), max)
 
 export const propByPath = (path: string | string[], obj: object) => {
 	const propPath = typeof path === 'string' ? path.split('.') : path
@@ -30,14 +34,18 @@ export const propByPath = (path: string | string[], obj: object) => {
 /**
  * Push an item to an array within an object
  */
-export const pushPath = (path: Array<string>, item: any) => (target: Object) => {
+export const pushPath = (path: Array<string>, item: any) => (
+	target: Object,
+) => {
 	// const arr: any[] = R.path(path)(target) || []
 	const arr = propByPath(path, target)
-	if (!Array.isArray(arr)) throw new Error(`Prop ${path} on this object is not an array`)
+	if (!Array.isArray(arr))
+		throw new Error(`Prop ${path} on this object is not an array`)
 	return R.assocPath(path, [...arr, item])(target)
 }
 
-export const compose = (...funcs: Array<Function>) => funcs.reduce((a, b) => (...args: any) => a(b(...args)), (arg) => arg)
+export const compose = (...funcs: Array<Function>) =>
+	funcs.reduce((a, b) => (...args: any) => a(b(...args)), (arg) => arg)
 
 /** Statechart Helpers */
 
@@ -54,13 +62,25 @@ export const getStateString = (value: MachineValue | string): string =>
 		? value
 		: Object.entries(value)
 				// $FlowFixMe
-				.reduce((acc, [key, val]: [string, MachineValue]) => [...acc, key, getStateString(val)], [])
+				.reduce(
+					(acc, [key, val]: [string, MachineValue]) => [
+						...acc,
+						key,
+						getStateString(val),
+					],
+					[],
+				)
 				.join('.')
 
-export const traceObject = (object: any, path: MachineValue | string = '', searchKey: string) => {
+export const traceObject = (
+	object: any,
+	path: MachineValue | string = '',
+	searchKey: string,
+) => {
 	const [prop, nextPath] = getStateString(path).split(/\.(.*)/)
 	const value = searchKey in object ? object[searchKey] : undefined
-	const nextLevel = prop in object ? traceObject(object[prop], nextPath, searchKey) : []
+	const nextLevel =
+		prop in object ? traceObject(object[prop], nextPath, searchKey) : []
 	return [value, ...nextLevel].filter(Boolean)
 }
 
