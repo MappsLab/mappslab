@@ -79,6 +79,12 @@ const config = convict({
 			default: 'tiles',
 			env: 'AWS_TILE_IMAGE_DIR',
 		},
+		kmlDirectory: {
+			doc: 'AWS Bucket KML Directory',
+			format: String,
+			default: 'kml',
+			env: 'AWS_BUCKET_KML_DIR',
+		},
 	},
 })
 

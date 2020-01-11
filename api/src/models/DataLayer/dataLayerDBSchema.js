@@ -1,7 +1,6 @@
 // @flow
 import Joi from '@hapi/joi'
 // import { merge } from 'ramda'
-import type { DataLayerType } from 'Types/TileTypes'
 
 /**
  * Schema
@@ -9,8 +8,8 @@ import type { DataLayerType } from 'Types/TileTypes'
 
 export const dataLayerSchema = () =>
 	Joi.object().keys({
-		url: Joi.string()
-			.uri()
+		uri: Joi.string()
+			.regex(/\.kml$/)
 			.required(),
 		title: Joi.string().required(),
 		type: Joi.any()
@@ -28,7 +27,7 @@ export const validateNew = (data: NewDataLayerData) =>
 export const publicFields = [
 	//
 	'uid',
-	'url',
+	'uri',
 	'title',
 	'deleted',
 ].join('\n')

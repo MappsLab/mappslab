@@ -63,8 +63,16 @@ export const dataLayers = async (
 	const fetchedDataLayers = await ctx.models.DataLayer.getDataLayers(
 		mergedInput,
 	)
+	console.log(fetchedDataLayers)
 
-	return assemblePage(fetchedDataLayers, input)
+	return assemblePage(
+		// TODO: this filters out datalayers with no URI (from the old URL input).
+		// This will be safe to revert once existing data layers without URIs
+		// are removed from the databases
+		fetchedDataLayers.filter((dl) => Boolean(dl.uri)),
+		// fetchedDataLayers,
+		input,
+	)
 }
 
 export const baseImage = async (

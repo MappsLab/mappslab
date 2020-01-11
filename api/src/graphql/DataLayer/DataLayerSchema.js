@@ -3,7 +3,7 @@
 const DataLayer = /* GraphQL */ `
 	type DataLayer implements Node {
 		uid: String!
-		url: String!
+		uri: String!
 		title: String!
 	}
 
@@ -18,7 +18,7 @@ const DataLayer = /* GraphQL */ `
 	}
 
 	input DataLayerInput {
-		url: String!
+		kml: Upload!
 		title: String!
 	}
 `
