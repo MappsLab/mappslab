@@ -12,6 +12,15 @@ const imageBucketRoot =
 		? 'http://mappslab-beta.localhost:4572/'
 		: 'https://mappslab-beta.s3.amazonaws.com/'
 
+// TODO: This doesn't actually work on localhost, the KML must
+// be on a public URL.
+// For now, use ngrok and update the dev URL below.
+
+const dataLayerRoot =
+	process.env.AWS_BUCKET_ROOT || process.env.NODE_ENV === 'development'
+		? 'http://mappslab-beta.localhost:4572/'
+		: 'https://mappslab-beta.s3.amazonaws.com/'
+
 /** Staging */
 // const apiRoot = 'https://mappslab-api-staging.now.sh/graphql'
 // const wsUri = 'wss://mappslab-api-staging.now.sh/graphql'
@@ -21,4 +30,5 @@ export default {
 	apiRoot,
 	wsUri,
 	imageBucketRoot,
+	dataLayerRoot,
 }

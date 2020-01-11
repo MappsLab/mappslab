@@ -5,12 +5,6 @@ import { DataLayerSelectorPane } from './Toolbar'
 import { ToolsProps } from './Tools'
 import { Header5 } from '../../../components/Text'
 
-const LayerButton = styled.button`
-	display: flex;
-	justify-content: flex-start;
-	align-items: flex-center;
-`
-
 interface DotProps {
 	theme: DefaultTheme
 	enabled: boolean
@@ -32,7 +26,7 @@ const Dot = styled.div`
 export const DataLayerSelector = (props: ToolsProps) => {
 	const { enableLayer, enabledLayers, disableLayer } = props
 	const [layers] = unwindEdges(props.mapData.dataLayers)
-	const validLayers = layers.filter((l) => /\.kml$/.test(l.url))
+	const validLayers = layers.filter((l) => /\.kml$/.test(l.uri))
 
 	const toggle = (uid: string) => () => {
 		if (enabledLayers.includes(uid)) {
@@ -59,3 +53,9 @@ export const DataLayerSelector = (props: ToolsProps) => {
 		</DataLayerSelectorPane>
 	)
 }
+
+const LayerButton = styled.button`
+	display: flex;
+	justify-content: flex-start;
+	align-items: flex-center;
+`

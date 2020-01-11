@@ -11,7 +11,7 @@ interface DataLayerUploadProps {
 }
 
 interface KMLUploadFormData {
-	kmlfile: File
+	kml: File
 }
 
 export const DataLayerUpload = ({
@@ -20,16 +20,16 @@ export const DataLayerUpload = ({
 }: DataLayerUploadProps) => {
 	const [submitting, setSubmitting] = useState(false)
 
-	const handleSubmit = async ({ kmlfile }: KMLUploadFormData) => {
+	const handleSubmit = async ({ kml }: KMLUploadFormData) => {
 		setSubmitting(true)
-		await handleUpload(kmlfile)
+		await handleUpload(kml)
 		setSubmitting(false)
 		onComplete()
 	}
 
 	return (
 		<FileUpload
-			name="kmlfile"
+			name="kml"
 			label="Browse"
 			disabled={submitting}
 			icon={FaFolderOpen}
