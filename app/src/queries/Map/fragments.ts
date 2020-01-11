@@ -1,5 +1,4 @@
 import gql from 'graphql-tag'
-import { withDefaultQuery } from '../Query'
 import { pinFragment } from '../Pin/fragments'
 import { userFragment } from '../User/fragments'
 import { imageFragment } from '../shared/fragments'
@@ -27,7 +26,7 @@ export const mapFragment = gql/* GraphQL */ `
 				node {
 					uid
 					title
-					url
+					uri
 				}
 			}
 		}

@@ -35,7 +35,7 @@ const mutation = gql`
 					node {
 						uid
 						title
-						url
+						uri
 					}
 				}
 			}
