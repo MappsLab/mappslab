@@ -24,10 +24,15 @@ export type NewMapData = {
 	addToClassrooms: Array<string>,
 }
 
+type UidInput = {
+	uid: string,
+}
+
 export interface UpdateMapData {
 	uid: string;
 	title?: string;
 	description?: string;
 	baseImage?: ImageUpload;
 	dataLayer?: NewDataLayerInput;
+	removeDataLayer: UidInput;
 }

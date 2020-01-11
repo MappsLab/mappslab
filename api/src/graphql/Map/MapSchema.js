@@ -37,12 +37,17 @@ const Map = /* GraphQL */ `
 		addToClassrooms: [String!]
 	}
 
+	input UidInput {
+		uid: String!
+	}
+
 	input UpdateMapInput {
 		uid: String!
 		title: String
 		description: String
 		baseImage: Upload
 		dataLayer: DataLayerInput
+		removeDataLayer: UidInput
 	}
 
 	input MapSortParameter {

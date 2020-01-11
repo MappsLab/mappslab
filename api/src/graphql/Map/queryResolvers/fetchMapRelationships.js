@@ -63,7 +63,6 @@ export const dataLayers = async (
 	const fetchedDataLayers = await ctx.models.DataLayer.getDataLayers(
 		mergedInput,
 	)
-	console.log(fetchedDataLayers)
 
 	return assemblePage(
 		// TODO: this filters out datalayers with no URI (from the old URL input).

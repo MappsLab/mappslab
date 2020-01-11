@@ -25,8 +25,6 @@ export const createDataLayer = async ({
 	const uploaded = await upload(buffer, fileName)
 
 	const uri = uploaded.Key
-	console.log(uri)
-	//
 	const validated = await validateNew({ title, uri })
 	const edges = []
 
