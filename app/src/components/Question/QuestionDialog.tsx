@@ -55,6 +55,7 @@ const QuestionDialogBase = ({
 }: QuestionDialogProps) => {
 	if (!currentQuestion) return null
 	const { title: paneTitle, message, options, render } = currentQuestion
+
 	return (
 		<Background data-testid="alert">
 			<BackgroundCancelButton onClick={cancelQuestion} />

@@ -3,6 +3,7 @@ import { css } from 'styled-components'
 export const z = {
 	map: 1,
 	mapTool: 50,
+	menuOverlay: 75,
 	modal: 100,
 	alert: 200,
 }

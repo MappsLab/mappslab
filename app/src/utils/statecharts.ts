@@ -14,7 +14,9 @@ export const createObjectSearchByState = ({
 	searchKey,
 	defaults,
 }: SearchConfig) => (values: NestedObject) => {
-	const getByPath = (paths) => path([...paths, searchKey])(chart)
+	const getByPath = (paths: String) =>
+		// @ts-ignore
+		path([...paths, searchKey])(chart) as String[]
 
 	const getOptions = (
 		value: any,
@@ -24,6 +26,7 @@ export const createObjectSearchByState = ({
 		if (typeof value === 'string') {
 			return {
 				...previousValues,
+				// @ts-ignore
 				...getByPath([...parentPath, value]),
 			}
 		}
@@ -31,6 +34,7 @@ export const createObjectSearchByState = ({
 			Object.entries(value)
 				.map(([key, val]) => {
 					// Get the value for the 'root' of this key
+					// @ts-ignore
 					const rootVal = getByPath([...parentPath, key])
 					// Then, all of its children
 					const children = getOptions(val, previousValues, [...parentPath, key])

@@ -1,11 +1,12 @@
 import { Paginated } from '@good-idea/unwind-edges'
+import { Node } from './shared'
 import { Pin } from './pin'
 import { Route } from './route'
 import { Classroom } from './classroom'
 import { Image } from './media'
 import { DataLayer } from './dataLayer'
 
-export interface Map {
+export interface Map extends Node {
 	title: string
 	uid: string
 	__typename: 'Map'

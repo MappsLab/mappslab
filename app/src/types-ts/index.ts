@@ -6,3 +6,5 @@ export * from './media'
 export * from './pin'
 export * from './route'
 export * from './user'
+export * from './shared'
+

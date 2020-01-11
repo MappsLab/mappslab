@@ -1,10 +1,11 @@
+import { Node } from './shared'
 import { User } from './user'
 import { Route } from './route'
 import { Image } from './media'
 
-export interface Pin {
-	__typename: 'Pin'
+export interface Pin extends Node {
 	uid: string
+	__typename: 'Pin'
 	lat: number
 	lng: number
 	owner?: User

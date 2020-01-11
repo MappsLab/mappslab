@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { DataLayer } from 'Types'
+import { DataLayer } from '../../types-ts'
 import { ListOfTypeProps, ListOfTypeBaseProps } from './utils'
 import { List } from './List'
 
@@ -11,7 +11,8 @@ interface DataLayerListProps {
 	title: string
 	dataLayers: DataLayer[]
 	viewerCanAdd: boolean
-	addNewDataLayer: (title: String) => Promise<void>
+	addNewDataLayer: (title: string) => Promise<void>
+	removeDataLayer: (dataLayer: DataLayer) => Promise<void>
 }
 
 const noResults = async () => undefined
@@ -22,7 +23,14 @@ export const DataLayerList = ({
 	dataLayers,
 	viewerCanAdd,
 	addNewDataLayer,
+	removeDataLayer,
 }: DataLayerListProps) => {
+	const buttons = [
+		{
+			label: 'Remove',
+			handler: removeDataLayer,
+		},
+	]
 	return (
 		<List
 			search={noResults}
@@ -32,6 +40,7 @@ export const DataLayerList = ({
 			items={dataLayers}
 			type="dataLayer"
 			viewerCanAdd={viewerCanAdd}
+			buttons={buttons}
 		/>
 	)
 }

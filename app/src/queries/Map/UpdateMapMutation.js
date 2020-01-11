@@ -12,6 +12,7 @@ const mutation = gql`
 		$description: String
 		$baseImage: Upload
 		$dataLayer: DataLayerInput
+		$removeDataLayer: UidInput
 	) {
 		updateMap(
 			input: {
@@ -20,6 +21,7 @@ const mutation = gql`
 				description: $description
 				baseImage: $baseImage
 				dataLayer: $dataLayer
+				removeDataLayer: $removeDataLayer
 			}
 		) {
 			title

@@ -1,4 +1,4 @@
-import { Node, Variables } from 'Types'
+import { Node, Variables } from '../../types-ts'
 
 export type SearchForList = (arg0: any) => Promise<void> | void
 

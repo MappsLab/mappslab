@@ -1,6 +1,12 @@
 import * as React from 'react'
 import { unwindEdges } from '@good-idea/unwind-edges'
-import { Map, Viewer, Mutation, QueryConfig } from '../../../types-ts'
+import {
+	Map,
+	Viewer,
+	Mutation,
+	QueryConfig,
+	DataLayer,
+} from '../../../types-ts'
 import { MapQuery, UpdateMapMutation } from '../../../queries/Map'
 import { Button } from '../../Buttons'
 import { DataLayerList, ClassroomList } from '../../Lists'
@@ -32,7 +38,8 @@ const validateImageDimensions = (file: File): Promise<string | void> =>
 		// @ts-ignore
 		const img = new window.Image()
 
-		img.onload = (e) => {
+		img.onload = (e: Event) => {
+			// @ts-ignore
 			if (e.target.naturalWidth < 1024 || e.target.naturalHeight < 1024) {
 				resolve('Base map images must be at 1024px wide and 1024px tall')
 			} else {
@@ -93,6 +100,25 @@ const MapInspectorMain = ({
 		})
 	}
 
+	const removeDataLayer = async (dataLayer: DataLayer) => {
+		const variables = {
+			uid: map.uid,
+			removeDataLayer: {
+				uid: dataLayer.uid,
+			},
+		}
+		const confirm = await ask({
+			message: 'Are you sure?',
+			options: [
+				{ title: 'Cancel', returnValue: false, level: 'secondary' },
+				{ title: 'Yes', returnValue: true, level: 'primary' },
+			],
+		})
+		if (confirm === true) {
+			await updateMap({ variables, refetchQueries: [mapQueryConfig] })
+		}
+	}
+
 	const submitUpdate = async (args) => {
 		if (!viewerIsOwner) throw new Error('You can only update maps you own')
 		const variables = {
@@ -136,6 +162,7 @@ const MapInspectorMain = ({
 			/>
 			<DataLayerList
 				dataLayers={dataLayers}
+				removeDataLayer={removeDataLayer}
 				addNewDataLayer={addNewDataLayer}
 				viewerCanAdd={viewerIsOwner}
 				title="Data Layers"

@@ -1,8 +1,9 @@
 import { Paginated } from '@good-idea/unwind-edges'
+import { Node } from './shared'
 import { User } from './user'
 import { Map } from './map'
 
-export interface Classroom {
+export interface Classroom extends Node {
 	uid: string
 	title: string
 	description?: string

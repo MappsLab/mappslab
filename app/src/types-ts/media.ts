@@ -1,5 +1,8 @@
+import { Node } from './shared'
+
 export interface Tileset {
 	uid: string
+	__typename: 'Tileset'
 	baseUri: string
 	maxZoom: number
 }
@@ -13,6 +16,7 @@ interface ImageSize {
 
 export interface Image {
 	uid: string
+	__typename: 'Image'
 	original: ImageSize
 	sizes: ImageSize[]
 	tileset?: Tileset

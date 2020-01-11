@@ -4,6 +4,8 @@ const { useContext } = React
 
 interface OptionConfig {
 	returnValue?: any
+	level?: string
+	title: string
 	[key: string]: any // Allow for other props to be passed
 }
 
