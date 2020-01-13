@@ -21,6 +21,30 @@ const DataLayer = /* GraphQL */ `
 		kml: Upload!
 		title: String!
 	}
+
+	input GetDataLayerInput {
+		uid: String!
+	}
+
+	input DataLayerSortParameters {
+		title: String
+	}
+
+	input DataLayerWhereParameters {
+		title: StringOperators
+	}
+
+	input GetDataLayersInput {
+		first: Int
+		after: String
+		sort: DataLayerSortParameters
+		where: DataLayerWhereParameters
+	}
+
+	extend type Query {
+		dataLayer(input: GetDataLayerInput!): DataLayer
+		dataLayers(input: GetDataLayersInput): DataLayerConnection!
+	}
 `
 
 export default DataLayer

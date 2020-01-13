@@ -9,6 +9,7 @@ export interface DBNode {
 
 type Operator =
 	| 'contains'
+	| 'has'
 	| 'eq'
 	| 'notEq'
 	| 'lt'

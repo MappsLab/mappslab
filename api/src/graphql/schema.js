@@ -27,7 +27,7 @@ import {
 import { UserSchema, UserQueryResolvers, UserMutationResolvers } from './User'
 import { ImageSchema, ImageResolvers } from './Image'
 import { TilesetSchema } from './Tileset'
-import { DataLayerSchema } from './DataLayer'
+import { DataLayerSchema, DataLayerQueryResolvers } from './DataLayer'
 
 const Root = /* GraphQL */ `
 	type Query {
@@ -63,6 +63,7 @@ export const resolvers = merge(
 	RouteQueryResolvers,
 	UserQueryResolvers,
 	ImageResolvers,
+	DataLayerQueryResolvers,
 	/**
 	 * Mutations
 	 */

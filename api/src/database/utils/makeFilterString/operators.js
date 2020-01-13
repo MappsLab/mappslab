@@ -34,6 +34,13 @@ const filterStringCreators = {
 	contains: (field: string, value: string): string =>
 		`regexp(${field}, /${escapeStringRegexp(value)}/i)`,
 
+	/*
+	 * has
+	 * if a predicate exists on an object, i.e. has(money)
+	 * types: any
+	 */
+	exists: (field: string) => `has(${field})`,
+
 	/**
 	 * lt / gt / lte / gte / between
 	 * types: numbers, dates

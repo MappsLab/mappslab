@@ -76,7 +76,7 @@ const Map = /* GraphQL */ `
 	# Queries & Mutations
 
 	extend type Query {
-		map(input: GetMapInput!): Map!
+		map(input: GetMapInput!): Map
 		maps(input: MapListOptions): MapConnection!
 	}
 

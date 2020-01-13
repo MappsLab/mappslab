@@ -27,6 +27,7 @@ export const validateNew = (data: NewDataLayerData) =>
 export const publicFields = [
 	//
 	'uid',
+	'type',
 	'uri',
 	'title',
 	'deleted',
