@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components'
 import { Node } from '../../types-ts'
 import { DotButton } from '../DotButton'
 
-const { useState, useEffect } = React
+const { useState, useEffect, useRef } = React
 
 const Wrapper = styled.div`
 	position: relative;
@@ -14,8 +14,8 @@ const ButtonsWrapper = styled.div`
 		z-index: ${theme.layout.z.menuOverlay};
 		background-color: white;
 		position: absolute;
-		right: 0;
-		top: 0;
+		right: 8px;
+		top: 2px;
 		border-radius: ${theme.mixins.borderRadius};
 		box-shadow: ${theme.mixins.boxShadow.heavy};
 	`}
@@ -24,8 +24,15 @@ const ButtonsWrapper = styled.div`
 const Button = styled.button`
 	${({ theme }) => css`
 		color: ${theme.color.gray};
+		padding: ${theme.layout.spacing.half};
+		font-size: ${theme.font.size.h5};
+
 		&:hover {
-			background-color: ${theme.color.lightGray};
+			background-color: ${theme.color.xLightGray};
+		}
+
+		& + & {
+			border-top: 1px solid ${theme.color.lightGray};
 		}
 	`}
 `
@@ -47,6 +54,7 @@ export const ButtonDropdown = <NodeType extends Node>({
 	buttons,
 	item,
 }: ButtonDropdownProps<NodeType>) => {
+	const wrapperElement = useRef<HTMLDivElement>(null)
 	const [isOpen, setOpen] = useState(false)
 	const openMenu = () => setOpen(true)
 	const closeMenu = () => setOpen(false)
@@ -56,8 +64,21 @@ export const ButtonDropdown = <NodeType extends Node>({
 		closeMenu()
 	}
 
+	const handleClickOutside = (e: MouseEvent) => {
+		// @ts-ignore
+		const path = e.composedPath()
+		if (!path.some((el) => el === wrapperElement.current)) {
+			closeMenu()
+		}
+	}
+
+	useEffect(() => {
+		document.addEventListener('click', handleClickOutside)
+		return () => document.removeEventListener('click', handleClickOutside)
+	})
+
 	return (
-		<Wrapper>
+		<Wrapper ref={wrapperElement}>
 			<DotButton onClick={openMenu} />
 			{isOpen ? (
 				<ButtonsWrapper>

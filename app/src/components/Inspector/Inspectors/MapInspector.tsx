@@ -2,6 +2,7 @@ import * as React from 'react'
 import { unwindEdges } from '@good-idea/unwind-edges'
 import {
 	Map,
+	Classroom,
 	Viewer,
 	Mutation,
 	QueryConfig,
@@ -70,7 +71,7 @@ const MapInspectorMain = ({
 		viewer && teachers.find((t) => t.uid === viewer.uid),
 	)
 
-	const updateMapClassrooms = (classroom) => {
+	const updateMapClassrooms = (classroom: Classroom) => {
 		const variables = {
 			input: {
 				uid: map.uid,
@@ -84,7 +85,7 @@ const MapInspectorMain = ({
 		const handleUpload = async (kml: File) => {
 			const variables = {
 				uid: map.uid,
-				dataLayer: {
+				createDataLayer: {
 					title,
 					kml,
 				},
@@ -98,6 +99,15 @@ const MapInspectorMain = ({
 				<DataLayerUpload onComplete={answer} handleUpload={handleUpload} />
 			),
 		})
+	}
+
+	const associateDataLayer = async (dataLayer: DataLayer) => {
+		const { uid } = dataLayer
+		const variables = {
+			uid: map.uid,
+			associateDataLayer: { uid },
+		}
+		await updateMap({ variables, refetchQueries: [mapQueryConfig] })
 	}
 
 	const removeDataLayer = async (dataLayer: DataLayer) => {
@@ -164,6 +174,7 @@ const MapInspectorMain = ({
 				dataLayers={dataLayers}
 				removeDataLayer={removeDataLayer}
 				addNewDataLayer={addNewDataLayer}
+				associateDataLayer={associateDataLayer}
 				viewerCanAdd={viewerIsOwner}
 				title="Data Layers"
 			/>
