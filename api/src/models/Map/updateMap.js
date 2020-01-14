@@ -10,7 +10,14 @@ export const updateMap = async (
 	args: UpdateMapData,
 	dispatchUpdate: () => Promise<void>,
 ): Promise<MapType> => {
-	const { uid, baseImage, dataLayer, removeDataLayer, ...mapData } = args
+	const {
+		uid,
+		baseImage,
+		dataLayer,
+		removeDataLayer,
+		associateDataLayer,
+		...mapData
+	} = args
 	const cleaned = await clean(mapData)
 	const validatedMapData = validateUpdate(cleaned)
 	// $FlowFixMe
@@ -29,6 +36,21 @@ export const updateMap = async (
 			pred: 'has_dataLayer',
 			toUid: removeDataLayer.uid,
 		})
+	}
+
+	const associateDataLayerEdge = associateDataLayer
+		? [
+				{ fromUid: uid, pred: 'has_dataLayer', toUid: associateDataLayer.uid },
+				{ unique: true },
+		  ]
+		: null
+
+	const addEdges = [associateDataLayerEdge].filter(Boolean)
+
+	if (addEdges.length) {
+		await Promise.all(
+			addEdges.map(([edge, config]) => createEdge(edge, config)),
+		)
 	}
 
 	if (baseImage) {

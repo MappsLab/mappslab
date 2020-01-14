@@ -46,7 +46,8 @@ const Map = /* GraphQL */ `
 		title: String
 		description: String
 		baseImage: Upload
-		dataLayer: DataLayerInput
+		createDataLayer: DataLayerInput
+		associateDataLayer: UidInput
 		removeDataLayer: UidInput
 	}
 

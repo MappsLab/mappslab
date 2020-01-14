@@ -34,5 +34,6 @@ export interface UpdateMapData {
 	description?: string;
 	baseImage?: ImageUpload;
 	dataLayer?: NewDataLayerInput;
+	associateDataLayer: UidInput;
 	removeDataLayer: UidInput;
 }
