@@ -67,6 +67,8 @@ export type ProviderProps = Utils & {
 	zoomIn: () => void
 	zoomOut: () => void
 	applyDataLayer: (url: string) => () => void
+	setMapType: (type: string) => void
+	mapType: string
 }
 
 // const defaults = {
@@ -134,6 +136,7 @@ class MapProviderClass extends React.Component<Props, State> {
 			machineState,
 			inspectedItem,
 			connectToPin,
+			mapType,
 		} = this.props
 		const { mapUid, userLatLng } = this.state
 		const value = {
@@ -142,6 +145,7 @@ class MapProviderClass extends React.Component<Props, State> {
 			machineState,
 			connectToPin,
 			userLatLng,
+			mapType,
 			...utils,
 			...this.getEditorUtils(),
 		}

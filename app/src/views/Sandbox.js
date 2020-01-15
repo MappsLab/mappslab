@@ -36,7 +36,6 @@ const MyComponent = () => (
 								{ title: 'NO', returnValue: false },
 							],
 						})
-						console.log(answer)
 					}}
 				>
 					click

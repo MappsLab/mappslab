@@ -1,24 +1,31 @@
 // @flow
 import React from 'react'
+import { unwindEdges } from '@good-idea/unwind-edges'
 import { State } from 'react-automata'
 import { ProviderProps } from '../Provider'
 import NewPinButton from './NewPinButton'
 import ZoomButton from './ZoomButton'
 import Toolbar from './Toolbar'
-import { DataLayerSelector } from './DataLayerSelector'
+import { LayersTool, DataLayerSelectorProps } from './LayersTool'
 
 /**
  * Tools
  */
 
-export interface ToolsProps extends ProviderProps {
-	disableLayer: (id: string) => void
-	enableLayer: (id: string) => void
-	enabledLayers: string[]
-}
+export interface ToolsProps extends ProviderProps, DataLayerSelectorProps {}
 
 const Tools = (props: ToolsProps) => {
-	const { zoomIn, zoomOut, transition } = props
+	const {
+		zoomIn,
+		zoomOut,
+		transition,
+		disableLayer,
+		enableLayer,
+		enabledLayers,
+		layers,
+		setMapType,
+		mapType,
+	} = props
 	const onNewPinClick = () => {
 		transition('clickedDropPin')
 	}
@@ -28,7 +35,14 @@ const Tools = (props: ToolsProps) => {
 			<Toolbar>
 				<NewPinButton onClick={onNewPinClick} />
 			</Toolbar>
-			<DataLayerSelector {...props} />
+			<LayersTool
+				disableLayer={disableLayer}
+				enableLayer={enableLayer}
+				enabledLayers={enabledLayers}
+				layers={layers}
+				setMapType={setMapType}
+				mapType={mapType}
+			/>
 			<Toolbar align="right">
 				<ZoomButton direction="in" onClick={() => zoomIn()} />
 				<ZoomButton direction="out" onClick={() => zoomOut()} />

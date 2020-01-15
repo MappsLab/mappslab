@@ -275,9 +275,11 @@ class MapEditorMain extends React.Component<EditorProps, MapEditorState> {
 	}
 
 	render() {
-		const { mapData, transition, viewer } = this.props
+		const { mapData, transition, viewer, setMapType } = this.props
 		const { enabledLayers } = this.state
 		const { enableLayer, disableLayer } = this
+		const [layers] =
+			mapData && mapData.dataLayers ? unwindEdges(mapData.dataLayers) : []
 		if (!mapData) return null
 		return (
 			<React.Fragment>
@@ -288,9 +290,11 @@ class MapEditorMain extends React.Component<EditorProps, MapEditorState> {
 				{viewer ? (
 					<Tools
 						{...this.props}
+						setMapType={setMapType}
 						enabledLayers={enabledLayers}
 						enableLayer={enableLayer}
 						disableLayer={disableLayer}
+						layers={layers}
 					/>
 				) : (
 					<NotLoggedIn />

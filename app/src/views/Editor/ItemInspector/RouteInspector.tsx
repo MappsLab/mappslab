@@ -44,7 +44,6 @@ const RouteInspector = ({ route, viewer, updateRoute, mapUid }: Props) => {
 			refetchQueries: [{ query: mapQuery, variables: { uid: mapUid } }],
 		})
 	}
-	console.log(route)
 	const distance = getRouteDistance(route)
 
 	return (
