@@ -41,7 +41,7 @@ export const updateMap = async (
 	const associateDataLayerEdge = associateDataLayer
 		? [
 				{ fromUid: uid, pred: 'has_dataLayer', toUid: associateDataLayer.uid },
-				{ unique: true },
+				{},
 		  ]
 		: null
 
