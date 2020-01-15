@@ -106,6 +106,7 @@ class Mapp extends React.Component<Props, State> {
 		this.state = {
 			ready: false,
 			errored: false,
+			mapType: 'roadmap',
 		}
 	}
 
@@ -194,6 +195,11 @@ class Mapp extends React.Component<Props, State> {
 			// });
 		}
 
+		const setMapType = (mapType: string) => {
+			this.setState({ mapType })
+			this.map.setMapTypeId(mapType)
+		}
+
 		const getZoom = () => {
 			if (this.map) return this.map.getZoom()
 			return undefined
@@ -243,6 +249,7 @@ class Mapp extends React.Component<Props, State> {
 			zoomIn,
 			zoomOut,
 			setBaseImage,
+			setMapType,
 			removeEventListeners: this.removeEventListeners,
 			addEventListeners: this.addEventListeners,
 		}
@@ -258,7 +265,7 @@ class Mapp extends React.Component<Props, State> {
 
 	render() {
 		const { style, render } = this.props
-		const { ready, errored } = this.state
+		const { ready, errored, mapType } = this.state
 		const value = {
 			map: this.map,
 		}
@@ -274,6 +281,7 @@ class Mapp extends React.Component<Props, State> {
 							overlay: this.overlay,
 							googleMap: this.map,
 							utils: this.getUtils(),
+							mapType,
 							addEventListeners: this.addEventListeners,
 							removeEventListeners: this.removeEventListeners,
 					  })
