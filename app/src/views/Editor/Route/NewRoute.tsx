@@ -22,10 +22,11 @@ const NewRoute = ({ connectToPin, userLatLng }: NewRouteProps) => {
 		uid: '__in-progress-pin__',
 	}
 	const route = {
-		__typename: 'Route',
+		__typename: 'Route' as 'Route',
 		uid: '__in-progress-route__',
 		pins: [connectToPin.pin, inProgressPin],
 	}
+	// @ts-ignore
 	return <Route route={route} />
 }
 

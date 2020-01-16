@@ -1,0 +1,51 @@
+{
+	"compilerOptions": {
+		"plugins": [{ "name": "typescript-tslint-plugin" }],
+		// "module": "es6",
+		"declaration": false,
+		"noImplicitAny": false,
+		"removeComments": true,
+		// "noLib": false,
+		"emitDecoratorMetadata": true,
+		"experimentalDecorators": true,
+		"target": "es5",
+		"sourceMap": true,
+		"jsx": "react",
+		// "rootDir": "./src",
+		"lib": ["es6", "es7", "dom"],
+		"outDir": "./dist",
+		"esModuleInterop": true,
+		"types": ["node", "jest"],
+		// "strictNullChecks": true,
+
+		/*
+		TODO: Tighten these up once development is rolling
+		"noImplicitReturns": true,
+		"noImplicitThis": true,
+		"noImplicitAny": true,
+		*/
+
+		"baseUrl": "app/src",
+		"paths": {
+			"Components/*": ["components/*"],
+			"Views/*": ["views/*"],
+			"GraphQL/*": ["graphql/*"],
+			"Types/*": ["types-ts/*"],
+			"Queries/*": ["queries/*"],
+			"Providers/*": ["providers/*"],
+			"Utils/*": ["utils/*"],
+			"Jest/*": ["../jest/*"],
+			"mapp": ["../../packages/mapp/src"]
+		}
+	},
+	"include": ["./src"],
+	"exclude": [
+		"node_modules",
+		"**/*.spec.ts",
+		"**/*.test.ts",
+		"**/__tests__/*",
+		"dist",
+		"build"
+	]
+	// "exclude": ["node_modules", "**/*.spec.ts", "**/*.test.ts", "dist"]
+}

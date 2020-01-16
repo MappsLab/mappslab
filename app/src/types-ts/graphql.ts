@@ -41,7 +41,7 @@ export type SubscriptionPayload = {
  * An additional, optional callback that passes the payload
  */
 
-export type SubscriptionCallback = (SubscriptionPayload) => void
+export type SubscriptionCallback = (prev: {}, newData: {}) => void
 
 /**
  * The shape of the initial setup for a subscription.
@@ -51,10 +51,10 @@ export type SubscriptionConfig<PreviousResponse, ResponseData> = {
 	name: string
 	document: DocumentNode
 	updateQuery: (
-		SubscriptionCallback,
+		callback: SubscriptionCallback,
 	) => (
 		previous: PreviousResponse,
-		ApolloSubscriptionResponse,
+		response: ApolloSubscriptionResponse,
 	) => {
 		data: ResponseData
 		// ResponseData,

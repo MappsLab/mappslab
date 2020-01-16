@@ -25,6 +25,7 @@ export const ItemInspector = () => {
 	if (!item) return null
 
 	if (item.__typename !== 'Pin' && item.__typename !== 'Route') {
+		// @ts-ignore
 		throw new Error(`There is no inspector for item type "${item.__typename}"`)
 	}
 

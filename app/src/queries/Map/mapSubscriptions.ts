@@ -14,10 +14,7 @@ interface MapUpdatedResponse {
 	mapUpdated: { map: Map }
 }
 
-export const mapUpdated: SubscriptionConfig<
-	MapResponse,
-	MapUpdatedResponse
-> = ({ refetch }) => ({
+export const mapUpdated = ({ refetch }) => ({
 	name: 'mapUpdated',
 	document: gql`
 		subscription mapUpdated($mapUid: String!) {
@@ -49,10 +46,7 @@ interface PinAddedResponse {
 	pinAddedToMap: { pin: Pin }
 }
 
-export const pinAddedToMap: SubscriptionConfig<
-	MapResponse,
-	PinAddedResponse
-> = {
+export const pinAddedToMap = {
 	name: 'pinAddedToMap',
 	document: gql`
 		subscription pinAddedToMap($mapUid: String!) {
@@ -90,7 +84,7 @@ interface PinUpdatedResponse {
 	pinUpdated: { pin: Pin }
 }
 
-export const pinUpdated: SubscriptionConfig<MapResponse, PinUpdatedResponse> = {
+export const pinUpdated = {
 	name: 'pinUpdated',
 	document: gql`
 		subscription pinUpdated($mapUid: String!) {
@@ -133,7 +127,7 @@ interface PinDeletedResponse {
 	pinDeleted: { pin: Pin }
 }
 
-export const pinDeleted: SubscriptionConfig<MapResponse, PinDeletedResponse> = {
+export const pinDeleted = {
 	name: 'pinDeleted',
 	document: gql`
 		subscription pinDeleted($mapUid: String!) {
