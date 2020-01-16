@@ -5,6 +5,7 @@
 	"main": "index.js",
 	"scripts": {
 		"test": "jest",
+    "start:api": "yarn workspace mappslab-api start",
 		"docz:dev": "docz dev",
 		"dev:app": "yarn workspace mappslab-app dev",
 		"dev:api": "yarn workspace mappslab-api dev",
@@ -16,7 +17,8 @@
 		"test:app:watch": "yarn workspace mappslab-app test:watch",
 		"test:api": "yarn workspace mappslab-api ci-test",
 		"test:api:watch": "yarn workspace mappslab-api test:watch",
-		"install:clean": "rimraf node_modules ./api/node_modules ./app/node_modules ./packages/mapp/node_modules && yarn install"
+		"install:clean": "rimraf node_modules ./api/node_modules ./app/node_modules ./packages/mapp/node_modules && yarn install",
+    "deploy": "env $(cat ./api/.env.staging | grep -v \"#\" | xargs) pm2 deploy ecosystem.config.js staging"
 	},
 	"repository": {
 		"type": "git",
