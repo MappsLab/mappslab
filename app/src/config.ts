@@ -1,8 +1,7 @@
-// @flow
 const apiRoot =
 	process.env.NODE_ENV === 'development'
 		? 'http://localhost:3000/graphql'
-		: 'https://mappslab-api.now.sh/graphql'
+		: 'https://mappslab-beta-api.good-idea.studio/graphql'
 const wsUri =
 	process.env.NODE_ENV === 'development'
 		? 'ws://localhost:3000/graphql'
