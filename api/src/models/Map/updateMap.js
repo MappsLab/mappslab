@@ -13,7 +13,7 @@ export const updateMap = async (
 	const {
 		uid,
 		baseImage,
-		dataLayer,
+		createDataLayer,
 		removeDataLayer,
 		associateDataLayer,
 		...mapData
@@ -23,9 +23,9 @@ export const updateMap = async (
 	// $FlowFixMe
 	const updatedMap: MapType = await mutateNode(uid, { data: validatedMapData })
 
-	if (dataLayer) {
+	if (createDataLayer) {
 		await DataLayer.createDataLayer({
-			...dataLayer,
+			...createDataLayer,
 			addToMaps: [uid],
 		})
 	}
