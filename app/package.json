@@ -7,7 +7,7 @@
   "license": "ISC",
   "scripts": {
     "start": "serve . --single",
-    "build": "webpack -p --env production --progress --colors",
+    "build": "webpack -p --env production --progress --colors --config webpack.config.js",
     "dev": "cross-env ENV=development DEBUG=api webpack-dev-server --colors --env development --config webpack.config.js",
     "dev:staging": "cross-env ENV=development cross-env AWS_BUCKET_ROOT=https://mappslab-beta.s3.amazonaws.com DEBUG=api webpack-dev-server --colors --env development --config webpack.config.js",
     "install-types": "typesync && yarn install",

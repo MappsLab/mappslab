@@ -111,7 +111,7 @@ const development = merge([
 
 const production = merge([
 	{
-		mode: 'production',
+		mode: 'development',
 		entry: ['@babel/polyfill', './src/index.tsx'],
 		output: {
 			path: path.resolve(__dirname, 'public', 'js'),
