@@ -1,4 +1,4 @@
-import { Viewer, JWT } from 'Types'
+import { Viewer, JWT } from '../../types-ts'
 
 /**
  * Shared

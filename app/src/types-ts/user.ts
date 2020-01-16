@@ -1,7 +1,7 @@
 import { Paginated } from '@good-idea/unwind-edges'
 import { Node } from './shared'
-import { Pin } from './Pin'
-import { Classroom } from './Classroom'
+import { Pin } from './pin'
+import { Classroom } from './classroom'
 
 type Role = 'teacher' | 'student' | 'admin'
 

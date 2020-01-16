@@ -1,6 +1,6 @@
 import * as React from 'react'
-import { User } from 'Types/User'
 import { unwindEdges } from '@good-idea/unwind-edges'
+import { User } from '../../types-ts'
 import { UsersQuery } from '../../queries/User'
 import { QuestionConsumer, QuestionContext } from '../Question'
 import { Prompt } from '../Forms'

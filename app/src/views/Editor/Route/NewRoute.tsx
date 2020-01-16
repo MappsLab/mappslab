@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { LatLng } from 'mapp'
-import { Pin, Route as RouteType } from 'Types'
+import { Pin, Route as RouteType } from '../../../types-ts'
 import { Route } from './Route'
 
 /**

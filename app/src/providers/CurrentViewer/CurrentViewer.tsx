@@ -1,6 +1,6 @@
 import * as React from 'react'
-import { Viewer } from 'Types'
 import { useMutation, useQuery, Context as ClientContext } from 'urql'
+import { Viewer } from '../../types-ts'
 import { setViewerCookie, removeViewerCookie } from 'Utils/storage'
 import {
 	CURRENT_VIEWER_QUERY,

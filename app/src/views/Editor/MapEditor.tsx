@@ -3,8 +3,8 @@ import { path } from 'ramda'
 import { mapEventNames } from 'mapp'
 import { unwindEdges } from '@good-idea/unwind-edges'
 import { State } from 'react-automata'
-import { Subscription } from 'Types'
 import { $PropertyType } from 'utility-types'
+import { Subscription } from '../../types-ts'
 import { startSubscription } from 'Queries/startSubscription'
 import {
 	pinAddedToMap,

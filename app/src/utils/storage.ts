@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie'
-import { JWT } from 'Types'
+import { JWT } from '../types-ts'
 
 const debug = require('debug')('app')
 

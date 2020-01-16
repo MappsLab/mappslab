@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { unwindEdges } from '@good-idea/unwind-edges'
 import { LatLng } from 'mapp'
-import { Route, Pin } from 'Types'
+import { Route, Pin } from '../../../types-ts'
 import { ProviderProps as MapProviderProps } from '../Provider'
 
 const { useContext, useReducer } = React

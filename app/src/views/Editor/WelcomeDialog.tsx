@@ -1,7 +1,7 @@
 // @flow
 import React from 'react'
-import { Map } from 'Types'
 import { Transition } from 'react-automata'
+import { Map } from '../../types-ts'
 import { Centered } from 'Components/Layout'
 import Pane from 'Components/Pane'
 import { Header2, P } from 'Components/Text'

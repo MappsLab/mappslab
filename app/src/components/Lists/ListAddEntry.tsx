@@ -1,5 +1,5 @@
 import React, { ChangeEvent } from 'react'
-import { Node } from 'Types'
+import { Node } from '../../types-ts'
 import { Header5 } from 'Components/Text'
 import { SearchForList, ListItemHandler, CreateNewFn } from './utils'
 import { nodeToListItem } from './utils'

@@ -1,5 +1,5 @@
 import React from 'react'
-import { User } from 'Types'
+import { User } from '../../types-ts'
 import { Chip } from 'Components/Generic'
 import { ChipProps } from 'Components/Generic/Chip'
 

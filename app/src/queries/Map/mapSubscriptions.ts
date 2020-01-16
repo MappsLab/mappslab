@@ -1,6 +1,11 @@
 import gql from 'graphql-tag'
 import * as R from 'ramda'
-import { Pin, Map, SubscriptionCallback, SubscriptionConfig } from 'Types'
+import {
+	Pin,
+	Map,
+	SubscriptionCallback,
+	SubscriptionConfig,
+} from '../../types-ts'
 import { MapResponse } from './MapQuery'
 import { pinFragment } from 'Queries/Pin/fragments'
 import { mapFragment } from 'Queries/Map/fragments'

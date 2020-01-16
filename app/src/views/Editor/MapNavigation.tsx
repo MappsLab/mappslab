@@ -1,6 +1,6 @@
 import * as React from 'react'
 import styled, { DefaultTheme, css } from 'styled-components'
-import { Map } from 'Types'
+import { Map } from '../../types-ts'
 // import type { Transition } from 'react-automata'
 import { Header2, Header4 } from 'Components/Text'
 import Burger from 'Components/Burger'

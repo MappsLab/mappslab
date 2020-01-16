@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Map } from 'Types'
+import { Map } from '../../types-ts'
 import { unwindEdges } from '@good-idea/unwind-edges'
 import { MapsQuery } from '../../queries/Map'
 import { List } from './List'

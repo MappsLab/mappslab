@@ -2,7 +2,7 @@ import * as React from 'react'
 import { CustomPopup } from 'mapp'
 import { PopupWrapper } from 'Components/InfoPopup'
 import { LatLngLiteral } from 'mapp'
-import { Route } from 'Types'
+import { Route } from '../../../types-ts'
 /**
  * RouteHoverPopup
  */

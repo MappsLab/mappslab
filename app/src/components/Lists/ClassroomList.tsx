@@ -1,6 +1,6 @@
 import * as React from 'react'
-import { Classroom } from 'Types'
 import { unwindEdges } from '@good-idea/unwind-edges'
+import { Classroom } from '../../types-ts'
 import { ClassroomsQuery } from '../../queries/Classroom'
 import { List } from './List'
 import { ListOfTypeProps, ListOfTypeBaseProps } from './utils'
