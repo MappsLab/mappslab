@@ -1,11 +1,6 @@
 module.exports = {
 	apps: [
 		{
-			name: 'mappslab-app',
-			autorestart: true,
-			max_restarts: 50,
-		},
-		{
 			name: 'mappslab-api',
 			script: 'yarn start:api',
 			time: true,
