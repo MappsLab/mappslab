@@ -6,6 +6,8 @@ import config from '../config'
 
 const JWT_KEY = config.get('jwtKey')
 
+if (!JWT_KEY) throw new Error('You must provide a JWT signing key')
+
 export const createToken = (): Promise<string> =>
 	new Promise((resolve, reject) => {
 		crypto
@@ -24,8 +26,8 @@ export const createJWT = (user: UserType): JWT => {
 	const { name, uid, roles } = user
 	if (!name || !uid || !roles || !roles.length)
 		throw new Error(`createJWT requires a name, uid, and roles`)
-	const token = jwt.sign({ name, uid, roles }, JWT_KEY || 'abc', { expiresIn })
-	const expires = new Date(Date.now() + expiresIn * 1000).toISOString() // send an actual date
+	const token = jwt.sign({ name, uid, roles }, JWT_KEY, { expiresIn })
+	const expires = new Date(Date.now() + expiresIn * 1000).toISOString()
 	return {
 		token: `Bearer ${token}`,
 		expires,
@@ -34,7 +36,7 @@ export const createJWT = (user: UserType): JWT => {
 
 export const verifyJWT = (token: string): Promise<UserType> =>
 	new Promise((resolve, reject) => {
-		jwt.verify(token, JWT_KEY, (err, decoded) => {
+		jwt.verify(token.replace(/^Bearer /, ''), JWT_KEY, (err, decoded) => {
 			if (err) {
 				reject(err)
 				return
@@ -42,3 +44,4 @@ export const verifyJWT = (token: string): Promise<UserType> =>
 			resolve(decoded)
 		})
 	})
+

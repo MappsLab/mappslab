@@ -14,12 +14,12 @@ const getCurrentViewer = async (
 		next()
 		return
 	}
-	const token = req.headers.authorization.replace(/^Bearer /, '')
+	const token = req.headers.authorization
 	try {
 		const viewer = await verifyJWT(token)
 		req.viewer = viewer
 	} catch (e) {
-		if (e.message !== 'jwt expired') {
+		if (e.message !== 'jwt expired' && e.message !== 'jwt malformed') {
 			debug('JWT Validation Error:')
 			debug(e)
 		}

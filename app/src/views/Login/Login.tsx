@@ -1,12 +1,10 @@
 import React from 'react'
 import { withStateMachine, State, Action, Transition } from 'react-automata'
 import styled from 'styled-components'
-// import { Link } from 'react-router-dom'
 import Pane from '../../components/Pane'
 import { Centered } from '../../components/Layout'
 import { Button } from '../../components/Buttons'
 import { useCurrentViewer } from '../../providers/CurrentViewer'
-// import { CurrentViewerQuery } from 'Queries/Viewer'
 import { Viewer } from '../../types-ts'
 import StudentLogin from './StudentLogin'
 import TeacherLogin from './TeacherLogin'
@@ -139,4 +137,3 @@ const Wrapper = (props: BaseProps) => {
 }
 
 export default withStateMachine(statechart)(Wrapper)
-// withStateMachine(statechart)(Login)

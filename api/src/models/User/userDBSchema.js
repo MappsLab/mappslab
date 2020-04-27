@@ -12,7 +12,7 @@ import type { NewUserData, UpdateUserData } from 'Types/UserTypes'
 const roles = Joi.array().items(Joi.valid('student', 'teacher', 'admin'))
 
 export const userSchema = (isNew: boolean = true) =>
-	Joi.object().keys({
+	Joi.object({
 		name: isNew
 			? Joi.string()
 					.min(3)
@@ -66,7 +66,7 @@ export const defaultValues = {
 }
 
 export const validateNew = (userData: NewUserData) =>
-	Joi.validate(userData, userSchema(true))
+	userSchema(true).validate(userData)
 export const validateUpdate = (userData: UpdateUserData) =>
 	Joi.validate(userData, userSchema(false))
 

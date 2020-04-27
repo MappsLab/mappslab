@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
-// import { DataLayer } from '../../types-ts'
-import { withDefaultQuery } from '../Query'
+import { Paginated } from '@good-idea/unwind-edges'
+import { DataLayer } from '../../types-ts'
 
-export const query = gql`
+export const dataLayersQuery = gql`
 	query DataLayersQuery(
 		$first: Int
 		$after: String
@@ -27,4 +27,6 @@ export const query = gql`
 	}
 `
 
-export const DataLayersQuery = withDefaultQuery(query)
+export interface DataLayersQueryResponse {
+	dataLayers: Paginated<DataLayer>
+}

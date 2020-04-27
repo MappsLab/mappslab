@@ -101,6 +101,7 @@
     "@types/webpack-dev-server": "^3.10.1",
     "@types/webpack-hot-client": "^4.1.0",
     "@types/webpack-merge": "^4.1.5",
+    "@typescript-eslint/eslint-plugin": "^2.29.0",
     "@typescript-eslint/eslint-plugin-tslint": "^2.29.0",
     "@typescript-eslint/parser": "^2.29.0",
     "babel-core": "7.0.0-bridge.0",

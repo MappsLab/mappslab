@@ -5,7 +5,7 @@ import { UpdateUserMutation, UserQuery } from '../../../queries/User'
 import { CreateClassroomMutation } from '../../../queries/Classroom'
 import { ClassroomList } from '../../Lists'
 import { InspectItem } from '../InspectorProvider'
-import InspectorSkeleton from '../InspectorSkeleton'
+import { InspectorSkeleton } from '../InspectorSkeleton'
 
 /**
  * UserInspector
@@ -57,7 +57,7 @@ const UserInspectorMain = ({
 			: []
 
 	return (
-		<React.Fragment>
+		<>
 			<ClassroomList
 				title="Classrooms"
 				items={classrooms}
@@ -66,7 +66,7 @@ const UserInspectorMain = ({
 				onItemClick={inspectItem}
 				create={createClassroomOnClick}
 			/>
-		</React.Fragment>
+		</>
 	)
 }
 

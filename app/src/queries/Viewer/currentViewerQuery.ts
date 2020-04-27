@@ -1,0 +1,65 @@
+import gql from 'graphql-tag'
+import { User } from '../../types-ts'
+import { getCookie, removeCookie, VIEWER_COOKIE_TOKEN } from 'Utils/storage'
+
+const debug = require('debug')('app')
+// todo#16 : Make a Viewer fragment and reuse it in the viewer query
+export const currentViewerQuery = gql`
+	query ViewerQuery {
+		currentViewer {
+			jwt {
+				token
+				expires
+			}
+			viewer {
+				uid
+				name
+				roles
+				classrooms {
+					edges {
+						node {
+							uid
+							title
+							slug
+							maps {
+								edges {
+									node {
+										uid
+										title
+										classroom {
+											uid
+											title
+											slug
+										}
+									}
+								}
+							}
+							teachers {
+								edges {
+									node {
+										uid
+										name
+										roles
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+`
+
+export interface CurrentViewerQueryResponse {
+	currentViewer: User
+}
+
+export const currentViewerQueryConfig = {
+	onCompleted: ({ currentViewer }: CurrentViewerQueryResponse) => {
+		if (getCookie(VIEWER_COOKIE_TOKEN) && !currentViewer) {
+			debug('User JWT has expired. Clearing cookies..')
+			removeCookie(VIEWER_COOKIE_TOKEN)
+		}
+	},
+}

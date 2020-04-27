@@ -2,39 +2,18 @@ const path = require('path')
 
 module.exports = {
 	parser: '@typescript-eslint/parser',
-	plugins: ['@typescript-eslint'],
-	env: {
-		browser: true,
-		node: true,
-	},
-	settings: {
-		'import/resolver': {
-			alias: {
-				map: [
-					['Constants', path.resolve(__dirname, 'src', 'constants')],
-					['Components', path.resolve(__dirname, 'src', 'components')],
-					['Views', path.resolve(__dirname, 'src', 'views')],
-					['Utils', path.resolve(__dirname, 'src', 'utils')],
-					['Providers', path.resolve(__dirname, 'src', 'providers')],
-					['Queries', path.resolve(__dirname, 'src', 'queries')],
-					['Types', path.resolve(__dirname, 'src', 'types')],
-					['Styles', path.resolve(__dirname, 'src', 'theme')],
-					['Jest', path.resolve(__dirname, 'jest')],
-					['Shared', path.resolve(__dirname, 'shared')],
-					['mapp', path.resolve(__dirname, '..', 'packages', 'mapp', 'src')],
-				],
-				extensions: ['.js', '.jsx', '.ts', '.tsx'],
-			},
-
-			node: {
-				extensions: ['.js'],
-			},
-		},
-	},
-	extends: ['airbnb', 'prettier', 'plugin:flowtype/recommended'],
+	extends: [
+		'airbnb',
+		'plugin:@typescript-eslint/recommended',
+		'prettier/@typescript-eslint',
+		'plugin:prettier/recommended',
+	],
 	rules: {
+		'no-unused-vars': 'off',
+		'@typescript-eslint/no-unused-vars': 1,
 		'no-underscore-dangle': 0,
 		'no-nested-ternary': 0,
+		'import/extensions': 0,
 		'jsx-a11y/anchor-is-valid': 0,
 		'react/sort-comp': 0,
 		'react/destructuring-assignment': 0,
@@ -55,5 +34,5 @@ module.exports = {
 			},
 		],
 	},
-	plugins: ['react', 'jsx-a11y', 'import', 'flowtype'],
+	plugins: ['react', 'jsx-a11y', 'import'],
 }

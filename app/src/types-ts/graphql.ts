@@ -72,7 +72,7 @@ export type StartSubscriptionOptions<
 	ResponseData
 > = SubscriptionConfig<PreviousResponse, ResponseData> & {
 	variables?: {}
-	subscribeToMore: (SubscribeToMoreOptions) => Subscription
+	subscribeToMore: (options: SubscribeToMoreOptions) => Subscription
 	callback?: SubscriptionCallback
 }
 

@@ -2,9 +2,7 @@ import * as React from 'react'
 import { render, fireEvent, wait } from '../../jest/utils'
 import { createMockProvider } from '../../jest/utils/mockServer'
 import { StaticRouter } from 'react-router-dom'
-// import { List } from 'Components/Inspector/Inspectors/List/List'
 import { InspectorProvider } from '../components/Inspector'
-// import { unwindEdges } from 'Queries/utils'
 import { act } from 'react-dom/test-utils'
 
 const mockClassrooms = jest.fn().mockResolvedValue(

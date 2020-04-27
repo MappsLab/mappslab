@@ -3,7 +3,7 @@ import { History } from 'history'
 import { Route } from 'react-router-dom'
 import { parseQueryString, buildQueryString } from 'Utils/url'
 import { findLastIndex } from 'Utils/data'
-import { Viewer } from '../../types'
+import { Viewer } from '../../types-ts'
 import { useCurrentViewer } from '../../providers/CurrentViewer'
 import Inspector from './Inspector'
 
@@ -100,14 +100,14 @@ class InspectorProviderBase extends React.Component<Props, State> {
 	}
 
 	inspectItem = async (nextItem: InspectorItem) => {
-		await this.setState(({ inspectorHistory }) => ({
+		this.setState(({ inspectorHistory }) => ({
 			inspectorHistory: [...inspectorHistory, nextItem],
 		}))
 		this.updateLocation(nextItem)
 	}
 
 	goBackTo = async (item: InspectorItem) => {
-		await this.setState(({ inspectorHistory }) => {
+		this.setState(({ inspectorHistory }) => {
 			const index = findLastIndex<InspectorItem>(
 				inspectorHistory,
 				(i) => i.uid === item.uid,

@@ -3,6 +3,7 @@ import { unwindEdges } from '@good-idea/unwind-edges'
 import {
 	Classroom,
 	Viewer,
+	Map,
 	Mutation,
 	QueryConfig,
 	User,
@@ -18,7 +19,7 @@ import {
 } from '../../../queries/User'
 import { MapList, UserList } from '../../Lists'
 import { InspectItem } from '../InspectorProvider'
-import InspectorSkeleton from '../InspectorSkeleton'
+import { InspectorSkeleton } from '../InspectorSkeleton'
 
 /**
  * ClassroomInspector
@@ -58,7 +59,7 @@ const ClassroomInspectorMain = ({
 	createStudent,
 	createMap,
 }: Props) => {
-	const updateClassroomUsers = (user) => {
+	const updateClassroomUsers = (user: User) => {
 		const addKey = user.roles.includes('teacher')
 			? 'addTeachers'
 			: 'addStudents'
@@ -71,7 +72,7 @@ const ClassroomInspectorMain = ({
 		updateClassroom({ variables, refetchQueries: [classroomQueryConfig] })
 	}
 
-	const updateClassroomMaps = (map) => {
+	const updateClassroomMaps = (map: Map) => {
 		const variables = {
 			input: {
 				uid: classroom.uid,
@@ -133,14 +134,14 @@ const ClassroomInspectorMain = ({
 	const viewerCanAdd = Boolean(
 		viewer &&
 			(viewer.roles.includes('admin') ||
-				(viewer.roles.includes('teacher') ||
-					(teachers &&
-						teachers.length &&
-						teachers.map((t) => t.uid).includes(viewer.uid)))),
+				viewer.roles.includes('teacher') ||
+				(teachers &&
+					teachers.length &&
+					teachers.map((t) => t.uid).includes(viewer.uid))),
 	)
 
 	return (
-		<React.Fragment>
+		<>
 			<MapList
 				title="Maps in this Classroom"
 				items={maps}
@@ -167,7 +168,7 @@ const ClassroomInspectorMain = ({
 				viewerCanAdd={viewerCanAdd}
 				create={createUserInClassroom('teacher')}
 			/>
-		</React.Fragment>
+		</>
 	)
 }
 

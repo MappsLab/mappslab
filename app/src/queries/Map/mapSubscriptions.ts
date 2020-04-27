@@ -6,9 +6,9 @@ import {
 	SubscriptionCallback,
 	SubscriptionConfig,
 } from '../../types-ts'
-import { MapResponse } from './MapQuery'
-import { pinFragment } from 'Queries/Pin/fragments'
-import { mapFragment } from 'Queries/Map/fragments'
+import { MapQueryResponse } from './MapQuery'
+import { pinFragment } from '../Pin/fragments'
+import { mapFragment } from '../Map/fragments'
 
 interface MapUpdatedResponse {
 	mapUpdated: { map: Map }
@@ -32,13 +32,6 @@ export const mapUpdated = ({ refetch }) => ({
 	) => {
 		refetch()
 		return previous
-		// console.log(previous, subscriptionData)
-		// if (callback) callback(previous, map)
-		// return Object.assign({}, previous, {
-		// 	map: {
-		// 		...map,
-		// 	},
-		// })
 	},
 })
 

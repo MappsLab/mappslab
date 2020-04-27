@@ -1,9 +1,8 @@
 import gql from 'graphql-tag'
 import { Map } from '../../types-ts'
-import { QueryWrapper, withDefaultQuery } from '../Query'
 import { mapFragment } from './fragments'
 
-export const query = gql/* GraphQL */ `
+export const mapQuery = gql`
 	query MapQuery($uid: String!) {
 		map(input: { uid: $uid }) {
 			...MapFragment
@@ -12,10 +11,6 @@ export const query = gql/* GraphQL */ `
 	${mapFragment}
 `
 
-export type MapResponse = {
+export interface MapQueryResponse {
 	map: Map
 }
-
-const MapQuery: QueryWrapper<MapResponse> = withDefaultQuery(query)
-
-export default MapQuery

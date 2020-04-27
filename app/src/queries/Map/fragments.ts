@@ -3,7 +3,7 @@ import { pinFragment } from '../Pin/fragments'
 import { userFragment } from '../User/fragments'
 import { imageFragment } from '../shared/fragments'
 
-export const mapFragment = gql/* GraphQL */ `
+export const mapFragment = gql`
 	fragment MapFragment on Map {
 		title
 		uid

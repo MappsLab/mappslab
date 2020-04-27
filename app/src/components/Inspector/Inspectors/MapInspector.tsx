@@ -14,9 +14,9 @@ import { DataLayerList, ClassroomList } from '../../Lists'
 import { InspectItem } from '../InspectorProvider'
 import { DataLayerUpload } from '../../DataLayer'
 import { Prompt } from '../../Forms'
-import EditableText from '../EditableText'
+import { EditableText } from '../EditableText'
 import { EditableMedia } from '../EditableMedia'
-import InspectorSkeleton from '../InspectorSkeleton'
+import { InspectorSkeleton } from '../InspectorSkeleton'
 import { useQuestion } from '../../../components/Question'
 
 /**

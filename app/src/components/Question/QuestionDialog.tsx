@@ -1,9 +1,9 @@
 import * as React from 'react'
 import styled, { css } from 'styled-components'
-import Pane from 'Components/Pane'
-import { Button } from 'Components/Buttons'
 import NativeListener from 'react-native-listener'
-import { P } from 'Components/Text'
+import Pane from '../Pane'
+import { Button } from '../Buttons'
+import { P } from '../Text'
 import { QuestionContext, QuestionConsumer } from './QuestionProvider'
 
 const Background = styled.div`

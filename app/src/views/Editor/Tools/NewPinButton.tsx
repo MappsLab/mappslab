@@ -1,8 +1,8 @@
 // @flow
 import React from 'react'
 import styled, { css, DefaultTheme } from 'styled-components'
-import { RoundButton } from 'Components/Buttons'
 import { State } from 'react-automata'
+import { RoundButton } from '../../../components/Buttons'
 
 const PIN_CURSOR = 'url("/images/newPin.svg") 18 49, crosshair'
 
@@ -28,7 +28,7 @@ type Props = {
 const NewPinButton = ({ onClick }: Props) => (
 	<State
 		is="Lesson.DropPin.*"
-		render={(dropMode) => {
+		render={(dropMode: boolean) => {
 			return (
 				<Wrapper active={dropMode}>
 					<RoundButton

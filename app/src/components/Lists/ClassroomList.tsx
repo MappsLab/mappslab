@@ -1,7 +1,11 @@
 import * as React from 'react'
-import { unwindEdges } from '@good-idea/unwind-edges'
+import { Paginated, unwindEdges } from '@good-idea/unwind-edges'
+import { useQuery } from '@apollo/react-hooks'
 import { Classroom } from '../../types-ts'
-import { ClassroomsQuery } from '../../queries/Classroom'
+import {
+	classroomsQuery,
+	ClassroomsQueryResponse,
+} from '../../queries/Classroom/ClassroomsQuery'
 import { List } from './List'
 import { ListOfTypeProps, ListOfTypeBaseProps } from './utils'
 
@@ -9,19 +13,21 @@ import { ListOfTypeProps, ListOfTypeBaseProps } from './utils'
  * ClassroomList
  */
 
-const ClassroomListMain = ({
+export const ClassroomList = ({
 	title,
-	searchQuery,
-	searchResults,
 	items,
 	viewerCanAdd,
 	update,
 	onItemClick,
 	create,
-}: ListOfTypeProps<Classroom>) => {
+}: ListOfTypeBaseProps<Classroom>) => {
+	const { loading, data, refetch } = useQuery<ClassroomsQueryResponse>(
+		classroomsQuery,
+	)
+
 	const search = (searchValue: string) => {
 		if (searchValue.length < 3) return
-		searchQuery({
+		refetch({
 			where: {
 				title: {
 					contains: searchValue,
@@ -29,16 +35,16 @@ const ClassroomListMain = ({
 			},
 		})
 	}
+	const [classrooms] = unwindEdges<Classroom>(data?.classrooms)
 
 	return (
 		<List
 			title={title}
 			search={search}
-			searchResults={searchResults}
+			searchResults={classrooms}
 			onSearchResultClick={update}
 			viewerCanAdd={viewerCanAdd}
 			type="classroom"
-			// $FlowFixMe
 			items={items}
 			create={create}
 			onItemClick={onItemClick}
@@ -46,16 +52,3 @@ const ClassroomListMain = ({
 	)
 }
 
-export const ClassroomList = (baseProps: ListOfTypeBaseProps<Classroom>) => (
-	<ClassroomsQuery delayQuery>
-		{({ data, refetch }) => (
-			<ClassroomListMain
-				searchQuery={refetch}
-				searchResults={
-					data && data.classrooms ? unwindEdges(data.classrooms)[0] || [] : []
-				}
-				{...baseProps}
-			/>
-		)}
-	</ClassroomsQuery>
-)
