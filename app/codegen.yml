@@ -1,0 +1,16 @@
+generates:
+  fragmentTypes.json:
+    schema: ./schema.graphql
+    plugins:
+      - fragment-matcher
+  src/types-ts/generated.ts:
+    schema: ./schema.graphql
+    plugins:
+      - typescript
+    config:
+      nonOptionalTypename: true
+      scalars:
+        DateTime: Date
+        JSON: '{ [key: string]: any }'
+      declarationKind:
+        type: 'interface'

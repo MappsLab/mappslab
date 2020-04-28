@@ -7,6 +7,7 @@ interface ButtonWrapperProps {
 	theme: DefaultTheme
 	disabled: boolean
 	level: string
+	children?: React.ReactNode
 }
 
 export const ButtonWrapper = styled.button`

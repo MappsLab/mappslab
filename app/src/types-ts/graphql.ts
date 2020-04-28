@@ -1,22 +1,14 @@
 import { DocumentNode } from 'graphql'
+import { Subscription } from './generated'
 
 interface Edge<T> {
 	cursor: string | number
 	node: T
 }
 
-export interface PageInfo {
-	hasNextPage: boolean
-	hasPrevPage: boolean
-}
-
 /**
  * The subscription as it is returned to the component
  */
-export type Subscription = {
-	name: string
-	unsubscribe: () => {}
-}
 
 /**
  *
@@ -90,4 +82,3 @@ export type MutationOptions = {
 	refetchQueries?: Array<QueryConfig>
 }
 
-export type Mutation = (options?: MutationOptions) => Promise<void>
