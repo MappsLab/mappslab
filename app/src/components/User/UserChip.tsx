@@ -7,7 +7,7 @@ import { ChipProps } from 'Components/Generic/Chip'
  * UserChip
  */
 
-type Props = ChipProps & {
+type Props = Omit<ChipProps, 'title'> & {
 	user: User
 }
 

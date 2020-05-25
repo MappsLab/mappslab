@@ -1,8 +1,8 @@
+// @ts-nocheck
 import * as React from 'react'
 import { MappRenderProps, LatLng } from 'mapp'
 import { withStateMachine, MachineState } from 'react-automata'
-import { MapQuery } from '../../queries'
-import CreatePinMutation from '../../queries/Pin/createPinMutation'
+import { useCreatePinMutation, useMapQuery } from '../../queries'
 import { CurrentViewerConsumer } from '../../providers/CurrentViewer'
 import {
 	Pin,
@@ -13,7 +13,7 @@ import {
 	SubscriptionConfig,
 } from '../../types-ts'
 import { getOptionsForState } from './mapOptions'
-import statechart from './statechart'
+import { statechart } from './statechart'
 
 const debug = require('debug')('app')
 

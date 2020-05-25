@@ -1,35 +1,34 @@
-import { Node, Variables } from '../../types-ts'
+import { NodeType } from '../../types-ts'
 
 export type SearchForList = (arg0: any) => Promise<void> | void
 
-export type ListItemHandler = (item: Node) => void | Promise<void>
+export type ListItemHandler<T extends NodeType> = (
+	item: T,
+) => void | Promise<void>
 
 export type CreateNewFn = (str: string) => void | Promise<void>
 
 export interface ListItem {
 	key: string
-	node: Node
+	node: NodeType
 	info: Array<string>
 	onClick: () => void | Promise<void>
 }
 
-export interface ListOfTypeBaseProps<Type> {
+export interface ListOfTypeProps<Type extends NodeType> {
 	title: string
-	items: Array<Type>
+	items?: Type[]
 	viewerCanAdd: boolean
-	update: (node: Node) => void | Promise<void>
-	onItemClick: ListItemHandler
-	create: (args: any) => Promise<void> | void
+	update?: (node: NodeType) => void | Promise<void>
+	onItemClick?: ListItemHandler<Type>
+	onSearchResultClick?: ListItemHandler<Type>
+	create?: (args: any) => Promise<void> | void
+	remove?: (args: any) => Promise<void> | void
 }
 
-export interface ListOfTypeProps<Type> extends ListOfTypeBaseProps<Type> {
-	searchQuery: (Variables) => Promise<void>
-	searchResults: Array<Type>
-}
-
-export const nodeToListItem = (
-	node: Node,
-	handler: ListItemHandler,
+export const nodeToListItem = <T extends NodeType>(
+	node: T,
+	handler: ListItemHandler<T>,
 ): ListItem => {
 	const { uid } = node
 	return {

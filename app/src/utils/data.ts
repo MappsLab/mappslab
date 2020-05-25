@@ -1,18 +1,28 @@
 import * as R from 'ramda'
 
+type Maybe<T> = T | void | null
+
+export function definitely<T>(items?: Maybe<T>[] | null): T[] {
+	if (!items) return []
+	return items.reduce<T[]>(
+		(acc, item) => (item && item !== undefined ? [...acc, item] : acc),
+		[],
+	)
+}
+
 export const objEquals = R.equals
 
 export const findLastIndex = <T>(
 	array: Array<T>,
-	fn: (T) => boolean,
+	fn: (arg: T) => boolean,
 ): number => {
 	const reverseIndex = [...array].reverse().findIndex(fn)
 	return array.length - reverseIndex - 1
 }
 
-export const findNextInArray = <T>(array: T[], item: T): T | void => {
+export const findNextInArray = <T>(array: T[], item: T): T | null => {
 	if (!array.includes(item)) return null
-	let nextI
+	let nextI: number
 	const currI = array.findIndex((k) => k === item)
 	if (currI === array.length - 1) {
 		nextI = 0
@@ -25,7 +35,7 @@ export const arrayify = R.flatten
 export const minMax = (min: number, max: number) => (num: number): number =>
 	Math.min(Math.max(num, min), max)
 
-export const propByPath = (path: string | string[], obj: object) => {
+export const propByPath = <T>(path: string | string[], obj: T) => {
 	const propPath = typeof path === 'string' ? path.split('.') : path
 	const [firstKey, ...rest] = propPath
 	return rest.length ? propByPath(rest, obj[firstKey]) : obj[firstKey]
@@ -34,18 +44,19 @@ export const propByPath = (path: string | string[], obj: object) => {
 /**
  * Push an item to an array within an object
  */
-export const pushPath = (path: Array<string>, item: any) => (
-	target: Object,
-) => {
+export const pushPath = (path: Array<string>, item: any) => <T>(target: T) => {
 	// const arr: any[] = R.path(path)(target) || []
-	const arr = propByPath(path, target)
+	const arr = propByPath<T>(path, target)
 	if (!Array.isArray(arr))
 		throw new Error(`Prop ${path} on this object is not an array`)
 	return R.assocPath(path, [...arr, item])(target)
 }
 
 export const compose = (...funcs: Array<Function>) =>
-	funcs.reduce((a, b) => (...args: any) => a(b(...args)), (arg) => arg)
+	funcs.reduce(
+		(a, b) => (...args: any) => a(b(...args)),
+		(arg) => arg,
+	)
 
 /** Statechart Helpers */
 
@@ -103,7 +114,4 @@ const fnReducer = (fns: Array<Function>) => (val = {}) =>
 
 // export const eventsRe
 
-export const eventsReducer = R.pipe(
-	traceObject,
-	fnReducer,
-)
+export const eventsReducer = R.pipe(traceObject, fnReducer)

@@ -1,5 +1,5 @@
-// @flow
 import gql from 'graphql-tag'
+import { useQuery } from '@apollo/react-hooks'
 import { Viewer } from '../../types-ts'
 
 export const viewerDashboardQuery = gql`
@@ -45,6 +45,9 @@ export const viewerDashboardQuery = gql`
 	}
 `
 
-export interface ViewerDashboardQueryResponse {
+interface Response {
 	viewer: Viewer
 }
+
+export const useViewerDashboardQuery = () =>
+	useQuery<Response>(viewerDashboardQuery)

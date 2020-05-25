@@ -1,4 +1,4 @@
-// @flow
+// @ts-nocheck
 import React from 'react'
 import styled, { css } from 'styled-components'
 import { QuestionConsumer } from 'Components/Question'

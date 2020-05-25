@@ -1,10 +1,11 @@
 import * as React from 'react'
 import styled, { css } from 'styled-components'
 import NativeListener from 'react-native-listener'
-import Pane from '../Pane'
+import { Pane } from '../Pane'
 import { Button } from '../Buttons'
 import { P } from '../Text'
 import { QuestionContext, QuestionConsumer } from './QuestionProvider'
+import { definitely } from '../../utils'
 
 const Background = styled.div`
 	${({ theme }) => css`
@@ -46,7 +47,7 @@ const Message = styled.div`
  * Ask
  */
 
-type QuestionDialogProps = QuestionContext
+type QuestionDialogProps = QuestionContext<any>
 
 const QuestionDialogBase = ({
 	currentQuestion,
@@ -69,11 +70,13 @@ const QuestionDialogBase = ({
 					render(answer)
 				) : (
 					<Buttons>
-						{options.map(({ title, answerQuestion, ...buttonConfig }) => (
-							<Button key={title} onClick={answerQuestion} {...buttonConfig}>
-								{title}
-							</Button>
-						))}
+						{definitely(options).map(
+							({ title, answerQuestion, ...buttonConfig }) => (
+								<Button key={title} onClick={answerQuestion} {...buttonConfig}>
+									{title}
+								</Button>
+							),
+						)}
 					</Buttons>
 				)}
 			</Pane>

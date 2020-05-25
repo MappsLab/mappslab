@@ -2,7 +2,7 @@ import * as React from 'react'
 import styled, { DefaultTheme, css } from 'styled-components'
 import { Map } from '../../types-ts'
 import { Header2, Header4 } from 'Components/Text'
-import Burger from 'Components/Burger'
+import { Burger } from 'Components/Burger'
 import { Button } from 'Components/Buttons'
 import { useCurrentViewer } from '../../providers/CurrentViewer'
 
@@ -85,7 +85,7 @@ type Props = {
 	// transition: Transition,
 }
 
-const MapNavigation = ({ map }: Props) => {
+export const MapNavigation = ({ map }: Props) => {
 	const [open, setOpen] = useState(false)
 	const { logoutUser } = useCurrentViewer()
 	const { title, classroom } = map
@@ -123,4 +123,3 @@ const MapNavigation = ({ map }: Props) => {
 	)
 }
 
-export default MapNavigation

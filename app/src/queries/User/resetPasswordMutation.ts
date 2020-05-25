@@ -1,8 +1,13 @@
 import gql from 'graphql-tag'
+import { MutationFunctionOptions } from 'react-apollo'
+import { useMutation } from '@apollo/react-hooks'
 import { setCookie, VIEWER_COOKIE_TOKEN } from '../../utils/storage'
-import { JWT, Viewer } from '../../types-ts'
+import { Token, Viewer, MutationResetPasswordArgs } from '../../types-ts'
 import { currentViewerQuery } from '../Viewer/CurrentViewerQuery'
-import { UserLoginMutationResponse } from './userLoginMutation'
+
+interface Response {
+	resetPassword: { jwt: Token; viewer: Viewer }
+}
 
 export const resetPasswordMutation = gql`
 	mutation ResetPassword($resetToken: String!, $password: String!) {
@@ -25,13 +30,14 @@ export const resetPasswordMutation = gql`
 	}
 `
 
-export const resetPasswordMutationConfig = {
+const config: MutationFunctionOptions<Response, Variables> = {
 	update: (cache, { data }) => {
+		if (!data) throw new Error('Did not recieve data')
 		const { resetPassword } = data
 		const { viewer, jwt } = resetPassword || {}
 		if (viewer && jwt) {
 			const { token, expires } = jwt
-			const cookieExpiration = expires / 24 / 60 / 60
+			const cookieExpiration = parseInt(expires, 10) / 24 / 60 / 60
 			if (token) {
 				setCookie(VIEWER_COOKIE_TOKEN, token, { expires: cookieExpiration })
 			}
@@ -46,5 +52,7 @@ export const resetPasswordMutationConfig = {
 	},
 }
 
-export type ResetPasswordMutationResponse = UserLoginMutationResponse
+type Variables = MutationResetPasswordArgs['input']
 
+export const useResetPasswordMutation = () =>
+	useMutation<Response, Variables>(resetPasswordMutation, config)

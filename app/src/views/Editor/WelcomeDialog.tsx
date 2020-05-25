@@ -1,9 +1,8 @@
-// @flow
 import React from 'react'
 import { Transition } from 'react-automata'
 import { Map } from '../../types-ts'
 import { Centered } from 'Components/Layout'
-import Pane from 'Components/Pane'
+import { Pane } from 'Components/Pane'
 import { Header2, P } from 'Components/Text'
 import { Button } from 'Components/Buttons'
 
@@ -16,11 +15,12 @@ type Props = {
 	transition: Transition
 }
 
-const WelcomeDialog = ({ map, transition }: Props) => {
+export const WelcomeDialog = ({ map, transition }: Props) => {
 	const enterLesson = (lessonUid?: string) => () => {
 		transition('enterLesson', { lessonUid })
 	}
 	const { title, description, classroom } = map
+	if (!classroom) throw new Error('No classroom')
 	return (
 		<Centered>
 			<Pane icon="🗺" size="normal" title={title} subtitle={classroom.title}>
@@ -31,5 +31,3 @@ const WelcomeDialog = ({ map, transition }: Props) => {
 		</Centered>
 	)
 }
-
-export default WelcomeDialog

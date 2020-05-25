@@ -1,8 +1,10 @@
 import gql from 'graphql-tag'
-import { User } from '../../types-ts'
+import Debug from 'debug'
+import { useQuery } from '@apollo/react-hooks'
+import { User, Token } from '../../types-ts'
 import { getCookie, removeCookie, VIEWER_COOKIE_TOKEN } from 'Utils/storage'
 
-const debug = require('debug')('app')
+const debug = Debug('app:queries')
 // todo#16 : Make a Viewer fragment and reuse it in the viewer query
 export const currentViewerQuery = gql`
 	query ViewerQuery {
@@ -51,15 +53,21 @@ export const currentViewerQuery = gql`
 	}
 `
 
-export interface CurrentViewerQueryResponse {
-	currentViewer: User
+interface Response {
+	currentViewer: {
+		viewer: User
+		jwt: Token
+	}
 }
 
-export const currentViewerQueryConfig = {
-	onCompleted: ({ currentViewer }: CurrentViewerQueryResponse) => {
+export const config = {
+	onCompleted: ({ currentViewer }: Response) => {
 		if (getCookie(VIEWER_COOKIE_TOKEN) && !currentViewer) {
 			debug('User JWT has expired. Clearing cookies..')
 			removeCookie(VIEWER_COOKIE_TOKEN)
 		}
 	},
 }
+
+export const useCurrentViewerQuery = () =>
+	useQuery<Response>(currentViewerQuery, config)

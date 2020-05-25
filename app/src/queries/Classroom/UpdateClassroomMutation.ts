@@ -1,8 +1,9 @@
-// @flow
 import gql from 'graphql-tag'
-import { Classroom } from '../../types-ts'
+import { useMutation } from '@apollo/react-hooks'
+import { Classroom, MutationUpdateClassroomArgs } from '../../types-ts'
+import { classroomQuery } from './classroomQuery'
 
-const mutation = gql`
+const updateClassroomMutation = gql`
 	mutation UpdateClassroom($input: UpdateClassroomInput!) {
 		updateClassroom(input: $input) {
 			uid
@@ -35,6 +36,18 @@ const mutation = gql`
 	}
 `
 
-export interface UpdateClassroomResponse {
+interface Response {
 	updateClassroom: Classroom
 }
+
+type Variables = MutationUpdateClassroomArgs['input']
+
+const getOptions = (classroomUid: string) => ({
+	refetchQueries: [{ query: classroomQuery, variables: { uid: classroomUid } }],
+})
+
+export const useUpdateClassroomMutation = (classroomUid: string) =>
+	useMutation<Response, Variables>(
+		updateClassroomMutation,
+		getOptions(classroomUid),
+	)

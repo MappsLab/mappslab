@@ -1,2 +1,2 @@
-export * from './CurrentViewerQuery'
-export * from './ViewerDashboardQuery'
+export * from './currentViewerQuery'
+export * from './viewerDashboardQuery'

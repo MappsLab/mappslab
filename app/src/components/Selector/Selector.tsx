@@ -25,7 +25,7 @@ export interface SelectorRenderProps {
 	label: string
 }
 
-type SelectorItemType = {
+export type SelectorItemType = {
 	value: string
 	label: string
 	render?: (props: SelectorRenderProps) => React.ReactNode
@@ -43,6 +43,7 @@ export type SelectorProps = {
 	items: Array<SelectorItemType>
 	inputFilter?: (input: string) => (value: { [key: string]: any }) => boolean
 	disabled?: boolean
+	onInputValueChange?: (value: string) => void
 }
 
 /**
@@ -91,6 +92,7 @@ export const Selector = ({
 	inputFilter,
 	disabled,
 	selectedItem: controlledSelectedItem,
+	onInputValueChange,
 }: SelectorProps) => {
 	const controlledValue = controlledSelectedItem
 		? // If a controlled value is provided, find it in the items.
@@ -106,6 +108,7 @@ export const Selector = ({
 	return (
 		<Downshift
 			onChange={onChange}
+			onInputValueChange={onInputValueChange}
 			onSelect={onSelect}
 			stateReducer={stateReducer}
 			itemToString={itemToString || defaultItemToString}
@@ -118,9 +121,9 @@ export const Selector = ({
 				getMenuProps,
 				isOpen,
 				inputValue,
-				highlightedIndex,
+				// highlightedIndex,
 				selectedItem,
-				openMenu,
+				openMenu: dsOpenMenu,
 				// clearSelection,
 			}) => {
 				const filterItems = inputFilter || defaultInputFilter
@@ -145,6 +148,7 @@ export const Selector = ({
 						</SelectorListItem>
 					)
 				}
+				const openMenu = () => dsOpenMenu()
 				return (
 					<div>
 						<Wrapper disabled={disabled} isOpen={isOpen}>
@@ -168,7 +172,9 @@ export const Selector = ({
 													placeholder="start typing.."
 												/>
 											</ItemContainer>
-											{items.filter(filterItems(inputValue)).map(renderItem)}
+											{items
+												.filter(filterItems(inputValue || ''))
+												.map(renderItem)}
 										</React.Fragment>
 									) : null}
 								</List>
@@ -185,7 +191,7 @@ Selector.defaultProps = {
 	selectedItem: undefined,
 	itemToString: defaultItemToString,
 	inputFilter: defaultInputFilter,
-	onChange: () => {},
-	onSelect: () => {},
+	onChange: () => undefined,
+	onSelect: () => undefined,
 	disabled: false,
 }

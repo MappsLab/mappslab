@@ -1,5 +1,7 @@
 import gql from 'graphql-tag'
-import { Route } from '../../types-ts'
+import { useMutation } from '@apollo/react-hooks'
+import { Route, MutationUpdateRouteArgs } from '../../types-ts'
+import { mapQuery } from '../map/mapQuery'
 
 export const updateRouteMutation = gql`
 	mutation UpdateRoute(
@@ -43,3 +45,19 @@ export const updateRouteMutation = gql`
 export interface UpdateRouteMutation {
 	updateRoute: Route
 }
+
+interface Config {
+	mapUid: string
+}
+
+const getOptions = ({ mapUid }: Config) => ({
+	refetchQueries: [{ query: mapQuery, variables: { uid: mapUid } }],
+})
+
+export type UpdateRouteVariables = MutationUpdateRouteArgs['input']
+
+export const useUpdateRouteMutation = (config: Config) =>
+	useMutation<UpdateRouteMutation, UpdateRouteVariables>(
+		updateRouteMutation,
+		getOptions(config),
+	)

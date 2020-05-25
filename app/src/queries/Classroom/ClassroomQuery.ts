@@ -1,7 +1,8 @@
 import gql from 'graphql-tag'
-import { Classroom } from '../../types-ts'
+import { useQuery } from '@apollo/react-hooks'
+import { Classroom, QueryClassroomArgs } from '../../types-ts'
 
-export const query = gql`
+export const classroomQuery = gql`
 	query ClassroomQuery($uid: String, $slug: String) {
 		classroom(input: { uid: $uid, slug: $slug }) {
 			title
@@ -42,6 +43,11 @@ export const query = gql`
 	}
 `
 
-export interface ClassroomQueryResponse {
+type Variables = QueryClassroomArgs['input']
+
+interface Response {
 	classroom: Classroom
 }
+
+export const useClassroomQuery = (variables: Variables) =>
+	useQuery<Response, Variables>(classroomQuery, { variables })

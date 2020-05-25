@@ -1,4 +1,5 @@
 import React from 'react'
+import Debug from 'debug'
 import { ApolloProvider } from 'react-apollo'
 import { ApolloLink, split } from 'apollo-link'
 import { WebSocketLink } from 'apollo-link-ws'
@@ -6,11 +7,11 @@ import { ApolloClient } from 'apollo-client'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { createUploadLink } from 'apollo-upload-client'
 import { getMainDefinition } from 'apollo-utilities'
-import config from '../../config'
+import { config } from '../../config'
 import fragmentMatcher from './fragmentMatcher'
 import { setAuthHeader, logQueries, logErrors } from './middleware'
 
-const debug = require('debug')('_app')
+const debug = Debug('app')
 
 debug(`Using API endpoint: ${config.apiRoot}`)
 

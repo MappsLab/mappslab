@@ -1,9 +1,9 @@
 import gql from 'graphql-tag'
 import { Paginated } from '@good-idea/unwind-edges'
 import { useQuery } from '@apollo/react-hooks'
-import { User } from '../../types-ts'
+import { User, QueryUsersArgs } from '../../types-ts'
 
-export const usersQuery = gql`
+const usersQuery = gql`
 	query UsersQuery($input: UsersListOptions) {
 		users(input: $input) {
 			pageInfo {
@@ -22,8 +22,11 @@ export const usersQuery = gql`
 	}
 `
 
-export interface UsersQueryResponse {
+type Variables = QueryUsersArgs['input']
+
+interface UsersQueryResponse {
 	users: Paginated<User>
 }
 
-export const useUsersQuery = (variables: UsersListOptions) => {}
+export const useUsersQuery = (variables?: Variables) =>
+	useQuery<UsersQueryResponse, Variables>(usersQuery, { variables })

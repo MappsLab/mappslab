@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { DataLayer as DataLayerType } from '../../../types-ts'
-import config from '../../../config'
+import { config } from '../../../config'
 
 const { useEffect } = React
 

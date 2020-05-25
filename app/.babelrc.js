@@ -51,6 +51,7 @@ module.exports = {
 			],
 		},
 	],
+	ignore: [/_(\w+)\.tsx/],
 	plugins: [
 		[
 			'babel-plugin-module-resolver',

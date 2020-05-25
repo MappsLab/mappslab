@@ -1,54 +1,44 @@
 import * as React from 'react'
 import { unwindEdges } from '@good-idea/unwind-edges'
-import { Viewer, User, Mutation, QueryConfig } from '../../../types-ts'
-import { UpdateUserMutation, UserQuery } from '../../../queries/User'
-import { CreateClassroomMutation } from '../../../queries/Classroom'
+import { User, Classroom } from '../../../types-ts'
+import { useUpdateUserMutation } from '../../../queries/User'
+import { useCreateClassroomMutation } from '../../../queries/Classroom'
 import { ClassroomList } from '../../Lists'
-import { InspectItem } from '../InspectorProvider'
-import { InspectorSkeleton } from '../InspectorSkeleton'
+import { useInspector, InspectItem } from '../InspectorProvider'
+import { useCurrentViewer } from '../../../providers/CurrentViewer'
 
 /**
  * UserInspector
  */
 
-interface BaseProps {
-	viewer: null | Viewer
-	inspectItem: InspectItem
-}
-
-interface Props extends BaseProps {
-	userQueryConfig: QueryConfig
+interface Props {
 	user: User
-	updateUser: Mutation
-	createClassroom: Mutation
 }
 
-const UserInspectorMain = ({
-	user,
-	viewer,
-	updateUser,
-	inspectItem,
-	userQueryConfig,
-	createClassroom,
-}: Props) => {
-	const updateUserClassrooms = (classroom) => {
+export const UserInspector = ({ user }: Props) => {
+	const { viewer } = useCurrentViewer()
+	const { inspectItem } = useInspector()
+	const [updateUser] = useUpdateUserMutation(user.uid)
+	const [createClassroom] = useCreateClassroomMutation(user.uid)
+
+	const updateUserClassrooms = (classroom: Classroom) => {
 		const variables = {
 			input: {
 				uid: user.uid,
 				addToClassrooms: [classroom.uid],
 			},
 		}
-		updateUser({ variables, refetchQueries: [userQueryConfig] })
+		updateUser({ variables })
 	}
 
-	const createClassroomOnClick = async (inputValue) => {
+	const createClassroomOnClick = async (title: string) => {
 		const variables = {
 			input: {
-				title: inputValue,
+				title,
 				addTeachers: [user.uid],
 			},
 		}
-		createClassroom({ variables, refetchQueries: [userQueryConfig] })
+		createClassroom({ variables })
 	}
 
 	const classrooms =
@@ -57,44 +47,13 @@ const UserInspectorMain = ({
 			: []
 
 	return (
-		<>
-			<ClassroomList
-				title="Classrooms"
-				items={classrooms}
-				viewerCanAdd={Boolean(viewer && user.uid === viewer.uid)}
-				update={updateUserClassrooms}
-				onItemClick={inspectItem}
-				create={createClassroomOnClick}
-			/>
-		</>
+		<ClassroomList
+			title="Classrooms"
+			items={classrooms}
+			viewerCanAdd={Boolean(viewer && user.uid === viewer.uid)}
+			update={updateUserClassrooms}
+			onItemClick={inspectItem}
+			create={createClassroomOnClick}
+		/>
 	)
 }
-
-export const UserInspector = ({
-	uid,
-	...baseProps
-}: BaseProps & { uid: string }) => (
-	<CreateClassroomMutation>
-		{(createClassroom) => (
-			<UpdateUserMutation>
-				{(updateUser) => (
-					<UserQuery variables={{ uid }}>
-						{({ data, loading, queryConfig }) =>
-							loading ? (
-								<InspectorSkeleton />
-							) : (
-								<UserInspectorMain
-									{...baseProps}
-									userQueryConfig={queryConfig}
-									user={data.user}
-									updateUser={updateUser}
-									createClassroom={createClassroom}
-								/>
-							)
-						}
-					</UserQuery>
-				)}
-			</UpdateUserMutation>
-		)}
-	</CreateClassroomMutation>
-)

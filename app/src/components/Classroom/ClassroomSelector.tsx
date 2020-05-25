@@ -14,9 +14,18 @@ type Props = {
 export const ClassroomSelector = ({ classrooms, label, ...props }: Props) => {
 	const items = classrooms.map((c) => ({
 		value: c.uid,
-		label: c.title,
-		render: ({ highlighted, selected }) => (
-			<SelectorItem title={c.title} active={highlighted || selected} />
+		label: c.title || 'Untitled Classroom',
+		render: ({
+			highlighted,
+			selected,
+		}: {
+			highlighted: boolean
+			selected: boolean
+		}) => (
+			<SelectorItem
+				title={c.title || 'Untitled Classroom'}
+				active={highlighted || selected}
+			/>
 		),
 	}))
 	return (

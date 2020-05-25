@@ -6,16 +6,13 @@ import { LayersToolPane } from './styled'
 interface LayersToolProps extends DataLayerSelectorProps, MapBaseSelectorProps {
 	/* */
 }
-
-const mapTypesRegex = /roadmap|terrain|satellite|hybrid/
+// TODO: Move layers to Map Provider
 
 export const LayersTool = ({
 	disableLayer,
 	enableLayer,
 	enabledLayers,
 	layers,
-	setMapType,
-	mapType,
 }: LayersToolProps) => {
 	return (
 		<LayersToolPane>
@@ -25,9 +22,7 @@ export const LayersTool = ({
 				enabledLayers={enabledLayers}
 				layers={layers}
 			/>
-			{mapTypesRegex.test(mapType) ? (
-				<MapBaseSelector mapType={mapType} setMapType={setMapType} />
-			) : null}
+			<MapBaseSelector />
 		</LayersToolPane>
 	)
 }

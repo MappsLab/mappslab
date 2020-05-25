@@ -1,6 +1,8 @@
 import gql from 'graphql-tag'
-import { Map } from '../../types-ts'
+import { useMutation } from '@apollo/react-hooks'
+import { Map, MutationUpdateMapArgs } from '../../types-ts'
 import { pinFragment } from '../Pin/fragments'
+import { mapQuery } from './mapQuery'
 
 export const updateMapMutation = gql`
 	mutation UpdateMap(
@@ -91,6 +93,18 @@ export const updateMapMutation = gql`
 	${pinFragment}
 `
 
-export interface UpdateMapResponse {
+export type UseUpdateMapVariables = MutationUpdateMapArgs['input']
+
+interface Response {
 	updateMap: Map
 }
+
+const getOptions = ({ uid }) => ({
+	refetchQueries: [{ query: mapQuery, variables: { uid } }],
+})
+
+export const useUpdateMapMutation = (mapUid: string) =>
+	useMutation<Response, UseUpdateMapVariables>(
+		updateMapMutation,
+		getOptions({ uid: mapUid }),
+	)

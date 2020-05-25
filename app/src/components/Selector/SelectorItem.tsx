@@ -61,7 +61,7 @@ export interface SelectorItemProps {
 	title: string
 }
 
-export const SelectorItem = ({ image, title, active }: SelectorItemProps) => {
+export const SelectorItem = ({ title, active }: SelectorItemProps) => {
 	return (
 		<Wrapper active={active || undefined}>
 			<ImageWrapper>

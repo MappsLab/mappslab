@@ -52,11 +52,11 @@ const MediaButtons = styled.div`
 type MediaSubmission = (data: { [key: string]: any }) => void | Promise<void>
 
 interface Props {
-	image?: Image
+	image?: ImageType | null
 	imageName: string
 	enableImage?: boolean
 	validateImage?: (file: File) => Promise<string | void>
-	video?: Video
+	video?: VideoType | null
 	videoName: string
 	enableVideo?: boolean
 	submitUpdate: (formData: any) => void | Promise<void>
@@ -95,11 +95,11 @@ export const EditableMedia = ({
 			),
 		})
 		if (!result.video) return
-		submitUpdate({ [videoName]: result.video })
+		await submitUpdate({ [videoName]: result.video })
 	}
 
-	const remove = (key: string) => () => {
-		submitUpdate({ [key]: null })
+	const remove = (key: string) => async () => {
+		await submitUpdate({ [key]: null })
 	}
 
 	const removeLabel = image ? 'Remove Image' : 'Remove Video'
@@ -119,14 +119,9 @@ export const EditableMedia = ({
 					</ButtonWrapper>
 				) : null}
 				{image && enableImage ? (
-					<Image
-						image={image}
-						alt={alt}
-						size={600}
-						submitUpdate={submitUpdate}
-					/>
+					<Image image={image} alt={alt} size={600} />
 				) : video && enableVideo ? (
-					<Video video={video} submitUpdate={submitUpdate} />
+					<Video video={video} />
 				) : null}
 				{viewerCanEdit && !video && !image ? (
 					<MediaButtons>

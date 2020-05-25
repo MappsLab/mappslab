@@ -1,7 +1,9 @@
 import gql from 'graphql-tag'
-import { User } from '../../types-ts'
+import { useMutation } from '@apollo/react-hooks'
 
-export const createStudentMutation = gql`
+import { User, MutationCreateStudentArgs } from '../../types-ts'
+
+const createStudentMutation = gql`
 	mutation createStudent($input: CreateStudentInput!) {
 		createStudent(input: $input) {
 			uid
@@ -11,6 +13,11 @@ export const createStudentMutation = gql`
 	}
 `
 
-export interface CreateStudentMutationResponse {
+interface Response {
 	createStudent: User
 }
+
+type Variables = MutationCreateStudentArgs['input']
+
+export const useCreateStudentMutation = () =>
+	useMutation<Response, Variables>(createStudentMutation)

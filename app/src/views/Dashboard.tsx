@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { InspectorConsumer } from '../components/Inspector'
 import { useInspector } from '../components/Inspector/InspectorProvider'
 import { useCurrentViewer } from '../providers/CurrentViewer'
 
@@ -16,8 +15,8 @@ export const Dashboard = () => {
 	const { inspectItem } = useInspector()
 
 	useEffect(() => {
-		inspectItem(viewer)
-	}, [])
+		if (viewer) inspectItem(viewer)
+	}, [viewer])
 
 	return null
 }

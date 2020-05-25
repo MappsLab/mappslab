@@ -1,7 +1,10 @@
 import * as React from 'react'
-import styled , { css } from 'styled-components'
-import { NotificationsConsumer, Notification } from 'Components/Notifications'
-import type { NotificationType } from 'Components/Notifications'
+import styled, { css } from 'styled-components'
+import {
+	useNotifications,
+	Notification,
+	NotificationType,
+} from '../../components/Notifications'
 
 const Wrapper = styled.div`
 	${({ theme }) => css`
@@ -24,10 +27,11 @@ const Wrapper = styled.div`
  */
 
 type Props = {
-	notifications: Array<NotificationType>,
+	notifications: NotificationType[]
 }
 
-const MapNotificationsInner = ({ notifications }: Props) => {
+export const MapNotifications = () => {
+	const { notifications } = useNotifications()
 	return (
 		<Wrapper>
 			{notifications.map((n) => (
@@ -36,9 +40,3 @@ const MapNotificationsInner = ({ notifications }: Props) => {
 		</Wrapper>
 	)
 }
-
-export const MapNotifications = () => (
-	<NotificationsConsumer>
-		{({ notifications }) => <MapNotificationsInner notifications={notifications} />}
-	</NotificationsConsumer>
-)

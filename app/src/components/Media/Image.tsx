@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Image as ImageType } from '../../types-ts'
 import { getBestSize } from 'Utils/media'
-import config from '../../config'
+import { config } from '../../config'
 
 interface ImageProps {
 	image: ImageType

@@ -3,36 +3,25 @@ const path = require('path')
 module.exports = {
 	parser: '@typescript-eslint/parser',
 	extends: [
-		'airbnb',
+		'plugin:react/recommended',
 		'plugin:@typescript-eslint/recommended',
 		'prettier/@typescript-eslint',
 		'plugin:prettier/recommended',
 	],
 	rules: {
+		// Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
 		'no-unused-vars': 'off',
 		'@typescript-eslint/no-unused-vars': 1,
-		'no-underscore-dangle': 0,
-		'no-nested-ternary': 0,
-		'import/extensions': 0,
-		'jsx-a11y/anchor-is-valid': 0,
-		'react/sort-comp': 0,
-		'react/destructuring-assignment': 0,
-		'react/jsx-indent': [2, 'tab'],
-		'react/jsx-indent-props': [2, 'tab'],
-		'react/jsx-one-expression-per-line': 0,
-		'react/jsx-filename-extension': [
-			1,
-			{
-				extensions: ['.js', '.jsx', '.tsx'],
-			},
-		],
-		'import/prefer-default-export': 0,
-		'import/no-extraneous-dependencies': [
-			'error',
-			{
-				devDependencies: true,
-			},
-		],
+		'@typescript-eslint/no-explicit-any': 'off',
+		'@typescript-eslint/explicit-member-accessibility': 'off',
+		'@typescript-eslint/ban-ts-ignore': 'off',
+		'@typescript-eslint/explicit-function-return-type': 'off',
+		'react/display-name': 'off',
 	},
 	plugins: ['react', 'jsx-a11y', 'import'],
+	settings: {
+		react: {
+			version: 'detect',
+		},
+	},
 }

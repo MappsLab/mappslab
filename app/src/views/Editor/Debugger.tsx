@@ -1,9 +1,9 @@
 import * as React from 'react'
 import styled, { css } from 'styled-components'
 import { State } from 'react-automata'
-import { states as statesList } from './statechart'
+import { statechart } from './statechart'
 
-const states = Object.keys(statesList)
+const states = Object.keys(statechart)
 
 const Wrapper = styled.div`
 	position: absolute;

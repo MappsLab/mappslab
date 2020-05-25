@@ -1,6 +1,5 @@
 import * as React from 'react'
-import { LatLng } from 'mapp'
-import { Pin, Route as RouteType } from '../../../types-ts'
+import { Pin, Route as RouteType, LatLngType } from '../../../types-ts'
 import { Route } from './Route'
 
 /**
@@ -12,10 +11,10 @@ type NewRouteProps = {
 		pin: Pin
 		position?: 'BEFORE' | 'AFTER'
 	}
-	userLatLng: LatLng
+	userLatLng: LatLngType
 }
 
-const NewRoute = ({ connectToPin, userLatLng }: NewRouteProps) => {
+export const NewRoute = ({ connectToPin, userLatLng }: NewRouteProps) => {
 	const inProgressPin = {
 		...userLatLng,
 		__typename: 'Pin',
@@ -30,4 +29,3 @@ const NewRoute = ({ connectToPin, userLatLng }: NewRouteProps) => {
 	return <Route route={route} />
 }
 
-export default NewRoute

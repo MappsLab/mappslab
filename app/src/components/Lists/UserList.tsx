@@ -1,13 +1,11 @@
 import * as React from 'react'
 import { unwindEdges } from '@good-idea/unwind-edges'
 import { User } from '../../types-ts'
-import { UsersQuery } from '../../queries/User'
-import { QuestionConsumer, QuestionContext } from '../Question'
+import { useUsersQuery } from '../../queries/User'
+import { useQuestion } from '../Question'
 import { Prompt } from '../Forms'
 import { List } from './List'
-import { ListOfTypeProps, ListOfTypeBaseProps } from './utils'
-
-const { useState } = React
+import { ListOfTypeProps } from './utils'
 
 /**
  * UserList
@@ -15,46 +13,38 @@ const { useState } = React
 
 type Props = ListOfTypeProps<User> & {
 	userType: 'teacher' | 'student' | void
-	question: QuestionContext
 }
 
-const UserListMain = ({
+export const UserList = ({
 	title,
-	searchQuery,
-	searchResults,
 	items,
 	viewerCanAdd,
 	update,
 	onItemClick,
 	userType,
 	create,
-	question,
 }: Props) => {
-	const [showResults, setShowResults] = useState(false)
+	const { ask } = useQuestion()
+	const { data, refetch } = useUsersQuery()
+	const [searchResults] = unwindEdges(data?.users)
 
 	const search = (searchValue: string) => {
-		if (searchValue.length < 3) {
-			setShowResults(false)
-		} else {
-			setShowResults(true)
-			const roleFilter = userType ? { roles: { includes: userType } } : {}
-			searchQuery({
-				input: {
-					where: {
-						name: {
-							contains: searchValue,
-						},
-						...roleFilter,
-					},
+		const roleFilter = userType ? { roles: { includes: userType } } : {}
+		refetch({
+			where: {
+				name: {
+					contains: searchValue,
 				},
-			})
-		}
+				...roleFilter,
+			},
+		})
 	}
 
 	const createUser = async (name: string) => {
+		if (!create) return
 		const emailQuestion =
 			userType === 'teacher'
-				? await question.ask({
+				? await ask({
 						message: 'Enter an email address for this teacher',
 						render: (answer) => (
 							<Prompt
@@ -67,7 +57,7 @@ const UserListMain = ({
 				  })
 				: undefined
 		if (userType === 'teacher' && !emailQuestion) return
-		const tempPassQuestion = await question.ask({
+		const tempPassQuestion = await ask({
 			message: 'Enter a temporary password for this user',
 			render: (answer) => (
 				<Prompt
@@ -87,38 +77,13 @@ const UserListMain = ({
 		<List
 			title={title}
 			search={search}
-			searchResults={showResults ? searchResults : []}
+			searchResults={searchResults}
 			onSearchResultClick={update}
 			viewerCanAdd={viewerCanAdd}
 			type="user"
-			// $FlowFixMe
 			items={items}
 			create={createUser}
 			onItemClick={onItemClick}
 		/>
 	)
 }
-
-type BaseProps = ListOfTypeBaseProps<User> & {
-	userType: 'teacher' | 'student' | void
-}
-
-export const UserList = (baseProps: BaseProps) => (
-	<QuestionConsumer>
-		{(question) => (
-			<UsersQuery delayQuery>
-				{({ data, refetch }) => (
-					// $FlowFixMe
-					<UserListMain
-						question={question}
-						searchQuery={refetch}
-						searchResults={
-							data && data.users ? unwindEdges<User>(data.users)[0] || [] : []
-						}
-						{...baseProps}
-					/>
-				)}
-			</UsersQuery>
-		)}
-	</QuestionConsumer>
-)

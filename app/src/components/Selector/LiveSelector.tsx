@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Selector, SelectorItem } from './Selector'
+import { Selector, SelectorItemType } from './Selector'
 
 const { useState, useEffect } = React
 
@@ -9,12 +9,12 @@ interface LiveSelectorProps {
 	onSelect: ({ value: string }) => void
 	refetchQuery: (value: string) => void
 	refetchDelay?: number
-	items: Array<SelectorItem>
+	items: SelectorItemType[]
 }
 
 export const LiveSelector = (props: LiveSelectorProps) => {
 	const { refetchQuery, refetchDelay, onSelect, items, disabled, label } = props
-	const [inputValue, setInputValue] = useState('')
+	const [inputValue] = useState('')
 
 	const onInputValueChange = (value: string) => {
 		const { refetchQuery, refetchDelay } = this.props

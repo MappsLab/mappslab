@@ -3,26 +3,23 @@ import { EditableText, EditableMedia } from 'Components/Inspector'
 import NativeListener from 'react-native-listener'
 import { FaPencilAlt } from 'react-icons/fa'
 import { Header5 } from '../../../components/Text'
-import { Route, Viewer, Mutation } from '../../../types-ts'
+import { Route } from '../../../types-ts'
 import { Button } from 'Components/Buttons'
-import { UpdateRouteMutation } from 'Queries/Route'
-import { query as mapQuery } from 'Queries/Map/MapQuery'
+import { useUpdateRouteMutation, UpdateRouteVariables } from '../../../queries'
 import { getRouteDistance } from '../../../utils/maps'
+import { useCurrentViewer } from '../../../providers/CurrentViewer'
 
 const { useState } = React
 
-type BaseProps = {
+interface Props {
 	route: Route
 	mapUid: string
-	viewer?: Viewer
 }
 
-type Props = BaseProps & {
-	updateRoute: Mutation
-}
-
-const RouteInspector = ({ route, viewer, updateRoute, mapUid }: Props) => {
+export const RouteInspector = ({ route, mapUid }: Props) => {
+	const { viewer } = useCurrentViewer()
 	const [editMode, setEditMode] = useState(false)
+	const [updateRoute] = useUpdateRouteMutation({ mapUid })
 	const enterEdit = () => setEditMode(true)
 	const exitEdit = () => setEditMode(false)
 
@@ -31,7 +28,7 @@ const RouteInspector = ({ route, viewer, updateRoute, mapUid }: Props) => {
 	)
 	const canEdit = Boolean(viewerIsOwner && editMode)
 
-	const submitUpdate = async (args) => {
+	const submitUpdate = async (args: Omit<UpdateRouteVariables, 'uid'>) => {
 		if (!viewerIsOwner) throw new Error('You can only update routes you own')
 
 		const variables = {
@@ -41,7 +38,6 @@ const RouteInspector = ({ route, viewer, updateRoute, mapUid }: Props) => {
 
 		updateRoute({
 			variables,
-			refetchQueries: [{ query: mapQuery, variables: { uid: mapUid } }],
 		})
 	}
 	const distance = getRouteDistance(route)
@@ -50,7 +46,6 @@ const RouteInspector = ({ route, viewer, updateRoute, mapUid }: Props) => {
 		<React.Fragment>
 			<EditableText
 				name="title"
-				label="Title"
 				updateFn={submitUpdate}
 				fontSize="h1"
 				placeholder="Untitled Route"
@@ -60,12 +55,11 @@ const RouteInspector = ({ route, viewer, updateRoute, mapUid }: Props) => {
 			/>
 			<EditableText
 				name="description"
-				label="Description"
 				updateFn={submitUpdate}
 				fontSize="p"
 				multiline
 				placeholder="Describe your route"
-				initialValue={route.description}
+				initialValue={route.description || ''}
 				viewerCanEdit={canEdit}
 				autoFocus
 			/>
@@ -98,13 +92,3 @@ const RouteInspector = ({ route, viewer, updateRoute, mapUid }: Props) => {
 RouteInspector.defaultProps = {
 	viewer: undefined,
 }
-
-const RouteInspectorWrapper = (baseProps: BaseProps) => (
-	<UpdateRouteMutation>
-		{(updateRoute) => (
-			<RouteInspector {...baseProps} updateRoute={updateRoute} />
-		)}
-	</UpdateRouteMutation>
-)
-
-export default RouteInspectorWrapper

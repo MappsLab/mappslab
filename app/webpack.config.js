@@ -3,8 +3,12 @@ const merge = require('webpack-merge')
 const path = require('path')
 const babelConfig = require('./.babelrc')
 
+const resourceRegExp = /_(\w+)\.tsx/
+const ignorePlugin = new webpack.WatchIgnorePlugin([resourceRegExp])
+
 const common = merge([
 	{
+		plugins: [ignorePlugin],
 		module: {
 			rules: [
 				{

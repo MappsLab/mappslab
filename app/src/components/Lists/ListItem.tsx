@@ -1,28 +1,30 @@
 import * as React from 'react'
-import { Node } from '../../types-ts'
+import { NodeType } from '../../types-ts'
 import { ButtonConfig, ButtonDropdown } from './ButtonDropdown'
 import { ListItemWrapper, ItemTitle, ItemInfo } from './styled'
+import { getNodeTitle } from '../../utils'
 
 /**
  * ListItem
  */
 
-interface ListItemProps<NodeType> {
-	node: NodeType
-	info: Array<string>
+interface ListItemProps<N> {
+	node: N
+	info: string[]
 	onClick: () => void | Promise<void>
-	buttons?: ButtonConfig<NodeType>[]
+	buttons?: ButtonConfig<N>[]
 }
 
-export const ListItem = <NodeType extends Node>({
+export const ListItem = <N extends NodeType>({
 	onClick,
 	node,
 	info,
 	buttons,
 }: ListItemProps<NodeType>) => {
+	const title = getNodeTitle(node)
 	return (
 		<ListItemWrapper onClick={onClick}>
-			<ItemTitle>{node.title || node.name || 'Untitled'}</ItemTitle>
+			<ItemTitle>{title}</ItemTitle>
 			{info && info.map((i) => <ItemInfo key={i}>{i}</ItemInfo>)}
 			{buttons ? <ButtonDropdown item={node} buttons={buttons} /> : null}
 		</ListItemWrapper>

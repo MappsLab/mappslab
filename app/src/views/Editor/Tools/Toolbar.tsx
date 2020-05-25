@@ -7,7 +7,7 @@ interface WrapperProps {
 }
 
 const Wrapper = styled.div`
-	${({ theme }: WrapperProps) => `
+	${({ theme }: WrapperProps) => css`
 		position: absolute;
 		z-index: ${theme.layout.z.mapTool};
 		bottom: ${theme.layout.spacing.double};
@@ -21,17 +21,17 @@ const Wrapper = styled.div`
 	${({ align }: WrapperProps) => {
 		switch (align) {
 			case 'left':
-				return `
-					left: 20px;
+				return css`
 					justify-content: flex-start;
+					left: 20px;
 				`
 			case 'right':
-				return `
-					right: 20px;
+				return css`
 					justify-content: flex-end;
+					right: 20px;
 				`
 			default:
-				return `
+				return css`
 					width: 400px;
 					left: calc(50% - 200px);
 					justify-content: center;
@@ -50,7 +50,7 @@ type Props = {
 }
 
 const Toolbar = ({ children, align }: Props) => (
-	<Wrapper align={align}>{children}</Wrapper>
+	<Wrapper align={align || 'center'}>{children}</Wrapper>
 )
 
 Toolbar.defaultProps = {

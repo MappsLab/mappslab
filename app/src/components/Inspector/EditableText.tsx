@@ -1,6 +1,6 @@
 import * as React from 'react'
-import styled, { DefaultTheme, css } from 'styled-components'
 import NativeListener from 'react-native-listener'
+import { Wrapper, StyledInput } from './styled'
 import {
 	Header1,
 	Header2,
@@ -9,44 +9,20 @@ import {
 	Header5,
 	P,
 	TextArea,
-	Input,
 } from '../Text'
 
-interface InputProps {
-	theme: DefaultTheme
-	fontSize: string
+const { useEffect, useState, useRef } = React
+
+interface EditableTextProps {
+	fontSize?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'p'
+	viewerCanEdit?: boolean
+	updateFn?: (value: { [key: string]: any }) => Promise<void>
+	name: string
+	autoFocus?: boolean
+	initialValue?: string
+	placeholder?: string
+	multiline?: boolean
 }
-
-const StyledInput = styled(Input)`
-	${({ theme, fontSize }: InputProps) => css`
-		font-size: ${theme.font.size[fontSize] || theme.font.size.p};
-		max-width: 100%;
-		min-height: 1.3em;
-		background-color: inherit;
-		cursor: inherit;
-		width: 100%;
-		background-color: ${theme.color.xLightGray};
-	`}
-`
-
-interface WrapperProps {
-	theme: DefaultTheme
-	focused: boolean
-}
-
-const Wrapper = styled.div`
-	${({ theme, focused }: WrapperProps) => css`
-		margin-bottom: ${theme.layout.spacing.single};
-		position: relative;
-		background-color: ${focused ? `${theme.color.xLightGray}` : ''};
-		cursor: ${focused ? 'initial' : 'pointer'};
-		color: ${focused ? theme.color.primary.normal : 'inherit'};
-		&:hover {
-			background-color: ${theme.color.xLightGray};
-		}
-	`}
-`
-
 const textComponentsMap = {
 	h1: Header1,
 	h2: Header2,
@@ -56,62 +32,30 @@ const textComponentsMap = {
 	p: P,
 }
 
-/**
- * EditableText
- */
+export const EditableText = ({
+	fontSize,
+	viewerCanEdit,
+	updateFn,
+	name,
+	autoFocus,
+	initialValue,
+	placeholder,
+	multiline,
+}: EditableTextProps) => {
+	const [focused, setFocused] = useState(autoFocus || false)
+	const [value, setValue] = useState(initialValue || '')
+	const inputRef = useRef<HTMLInputElement | null>(null)
 
-interface EditableTextProps {
-	fontSize?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'p'
-	viewerCanEdit?: boolean
-	updateFn?: (value: { [key: string]: any }) => Promise<void>
-	name: string
-	label?: string
-	autoFocus?: boolean
-	initialValue?: string
-	placeholder?: string
-	multiline?: boolean
-}
+	const focus = () => setFocused(true)
+	const blur = () => setFocused(false)
 
-type State = {
-	value: string
-	focused: boolean
-}
-
-export class EditableText extends React.Component<EditableTextProps, State> {
-	static defaultProps = {
-		initialValue: '',
-		fontSize: 'p',
-		placeholder: 'Untitled',
-		updateFn: undefined,
-		viewerCanEdit: false,
-		autoFocus: true,
-		multiline: false,
+	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setValue(e.target.value)
 	}
 
-	state = {
-		focused: false,
-		value: this.props.initialValue || '',
-	}
-
-	inputRef = React.createRef<HTMLInputElement>()
-
-	componentDidMount() {
-		this.autoSize()
-	}
-
-	componentWillReceiveProps(nextProps: EditableTextProps) {
-		if (nextProps.initialValue !== this.props.initialValue) {
-			this.setState({ value: nextProps.initialValue })
-		}
-	}
-
-	componentWillUnmount() {
-		this.submitChange()
-	}
-
-	autoSize = () => {
-		const field = this.inputRef.current
-		if (!this.props.multiline || !field) return
+	const autoSize = () => {
+		const field = inputRef.current
+		if (!multiline || !field) return
 		// Reset field height
 		field.style.height = '0px'
 		// Get the computed styles for the element
@@ -126,65 +70,35 @@ export class EditableText extends React.Component<EditableTextProps, State> {
 		field.style.height = `${height}px`
 	}
 
-	handleChange = async (e: React.FormEvent<HTMLInputElement>) => {
-		const { value } = e.currentTarget
-		this.setState({ value })
-		this.autoSize()
+	const submitChange = () => {
+		if (updateFn && value) updateFn({ [name]: value })
 	}
 
-	focus = async () => {
-		this.setState({ focused: true })
-		this.autoSize()
-	}
+	// auto-size on mount
+	useEffect(autoSize, [])
 
-	/**
-	 * TODO: Blur and componentWillUnmount both fire, double-updating
-	 * figure out how to ensure it only happens once
-	 */
-	blur = async () => {
-		this.setState({ focused: false })
-		this.submitChange()
-	}
+	// auto-submit on unmount
+	useEffect(() => submitChange(), [])
 
-	submitChange = async () => {
-		const { updateFn, name, initialValue } = this.props
-		// Use an empty string if initialValue is falsy
-		const parsedInitialValue = initialValue || ''
-		const { value } = this.state
-		if (updateFn && parsedInitialValue !== value) {
-			updateFn({ [name]: value || '' })
-		}
-	}
-
-	render() {
-		const {
-			viewerCanEdit,
-			fontSize,
-			placeholder,
-			multiline,
-			autoFocus,
-		} = this.props
-		const { value, focused } = this.state
+	if (!viewerCanEdit) {
 		const Text = textComponentsMap[fontSize || 'p'] || textComponentsMap.p
-		if (!viewerCanEdit) {
-			return <Text>{value}</Text>
-		}
-		return (
-			<Wrapper focused={focused}>
-				<NativeListener onClick={this.focus}>
-					<StyledInput
-						onBlur={this.blur}
-						fontSize={fontSize}
-						as={multiline ? TextArea : undefined}
-						autoFocus={autoFocus}
-						onChange={this.handleChange}
-						value={value}
-						ref={this.inputRef}
-						placeholder={placeholder}
-					/>
-				</NativeListener>
-			</Wrapper>
-		)
+		return <Text>{value}</Text>
 	}
-}
 
+	return (
+		<Wrapper focused={focused}>
+			<NativeListener onClick={focus}>
+				<StyledInput
+					onBlur={blur}
+					fontSize={fontSize}
+					as={multiline ? TextArea : undefined}
+					autoFocus={autoFocus}
+					onChange={handleChange}
+					value={value}
+					ref={inputRef}
+					placeholder={placeholder}
+				/>
+			</NativeListener>
+		</Wrapper>
+	)
+}

@@ -1,7 +1,10 @@
 import gql from 'graphql-tag'
-import { Classroom } from '../../types-ts'
+import { MutationFunctionOptions } from 'react-apollo'
+import { useMutation } from '@apollo/react-hooks'
+import { userQuery } from '../User/userQuery'
+import { Classroom, MutationCreateClassroomArgs } from '../../types-ts'
 
-export const createClassroomMutation = gql`
+const createClassroomMutation = gql`
 	mutation CreateClassroom($input: NewClassroomInput!) {
 		createClassroom(input: $input) {
 			title
@@ -36,6 +39,20 @@ export const createClassroomMutation = gql`
 	}
 `
 
-export interface CreateClassroomResponse {
+type Variables = {
+	input: MutationCreateClassroomArgs['input']
+}
+
+interface Response {
 	classroom: Classroom
 }
+
+const getOptions = ({ uid }): MutationFunctionOptions<Response, Variables> => ({
+	refetchQueries: [{ query: userQuery, variables: { uid } }],
+})
+
+export const useCreateClassroomMutation = (userUid: string) =>
+	useMutation<Response, Variables>(
+		createClassroomMutation,
+		getOptions({ uid: userUid }),
+	)

@@ -1,63 +1,58 @@
 import * as React from 'react'
 
-export type NewNotification = {
+const { useState } = React
+
+export interface NewNotification {
 	message: string
 }
 
-export type NotificationType = {
+export interface NotificationType {
 	message: string
 	timestamp: number
 }
 
-type ContextType = {
+interface NotificationsContextValue {
 	sendNotification: (notification: NewNotification) => void
-	notifications: Array<NotificationType>
-}
-
-const { Consumer, Provider } = React.createContext<ContextType>({
-	sendNotification: () => {},
-	notifications: [],
-})
-
-export const NotificationsConsumer = Consumer
-
-/**
- * NotificationContext
- */
-
-interface NotificationsProviderProps {
-	children: React.ReactNode
-}
-
-interface State {
 	notifications: NotificationType[]
 }
 
-export class NotificationsProvider extends React.Component<
-	NotificationsProviderProps,
-	State
-> {
-	state = {
-		notifications: [],
-	}
+const NotificationsContext = React.createContext<
+	NotificationsContextValue | undefined
+>(undefined)
 
-	sendNotification = (newNotification: NewNotification) => {
-		const notification = {
-			...newNotification,
+export const NotificationsConsumer = NotificationsContext.Consumer
+
+export const useNotifications = () => {
+	const ctx = React.useContext(NotificationsContext)
+	if (!ctx)
+		throw new Error(
+			'useNotificationsContext must be used within a NotificationsProvider',
+		)
+	return ctx
+}
+
+interface NotificationsProps {
+	children: React.ReactNode
+}
+
+export const NotificationsProvider = ({ children }: NotificationsProps) => {
+	const [notifications, setNotifications] = useState<NotificationType[]>([])
+
+	const sendNotification = (note: NewNotification) => {
+		const newNotification = {
+			...note,
 			timestamp: Date.now(),
 		}
-		this.setState(({ notifications }) => ({
-			notifications: [...notifications, notification],
-		}))
+		setNotifications([...notifications, newNotification])
+	}
+	const value = {
+		notifications,
+		sendNotification,
 	}
 
-	render() {
-		const { children } = this.props
-		const { notifications } = this.state
-		const value = {
-			sendNotification: this.sendNotification,
-			notifications,
-		}
-		return <Provider value={value}>{children}</Provider>
-	}
+	return (
+		<NotificationsContext.Provider value={value}>
+			{children}
+		</NotificationsContext.Provider>
+	)
 }

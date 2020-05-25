@@ -1,8 +1,7 @@
 import * as React from 'react'
 import { unwindEdges } from '@good-idea/unwind-edges'
-import { LatLng } from 'mapp'
-import { Route, Pin } from '../../../types-ts'
-import { ProviderProps as MapProviderProps } from '../Provider'
+import { LatLngType, Route, Pin } from '../../../types-ts'
+import { useCurrentMap } from '../../../providers/CurrentMap'
 
 const { useContext, useReducer } = React
 
@@ -14,7 +13,7 @@ type InspectorItem = Route | Pin
 
 interface ItemInspectorState {
 	item?: InspectorItem
-	position?: LatLng
+	position?: LatLngType
 }
 
 interface Offset {
@@ -23,14 +22,14 @@ interface Offset {
 }
 
 export interface ItemInspectorProviderProps extends ItemInspectorState {
-	inspectItem: (item: InspectorItem, latlng?: LatLng) => void
+	inspectItem: (item: InspectorItem, latlng?: LatLngType) => void
 	closeInspector: () => void
-	panTo: (latlng: LatLng, offset?: Offset) => void
+	panTo: (latlng: LatLngType, offset?: Offset) => void
 	// panTo: Pick<MapProviderProps, 'panTo'>
 	mapUid: string
 }
 
-type Props = MapProviderProps & {
+type Props = {
 	children: React.ReactNode
 }
 
@@ -75,12 +74,13 @@ const inspectorReducer = (
 	}
 }
 
-export const InspectorProvider = ({ children, mapData, panTo }: Props) => {
+export const InspectorProvider = ({ children }: Props) => {
+	const { mapData, panTo } = useCurrentMap()
 	const [state, dispatch] = useReducer(inspectorReducer, {})
 	const { item, position } = state
 
 	// $FlowFixMe
-	const getItem = (newItem: InspectorItem) => {
+	const getItem = (newItem?: InspectorItem) => {
 		if (!newItem) return undefined
 		if (!mapData) throw new Error('Map data has not been loaded')
 		const { uid, __typename } = newItem
@@ -95,7 +95,7 @@ export const InspectorProvider = ({ children, mapData, panTo }: Props) => {
 		throw new Error(`Cannot inspect item of type "${__typename}"`)
 	}
 
-	const inspectItem = (newItem: InspectorItem, newPosition: LatLng) => {
+	const inspectItem = (newItem: InspectorItem, newPosition: LatLngType) => {
 		dispatch({ type: INSPECT_ITEM, item: newItem, position: newPosition })
 	}
 

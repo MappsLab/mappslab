@@ -1,11 +1,11 @@
 import * as React from 'react'
 import styled from 'styled-components'
 import { Centered } from '../../components/Layout'
-import { Viewer } from '../../types/User'
-import Pane from '../../components/Pane'
+import { Pane } from '../../components/Pane'
 import { UserInspector, ClassroomInspector, MapInspector } from './Inspectors'
-import { InspectItem, InspectorItem } from './InspectorProvider'
-import Breadcrumbs from './Breadcrumbs'
+import { useInspector } from './InspectorProvider'
+import { Breadcrumbs } from './Breadcrumbs'
+import { getNodeTitle } from '../../utils'
 
 const Outer = styled.div`
 	position: relative;
@@ -17,48 +17,31 @@ const Outer = styled.div`
  * Parses the given inspectPath and loads the correct Inspector
  */
 
-interface Props {
-	// for the Pane
-	inspectItem: InspectItem
-	viewer: null | Viewer
-	// for the breadcrumb
-	goBackTo: (InspectorItem) => Promise<void>
-	inspectorHistory: Array<InspectorItem>
-	currentItem: InspectorItem
-}
-
-const Loader = (props: Props) => {
-	const { currentItem, goBackTo, inspectorHistory, viewer, inspectItem } = props
-	const { __typename, uid, title, name } = currentItem
+const Loader = () => {
+	const { currentItem } = useInspector()
+	if (!currentItem) return null
+	const title = getNodeTitle(currentItem)
 
 	const renderInner = () => {
-		switch (__typename.toLowerCase()) {
-			case 'user':
-				return (
-					<UserInspector uid={uid} viewer={viewer} inspectItem={inspectItem} />
-				)
-			case 'classroom':
-				return (
-					<ClassroomInspector
-						viewer={viewer}
-						uid={uid}
-						inspectItem={inspectItem}
-					/>
-				)
-			case 'map':
-				return (
-					<MapInspector viewer={viewer} uid={uid} inspectItem={inspectItem} />
-				)
+		switch (currentItem.__typename) {
+			case 'User':
+				return <UserInspector user={currentItem} />
+			case 'Classroom':
+				return <ClassroomInspector classroom={currentItem} />
+			case 'Map':
+				return <MapInspector map={currentItem} />
 			default:
-				throw new Error(`There is no inspector for type "${__typename}"`)
+				throw new Error(
+					`There is no inspector for type "${currentItem.__typename}"`,
+				)
 		}
 	}
 
 	return (
 		<Centered>
 			<Outer>
-				<Breadcrumbs goBackTo={goBackTo} inspectorHistory={inspectorHistory} />
-				<Pane size="full" title={title || name}>
+				<Breadcrumbs />
+				<Pane size="full" title={title}>
 					{renderInner()}
 				</Pane>
 			</Outer>

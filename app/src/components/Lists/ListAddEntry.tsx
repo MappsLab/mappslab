@@ -1,8 +1,13 @@
 import React, { ChangeEvent } from 'react'
-import { Node } from '../../types-ts'
+import { NodeType } from '../../types-ts'
 import { Header5 } from 'Components/Text'
-import { SearchForList, ListItemHandler, CreateNewFn } from './utils'
-import { nodeToListItem } from './utils'
+import {
+	nodeToListItem,
+	SearchForList,
+	ListItemHandler,
+	CreateNewFn,
+} from './utils'
+import { getNodeTitle } from '../../utils'
 import { ListItem } from './ListItem'
 import {
 	AddButton,
@@ -19,17 +24,17 @@ const { useState, useEffect, useRef, useLayoutEffect } = React
  * ListAddEntry
  */
 
-type Props = {
+interface Props<T extends NodeType> {
 	addLabel: string
 	type: string
 	searchName: string
 	search: SearchForList
 	create: CreateNewFn
-	searchResults?: Array<Node>
-	onSearchResultClick: ListItemHandler
+	searchResults?: T[]
+	onSearchResultClick: ListItemHandler<T>
 }
 
-export const ListAddEntry = ({
+export const ListAddEntry = <T extends NodeType>({
 	addLabel,
 	searchName,
 	search,
@@ -37,7 +42,7 @@ export const ListAddEntry = ({
 	searchResults,
 	onSearchResultClick,
 	create,
-}: Props) => {
+}: Props<T>) => {
 	const [isOpen, setIsOpen] = useState(false)
 	const [inputValue, setInputValue] = useState('')
 	const inputRef = useRef<HTMLInputElement>(null)
@@ -79,6 +84,7 @@ export const ListAddEntry = ({
 		await create(inputValue)
 		reset()
 	}
+	const label = addLabel || `Add new ${searchName}`
 
 	return !isOpen ? (
 		<LineWrapper>
@@ -87,7 +93,7 @@ export const ListAddEntry = ({
 				onClick={startSearch}
 				data-testid="list-addButton"
 			>
-				+ {addLabel || `Add new ${searchName}`}
+				+ {label}
 			</AddButton>
 		</LineWrapper>
 	) : (
@@ -110,7 +116,7 @@ export const ListAddEntry = ({
 				<ListItems>
 					{searchResultItems && searchResultItems.length ? (
 						searchResultItems.map((item) => {
-							const label = item.node.title || item.node.name
+							const label = getNodeTitle(item.node)
 							if (!label)
 								throw new Error('This node does not have a name or title')
 							return <ListItem key={item.key} {...item} />

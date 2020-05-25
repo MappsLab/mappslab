@@ -1,7 +1,8 @@
 import gql from 'graphql-tag'
-import { Map } from '../../types-ts'
+import { useMutation } from '@apollo/react-hooks'
+import { Map, MutationCreateMapArgs } from '../../types-ts'
 
-export const createMapMutation = gql`
+const createMapMutation = gql`
 	mutation CreateMap($input: CreateMapInput!) {
 		createMap(input: $input) {
 			title
@@ -27,6 +28,11 @@ export const createMapMutation = gql`
 	}
 `
 
-export interface CreateMapResponse {
+type Variables = MutationCreateMapArgs['input']
+
+interface Response {
 	updateMap: Map
 }
+
+export const useCreateMapMutation = () =>
+	useMutation<Response, Variables>(createMapMutation)

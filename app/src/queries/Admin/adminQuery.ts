@@ -1,8 +1,9 @@
 import gql from 'graphql-tag'
+import { useQuery } from '@apollo/react-hooks'
 import { Paginated } from '@good-idea/unwind-edges'
 import { User, Classroom } from '../../types-ts'
 
-export const adminQuery = gql`
+const adminQuery = gql`
 	query AdminQuery {
 		teachers {
 			edges {
@@ -24,7 +25,9 @@ export const adminQuery = gql`
 	}
 `
 
-export interface AdminQueryResponse {
+interface Response {
 	teachers: Paginated<User>
 	classrooms: Paginated<Classroom>
 }
+
+export const useAdminQuery = () => useQuery<Response>(adminQuery)

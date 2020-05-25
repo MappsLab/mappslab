@@ -6,7 +6,7 @@ const { useState } = React
 
 interface DataLayerUploadProps {
 	/* */
-	onComplete: () => void
+	onComplete: () => Promise<void> | void
 	handleUpload: (file: File) => Promise<void>
 }
 

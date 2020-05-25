@@ -1,8 +1,7 @@
 import * as React from 'react'
-import { CustomPopup } from 'mapp'
+import { InfoWindow } from '@react-google-maps/api'
 import { PopupWrapper } from 'Components/InfoPopup'
-import { LatLngLiteral } from 'mapp'
-import { Route } from '../../../types-ts'
+import { LatLngLiteral, Route } from '../../../types-ts'
 /**
  * RouteHoverPopup
  */
@@ -12,14 +11,13 @@ type Props = {
 	position: LatLngLiteral
 }
 
-const RouteHoverPopup = ({ route, position }: Props) => {
+export const RouteHoverPopup = ({ route, position }: Props) => {
 	return (
-		<CustomPopup position={position}>
+		<InfoWindow position={position}>
 			<PopupWrapper noTouchEvents>
 				<p>{route.title || 'Untitled Route'}</p>
 			</PopupWrapper>
-		</CustomPopup>
+		</InfoWindow>
 	)
 }
 
-export default RouteHoverPopup

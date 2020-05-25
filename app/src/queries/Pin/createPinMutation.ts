@@ -1,5 +1,6 @@
 import gql from 'graphql-tag'
-import { Pin } from '../../types-ts'
+import { useMutation } from '@apollo/react-hooks'
+import { Pin, NewPinInput } from '../../types-ts'
 
 export const createPinMutation = gql`
 	mutation createPin($input: NewPinInput!) {
@@ -30,6 +31,13 @@ export const createPinMutation = gql`
 	}
 `
 
-export interface CreatePinResponse {
+interface Response {
 	createPin: Pin
 }
+
+interface Variables {
+	input: NewPinInput
+}
+
+export const useCreatePinMutation = () =>
+	useMutation<Response, Variables>(createPinMutation)

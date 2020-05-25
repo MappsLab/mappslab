@@ -1,14 +1,14 @@
 import React from 'react'
 import { withStateMachine, State, Action, Transition } from 'react-automata'
 import styled from 'styled-components'
-import Pane from '../../components/Pane'
+import { Pane } from '../../components/Pane'
 import { Centered } from '../../components/Layout'
 import { Button } from '../../components/Buttons'
 import { useCurrentViewer } from '../../providers/CurrentViewer'
 import { Viewer } from '../../types-ts'
-import StudentLogin from './StudentLogin'
-import TeacherLogin from './TeacherLogin'
-import UserLogin from './UserLogin'
+import { StudentLogin } from './StudentLogin'
+import { TeacherLogin } from './TeacherLogin'
+import { UserLogin } from './UserLogin'
 import { LoginSuccess } from './LoginSuccess'
 import SetNewPassword from './SetNewPassword'
 import {
@@ -53,7 +53,7 @@ type Props = BaseProps & {
 	error?: null | string
 }
 
-class Login extends React.Component<Props, State> {
+class LoginBase extends React.Component<Props, State> {
 	static defaultProps = {
 		classroomUid: null,
 		userUid: null,
@@ -96,7 +96,9 @@ class Login extends React.Component<Props, State> {
 						</State>
 
 						<State is={ENTER_PASSWORD}>
-							{childProps.userUid ? <UserLogin {...childProps} /> : null}
+							{childProps.userUid ? (
+								<UserLogin uid={childProps.userUid} {...childProps} />
+							) : null}
 						</State>
 
 						<State is={SET_NEW_PASSWORD}>
@@ -104,7 +106,14 @@ class Login extends React.Component<Props, State> {
 						</State>
 
 						<State is={LOGIN_SUCCESS}>
-							<LoginSuccess {...childProps} />
+							{childProps.viewer ? (
+								<LoginSuccess
+									transition={this.props.transition}
+									viewer={childProps.viewer}
+								/>
+							) : (
+								<p>Sorry, could not log in</p>
+							)}
 						</State>
 
 						<State is={[WELCOME, STUDENT_FLOW]}>
@@ -133,7 +142,7 @@ class Login extends React.Component<Props, State> {
 const Wrapper = (props: BaseProps) => {
 	const { viewer, ready } = useCurrentViewer()
 	if (!ready) return null
-	return <Login {...props} viewer={viewer} />
+	return <LoginBase {...props} viewer={viewer} />
 }
 
-export default withStateMachine(statechart)(Wrapper)
+export const Login = withStateMachine(statechart)(Wrapper)

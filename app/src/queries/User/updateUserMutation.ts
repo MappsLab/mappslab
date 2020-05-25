@@ -1,5 +1,8 @@
 import gql from 'graphql-tag'
-import { User } from '../../types-ts'
+import { MutationFunctionOptions } from 'react-apollo'
+import { useMutation } from '@apollo/react-hooks'
+import { User, MutationUpdateUserArgs } from '../../types-ts'
+import { userQuery } from './userQuery'
 
 export const updateUserMutation = gql`
 	mutation UpdateUser($input: UpdateUserInput!) {
@@ -11,6 +14,20 @@ export const updateUserMutation = gql`
 	}
 `
 
-export interface UpdateUserMutationResponse {
+type Variables = {
+	input: MutationUpdateUserArgs['input']
+}
+
+interface Response {
 	updateUser: User
 }
+
+const getOptions = ({ uid }): MutationFunctionOptions<Response, Variables> => ({
+	refetchQueries: [{ query: userQuery, variables: { uid } }],
+})
+
+export const useUpdateUserMutation = (userUid: string) =>
+	useMutation<Response, Variables>(
+		updateUserMutation,
+		getOptions({ uid: userUid }),
+	)

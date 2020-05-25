@@ -20,7 +20,7 @@ const dataLayerRoot =
 		? 'http://mappslab-beta.localhost:4572/'
 		: 'https://mappslab-beta.s3.amazonaws.com/'
 
-export default {
+export const config = {
 	apiRoot,
 	wsUri,
 	imageBucketRoot,

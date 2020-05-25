@@ -1,10 +1,9 @@
 import * as React from 'react'
 import styled, { css } from 'styled-components'
-import { Video as VideoType } from '../../types-ts'
 import { getVideoInfo } from '../../utils/media'
 
 interface VideoFrameProps {
-	ratio: number
+	ratio?: number
 }
 
 const VideoFrame = styled.div`
@@ -23,7 +22,7 @@ const VideoFrame = styled.div`
 `
 
 interface VideoProps {
-	video: VideoType
+	video: string
 	ratio?: number
 	title?: string
 }

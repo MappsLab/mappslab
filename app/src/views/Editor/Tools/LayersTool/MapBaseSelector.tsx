@@ -1,19 +1,16 @@
 import * as React from 'react'
 import { Header5 } from '../../../../components/Text'
-import { ProviderProps } from '../../Provider'
+import { useCurrentMap } from '../../../../providers/CurrentMap'
 import { Option } from './Option'
 
-export interface MapBaseSelectorProps {
-	/* */
-	setMapType: ProviderProps['setMapType']
-	mapType: ProviderProps['mapType']
-}
+export interface MapBaseSelectorProps {}
 
-export const MapBaseSelector = ({
-	setMapType,
-	mapType,
-}: MapBaseSelectorProps) => {
+const mapTypesRegex = /roadmap|terrain|satellite|hybrid/
+
+export const MapBaseSelector = () => {
+	const { mapType, setMapType } = useCurrentMap()
 	const setType = (type: string) => () => setMapType(type)
+	if (!mapTypesRegex.test(mapType)) return null
 
 	return (
 		<>

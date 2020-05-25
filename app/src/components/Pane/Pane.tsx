@@ -72,10 +72,10 @@ const TitleIcon = styled(Header1)`
  */
 
 interface PaneProps {
-	title?: string
+	title?: string | null
+	subtitle?: string | null
 	viewerCanEdit?: boolean
 	updateTitle?: (args: { [key: string]: any }) => Promise<void>
-	subtitle?: string
 	icon?: string
 	children: React.ReactNode
 	titleFieldName?: string
@@ -83,7 +83,7 @@ interface PaneProps {
 	allowOverflow: boolean
 }
 
-const Pane = ({
+export const Pane = ({
 	title,
 	subtitle,
 	titleFieldName,
@@ -128,4 +128,3 @@ Pane.defaultProps = {
 	allowOverflow: false,
 }
 
-export default Pane

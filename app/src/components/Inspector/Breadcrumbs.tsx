@@ -1,8 +1,9 @@
 import * as React from 'react'
 import styled, { css } from 'styled-components'
 import { Button } from '../Buttons'
-import ItemIcon from '../ItemIcon'
-import { InspectorItem } from './InspectorProvider'
+import { ItemIcon } from '../ItemIcon'
+import { useInspector } from './InspectorProvider'
+import { getNodeTitle } from '../../utils'
 
 const Wrapper = styled.div`
 	${({ theme }) => css`
@@ -17,28 +18,19 @@ const Wrapper = styled.div`
  * Breadcrumbs
  */
 
-type Props = {
-	goBackTo: (item: InspectorItem) => Promise<void>
-	inspectorHistory: Array<InspectorItem>
-}
-
-const Breadcrumbs = (props: Props) => {
-	const { goBackTo, inspectorHistory } = props
+export const Breadcrumbs = () => {
+	const { goBack, inspectorHistory } = useInspector()
 	if (inspectorHistory.length < 2) return null
 	const previousItem = inspectorHistory[inspectorHistory.length - 2]
 
-	const goBackToItem = (item: InspectorItem) => () => {
-		goBackTo(item)
-	}
+	const title = getNodeTitle(previousItem)
 
 	return (
 		<Wrapper>
-			<Button onClick={goBackToItem(previousItem)} level="tertiary">
-				← <ItemIcon type={previousItem.__typename} />{' '}
-				{previousItem.title || previousItem.name}
+			<Button onClick={goBack} level="tertiary">
+				← <ItemIcon type={previousItem.__typename} /> {title}
 			</Button>
 		</Wrapper>
 	)
 }
 
-export default Breadcrumbs

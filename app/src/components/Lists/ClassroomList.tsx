@@ -1,13 +1,9 @@
 import * as React from 'react'
-import { Paginated, unwindEdges } from '@good-idea/unwind-edges'
-import { useQuery } from '@apollo/react-hooks'
+import { unwindEdges } from '@good-idea/unwind-edges'
 import { Classroom } from '../../types-ts'
-import {
-	classroomsQuery,
-	ClassroomsQueryResponse,
-} from '../../queries/Classroom/ClassroomsQuery'
+import { useClassroomsQuery } from '../../queries/Classroom/ClassroomsQuery'
 import { List } from './List'
-import { ListOfTypeProps, ListOfTypeBaseProps } from './utils'
+import { ListOfTypeProps } from './utils'
 
 /**
  * ClassroomList
@@ -20,10 +16,8 @@ export const ClassroomList = ({
 	update,
 	onItemClick,
 	create,
-}: ListOfTypeBaseProps<Classroom>) => {
-	const { loading, data, refetch } = useQuery<ClassroomsQueryResponse>(
-		classroomsQuery,
-	)
+}: ListOfTypeProps<Classroom>) => {
+	const { data, refetch } = useClassroomsQuery({ skip: true })
 
 	const search = (searchValue: string) => {
 		if (searchValue.length < 3) return
@@ -35,20 +29,19 @@ export const ClassroomList = ({
 			},
 		})
 	}
-	const [classrooms] = unwindEdges<Classroom>(data?.classrooms)
+	const [searchResults] = unwindEdges<Classroom>(data?.classrooms)
 
 	return (
 		<List
 			title={title}
 			search={search}
-			searchResults={classrooms}
+			searchResults={searchResults}
 			onSearchResultClick={update}
 			viewerCanAdd={viewerCanAdd}
 			type="classroom"
-			items={items}
+			items={items || []}
 			create={create}
 			onItemClick={onItemClick}
 		/>
 	)
 }
-

@@ -1,7 +1,6 @@
 import React from 'react'
 import { unwindEdges } from '@good-idea/unwind-edges'
-import { useQuery } from '@apollo/react-hooks'
-import { classroomsQuery, ClassroomsQueryResponse } from '../../queries'
+import { useClassroomsQuery } from '../../queries'
 import { LiveSelector, SelectorItem } from '../Selector'
 
 /**
@@ -19,10 +18,9 @@ export const LiveClassroomSelector = ({
 	delayQuery,
 	onSelect,
 }: LiveClassroomSelectorProps) => {
-	const { loading, data, refetch } = useQuery<ClassroomsQueryResponse>(
-		classroomsQuery,
-		{ variables: { first: 25 } },
-	)
+	const { data, refetch } = useClassroomsQuery({ variables: { first: 25 } })
+	const [classrooms] = unwindEdges(data?.classrooms)
+
 	const refetchQuery = (input: string) => {
 		if (input.length < 3) {
 			refetch({ where: {} })
@@ -36,17 +34,24 @@ export const LiveClassroomSelector = ({
 			},
 		})
 	}
-	const classrooms =
-		data && data.classrooms && data.classrooms.edges
-			? unwindEdges(data.classrooms)[0]
-			: []
+
 	const items = classrooms.map((c) => ({
 		value: c.uid,
-		label: c.title,
-		render: ({ highlighted, selected }) => (
-			<SelectorItem title={c.title} active={highlighted || selected} />
+		label: c.title || 'Untitled Classroom',
+		render: ({
+			highlighted,
+			selected,
+		}: {
+			highlighted: boolean
+			selected: boolean
+		}) => (
+			<SelectorItem
+				title={c.title || 'Untitled Classroom'}
+				active={highlighted || selected}
+			/>
 		),
 	}))
+
 	return (
 		<LiveSelector
 			label="Select your classroom"

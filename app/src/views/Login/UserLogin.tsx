@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { transition as transitionType } from 'react-automata'
-import { UserType } from '../../types'
-import { UserQuery } from '../../queries/User'
+import { User } from '../../types-ts'
+import { useUserQuery } from '../../queries/User'
 import { Header2, Header4 } from '../../components/Text'
 import { Form, Field, ErrorMessage } from '../../components/Forms'
 import { useCurrentViewer, Credentials } from '../../providers/CurrentViewer'
@@ -11,17 +11,17 @@ import { SUCCESS, REQUIRE_RESET } from './statechart'
  * UserLogin
  */
 
-interface BaseProps {
+interface Props {
 	transition: transitionType
+	uid: string
 }
 
-interface Props extends BaseProps {
-	user: UserType
-}
-
-const UserLogin = ({ user, transition }: Props) => {
+export const UserLogin = ({ uid, transition }: Props) => {
 	const { loginUser, loading, viewer, error, resetToken } = useCurrentViewer()
-	const { uid, name } = user
+	const result = useUserQuery({ uid })
+	if (!result.data) return <Header4>Could not find user</Header4>
+	const { user } = result.data
+	const { name } = user
 
 	useEffect(() => {
 		if (resetToken) {
@@ -55,18 +55,3 @@ const UserLogin = ({ user, transition }: Props) => {
 		</Form>
 	)
 }
-
-interface WrapperProps extends BaseProps {
-	userUid?: string
-}
-
-const WithUser = ({ userUid, ...props }: WrapperProps) => {
-	if (!userUid) throw new Error('You must supply a `userUid`')
-	return (
-		<UserQuery variables={{ uid: userUid }}>
-			{({ data }) => <UserLogin user={data.user} {...props} />}
-		</UserQuery>
-	)
-}
-
-export default WithUser

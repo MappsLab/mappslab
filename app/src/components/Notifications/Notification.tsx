@@ -1,7 +1,7 @@
 import * as React from 'react'
 import styled, { DefaultTheme, css, keyframes } from 'styled-components'
 import { Header4 } from 'Components/Text'
-import type { NotificationType } from './Context'
+import { NotificationType } from './Context'
 
 const hide = keyframes`
 	0% {
@@ -30,9 +30,8 @@ const enter = keyframes`
 `
 
 interface MessageProps {
-  theme: DefaultTheme,
-  visible?: boolean
-
+	theme: DefaultTheme
+	visible?: boolean
 }
 
 const Message = styled(Header4)`
@@ -62,7 +61,7 @@ type Timeout = ReturnType<typeof setTimeout>
 type Props = NotificationType
 
 type State = {
-	visible: boolean,
+	visible: boolean
 }
 
 export class Notification extends React.Component<Props, State> {
@@ -76,7 +75,7 @@ export class Notification extends React.Component<Props, State> {
 		}, 5000)
 	}
 
-	timeout:Timeout 
+	timeout: Timeout
 
 	render() {
 		const { visible } = this.state
@@ -84,4 +83,3 @@ export class Notification extends React.Component<Props, State> {
 		return <Message visible={visible}>{message}</Message>
 	}
 }
-
