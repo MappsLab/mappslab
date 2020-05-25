@@ -4,8 +4,8 @@ import { QueryResult } from 'react-apollo'
 import * as R from 'ramda'
 import { Pin, Map } from '../../types-ts'
 import { MapResponse } from './mapQuery'
-import { pinFragment } from '../Pin/fragments'
-import { mapFragment } from '../Map/fragments'
+import { pinFragment } from '../pin/fragments'
+import { mapFragment } from '../map/fragments'
 
 interface MapUpdatedResponse {
 	mapUpdated: { map: Map }

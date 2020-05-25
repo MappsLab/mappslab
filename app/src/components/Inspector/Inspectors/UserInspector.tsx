@@ -1,10 +1,10 @@
 import * as React from 'react'
 import { unwindEdges } from '@good-idea/unwind-edges'
 import { User, Classroom } from '../../../types-ts'
-import { useUpdateUserMutation } from '../../../queries/User'
-import { useCreateClassroomMutation } from '../../../queries/Classroom'
+import { useUpdateUserMutation } from '../../../queries/user'
+import { useCreateClassroomMutation } from '../../../queries/classroom'
 import { ClassroomList } from '../../Lists'
-import { useInspector, InspectItem } from '../InspectorProvider'
+import { useInspector } from '../InspectorProvider'
 import { useCurrentViewer } from '../../../providers/CurrentViewer'
 
 /**

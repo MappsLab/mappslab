@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { unwindEdges } from '@good-idea/unwind-edges'
 import { DataLayer } from '../../types-ts'
-import { useDataLayersQuery } from '../../queries/DataLayer'
+import { useDataLayersQuery } from '../../queries/dataLayer'
 import { ListOfTypeProps } from './utils'
 import { List } from './List'
 import { definitely } from '../../utils'

@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { unwindEdges } from '@good-idea/unwind-edges'
 import { User } from '../../types-ts'
-import { useUsersQuery } from '../../queries/User'
+import { useUsersQuery } from '../../queries/user'
 import { useQuestion } from '../Question'
 import { Prompt } from '../Forms'
 import { List } from './List'

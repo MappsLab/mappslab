@@ -3,7 +3,7 @@ import { MutationFunctionOptions } from 'react-apollo'
 import { useMutation } from '@apollo/react-hooks'
 import { setCookie, VIEWER_COOKIE_TOKEN } from '../../utils/storage'
 import { Token, Viewer, MutationLoginViewerArgs } from '../../types-ts'
-import { currentViewerQuery } from '../Viewer/CurrentViewerQuery'
+import { currentViewerQuery } from '../viewer/currentViewerQuery'
 
 const userLoginMutation = gql`
 	mutation LoginViewer($password: String!, $uid: String, $email: String) {

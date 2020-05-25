@@ -1,12 +1,12 @@
 import * as React from 'react'
 import { unwindEdges } from '@good-idea/unwind-edges'
 import { Classroom, Map, User } from '../../../types-ts'
-import { useUpdateClassroomMutation } from '../../../queries/Classroom'
-import { useCreateMapMutation } from '../../../queries/Map'
+import { useUpdateClassroomMutation } from '../../../queries/classroom'
+import { useCreateMapMutation } from '../../../queries/map'
 import {
 	useCreateStudentMutation,
 	useCreateTeacherMutation,
-} from '../../../queries/User'
+} from '../../../queries/user'
 import { MapList, UserList } from '../../Lists'
 import { useInspector } from '../InspectorProvider'
 import { useCurrentViewer } from '../../../providers/CurrentViewer'

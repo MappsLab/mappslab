@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 import { MutationFunctionOptions } from 'react-apollo'
 import { useMutation } from '@apollo/react-hooks'
-import { userQuery } from '../User/userQuery'
+import { userQuery } from '../user/userQuery'
 import { Classroom, MutationCreateClassroomArgs } from '../../types-ts'
 
 const createClassroomMutation = gql`

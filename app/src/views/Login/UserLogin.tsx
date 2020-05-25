@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { transition as transitionType } from 'react-automata'
 import { User } from '../../types-ts'
-import { useUserQuery } from '../../queries/User'
+import { useUserQuery } from '../../queries/user'
 import { Header2, Header4 } from '../../components/Text'
 import { Form, Field, ErrorMessage } from '../../components/Forms'
 import { useCurrentViewer, Credentials } from '../../providers/CurrentViewer'

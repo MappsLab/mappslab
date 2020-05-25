@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { unwindEdges } from '@good-idea/unwind-edges'
 import { Map } from '../../types-ts'
-import { useMapsQuery } from '../../queries/Map'
+import { useMapsQuery } from '../../queries/map'
 import { List } from './List'
 import { ListOfTypeProps } from './utils'
 

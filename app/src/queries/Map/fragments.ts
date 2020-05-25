@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
-import { pinFragment } from '../Pin/fragments'
-import { userFragment } from '../User/fragments'
+import { pinFragment } from '../pin/fragments'
+import { userFragment } from '../user/fragments'
 import { imageFragment } from '../shared/fragments'
 
 export const mapFragment = gql`

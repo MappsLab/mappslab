@@ -1,6 +1,6 @@
 export * from './admin'
 export * from './classroom'
-export * from './datalayer'
+export * from './dataLayer'
 export * from './map'
 export * from './network'
 export * from './pin'

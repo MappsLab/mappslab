@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 import { useMutation } from '@apollo/react-hooks'
 import { Map, MutationUpdateMapArgs } from '../../types-ts'
-import { pinFragment } from '../Pin/fragments'
+import { pinFragment } from '../pin/fragments'
 import { mapQuery } from './mapQuery'
 
 export const updateMapMutation = gql`

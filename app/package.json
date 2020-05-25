@@ -138,6 +138,7 @@
     "jest-styled-components": "^7.0.2",
     "node-fetch": "^2.6.0",
     "react-hot-loader": "^4.12.20",
+    "react-test-renderer": "^16.13.1",
     "react-testing-library": "^8.0.1",
     "ts-jest": "^25.4.0",
     "ts-loader": "^7.0.1",

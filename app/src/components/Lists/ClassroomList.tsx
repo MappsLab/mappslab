@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { unwindEdges } from '@good-idea/unwind-edges'
 import { Classroom } from '../../types-ts'
-import { useClassroomsQuery } from '../../queries/Classroom/ClassroomsQuery'
+import { useClassroomsQuery } from '../../queries/classroom/classroomsQuery'
 import { List } from './List'
 import { ListOfTypeProps } from './utils'
 

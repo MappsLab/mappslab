@@ -4,7 +4,7 @@ import { Map, Classroom, DataLayer } from '../../../types-ts'
 import {
 	useUpdateMapMutation,
 	UseUpdateMapVariables,
-} from '../../../queries/Map'
+} from '../../../queries/map'
 import { Button } from '../../Buttons'
 import { DataLayerList, ClassroomList } from '../../Lists'
 import { useInspector } from '../InspectorProvider'
