@@ -1,7 +1,7 @@
 import React from 'react'
 import { State, Action, Transition } from 'react-automata'
-import { useUserQuery } from 'Queries'
-import { Form, Field } from 'Components/Forms'
+import { useUserQuery } from '../../queries'
+import { Form, Field } from '../../components/Forms'
 import {
 	FIND_TEACHER,
 	SUBMIT,
@@ -21,16 +21,15 @@ type Props = {
 
 export const TeacherLogin = ({ teacherEmail, transition }: Props) => {
 	const [isLoading, setIsLoading] = useState(false)
-	const { data, refetch } = useUserQuery({ email: teacherEmail })
+	const { refetch } = useUserQuery({ email: teacherEmail })
+
 	const handleSubmit = async ({ email }) => {
 		setIsLoading(true)
 		transition(SUBMIT)
-		await refetch({ email })
-	}
-
-	if (data && data.user) {
-		transition(FETCHED_TEACHER, { userUid: data.user.uid })
-		return null
+		const { data } = await refetch({ email })
+		if (data?.user) {
+			transition(FETCHED_TEACHER, { userUid: data.user.uid })
+		}
 	}
 
 	return (

@@ -17,7 +17,7 @@ const Outer = styled.div`
  * Parses the given inspectPath and loads the correct Inspector
  */
 
-const Loader = () => {
+export const Inspector = () => {
 	const { currentItem } = useInspector()
 	if (!currentItem) return null
 	const title = getNodeTitle(currentItem)
@@ -25,11 +25,11 @@ const Loader = () => {
 	const renderInner = () => {
 		switch (currentItem.__typename) {
 			case 'User':
-				return <UserInspector user={currentItem} />
+				return <UserInspector userUid={currentItem.uid} />
 			case 'Classroom':
-				return <ClassroomInspector classroom={currentItem} />
+				return <ClassroomInspector classroomUid={currentItem.uid} />
 			case 'Map':
-				return <MapInspector map={currentItem} />
+				return <MapInspector mapUid={currentItem.uid} />
 			default:
 				throw new Error(
 					`There is no inspector for type "${currentItem.__typename}"`,
@@ -49,4 +49,3 @@ const Loader = () => {
 	)
 }
 
-export default Loader

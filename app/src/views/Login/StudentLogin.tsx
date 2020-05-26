@@ -41,7 +41,7 @@ export const StudentLogin = ({ transition, classroomUid }: Props) => {
 		: {}
 
 	return (
-		<div>
+		<>
 			<State
 				is={SELECT_CLASSROOM}
 				render={() => <LiveClassroomSelector onSelect={selectClassroom} />}
@@ -57,7 +57,7 @@ export const StudentLogin = ({ transition, classroomUid }: Props) => {
 					/>
 				)}
 			/>
-		</div>
+		</>
 	)
 }
 

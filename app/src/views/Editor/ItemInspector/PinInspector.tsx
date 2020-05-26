@@ -1,7 +1,7 @@
 import * as React from 'react'
 import NativeListener from 'react-native-listener'
-import { useQuestion } from 'Components/Question'
 import { FaPencilAlt, FaTrashAlt } from 'react-icons/fa'
+import { useQuestion } from '../../../components/Question'
 import { Pin } from '../../../types-ts'
 import { EditableText, EditableMedia } from '../../../components/Inspector'
 import { Button } from '../../../components/Buttons'
@@ -10,7 +10,7 @@ import {
 	useUpdatePinMutation,
 	UpdatePinVariables,
 	useDeletePinMutation,
-} from '../../../Queries'
+} from '../../../queries'
 import { useInspector } from './Provider'
 
 const { useState } = React

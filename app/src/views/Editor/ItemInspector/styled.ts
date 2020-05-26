@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components'
-import { Button } from 'Components/Buttons'
+import { Button } from '../../../components/Buttons'
 
 export const Header = styled.div`
 	position: relative;

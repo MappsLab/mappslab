@@ -1,7 +1,7 @@
 // @flow
 import React from 'react'
 import { FaPlus, FaMinus } from 'react-icons/fa'
-import { RoundButton } from 'Components/Buttons'
+import { RoundButton } from '../../../components/Buttons'
 /**
  * ZoomButton
  */

@@ -1,16 +1,11 @@
 import * as React from 'react'
 import { Viewer } from '../../types-ts'
-import { setViewerCookie, removeViewerCookie } from 'Utils/storage'
+import { setViewerCookie, removeViewerCookie } from '../../utils/storage'
 import {
 	useCurrentViewerQuery,
 	useUserLoginMutation,
 	useResetPasswordMutation,
 } from '../../queries'
-// import {
-// 	useCurrentViewerQuery,
-// 	useLoginMutation,
-// 	useResetMutation,
-// } from './queries'
 
 const { useContext, useReducer, useEffect } = React
 

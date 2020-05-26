@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Button } from 'Components/Buttons'
+import { Button } from '../../components/Buttons'
 import Toolbar from './Tools/Toolbar'
 
 /**

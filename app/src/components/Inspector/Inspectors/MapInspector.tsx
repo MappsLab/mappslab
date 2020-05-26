@@ -1,7 +1,8 @@
 import * as React from 'react'
 import { unwindEdges } from '@good-idea/unwind-edges'
-import { Map, Classroom, DataLayer } from '../../../types-ts'
+import { Classroom, DataLayer } from '../../../types-ts'
 import {
+	useMapQuery,
 	useUpdateMapMutation,
 	UseUpdateMapVariables,
 } from '../../../queries/map'
@@ -38,14 +39,18 @@ const validateImageDimensions = (file: File): Promise<string | void> =>
 	})
 
 interface Props {
-	map: Map
+	mapUid: string
 }
 
-export const MapInspector = ({ map }: Props) => {
+export const MapInspector = ({ mapUid }: Props) => {
 	const { viewer } = useCurrentViewer()
 	const { inspectItem } = useInspector()
-	const [updateMap] = useUpdateMapMutation(map.uid)
+	const [updateMap] = useUpdateMapMutation(mapUid)
+	const response = useMapQuery({ variables: { uid: mapUid } })
 	const { ask } = useQuestion()
+
+	const map = response?.data?.map
+	if (response.loading || !map) return null
 
 	const [teachers] = unwindEdges(map?.classroom?.teachers)
 	const dataLayers =

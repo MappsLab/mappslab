@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 import { Paginated } from '@good-idea/unwind-edges'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 import { User, QueryUsersArgs } from '../../types-ts'
 
 const usersQuery = gql`

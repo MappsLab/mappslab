@@ -1,10 +1,9 @@
 import * as React from 'react'
 import { useGoogleMap } from '@react-google-maps/api'
-import { StateValue } from 'xstate'
 import { MapEventListeners } from '../../types-ts'
 import { addListeners, removeListeners } from '../../utils/listeners'
 import { useMapReducer, MapReducer } from './reducer'
-import { Map, Pin, Route, Image, Tileset } from '../../types-ts'
+import { Map, Pin, Route, Tileset } from '../../types-ts'
 import { useMapQuery, useMapSubscriptions } from '../../queries'
 import { applyBaseImage } from './baseImage'
 import { useMapMode, ModeEvent } from './mapMode'
@@ -58,7 +57,11 @@ export const CurrentMapProvider = ({ children }: CurrentMapProps) => {
 	const listenersRef = useRef<google.maps.MapsEventListener[]>([])
 	const reducerState = useMapReducer()
 	const { mapUid, mapType } = reducerState
-	const mapQuery = useMapQuery({ uid: mapUid })
+	const mapQuery = useMapQuery({
+		variables: { uid: mapUid },
+		skip: mapUid === null,
+	})
+
 	const { data } = mapQuery
 	const mapData = data?.map ?? null
 	const { state: modeState, transitionMode } = useMapMode()

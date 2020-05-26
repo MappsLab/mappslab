@@ -1,11 +1,11 @@
 import gql from 'graphql-tag'
-import { SubscribeToMoreOptions } from 'apollo-client'
-import { QueryResult } from 'react-apollo'
+import { SubscribeToMoreOptions, QueryResult } from '@apollo/client'
 import * as R from 'ramda'
 import { Pin, Map } from '../../types-ts'
 import { MapResponse } from './mapQuery'
 import { pinFragment } from '../pin/fragments'
 import { mapFragment } from '../map/fragments'
+import { definitely } from '../../utils'
 
 interface MapUpdatedResponse {
 	mapUpdated: { map: Map }
@@ -100,11 +100,35 @@ export const pinUpdated: SubscribeToMoreOptions = {
 	},
 }
 
+interface PinDeletedSubscriptionVariables {
+	mapUid: string
+}
+
 interface PinDeletedResponse {
 	pinDeleted: { pin: Pin }
 }
 
-export const pinDeleted: SubscribeToMoreOptions = {
+type GetSubscriptionConfig<
+	QueryResponse = any,
+	SubscriptionVariables = any,
+	SubscriptionData = any
+> = (
+	query: QueryResult<QueryResponse>,
+) => SubscribeToMoreOptions<
+	QueryResponse,
+	SubscriptionVariables,
+	SubscriptionData
+>
+
+interface MapSubscritionConfig {
+	mapUid: string
+}
+
+const pinDeleted: GetSubscriptionConfig<
+	MapResponse,
+	PinDeletedSubscriptionVariables,
+	PinDeletedResponse
+> = (query) => ({
 	document: gql`
 		subscription pinDeleted($mapUid: String!) {
 			pinDeleted(input: { mapUid: $mapUid }) {
@@ -115,27 +139,43 @@ export const pinDeleted: SubscribeToMoreOptions = {
 		}
 		${pinFragment}
 	`,
+
+	variables: {
+		mapUid: query?.variables?.uid,
+	},
+
 	updateQuery: (previous, { subscriptionData }) => {
-		const deletedPin = subscriptionData.data.pinDeleted.pin
-		const { edges } = previous.map.pins
-		const updatedEdges = edges.filter(
-			(edge) => edge.node.uid !== deletedPin.uid,
+		const deletedPin = subscriptionData?.data?.pinDeleted.pin
+		const previousPins = previous?.map?.pins
+		if (!deletedPin || !previousPins) return previous
+
+		const updatedEdges = definitely(previous.map?.pins?.edges).filter(
+			(edge) => edge?.node?.uid && edge.node.uid !== deletedPin.uid,
 		)
 
-		const map = R.assocPath(['pins', 'edges'], updatedEdges)(previous.map)
-
-		return {
-			...previous,
-			map,
+		const updatedMap: Map = {
+			...previous.map,
+			pins: {
+				...previousPins,
+				edges: updatedEdges,
+			},
 		}
+		return { map: updatedMap }
 	},
-}
+})
 
-const mapSubscriptions = [pinAddedToMap, pinUpdated, pinDeleted, mapUpdated]
+const mapSubscriptions: GetSubscriptionConfig[] = [
+	// pinAddedToMap,
+	// pinUpdated,
+	pinDeleted,
+	// mapUpdated,
+]
 
 export const useMapSubscriptions = (query: QueryResult<MapResponse>) => {
-	const { refetch, subscribeToMore } = query
-	const subscriptions = mapSubscriptions.map(({ document, updateQuery }) =>
-		subscribeToMore({ document, updateQuery }),
-	)
+	const { subscribeToMore } = query
+	if (!subscribeToMore) return null
+	return mapSubscriptions.map((sub) => {
+		const { document, variables, updateQuery } = sub(query)
+		subscribeToMore({ document, variables, updateQuery })
+	})
 }

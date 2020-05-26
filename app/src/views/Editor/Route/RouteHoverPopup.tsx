@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { InfoWindow } from '@react-google-maps/api'
-import { PopupWrapper } from 'Components/InfoPopup'
+import { PopupWrapper } from '../../../components/InfoPopup'
 import { LatLngLiteral, Route } from '../../../types-ts'
 /**
  * RouteHoverPopup

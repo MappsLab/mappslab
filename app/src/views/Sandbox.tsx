@@ -1,7 +1,6 @@
-// @ts-nocheck
 import React from 'react'
 import styled, { css } from 'styled-components'
-import { QuestionConsumer } from 'Components/Question'
+import { QuestionConsumer } from '../components/Question'
 
 const Wrapper = styled.div`
 	${({ theme }) => css`

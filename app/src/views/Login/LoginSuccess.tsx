@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect } from 'react'
 import { unwindEdges } from '@good-idea/unwind-edges'
 import { Action } from 'react-automata'
 import { Header1, Header2, Header4 } from '../../components/Text'
@@ -61,6 +61,7 @@ export const LoginSuccess = ({ transition }: Props) => {
 					))}
 				</React.Fragment>
 			) : null}
+
 			{isTeacher && (
 				<Button to="/dashboard" level="tertiary">
 					Manage my classrooms

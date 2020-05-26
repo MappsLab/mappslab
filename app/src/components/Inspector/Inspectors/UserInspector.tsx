@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { unwindEdges } from '@good-idea/unwind-edges'
-import { User, Classroom } from '../../../types-ts'
-import { useUpdateUserMutation } from '../../../queries/user'
+import { Classroom } from '../../../types-ts'
+import { useUserQuery, useUpdateUserMutation } from '../../../queries/user'
 import { useCreateClassroomMutation } from '../../../queries/classroom'
 import { ClassroomList } from '../../Lists'
 import { useInspector } from '../InspectorProvider'
@@ -12,14 +12,18 @@ import { useCurrentViewer } from '../../../providers/CurrentViewer'
  */
 
 interface Props {
-	user: User
+	userUid: string
 }
 
-export const UserInspector = ({ user }: Props) => {
+export const UserInspector = ({ userUid }: Props) => {
 	const { viewer } = useCurrentViewer()
 	const { inspectItem } = useInspector()
-	const [updateUser] = useUpdateUserMutation(user.uid)
-	const [createClassroom] = useCreateClassroomMutation(user.uid)
+	const response = useUserQuery({ uid: userUid })
+	const user = response?.data?.user
+	const [updateUser] = useUpdateUserMutation(user?.uid || '')
+	const [createClassroom] = useCreateClassroomMutation({ userUid })
+
+	if (response.loading || !user) return null
 
 	const updateUserClassrooms = (classroom: Classroom) => {
 		const variables = {

@@ -1,5 +1,3 @@
-const path = require('path')
-
 module.exports = {
 	parser: '@typescript-eslint/parser',
 	extends: [
@@ -16,6 +14,7 @@ module.exports = {
 		'@typescript-eslint/explicit-member-accessibility': 'off',
 		'@typescript-eslint/ban-ts-ignore': 'off',
 		'@typescript-eslint/explicit-function-return-type': 'off',
+		'@typescript-eslint/explicit-module-boundary-types': 'off',
 		'react/display-name': 'off',
 	},
 	plugins: ['react', 'jsx-a11y', 'import'],

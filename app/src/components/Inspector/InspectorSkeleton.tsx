@@ -1,6 +1,6 @@
 import * as React from 'react'
 import styled, { css, keyframes } from 'styled-components'
-import { P } from 'Components/Text'
+import { P } from '../../components/Text'
 
 const pulse = keyframes`
 	0% {

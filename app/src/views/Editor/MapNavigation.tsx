@@ -1,9 +1,9 @@
 import * as React from 'react'
 import styled, { DefaultTheme, css } from 'styled-components'
 import { Map } from '../../types-ts'
-import { Header2, Header4 } from 'Components/Text'
-import { Burger } from 'Components/Burger'
-import { Button } from 'Components/Buttons'
+import { Header2, Header4 } from '../../components/Text'
+import { Burger } from '../../components/Burger'
+import { Button } from '../../components/Buttons'
 import { useCurrentViewer } from '../../providers/CurrentViewer'
 
 const { useState } = React

@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Image as ImageType } from '../../types-ts'
-import { getBestSize } from 'Utils/media'
+import { getBestSize } from '../../utils/media'
 import { config } from '../../config'
 
 interface ImageProps {
@@ -10,7 +10,7 @@ interface ImageProps {
 }
 
 const getSrc = (image: ImageType, size: number) =>
-	`${config.imageBucketRoot}${getBestSize(image, size).uri}`
+	`${config.imageBucketRoot}mappslab-beta/${getBestSize(image, size).uri}`
 
 export const Image = ({ image, size, alt }: ImageProps) => (
 	<img alt={alt || ''} src={getSrc(image, size)} />

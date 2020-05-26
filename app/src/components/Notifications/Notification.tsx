@@ -1,6 +1,6 @@
 import * as React from 'react'
 import styled, { DefaultTheme, css, keyframes } from 'styled-components'
-import { Header4 } from 'Components/Text'
+import { Header4 } from '../Text'
 import { NotificationType } from './Context'
 
 const hide = keyframes`

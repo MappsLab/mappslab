@@ -8,7 +8,7 @@ import { Prompt } from '../Forms'
 import { Image as ImageType, Video as VideoType } from '../../types-ts'
 import { Button } from '../Buttons'
 import { Image, Video } from '../Media'
-import { Header2 } from 'Components/Text'
+import { Header2 } from '../Text'
 
 const { useState } = React
 

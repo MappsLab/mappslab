@@ -1,7 +1,10 @@
 import * as React from 'react'
 import { unwindEdges } from '@good-idea/unwind-edges'
-import { Classroom, Map, User } from '../../../types-ts'
-import { useUpdateClassroomMutation } from '../../../queries/classroom'
+import { Map, User } from '../../../types-ts'
+import {
+	useClassroomQuery,
+	useUpdateClassroomMutation,
+} from '../../../queries/classroom'
 import { useCreateMapMutation } from '../../../queries/map'
 import {
 	useCreateStudentMutation,
@@ -16,7 +19,7 @@ import { useCurrentViewer } from '../../../providers/CurrentViewer'
  */
 
 interface Props {
-	classroom: Classroom
+	classroomUid: string
 }
 
 interface CreateUserFnArgs {
@@ -29,15 +32,21 @@ interface CreateUserFnArgs {
 	temporaryPassword: string
 }
 
-export const ClassroomInspector = ({ classroom }: Props) => {
+export const ClassroomInspector = ({ classroomUid }: Props) => {
 	const { viewer } = useCurrentViewer()
 	const { inspectItem } = useInspector()
-	const [updateClassroom] = useUpdateClassroomMutation(classroom.uid)
-	const [createTeacher] = useCreateTeacherMutation()
-	const [createStudent] = useCreateStudentMutation()
-	const [createMap] = useCreateMapMutation()
+	const response = useClassroomQuery({ uid: classroomUid })
+	const classroom = response?.data?.classroom
+	const [updateClassroom] = useUpdateClassroomMutation(classroom?.uid || '')
+	const [createTeacher] = useCreateTeacherMutation({ classroomUid })
+	const [createStudent] = useCreateStudentMutation({ classroomUid })
+	const [createMap] = useCreateMapMutation({
+		classroomUid,
+	})
 
-	const updateClassroomUsers = (user: User) => {
+	if (response.loading || !classroom) return null
+
+	const updateClassroomUsers = async (user: User) => {
 		const addKey = user?.roles?.includes('teacher')
 			? 'addTeachers'
 			: 'addStudents'
@@ -45,15 +54,15 @@ export const ClassroomInspector = ({ classroom }: Props) => {
 			uid: classroom.uid,
 			[addKey]: [user.uid],
 		}
-		updateClassroom({ variables })
+		await updateClassroom({ variables })
 	}
 
-	const updateClassroomMaps = (map: Map) => {
+	const updateClassroomMaps = async (map: Map) => {
 		const variables = {
 			uid: classroom.uid,
 			addMaps: [map.uid],
 		}
-		updateClassroom({ variables })
+		await updateClassroom({ variables })
 	}
 
 	const createMapInClassroom = async (title: string) => {
@@ -78,7 +87,6 @@ export const ClassroomInspector = ({ classroom }: Props) => {
 			throw new Error(
 				`There is no mutation for creating a user with the role "${role}"`,
 			)
-		// const addKey = role === 'student' ? 'addStudents' | 'addTeacher'
 		const variables = {
 			name,
 			email: email || '',

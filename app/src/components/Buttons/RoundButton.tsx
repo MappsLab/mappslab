@@ -1,6 +1,6 @@
 import * as React from 'react'
 import styled, { css } from 'styled-components'
-import { ToolTip } from 'Components/ToolTip'
+import { ToolTip } from '../ToolTip'
 
 interface WrapperProps {
 	active?: boolean

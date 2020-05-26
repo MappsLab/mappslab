@@ -2,6 +2,7 @@ import * as React from 'react'
 import { useLocation, useHistory } from 'react-router-dom'
 import { parseQueryString, getNodeTitle, buildQueryString } from '../../utils'
 import { NodeType } from '../../types-ts'
+import { Inspector } from './Inspector'
 import { Dispatchers, useInspectorState } from './state'
 
 const { useEffect } = React
@@ -72,6 +73,7 @@ export const InspectorProvider = ({
 
 	return (
 		<InspectorContext.Provider value={value}>
+			<Inspector />
 			{children}
 		</InspectorContext.Provider>
 	)

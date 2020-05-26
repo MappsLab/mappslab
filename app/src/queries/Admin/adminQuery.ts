@@ -1,5 +1,5 @@
 import gql from 'graphql-tag'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 import { Paginated } from '@good-idea/unwind-edges'
 import { User, Classroom } from '../../types-ts'
 

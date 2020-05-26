@@ -1,10 +1,10 @@
 import React from 'react'
 import { Transition } from 'react-automata'
 import { Map } from '../../types-ts'
-import { Centered } from 'Components/Layout'
-import { Pane } from 'Components/Pane'
-import { Header2, P } from 'Components/Text'
-import { Button } from 'Components/Buttons'
+import { Centered } from '../../components/Layout'
+import { Pane } from '../../components/Pane'
+import { Header2, P } from '../../components/Text'
+import { Button } from '../../components/Buttons'
 
 /**
  * WelcomeDialog

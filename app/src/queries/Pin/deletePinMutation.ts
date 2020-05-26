@@ -1,6 +1,5 @@
 import gql from 'graphql-tag'
-import { MutationFunctionOptions } from 'react-apollo'
-import { useMutation } from '@apollo/react-hooks'
+import { MutationFunctionOptions, useMutation } from '@apollo/client'
 import { Pin, MutationDeletePinArgs } from '../../types-ts'
 
 export const deletePinMutation = gql`

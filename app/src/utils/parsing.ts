@@ -4,11 +4,12 @@ export const getNodeTitle = (node: NodeType): string | null | undefined => {
 	switch (node.__typename) {
 		case 'User':
 			return node.name
+		case 'Classroom':
+		case 'DataLayer':
 		case 'Map':
 			return node.title
-		case 'Classroom':
-			return node.title
 		default:
-			return null
+			// @ts-ignore
+			throw new Error(`Could not get title for node type "${node.__typename}"`)
 	}
 }

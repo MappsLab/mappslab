@@ -1,6 +1,5 @@
 import gql from 'graphql-tag'
-import { MutationFunctionOptions } from 'react-apollo'
-import { useMutation } from '@apollo/react-hooks'
+import { MutationFunctionOptions, useMutation } from '@apollo/client'
 import { setCookie, VIEWER_COOKIE_TOKEN } from '../../utils/storage'
 import { Token, Viewer, MutationLoginViewerArgs } from '../../types-ts'
 import { currentViewerQuery } from '../viewer/currentViewerQuery'

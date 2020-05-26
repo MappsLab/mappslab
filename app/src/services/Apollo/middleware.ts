@@ -1,8 +1,9 @@
-import { ApolloLink } from 'apollo-link'
-import { onError } from 'apollo-link-error'
-import { getCookie, VIEWER_COOKIE_TOKEN } from 'Utils/storage'
+import { ApolloLink } from '@apollo/client'
+import { onError } from '@apollo/link-error'
+import { getCookie, VIEWER_COOKIE_TOKEN } from '../../utils/storage'
+import Debug from 'debug'
 
-const debug = require('debug')('app')
+const debug = Debug('app:http')
 
 export const setAuthHeader = new ApolloLink((operation, forward) => {
 	const authCookie = getCookie(VIEWER_COOKIE_TOKEN)

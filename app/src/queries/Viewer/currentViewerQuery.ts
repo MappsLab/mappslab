@@ -1,8 +1,12 @@
 import gql from 'graphql-tag'
 import Debug from 'debug'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 import { User, Token } from '../../types-ts'
-import { getCookie, removeCookie, VIEWER_COOKIE_TOKEN } from 'Utils/storage'
+import {
+	getCookie,
+	removeCookie,
+	VIEWER_COOKIE_TOKEN,
+} from '../../utils/storage'
 
 const debug = Debug('app:queries')
 // todo#16 : Make a Viewer fragment and reuse it in the viewer query

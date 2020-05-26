@@ -1,5 +1,5 @@
 import gql from 'graphql-tag'
-import { useQuery } from '@apollo/react-hooks'
+import { QueryHookOptions, QueryResult, useQuery } from '@apollo/client'
 import { Map } from '../../types-ts'
 import { mapFragment } from './fragments'
 
@@ -20,8 +20,19 @@ interface Variables {
 	uid?: string | null
 }
 
-export const useMapQuery = (variables: Variables) =>
-	useQuery<MapResponse, Variables>(mapQuery, {
-		variables,
-		skip: !Boolean(variables.uid),
-	})
+const skippable = (options: any): QueryResult<MapResponse, Variables> => {
+	return {
+		data: undefined,
+		loading: false,
+		// @ts-ignore
+		called: false,
+		networkStatus: 7,
+	}
+}
+
+export const useMapQuery = (
+	options: QueryHookOptions<MapResponse, Variables>,
+) =>
+	options.skip
+		? skippable(options)
+		: useQuery<MapResponse, Variables>(mapQuery, options)

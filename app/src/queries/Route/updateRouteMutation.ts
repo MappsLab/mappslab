@@ -1,5 +1,5 @@
 import gql from 'graphql-tag'
-import { useMutation } from '@apollo/react-hooks'
+import { useMutation } from '@apollo/client'
 import { Route, MutationUpdateRouteArgs } from '../../types-ts'
 import { mapQuery } from '../map/mapQuery'
 

@@ -14,12 +14,10 @@ interface LiveSelectorProps {
 
 export const LiveSelector = (props: LiveSelectorProps) => {
 	const { refetchQuery, refetchDelay, onSelect, items, disabled, label } = props
-	const [inputValue] = useState('')
+	const [inputValue, setInputValue] = useState('')
 
 	const onInputValueChange = (value: string) => {
-		const { refetchQuery, refetchDelay } = this.props
-		clearTimeout(this.refetchTimeout)
-		this.refetchTimeout = setTimeout(() => refetchQuery(value), refetchDelay)
+		setInputValue(value)
 	}
 
 	useEffect(() => {

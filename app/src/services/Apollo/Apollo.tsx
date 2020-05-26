@@ -1,14 +1,17 @@
-import React from 'react'
+import * as React from 'react'
 import Debug from 'debug'
-import { ApolloProvider } from 'react-apollo'
-import { ApolloLink, split } from 'apollo-link'
-import { WebSocketLink } from 'apollo-link-ws'
-import { ApolloClient } from 'apollo-client'
-import { InMemoryCache } from 'apollo-cache-inmemory'
+import {
+	ApolloLink,
+	HttpLink,
+	split,
+	ApolloProvider,
+	ApolloClient,
+	InMemoryCache,
+} from '@apollo/client'
+import { WebSocketLink } from '@apollo/link-ws'
 import { createUploadLink } from 'apollo-upload-client'
 import { getMainDefinition } from 'apollo-utilities'
 import { config } from '../../config'
-import fragmentMatcher from './fragmentMatcher'
 import { setAuthHeader, logQueries, logErrors } from './middleware'
 
 const debug = Debug('app')
@@ -33,6 +36,7 @@ const apiLink = split(
 		return kind === 'OperationDefinition' && operation === 'subscription'
 	},
 	wsLink,
+	// @ts-ignore
 	uploadLink,
 )
 
@@ -42,24 +46,16 @@ interface CacheObject {
 	uid: string
 }
 
-// @todo Return IDs from more objects for better caching
-const cache = new InMemoryCache({
-	addTypename: true,
-	fragmentMatcher,
-	dataIdFromObject: (object: CacheObject) => {
-		switch (object.__typename) {
-			case 'image':
-				return object.publicId
-			default:
-				return object.uid || null
-		}
-	},
-})
+const cache = new InMemoryCache()
 
 const link = ApolloLink.from([setAuthHeader, logQueries, logErrors, apiLink])
 
 const client = new ApolloClient({ link, cache })
 
-export const ApolloWrapper = (props: { children: React.ReactNode }) => (
-	<ApolloProvider client={client}>{props.children}</ApolloProvider>
+interface Props {
+	children: React.ReactNode
+}
+
+export const ApolloWrapper = ({ children }: Props) => (
+	<ApolloProvider client={client}>{children}</ApolloProvider>
 )

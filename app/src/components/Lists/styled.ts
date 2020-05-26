@@ -1,6 +1,6 @@
 import styled, { css, DefaultTheme } from 'styled-components'
-import { Button } from 'Components/Buttons'
-import { Header4, Header5 } from 'Components/Text'
+import { Button } from '../Buttons'
+import { Header4, Header5 } from '../Text'
 
 /**
  * Main Wrapper

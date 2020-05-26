@@ -1,7 +1,7 @@
 import * as React from 'react'
 import styled, { css, DefaultTheme } from 'styled-components'
-import { Header1, Header5 } from 'Components/Text'
-import { EditableText } from 'Components/Inspector'
+import { Header1, Header5 } from '../Text'
+import { EditableText } from '../Inspector'
 
 interface WrapperProps {
 	theme: DefaultTheme

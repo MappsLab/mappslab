@@ -63,7 +63,7 @@ export const List = <T extends NodeType>({
 				{definitely(items)
 					.map(itemToListItem)
 					.map((item) => (
-						<ListItem key={item.key} {...item} buttons={buttons} />
+						<ListItem {...item} key={item.key} buttons={buttons} />
 					))}
 			</ListItems>
 			{viewerCanAdd && search && onSearchResultClick && create && (

@@ -1,6 +1,6 @@
 import React, { ChangeEvent } from 'react'
 import { NodeType } from '../../types-ts'
-import { Header5 } from 'Components/Text'
+import { Header5 } from '../Text'
 import {
 	nodeToListItem,
 	SearchForList,
@@ -102,7 +102,6 @@ export const ListAddEntry = <T extends NodeType>({
 				<SearchLabel htmlFor="searchInput">
 					+
 					<SearchInput
-						// onBlur={endSearch}
 						ref={inputRef}
 						id="searchInput"
 						name="searchInput"
@@ -119,7 +118,7 @@ export const ListAddEntry = <T extends NodeType>({
 							const label = getNodeTitle(item.node)
 							if (!label)
 								throw new Error('This node does not have a name or title')
-							return <ListItem key={item.key} {...item} />
+							return <ListItem {...item} key={item.key} />
 						})
 					) : (
 						<ListItemWrapper>

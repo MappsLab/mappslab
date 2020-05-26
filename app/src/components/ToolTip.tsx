@@ -82,7 +82,7 @@ export const ToolTip = ({
 			{children}
 		</Wrapper>
 	) : (
-		<>children</>
+		<>{children}</>
 	)
 
 ToolTip.defaultProps = {

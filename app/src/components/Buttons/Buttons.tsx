@@ -71,14 +71,16 @@ interface ButtonProps {
 	htmlFor?: string
 }
 
-export const Button = (props: ButtonProps) => (
-	<ToolTip message={props.tooltip}>
+export const Button = ({ children, ...rest }: ButtonProps) => (
+	<ToolTip message={rest.tooltip}>
 		<ButtonWrapper
-			{...props}
+			{...rest}
 			// @ts-ignore
-			as={props.as || (props.to ? Link : undefined)}
-			type={props.to || props.as ? undefined : props.type}
-		/>
+			as={rest.as || (rest.to ? Link : undefined)}
+			type={rest.to || rest.as ? undefined : rest.type}
+		>
+			{children}
+		</ButtonWrapper>
 	</ToolTip>
 )
 

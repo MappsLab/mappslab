@@ -29,8 +29,7 @@ export const UserSelector = ({ disabled, onSelect, variables }: Props) => {
 				},
 			},
 		}
-		// @ts-ignore
-		const newVariables = merge(variables, nameFilter)
+		const newVariables = merge(variables || {}, nameFilter)
 		refetch(newVariables)
 	}
 	const items =

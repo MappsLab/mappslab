@@ -21,9 +21,9 @@ export const ClassroomChip = ({ size, active, classroom, ...rest }: Props) => (
 	<Chip
 		size={size || 'large'}
 		active={active}
-		title={classroom.title}
 		subtitle={getTeacherNames(classroom)}
 		{...rest}
+		title={classroom.title || 'Untitled Classroom'}
 	/>
 )
 

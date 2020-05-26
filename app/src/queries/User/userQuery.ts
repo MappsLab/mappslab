@@ -1,5 +1,5 @@
 import gql from 'graphql-tag'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 import { User } from '../../types-ts'
 import { userFragment } from './fragments'
 

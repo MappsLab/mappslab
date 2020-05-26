@@ -1,4 +1,4 @@
-import { createObjectSearchByState } from 'Utils/statecharts'
+import { createObjectSearchByState } from '../../utils/statecharts'
 
 const defaults = {
 	draggable: true,
