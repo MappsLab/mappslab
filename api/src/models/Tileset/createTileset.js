@@ -15,16 +15,18 @@ import { upload } from 'Services/aws'
 import { validateNew } from './tilesetDBSchema'
 import config from '../../config'
 
-const debug = require('debug')('api')
+const debug = require('debug')('api:images')
 
 const createSlices = async (file: string, outputDir: string): Promise<void> =>
 	new Promise((resolve) => {
+		console.log(file)
+		console.log(outputDir)
 		const mapSlicer = new MapSlicer({
 			file, // (required) Huge image to slice
 			output: `${outputDir}/{z}/{x}/{y}.png`, // Output file pattern
 			imageMagick: true, // (default: false) If (true) then use ImageMagick instead of GraphicsMagick
-			// background: '#0000000', // (default: '#FFFFFFFF') Background color to be used for the tiles. More: http://ow.ly/rsluD
-			// tmp: './temp', // (default: '.tmp') Temporary directory to be used to store helper files
+			background: '#0000000', // (default: '#FFFFFFFF') Background color to be used for the tiles. More: http://ow.ly/rsluD
+			tmp: '.tmp', // (default: '.tmp') Temporary directory to be used to store helper files
 			parallelLimit: 3, // (default: 5) Maximum parallel tasks to be run at the same time (warning: processes can consume a lot of memory!)
 			minWidth: 200, // See explanation about Size detection below
 			skipEmptyTiles: true, // Skips all the empty tiles
@@ -34,6 +36,7 @@ const createSlices = async (file: string, outputDir: string): Promise<void> =>
 			// autoStart: false,                  // (default: false) Automatically runs .start() if true
 			// gm, // (optional) Alternative way to specify the GraphicsMagic library
 		})
+		console.log('??')
 
 		mapSlicer.on('start', (files) =>
 			debug(`Starting to process ${files} files.`),

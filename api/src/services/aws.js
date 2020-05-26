@@ -3,7 +3,7 @@ import AWS from 'aws-sdk'
 import type { ReadStream } from 'fs'
 import config from '../config'
 
-const debug = require('debug')('api')
+const debug = require('debug')('api:aws')
 
 const credentials = {
 	accessKeyId: config.get('aws.accessKey'),
@@ -13,6 +13,7 @@ const credentials = {
 const s3client = new AWS.S3({
 	credentials,
 	endpoint: config.get('aws.endpoint'),
+	s3ForcePathStyle: true,
 })
 
 type PutResponse = {
@@ -32,13 +33,16 @@ export const upload = async (
 			{
 				Bucket: bucketName,
 				/* include the bucket name here. For some reason Localstack needs it */
-				Key: `${bucketName}/${name}`,
+				Key: name,
+				// Key: `${bucketName}/${name}`,
 				Body: data,
 			},
 			(err, response) => {
 				if (err) throw err
 				debug(`Uploaded file: ${name}`)
+				console.log(response)
 				resolve(response)
 			},
 		)
 	})
+
