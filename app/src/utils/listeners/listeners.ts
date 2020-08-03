@@ -1,5 +1,5 @@
 import { StateSchema } from 'xstate'
-import { ModeStateSchema } from '../../providers/CurrentMap/mapMode'
+import { ModeStateSchema } from '../../providers/CurrentMap/mapStateMachine'
 import {
 	NamedEventListeners,
 	MapEventListeners,

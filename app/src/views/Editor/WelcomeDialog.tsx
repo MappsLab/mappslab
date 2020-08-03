@@ -5,6 +5,8 @@ import { Centered } from '../../components/Layout'
 import { Pane } from '../../components/Pane'
 import { Header2, P } from '../../components/Text'
 import { Button } from '../../components/Buttons'
+import { useCurrentMap } from '../../providers/CurrentMap'
+import { useMapStateMachine } from '../../providers/CurrentMap/mapStateMachine'
 
 /**
  * WelcomeDialog
@@ -12,15 +14,22 @@ import { Button } from '../../components/Buttons'
 
 type Props = {
 	map: Map
-	transition: Transition
 }
 
-export const WelcomeDialog = ({ map, transition }: Props) => {
+export const WelcomeDialog = ({ map }: Props) => {
+	const {mode, transitionMode} = useCurrentMap()
+
+	if (!mode.matches('Welcome')) return null
+
 	const enterLesson = (lessonUid?: string) => () => {
-		transition('enterLesson', { lessonUid })
+		transitionMode({
+			type: 'enterLesson'
+		})
 	}
+
 	const { title, description, classroom } = map
 	if (!classroom) throw new Error('No classroom')
+
 	return (
 		<Centered>
 			<Pane icon="🗺" size="normal" title={title} subtitle={classroom.title}>

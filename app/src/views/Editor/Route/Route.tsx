@@ -26,7 +26,7 @@ const getPathFromPins = (pins: Array<Pin | LatLngType>): LatLngLiteral[] =>
 	}))
 
 export const Route = ({ route, active, clickable }: RouteProps) => {
-	const { mapMode, setInspectedItem } = useCurrentMap()
+	const { setInspectedItem } = useCurrentMap()
 	useEffect(() => {
 		console.log('TODO: Route events')
 		// TODO:

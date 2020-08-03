@@ -6,7 +6,9 @@ import { useMapReducer, MapReducer } from './reducer'
 import { Map, Pin, Route, Tileset } from '../../types-ts'
 import { useMapQuery, useMapSubscriptions } from '../../queries'
 import { applyBaseImage } from './baseImage'
-import { useMapMode, ModeEvent } from './mapMode'
+import { ModeContext, ModeEvent, useMapStateMachine } from './mapStateMachine'
+import { Interpreter, State } from 'xstate'
+import { getOptionsForState } from '../../views/Editor/mapOptions'
 
 const { useRef, useEffect } = React
 
@@ -23,11 +25,15 @@ interface CurrentMapContextValue extends MapReducer {
 	zoomIn: () => void
 	zoomOut: () => void
 	setBaseImage: (tileset: Tileset | null) => void
+
+	// Map Machine State
+	mode: State<ModeContext, ModeEvent>
+	transitionMode: Interpreter<ModeContext, any, ModeEvent>['send']
+	service: Interpreter<ModeContext, any, ModeEvent>
+
 	// Map State
 	setMapUid: (uid: string | null) => void
 	mapData: Map | null
-	mapMode: string
-	transitionMode: (transition: ModeEvent) => void
 	mapType: string
 	inspectedItem: Route | Pin | null
 }
@@ -59,13 +65,16 @@ export const CurrentMapProvider = ({ children }: CurrentMapProps) => {
 	const { mapUid, mapType } = reducerState
 	const mapQuery = useMapQuery({
 		variables: { uid: mapUid },
-		skip: mapUid === null,
 	})
 
 	const { data } = mapQuery
 	const mapData = data?.map ?? null
-	const { state: modeState, transitionMode } = useMapMode()
-	const mapMode = modeState.toString()
+	const [mode, transitionMode, service] = useMapStateMachine()
+
+	useEffect(() => {
+		const options = getOptionsForState(mode.value)
+		googleMap?.setOptions(options)
+	}, [googleMap, mode, getOptionsForState])
 
 	// effects
 	useEffect(() => {
@@ -133,9 +142,10 @@ export const CurrentMapProvider = ({ children }: CurrentMapProps) => {
 		addEventListeners,
 		removeEventListeners,
 		mapData,
-		setBaseImage,
+		mode,
 		transitionMode,
-		mapMode,
+		service,
+		setBaseImage,
 		...reducerState,
 	}
 
