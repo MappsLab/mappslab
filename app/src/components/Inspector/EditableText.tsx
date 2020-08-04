@@ -10,6 +10,8 @@ import {
 	P,
 	TextArea,
 } from '../Text'
+import { useCallback } from 'react'
+import { debounce } from 'lodash'
 
 const { useEffect, useState, useRef } = React
 
@@ -46,11 +48,19 @@ export const EditableText = ({
 	const [value, setValue] = useState(initialValue || '')
 	const inputRef = useRef<HTMLInputElement | null>(null)
 
+	const submitChange = useCallback(
+		debounce((newValue) => {
+			if (updateFn && newValue) updateFn({ [name]: newValue })
+		}, 300),
+		[],
+	)
+
 	const focus = () => setFocused(true)
 	const blur = () => setFocused(false)
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setValue(e.target.value)
+		submitChange(e.target.value)
 	}
 
 	const autoSize = () => {
@@ -70,15 +80,8 @@ export const EditableText = ({
 		field.style.height = `${height}px`
 	}
 
-	const submitChange = () => {
-		if (updateFn && value) updateFn({ [name]: value })
-	}
-
 	// auto-size on mount
 	useEffect(autoSize, [])
-
-	// auto-submit on unmount
-	useEffect(() => submitChange(), [])
 
 	if (!viewerCanEdit) {
 		const Text = textComponentsMap[fontSize || 'p'] || textComponentsMap.p

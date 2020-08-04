@@ -19,8 +19,7 @@ interface MapEventsProps {
 }
 
 export const MapEvents = ({ mapUid }: MapEventsProps) => {
-	const { mode, addEventListeners, removeEventListeners, transitionMode } = useCurrentMap()
-	const [createPin] = useCreatePinMutation()
+	const { mode, addEventListeners, removeEventListeners, transitionMode, createNewPin } = useCurrentMap()
 
 	useEffect(() => {
 		const listeners = addEventListeners({
@@ -29,14 +28,10 @@ export const MapEvents = ({ mapUid }: MapEventsProps) => {
 			onClick: async (event) => {
 				switch (true) {
 					case mode.matches('Lesson.DropPin.DropMode'):
-						await createPin({
-							variables: {
-								input: {
-									lat: event.latLng.lat(),
-									lng: event.latLng.lng(),
-									addToMaps: [mapUid],
-								},
-							},
+						createNewPin({
+							lat: event.latLng.lat(),
+							lng: event.latLng.lng(),
+							addToMaps: [mapUid],
 						})
 						break
 					default:
