@@ -1,11 +1,7 @@
 import * as React from 'react'
 import { useGoogleMap } from '@react-google-maps/api'
 import { MapEventListeners, NewPinInput } from '../../types-ts'
-import {
-	addListeners,
-	mappedEventNames,
-	removeListeners,
-} from '../../utils/listeners'
+import { addListeners, removeListeners } from '../../utils/listeners'
 import { useMapReducer, MapReducer } from './reducer'
 import { Map, Pin, Route, Tileset } from '../../types-ts'
 import {
@@ -22,12 +18,6 @@ import { useCallback } from 'react'
 const { useRef, useEffect } = React
 
 interface CurrentMapContextValue extends MapReducer {
-	// Original API functions
-	setZoom: google.maps.Map['setZoom']
-	getZoom: google.maps.Map['getZoom']
-	panTo: google.maps.Map['panTo']
-	fitBounds: google.maps.Map['fitBounds']
-
 	// Helper functions
 	addEventListeners: (
 		listeners: MapEventListeners,
@@ -85,6 +75,18 @@ export const CurrentMapProvider = ({ children }: CurrentMapProps) => {
 	const { data, refetch } = mapQuery
 	const mapData = data?.map ?? null
 	const [mode, transitionMode, service] = useMapStateMachine()
+
+	const createNewPin = useCallback(
+		async (newPinInput: NewPinInput) => {
+			await createPin({
+				variables: {
+					input: newPinInput,
+				},
+			})
+			await refetch()
+		},
+		[createPin],
+	)
 
 	useEffect(() => {
 		const options = getOptionsForState(mode.value)
@@ -144,26 +146,7 @@ export const CurrentMapProvider = ({ children }: CurrentMapProps) => {
 		removeListeners(listeners)
 	}
 
-	// re-export original API
-	const { setZoom, getZoom, panTo, fitBounds } = googleMap
-
-	const createNewPin = useCallback(
-		async (newPinInput: NewPinInput) => {
-			await createPin({
-				variables: {
-					input: newPinInput,
-				},
-			})
-			await refetch()
-		},
-		[createPin],
-	)
-
 	const value: CurrentMapContextValue = {
-		setZoom,
-		getZoom,
-		panTo,
-		fitBounds,
 		zoomIn,
 		zoomOut,
 		addEventListeners,

@@ -1,6 +1,6 @@
 import * as React from 'react'
-import { useMemo } from 'react'
-import { Marker, OverlayView } from '@react-google-maps/api'
+import { useCallback, useMemo } from 'react'
+import { Marker, OverlayView, useGoogleMap } from '@react-google-maps/api'
 import { Pin as PinType } from '../../../types-ts'
 import { useCurrentMap } from '../../../providers/CurrentMap'
 import { useCurrentViewer } from '../../../providers/CurrentViewer'
@@ -14,7 +14,8 @@ interface PinProps {
 }
 
 export const Pin = ({ pin }: PinProps) => {
-	const { mode, panTo } = useCurrentMap()
+	const googleMap = useGoogleMap()
+	const { mode } = useCurrentMap()
 	const { viewer } = useCurrentViewer()
 	const { inspectItem, item: inspectedItem } = useInspector()
 
@@ -36,7 +37,7 @@ export const Pin = ({ pin }: PinProps) => {
 			console.log('DROP')
 		} else {
 			setIsHovered(false)
-			panTo(position)
+			googleMap?.panTo(position)
 			inspectItem(pin, position)
 		}
 	}
