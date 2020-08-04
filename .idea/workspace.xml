@@ -2,21 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="de3e9ac1-8956-4b0d-9b59-e700db59a4e3" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../app/src/views/Editor/MapData.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../app/src/views/Editor/editorStateChart.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../app/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../app/package.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../app/src/views/Editor/MapEvents.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/components/Pane/Pane.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../app/src/components/Pane/Pane.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../app/src/providers/CurrentMap/CurrentMap.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../app/src/providers/CurrentMap/CurrentMap.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../app/src/providers/CurrentMap/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../app/src/providers/CurrentMap/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../app/src/providers/CurrentMap/mapMode.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../app/src/providers/CurrentMap/mapStateMachine.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../app/src/utils/listeners/listeners.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../app/src/utils/listeners/listeners.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/views/Editor/ItemInspector/ItemInspector.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../app/src/views/Editor/ItemInspector/ItemInspector.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/views/Editor/ItemInspector/Provider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../app/src/views/Editor/ItemInspector/Provider.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../app/src/views/Editor/MapEditor.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../app/src/views/Editor/MapEditor.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../app/src/views/Editor/Route/Route.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../app/src/views/Editor/Route/Route.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../app/src/views/Editor/Tools/NewPinButton.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../app/src/views/Editor/Tools/NewPinButton.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../app/src/views/Editor/Tools/Tools.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../app/src/views/Editor/Tools/Tools.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../app/src/views/Editor/WelcomeDialog.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../app/src/views/Editor/WelcomeDialog.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../app/src/views/Editor/mapEventHandlers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../app/src/views/Editor/mapEventHandlers.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../app/src/views/Editor/mapOptions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../app/src/views/Editor/mapOptions.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../yarn.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/views/Editor/Pin/Pin.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../app/src/views/Editor/Pin/Pin.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/views/Editor/Pin/PinHoverPopup.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../app/src/views/Editor/Pin/PinHoverPopup.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,6 +50,7 @@
     <property name="node.js.path.for.package.eslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="yarn" />
+    <property name="prettierjs.PrettierConfiguration.Package" value="C:\Users\jaden\projects\mappslab\node_modules\prettier" />
     <property name="ts.external.directory.path" value="C:\Users\jaden\projects\mappslab\node_modules\typescript\lib" />
   </component>
   <component name="RecentsManager">
@@ -74,7 +70,8 @@
       <option name="presentableId" value="Default" />
       <updated>1595301614351</updated>
       <workItem from="1595301620089" duration="3285000" />
-      <workItem from="1596472970533" duration="16522000" />
+      <workItem from="1596472970533" duration="22360000" />
+      <workItem from="1596567574622" duration="8180000" />
     </task>
     <servers />
   </component>
@@ -156,17 +153,21 @@
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state x="1037" y="594" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/2560.0.2560.1400/0.0.2560.1400@0.0.2560.1400" timestamp="1596486795940" />
-    <state x="2560" y="0" width="1888" height="1372" key="dock-window-1" timestamp="1596476409555">
+    <state x="2560" y="0" width="1888" height="1372" key="dock-window-1" timestamp="1596567658704">
       <screen x="2560" y="0" width="2560" height="1400" />
     </state>
-    <state x="2560" y="0" width="1888" height="1372" key="dock-window-1/2560.0.2560.1400/0.0.2560.1400@0.0.2560.1400" timestamp="1596476409555" />
-    <state x="883" y="340" width="1451" height="1020" key="find.popup" timestamp="1596490151935">
+    <state x="2560" y="0" width="1888" height="1372" key="dock-window-1/2560.0.2560.1400/0.0.2560.1400@0.0.2560.1400" timestamp="1596567658704" />
+    <state x="883" y="340" width="1451" height="1020" key="find.popup" timestamp="1596570563416">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state x="883" y="340" width="1451" height="1020" key="find.popup/2560.0.2560.1400/0.0.2560.1400@0.0.2560.1400" timestamp="1596490151935" />
-    <state x="859" y="308" width="840" height="1034" key="search.everywhere.popup" timestamp="1596490122046">
+    <state x="883" y="340" width="1451" height="1020" key="find.popup/2560.0.2560.1400/0.0.2560.1400@0.0.2560.1400" timestamp="1596570563416" />
+    <state x="852" y="327" key="run.anything.popup" timestamp="1596510819137">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state x="859" y="308" width="840" height="1034" key="search.everywhere.popup/2560.0.2560.1400/0.0.2560.1400@0.0.2560.1400" timestamp="1596490122046" />
+    <state x="852" y="327" key="run.anything.popup/2560.0.2560.1400/0.0.2560.1400@0.0.2560.1400" timestamp="1596510819137" />
+    <state x="859" y="308" width="840" height="1034" key="search.everywhere.popup" timestamp="1596576750403">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="859" y="308" width="840" height="1034" key="search.everywhere.popup/2560.0.2560.1400/0.0.2560.1400@0.0.2560.1400" timestamp="1596576750403" />
   </component>
 </project>

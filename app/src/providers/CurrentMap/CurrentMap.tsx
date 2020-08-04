@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { useGoogleMap } from '@react-google-maps/api'
 import { MapEventListeners } from '../../types-ts'
-import { addListeners, removeListeners } from '../../utils/listeners'
+import { addListeners, mappedEventNames, removeListeners } from '../../utils/listeners'
 import { useMapReducer, MapReducer } from './reducer'
 import { Map, Pin, Route, Tileset } from '../../types-ts'
 import { useMapQuery, useMapSubscriptions } from '../../queries'
@@ -20,8 +20,8 @@ interface CurrentMapContextValue extends MapReducer {
 	fitBounds: google.maps.Map['fitBounds']
 
 	// Helper functions
-	addEventListeners: (listeners: MapEventListeners) => void
-	removeEventListeners: (listeners: MapEventListeners) => void
+	addEventListeners: (listeners: MapEventListeners) => google.maps.MapsEventListener[]
+	removeEventListeners: (listeners: google.maps.MapsEventListener[]) => void
 	zoomIn: () => void
 	zoomOut: () => void
 	setBaseImage: (tileset: Tileset | null) => void
@@ -118,15 +118,14 @@ export const CurrentMapProvider = ({ children }: CurrentMapProps) => {
 	const zoomIn = () => zoom(1)
 	const zoomOut = () => zoom(-1)
 
-	const setBaseImage = (tileset: Tileset | null) =>
-		applyBaseImage(googleMap, tileset)
+	const setBaseImage = (tileset: Tileset | null) => applyBaseImage(googleMap, tileset)
+
 	const addEventListeners = (listeners: MapEventListeners) => {
-		const newListeners = addListeners(googleMap, listeners)
+		return addListeners(googleMap, listeners)
 	}
 
-	const removeEventListeners = () => {
-		removeListeners(listenersRef.current)
-		listenersRef.current = []
+	const removeEventListeners = (listeners: google.maps.MapsEventListener[]) => {
+		removeListeners(listeners)
 	}
 
 	// re-export original API

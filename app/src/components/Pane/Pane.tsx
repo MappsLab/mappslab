@@ -12,9 +12,7 @@ interface WrapperProps {
 const Wrapper = styled.div`
 	${({ theme, allowOverflow }: WrapperProps) => css`
 		background-color: white;
-		box-shadow: ${theme.mixins.boxShadow.heavy};
 		border-radius: 2px;
-		border: 1px solid ${theme.color.darkGray};
 		position: relative;
 		max-height: 95vh;
 		${allowOverflow
@@ -95,7 +93,7 @@ export const Pane = ({
 	allowOverflow,
 }: PaneProps) => {
 	return (
-		<Wrapper size={size} allowOverflow={allowOverflow}>
+		<Wrapper size={size} allowOverflow={allowOverflow} className="Pane">
 			{title && (
 				<Title size={size}>
 					{icon && <TitleIcon>{icon}</TitleIcon>}
@@ -127,4 +125,3 @@ Pane.defaultProps = {
 	updateTitle: undefined,
 	allowOverflow: false,
 }
-

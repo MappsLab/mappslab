@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { unwindEdges } from '@good-idea/unwind-edges'
-import { LatLngType, Route, Pin } from '../../../types-ts'
+import { LatLngType, Pin, Route } from '../../../types-ts'
 import { useCurrentMap } from '../../../providers/CurrentMap'
 
 const { useContext, useReducer } = React
@@ -24,9 +24,6 @@ interface Offset {
 export interface ItemInspectorProviderProps extends ItemInspectorState {
 	inspectItem: (item: InspectorItem, latlng?: LatLngType) => void
 	closeInspector: () => void
-	panTo: (latlng: LatLngType, offset?: Offset) => void
-	// panTo: Pick<MapProviderProps, 'panTo'>
-	mapUid: string
 }
 
 type Props = {
@@ -75,7 +72,7 @@ const inspectorReducer = (
 }
 
 export const InspectorProvider = ({ children }: Props) => {
-	const { mapData, panTo } = useCurrentMap()
+	const { mapData } = useCurrentMap()
 	const [state, dispatch] = useReducer(inspectorReducer, {})
 	const { item, position } = state
 
@@ -105,9 +102,6 @@ export const InspectorProvider = ({ children }: Props) => {
 		position,
 		inspectItem,
 		closeInspector,
-		// TODO: move this to a useMap() fn
-		panTo,
-		mapUid: mapData ? mapData.uid : '',
 	}
 	return (
 		<InspectorContext.Provider value={value}>
