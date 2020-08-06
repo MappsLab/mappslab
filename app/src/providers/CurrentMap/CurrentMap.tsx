@@ -91,7 +91,7 @@ export const CurrentMapProvider = ({ children }: CurrentMapProps) => {
 	useEffect(() => {
 		const options = getOptionsForState(mode.value)
 		googleMap?.setOptions(options)
-	}, [googleMap, mode, getOptionsForState])
+	}, [googleMap, mode, getOptionsForState(mode.value)])
 
 	// effects
 	useEffect(() => {
