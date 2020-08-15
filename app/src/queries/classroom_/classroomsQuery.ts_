@@ -1,9 +1,8 @@
 import gql from 'graphql-tag'
-import { useQuery, QueryHookOptions } from '@apollo/client'
 import { Paginated } from '@good-idea/unwind-edges'
 import { Classroom, QueryClassroomsArgs } from '../../types-ts'
 
-const classroomsQuery = gql`
+export const classroomsQuery = gql`
 	query ClassroomsQuery(
 		$first: Int
 		$after: String
@@ -38,13 +37,12 @@ const classroomsQuery = gql`
 	}
 `
 
-type Variables = QueryClassroomsArgs['input']
+export type ClassroomsInput = QueryClassroomsArgs['input']
 
-interface Response {
+export interface ClassroomsResponse {
 	classrooms: Paginated<Classroom>
 }
 
-export const useClassroomsQuery = (
-	options: QueryHookOptions<Response, Variables> = {},
-) => useQuery<Response, Variables>(classroomsQuery, options)
-
+// export const useClassroomsQuery = (
+// 	options: QueryHookOptions<Classroomsresponse, ClassroomInput> = {},
+// ) => useQuery<ClassroomsResponse, ClassroomInput>(classroomsQuery, options)

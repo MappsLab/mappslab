@@ -12,11 +12,11 @@ export const userQuery = gql`
 	${userFragment}
 `
 
-type UserQueryResponse = {
+export type UserQueryResponse = {
 	user: User
 }
 
-interface UserQueryArgs {
+export interface UserQueryArgs {
 	uid?: string | null
 	email?: string | null
 }

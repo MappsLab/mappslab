@@ -1,5 +1,4 @@
 import gql from 'graphql-tag'
-import { useQuery, QueryHookOptions } from '@apollo/client'
 import { Paginated } from '@good-idea/unwind-edges'
 import { Map, QueryMapsArgs } from '../../types-ts'
 
@@ -21,11 +20,8 @@ export const mapsQuery = gql`
 	}
 `
 
-interface Response {
+export interface MapsResponse {
 	maps: Paginated<Pick<Map, 'uid' | 'title' | '__typename'>>
 }
 
-type Variables = QueryMapsArgs['input']
-
-export const useMapsQuery = (options: QueryHookOptions<Response, Variables>) =>
-	useQuery<Response, Variables>(mapsQuery, options)
+export type MapsInput = QueryMapsArgs['input']
