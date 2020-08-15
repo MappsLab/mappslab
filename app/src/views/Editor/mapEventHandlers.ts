@@ -12,9 +12,7 @@ const debug = require('debug')('app')
 export const useMapEvents = () => {
 	const {
 		addEventListeners,
-		setViewerLatLng,
-		mapMode,
-		transitionMode,
+		setViewerLatLng
 	} = useCurrentMap()
 
 	const options: MapStateHandlers = {

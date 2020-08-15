@@ -1,29 +1,33 @@
 import React from 'react'
-import { unwindEdges } from '@good-idea/unwind-edges'
-import { State } from 'react-automata'
 import { useCurrentMap } from '../../../providers/CurrentMap'
 import NewPinButton from './NewPinButton'
 import ZoomButton from './ZoomButton'
 import Toolbar from './Toolbar'
-import { LayersTool, DataLayerSelectorProps } from './LayersTool'
+import { DataLayerSelectorProps, LayersTool } from './LayersTool'
+import { useMapStateMachine } from '../../../providers/CurrentMap/mapStateMachine'
+import { useGoogleMap } from '@react-google-maps/api'
 
 /**
  * Tools
  */
 
-export interface ToolsProps extends DataLayerSelectorProps {}
+export interface ToolsProps extends DataLayerSelectorProps {
+}
 
 export const Tools = (props: ToolsProps) => {
-	const { zoomIn, zoomOut, transitionMode } = useCurrentMap()
+	const { zoomIn, zoomOut, mode, transitionMode } = useCurrentMap()
 	const { disableLayer, enableLayer, enabledLayers, layers } = props
+
 	const onNewPinClick = () => {
 		transitionMode({ type: 'clickedDropPin' })
 	}
 
+	if (!mode.matches('Lesson')) return null
+
 	return (
-		<State is="Lesson*">
+		<React.Fragment>
 			<Toolbar>
-				<NewPinButton onClick={onNewPinClick} />
+				<NewPinButton onClick={onNewPinClick}/>
 			</Toolbar>
 			<LayersTool
 				disableLayer={disableLayer}
@@ -32,9 +36,9 @@ export const Tools = (props: ToolsProps) => {
 				layers={layers}
 			/>
 			<Toolbar align="right">
-				<ZoomButton direction="in" onClick={() => zoomIn()} />
-				<ZoomButton direction="out" onClick={() => zoomOut()} />
+				<ZoomButton direction="in" onClick={() => zoomIn()}/>
+				<ZoomButton direction="out" onClick={() => zoomOut()}/>
 			</Toolbar>
-		</State>
+		</React.Fragment>
 	)
 }

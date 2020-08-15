@@ -1,2 +1,2 @@
 export * from './CurrentMap'
-export * from './mapMode'
+export * from './mapStateMachine'

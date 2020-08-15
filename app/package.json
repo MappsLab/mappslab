@@ -7,8 +7,8 @@
 	"license": "ISC",
 	"scripts": {
 		"start": "serve . --single",
-    "build": "parcel build src/index.html",
-		"dev": "cross-env ENV=development DEBUG=api parcel src/index.html", 
+		"build": "parcel build src/index.html",
+		"dev": "cross-env ENV=development DEBUG=api parcel src/index.html",
 		"dev:staging": "AWS_BUCKET_ROOT=https://mappslab-beta.s3.amazonaws.com yarn dev",
 		"install-types": "typesync && yarn install",
 		"generate-types": "graphql get-schema && graphql-codegen && prettier ./src/types-ts/**/* --write",
@@ -41,6 +41,7 @@
 		"jest": "^24.8.0",
 		"jest-dom": "^3.2.2",
 		"js-cookie": "^2.2.1",
+		"mapp": "^0.1.0",
 		"ramda": "^0.27.0",
 		"react": "^16.13.1",
 		"react-adopt": "^0.6.0",
@@ -79,7 +80,7 @@
 		"@types/styled-components": "^5.1.0",
 		"@types/tsc-watch": "^4.2.0",
 		"@types/url-parse": "^1.4.3",
-	  "@typescript-eslint/eslint-plugin": "^3.0.1",
+		"@typescript-eslint/eslint-plugin": "^3.0.1",
 		"@typescript-eslint/eslint-plugin-tslint": "^3.0.1",
 		"@typescript-eslint/parser": "^3.0.1",
 		"cross-env": "^7.0.2",
@@ -111,7 +112,7 @@
 		"typescript-tslint-plugin": "^0.5.5",
 		"typesync": "^0.6.1",
 		"utility-types": "^3.10.0"
-  },
+	},
 	"resolutions": {
 		"graphql": "14.1.1"
 	}

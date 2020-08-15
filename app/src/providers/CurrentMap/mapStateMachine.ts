@@ -10,7 +10,7 @@ interface NewPinConnection {
 	position?: 'BEFORE' | 'AFTER'
 }
 
-type ModeContext = {
+export type ModeContext = {
 	inspectedItem: Pin | Route | null
 	connectToPin: NewPinConnection
 }
@@ -47,7 +47,7 @@ export type ModeEvent =
 	| { type: 'clickedDropPin' }
 
 export const modeSchema = {
-	id: 'modeMachine',
+	id: 'mapStateMachine',
 	initial: 'Welcome' as 'Welcome',
 	states: {
 		Welcome: { id: 'Welcome', states: {}, on: { enterLesson: '#Lesson' } },
@@ -84,16 +84,10 @@ export const modeSchema = {
 	},
 }
 
-const modeMachine = Machine<ModeContext, ModeStateSchema, ModeEvent>(modeSchema)
+const mapMachine = Machine<ModeContext, ModeStateSchema, ModeEvent>(modeSchema)
 
 const machineOptions = {
 	logger: debug,
 }
 
-export const useMapMode = () => {
-	const [state, send] = useMachine(modeMachine)
-	return {
-		state,
-		transitionMode: send,
-	}
-}
+export const useMapStateMachine = () => useMachine(mapMachine)

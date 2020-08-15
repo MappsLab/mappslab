@@ -66,7 +66,7 @@ export const PinInspector = ({ pin, mapUid }: Props) => {
 	}
 
 	return (
-		<React.Fragment>
+		<React.Fragment key={pin.uid}>
 			<EditableText
 				name="title"
 				updateFn={submitUpdate}

@@ -1,11 +1,6 @@
 import { StateSchema } from 'xstate'
-import { ModeStateSchema } from '../../providers/CurrentMap/mapMode'
-import {
-	NamedEventListeners,
-	MapEventListeners,
-	MarkerEventListeners,
-	PolylineEventListeners,
-} from '../../types-ts'
+import { ModeStateSchema } from '../../providers/CurrentMap/mapStateMachine'
+import { MapEventListeners, NamedEventListeners } from '../../types-ts'
 import { definitely } from '../../utils'
 import { mappedEventNames } from './eventNames'
 
@@ -18,8 +13,7 @@ export const addListeners = <T>(
 			const googleEvent = mappedEventNames[eventName]
 			const handler = handlers[eventName]
 			if (googleEvent && typeof handler === 'function') {
-				const listener = entity.addListener(googleEvent, handler)
-				return listener
+				return entity.addListener(googleEvent, handler)
 			}
 			return null
 		}),

@@ -1,35 +1,45 @@
 import * as React from 'react'
 import { useGoogleMap } from '@react-google-maps/api'
-import { MapEventListeners } from '../../types-ts'
+import { MapEventListeners, NewPinInput } from '../../types-ts'
 import { addListeners, removeListeners } from '../../utils/listeners'
 import { useMapReducer, MapReducer } from './reducer'
 import { Map, Pin, Route, Tileset } from '../../types-ts'
-import { useMapQuery, useMapSubscriptions } from '../../queries'
+import {
+	useCreatePinMutation,
+	useMapQuery,
+	useMapSubscriptions,
+} from '../../queries'
 import { applyBaseImage } from './baseImage'
-import { useMapMode, ModeEvent } from './mapMode'
+import { ModeContext, ModeEvent, useMapStateMachine } from './mapStateMachine'
+import { Interpreter, State } from 'xstate'
+import { getOptionsForState } from '../../views/Editor/mapOptions'
+import { useCallback } from 'react'
 
 const { useRef, useEffect } = React
 
 interface CurrentMapContextValue extends MapReducer {
-	// Original API functions
-	setZoom: google.maps.Map['setZoom']
-	getZoom: google.maps.Map['getZoom']
-	panTo: google.maps.Map['panTo']
-	fitBounds: google.maps.Map['fitBounds']
-
 	// Helper functions
-	addEventListeners: (listeners: MapEventListeners) => void
-	removeEventListeners: (listeners: MapEventListeners) => void
+	addEventListeners: (
+		listeners: MapEventListeners,
+	) => google.maps.MapsEventListener[]
+	removeEventListeners: (listeners: google.maps.MapsEventListener[]) => void
 	zoomIn: () => void
 	zoomOut: () => void
 	setBaseImage: (tileset: Tileset | null) => void
+
+	// Map Machine State
+	mode: State<ModeContext, ModeEvent>
+	transitionMode: Interpreter<ModeContext, any, ModeEvent>['send']
+	service: Interpreter<ModeContext, any, ModeEvent>
+
 	// Map State
 	setMapUid: (uid: string | null) => void
 	mapData: Map | null
-	mapMode: string
-	transitionMode: (transition: ModeEvent) => void
 	mapType: string
 	inspectedItem: Route | Pin | null
+
+	// API
+	createNewPin: (pinInput: NewPinInput) => void
 }
 
 const CurrentMapContext = React.createContext<
@@ -53,19 +63,35 @@ interface CurrentMapProps {
 
 export const CurrentMapProvider = ({ children }: CurrentMapProps) => {
 	const googleMap = useGoogleMap()
+	const [createPin] = useCreatePinMutation()
 	// state
 	const listenersRef = useRef<google.maps.MapsEventListener[]>([])
 	const reducerState = useMapReducer()
 	const { mapUid, mapType } = reducerState
 	const mapQuery = useMapQuery({
 		variables: { uid: mapUid },
-		skip: mapUid === null,
 	})
 
-	const { data } = mapQuery
+	const { data, refetch } = mapQuery
 	const mapData = data?.map ?? null
-	const { state: modeState, transitionMode } = useMapMode()
-	const mapMode = modeState.toString()
+	const [mode, transitionMode, service] = useMapStateMachine()
+
+	const createNewPin = useCallback(
+		async (newPinInput: NewPinInput) => {
+			await createPin({
+				variables: {
+					input: newPinInput,
+				},
+			})
+			await refetch()
+		},
+		[createPin],
+	)
+
+	useEffect(() => {
+		const options = getOptionsForState(mode.value)
+		googleMap?.setOptions(options)
+	}, [googleMap, mode, getOptionsForState(mode.value)])
 
 	// effects
 	useEffect(() => {
@@ -111,31 +137,26 @@ export const CurrentMapProvider = ({ children }: CurrentMapProps) => {
 
 	const setBaseImage = (tileset: Tileset | null) =>
 		applyBaseImage(googleMap, tileset)
+
 	const addEventListeners = (listeners: MapEventListeners) => {
-		const newListeners = addListeners(googleMap, listeners)
+		return addListeners(googleMap, listeners)
 	}
 
-	const removeEventListeners = () => {
-		removeListeners(listenersRef.current)
-		listenersRef.current = []
+	const removeEventListeners = (listeners: google.maps.MapsEventListener[]) => {
+		removeListeners(listeners)
 	}
-
-	// re-export original API
-	const { setZoom, getZoom, panTo, fitBounds } = googleMap
 
 	const value: CurrentMapContextValue = {
-		setZoom,
-		getZoom,
-		panTo,
-		fitBounds,
 		zoomIn,
 		zoomOut,
 		addEventListeners,
 		removeEventListeners,
 		mapData,
-		setBaseImage,
+		mode,
 		transitionMode,
-		mapMode,
+		service,
+		setBaseImage,
+		createNewPin,
 		...reducerState,
 	}
 

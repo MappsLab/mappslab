@@ -10396,6 +10396,11 @@ map-visit@^1.0.0:
   dependencies:
     object-visit "^1.0.0"
 
+mapp@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/mapp/-/mapp-0.1.0.tgz#4865bd9dbad37d57c7bc86237d2b032e10be82ed"
+  integrity sha1-SGW9nbrTfVfHvIYjfSsDLhC+gu0=
+
 mapslice@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/mapslice/-/mapslice-2.0.1.tgz#90703f93b4b01d5e15f6012ced48e52f636c5bfd"
