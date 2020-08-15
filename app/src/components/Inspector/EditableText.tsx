@@ -12,6 +12,8 @@ import {
 } from '../Text'
 import { useCallback } from 'react'
 import { debounce } from 'lodash'
+import Linkify from 'react-linkify'
+import styled from 'styled-components'
 
 const { useEffect, useState, useRef } = React
 
@@ -25,6 +27,7 @@ interface EditableTextProps {
 	placeholder?: string
 	multiline?: boolean
 }
+
 const textComponentsMap = {
 	h1: Header1,
 	h2: Header2,
@@ -33,6 +36,20 @@ const textComponentsMap = {
 	h5: Header5,
 	p: P,
 }
+
+const LinkifyLink = styled.a`
+	color: #0000ff;
+	&:hover {
+		text-decoration: underline;
+	}
+`
+
+// decorator for making Linkify links open in a new tab
+export const linkifyDecorator = (href, text, key) => (
+	<LinkifyLink href={href} key={key} target="_blank">
+		{text}
+	</LinkifyLink>
+)
 
 export const EditableText = ({
 	fontSize,
@@ -85,7 +102,11 @@ export const EditableText = ({
 
 	if (!viewerCanEdit) {
 		const Text = textComponentsMap[fontSize || 'p'] || textComponentsMap.p
-		return <Text>{value}</Text>
+		return (
+			<Linkify componentDecorator={linkifyDecorator}>
+				<Text>{value}</Text>
+			</Linkify>
+		)
 	}
 
 	return (
