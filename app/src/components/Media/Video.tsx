@@ -1,6 +1,7 @@
 import * as React from 'react'
 import styled, { css } from 'styled-components'
 import { getVideoInfo } from '../../utils/media'
+import { Modal } from '../Modals'
 
 interface VideoFrameProps {
 	ratio?: number
@@ -28,14 +29,17 @@ interface VideoProps {
 }
 
 export const Video = ({ video, title, ratio }: VideoProps) => (
-	<VideoFrame ratio={ratio}>
-		<iframe
-			title={title || ''}
-			src={getVideoInfo(video).src}
-			width="100%"
-			height="100%"
-		/>
-	</VideoFrame>
+	<Modal>
+		<VideoFrame ratio={ratio}>
+			<iframe
+				allowFullScreen={true}
+				title={title || ''}
+				src={getVideoInfo(video).src}
+				width="100%"
+				height="100%"
+			/>
+		</VideoFrame>
+	</Modal>
 )
 
 Video.defaultProps = {

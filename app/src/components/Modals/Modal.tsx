@@ -1,5 +1,7 @@
 import * as React from 'react'
 import styled, { css } from 'styled-components'
+import ReactDOM from 'react-dom'
+import { useState } from 'react'
 
 export const ModalInner = styled.div`
 	${({ theme }) => css`
@@ -11,25 +13,74 @@ export const ModalInner = styled.div`
 		z-index: ${theme.layout.z.modal};
 		pointer-events: initial;
 		margin: 50px auto;
+		min-width: 70%;
+		position: relative;
 	`};
 `
 
-export const ModalContainer = styled.div`
-	${({ theme }) => css`
+type ModalContainerProps = {
+	visible: boolean
+}
+
+export const ModalContainer = styled.div<ModalContainerProps>`
+	${({ theme, visible }) => css`
 		${theme.mixins.fixedFullSize};
 		${theme.mixins.flexCenter};
 		z-index: ${theme.layout.z.modal};
 		overflow-y: scroll;
 		pointer-events: none;
+		display: ${!visible ? 'none' : undefined};
 	`};
 `
 
+const CloseButton = styled.button`
+	padding: 10px 20px;
+	background: #dadada;
+	margin-top: 15px;
+	float: right;
+	font-size: 1.2em;
+`
+const PreviewContainer = styled.div`
+	position: relative;
+`
+
+const PreviewOverlay = styled.button`
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+`
+
+const Preview = styled.div`
+	pointer-events: none;
+`
+
 type Props = {
-	children: React.ReactNode
+	initiallyVisible?: boolean
 }
 
-export const Modal = ({ children }: Props) => (
-	<ModalContainer>
-		<ModalInner>{children}</ModalInner>
-	</ModalContainer>
-)
+export const Modal = ({
+	children,
+	initiallyVisible,
+}: React.PropsWithChildren<Props>) => {
+	const [visible, setVisible] = useState(initiallyVisible)
+
+	return (
+		<PreviewContainer>
+			<PreviewOverlay aria-label="Open" onClick={() => setVisible(true)} />
+			<Preview>{children}</Preview>
+			{ReactDOM.createPortal(
+				<ModalContainer visible={visible}>
+					<ModalInner>
+						{children}
+						<CloseButton aria-label="Close" onClick={() => setVisible(false)}>
+							Close
+						</CloseButton>
+					</ModalInner>
+				</ModalContainer>,
+				document.getElementById('root'),
+			)}
+		</PreviewContainer>
+	)
+}
