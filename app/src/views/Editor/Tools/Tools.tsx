@@ -11,8 +11,7 @@ import { useGoogleMap } from '@react-google-maps/api'
  * Tools
  */
 
-export interface ToolsProps extends DataLayerSelectorProps {
-}
+export type ToolsProps = DataLayerSelectorProps
 
 export const Tools = (props: ToolsProps) => {
 	const { zoomIn, zoomOut, mode, transitionMode } = useCurrentMap()
@@ -27,7 +26,7 @@ export const Tools = (props: ToolsProps) => {
 	return (
 		<React.Fragment>
 			<Toolbar>
-				<NewPinButton onClick={onNewPinClick}/>
+				<NewPinButton onClick={onNewPinClick} />
 			</Toolbar>
 			<LayersTool
 				disableLayer={disableLayer}
@@ -36,8 +35,8 @@ export const Tools = (props: ToolsProps) => {
 				layers={layers}
 			/>
 			<Toolbar align="right">
-				<ZoomButton direction="in" onClick={() => zoomIn()}/>
-				<ZoomButton direction="out" onClick={() => zoomOut()}/>
+				<ZoomButton direction="in" onClick={() => zoomIn()} />
+				<ZoomButton direction="out" onClick={() => zoomOut()} />
 			</Toolbar>
 		</React.Fragment>
 	)

@@ -1,5 +1,5 @@
 // @flow
-import React from 'react'
+import React, { useMemo } from 'react'
 import styled, { css, DefaultTheme } from 'styled-components'
 import { State } from 'react-automata'
 import { RoundButton } from '../../../components/Buttons'
@@ -28,16 +28,39 @@ type Props = {
 }
 
 const NewPinButton = ({ onClick }: Props) => {
-	const {mode} = useCurrentMap()
+	const { mode } = useCurrentMap()
 
 	const dropMode = _.get(mode.value, 'Lesson.DropPin.DropMode')
+	const icon = useMemo(() => {
+		switch (true) {
+			case mode.matches('Lesson.DropPin.DropMode.Connect'):
+				return '✔'
+			case mode.matches('Lesson.DropPin.DropMode'):
+				return '❌󠁿'
+			default:
+				return '📍'
+		}
+	}, [mode])
+
+	const label = useMemo(() => {
+		switch (true) {
+			case mode.matches('Lesson.DropPin.DropMode.Connect'):
+				return 'Done'
+			case mode.matches('Lesson.DropPin.DropMode'):
+				return 'Cancel'
+			default:
+				return 'Add A New Pin'
+		}
+	}, [mode])
+
 	return (
-		<Wrapper id='here' active={dropMode}>
+		<Wrapper id="here" active={dropMode}>
 			<RoundButton
-				tooltip={dropMode ? 'Cancel' : 'Add a New Pin'}
+				tooltip={label}
 				onClick={onClick}
-				label="Add a new Pin"
-				icon={dropMode ? '' : '📍'}
+				label={label}
+				showLabel={true}
+				icon={icon}
 				size="large"
 			/>
 		</Wrapper>

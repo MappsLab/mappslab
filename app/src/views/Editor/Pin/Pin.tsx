@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useCallback, useMemo } from 'react'
+import { useMemo } from 'react'
 import { Marker, OverlayView, useGoogleMap } from '@react-google-maps/api'
 import { Pin as PinType } from '../../../types-ts'
 import { useCurrentMap } from '../../../providers/CurrentMap'
@@ -15,7 +15,7 @@ interface PinProps {
 
 export const Pin = ({ pin }: PinProps) => {
 	const googleMap = useGoogleMap()
-	const { mode } = useCurrentMap()
+	const { mode, transitionMode } = useCurrentMap()
 	const { viewer } = useCurrentViewer()
 	const { inspectItem, item: inspectedItem } = useInspector()
 
@@ -32,13 +32,24 @@ export const Pin = ({ pin }: PinProps) => {
 	const onMouseOver = () => setIsHovered(true)
 	const onMouseOut = () => setIsHovered(false)
 	const onMouseClick = () => {
-		if (mode.matches('Lesson.DropPin.DropMode.Drop')) {
-			// TODO
-			console.log('DROP')
-		} else {
-			setIsHovered(false)
-			googleMap?.panTo(position)
-			inspectItem(pin, position)
+		setIsHovered(false)
+		switch (true) {
+			case mode.matches('Lesson.DropPin.DropMode'):
+				googleMap?.panTo(position)
+				transitionMode({
+					type: 'enterConnect',
+					context: {
+						connectToPin: {
+							pin,
+							position: pin.route && pin.route.isFirst ? 'BEFORE' : 'AFTER',
+						},
+					},
+				})
+				break
+			default:
+				googleMap?.panTo(position)
+				inspectItem(pin, position)
+				break
 		}
 	}
 
