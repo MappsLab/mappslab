@@ -38,7 +38,6 @@ export const MapEvents = ({ mapUid }: MapEventsProps) => {
 			lng: event.latLng.lng(),
 		}
 		const { connectToPin } = mode.context
-		console.log(connectToPin)
 		const newPin = await createNewPin({
 			...position,
 			addToRoute: connectToPin
