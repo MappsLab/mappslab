@@ -9,6 +9,7 @@ interface WrapperProps {
 
 const Wrapper = styled.button`
 	${({ active, size }: WrapperProps) => css`
+		margin: 10px auto auto auto;
 		border: 2px solid ${active ? 'red' : 'green'};
 		display: flex;
 		justify-content: center;
@@ -19,17 +20,30 @@ const Wrapper = styled.button`
 					width: 50px;
 					height: 50px;
 					border-radius: 25px;
-					margin: 5px;
 					font-size: 35px;
 			  `
 			: css`
 					width: 35px;
 					height: 35px;
 					border-radius: 18px;
-					margin: 4px;
 					font-size: 22px;
 			  `}
 	`}
+`
+
+const Label = styled.div`
+	text-align: center;
+	font-size: 1.5em;
+	font-weight: bold;
+	background: white;
+	padding: 5px;
+	border-radius: 5px;
+`
+
+const ImageContainer = styled.span`
+	display: flex;
+	align-items: center;
+	line-height: 1em;
 `
 
 /**
@@ -44,6 +58,7 @@ interface BaseProps {
 	icon: React.ReactNode
 	size?: 'normal' | 'large'
 	tooltip?: string
+	showLabel?: boolean
 }
 
 export const RoundButton = ({
@@ -54,17 +69,19 @@ export const RoundButton = ({
 	icon,
 	size,
 	tooltip,
+	showLabel,
 }: BaseProps) => (
-	<ToolTip message={tooltip}>
+	<ToolTip message={!showLabel ? tooltip : undefined}>
+		{showLabel && <Label>{label}</Label>}
 		<Wrapper
 			size={size}
 			onClick={onClick}
 			active={isActive}
 			disabled={disabled}
 		>
-			<span role="img" aria-label={label}>
+			<ImageContainer role="img" aria-label={label}>
 				{icon}
-			</span>
+			</ImageContainer>
 		</Wrapper>
 	</ToolTip>
 )

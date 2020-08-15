@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/ban-types */
 import Debug from 'debug'
-import { Machine } from 'xstate'
+import { assign, Machine } from 'xstate'
 import { useMachine } from '@xstate/react'
 import { Pin, Route } from '../../types-ts'
 
@@ -38,17 +39,24 @@ export interface ModeStateSchema {
 	}
 }
 
-export type ModeEvent =
-	| { type: 'enterLesson' }
-	| { type: 'clickedItem' }
-	| { type: 'close' }
-	| { type: 'droppedPin' }
-	| { type: 'enterConnect'; context: Pick<ModeContext, 'connectToPin'> }
-	| { type: 'clickedDropPin' }
+interface ModeEventInterface {
+	type: string
+	context?: any
+}
+
+export type ModeEvent = ModeEventInterface &
+	(
+		| { type: 'enterLesson' }
+		| { type: 'clickedItem' }
+		| { type: 'close'; context: any }
+		| { type: 'droppedPin' }
+		| { type: 'enterConnect'; context: Pick<ModeContext, 'connectToPin'> }
+		| { type: 'clickedDropPin' }
+	)
 
 export const modeSchema = {
 	id: 'mapStateMachine',
-	initial: 'Welcome' as 'Welcome',
+	initial: 'Welcome' as const,
 	states: {
 		Welcome: { id: 'Welcome', states: {}, on: { enterLesson: '#Lesson' } },
 		Lesson: {
@@ -64,21 +72,40 @@ export const modeSchema = {
 								Drop: { id: 'Drop', states: {} },
 								Connect: { id: 'Connect', states: {} },
 							},
-							initial: 'Drop' as 'Drop',
+							initial: 'Drop' as const,
 							on: {},
 						},
 					},
-					initial: 'DropMode' as 'DropMode',
+					initial: 'DropMode' as const,
 					on: {
-						clickedDropPin: '#Browse',
-						droppedPin: '#Inspect',
-						enterConnect: '#Connect',
+						clickedDropPin: {
+							target: '#Browse',
+							actions: assign({ connectToPin: undefined }),
+						},
+						enterConnect: {
+							target: '#Connect',
+							actions: assign((_, event: ModeEvent) => event.context),
+						},
+						droppedPin: {
+							target: '#Browse',
+						},
 					},
 				},
-				Inspect: { id: 'Inspect', states: {}, on: { close: '#Lesson' } },
+				Inspect: {
+					id: 'Inspect',
+					states: {},
+					on: {
+						close: '#Lesson',
+					},
+				},
 			},
-			initial: 'Browse' as 'Browse',
-			on: { clickedDropPin: '#DropPin' },
+			initial: 'Browse' as const,
+			on: {
+				clickedDropPin: {
+					target: '#DropPin',
+					actions: assign({ connectToPin: undefined }),
+				},
+			},
 		},
 		CaptureView: { id: 'CaptureView', states: {} },
 	},

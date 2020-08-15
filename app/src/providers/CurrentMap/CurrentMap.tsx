@@ -39,7 +39,7 @@ interface CurrentMapContextValue extends MapReducer {
 	inspectedItem: Route | Pin | null
 
 	// API
-	createNewPin: (pinInput: NewPinInput) => void
+	createNewPin: (pinInput: NewPinInput) => Promise<Pin|undefined>
 }
 
 const CurrentMapContext = React.createContext<
@@ -78,12 +78,13 @@ export const CurrentMapProvider = ({ children }: CurrentMapProps) => {
 
 	const createNewPin = useCallback(
 		async (newPinInput: NewPinInput) => {
-			await createPin({
+			const result = await createPin({
 				variables: {
 					input: newPinInput,
 				},
 			})
 			await refetch()
+			return result.data?.createPin
 		},
 		[createPin],
 	)
