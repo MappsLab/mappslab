@@ -1,5 +1,5 @@
 import gql from 'graphql-tag'
-import { MutationFunctionOptions, useMutation } from '@apollo/client'
+import { MutationHookOptions, useMutation } from '@apollo/client'
 import { Pin, MutationDeletePinArgs } from '../../types-ts'
 
 export const deletePinMutation = gql`
@@ -17,7 +17,7 @@ interface DeletePinMutationOptionsProps {
 
 type Variables = MutationDeletePinArgs['input']
 
-const deletePinOptions: MutationFunctionOptions<Response, Variables> = {
+const deletePinOptions: MutationHookOptions<Response, Variables> = {
 	update: (cache, { data }) => {
 		// Update the unfollowed user's data from the query
 		if (data?.deletePin.success === true) {

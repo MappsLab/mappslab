@@ -1,1 +1,1 @@
-export * from './DataLayersQuery'
+export * from './dataLayersQuery'

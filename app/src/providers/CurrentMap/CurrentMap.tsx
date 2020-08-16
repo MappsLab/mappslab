@@ -10,7 +10,12 @@ import {
 	useMapSubscriptions,
 } from '../../queries'
 import { applyBaseImage } from './baseImage'
-import { ModeContext, ModeEvent, useMapStateMachine } from './mapStateMachine'
+import {
+	ModeStateSchema,
+	ModeContext,
+	ModeEvent,
+	useMapStateMachine,
+} from './mapStateMachine'
 import { Interpreter, State } from 'xstate'
 import { getOptionsForState } from '../../views/Editor/mapOptions'
 import { useCallback } from 'react'
@@ -29,7 +34,7 @@ interface CurrentMapContextValue extends MapReducer {
 
 	// Map Machine State
 	mode: State<ModeContext, ModeEvent>
-	transitionMode: Interpreter<ModeContext, any, ModeEvent>['send']
+	transitionMode: Interpreter<ModeContext, ModeStateSchema, ModeEvent>['send']
 	service: Interpreter<ModeContext, any, ModeEvent>
 
 	// Map State

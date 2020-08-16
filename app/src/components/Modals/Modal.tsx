@@ -64,7 +64,11 @@ export const Modal = ({
 	children,
 	initiallyVisible,
 }: React.PropsWithChildren<Props>) => {
-	const [visible, setVisible] = useState(initiallyVisible)
+	const [visible, setVisible] = useState(Boolean(initiallyVisible))
+
+	const modalRoot = document.getElementById('root')
+
+	if (!modalRoot) throw new Error('Could not find element with id "#root"')
 
 	return (
 		<PreviewContainer>
@@ -79,7 +83,7 @@ export const Modal = ({
 						</CloseButton>
 					</ModalInner>
 				</ModalContainer>,
-				document.getElementById('root'),
+				modalRoot,
 			)}
 		</PreviewContainer>
 	)

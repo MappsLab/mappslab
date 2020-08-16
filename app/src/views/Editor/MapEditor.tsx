@@ -10,7 +10,7 @@ import { Tools } from './Tools'
 import { NotLoggedIn } from './NotLoggedIn'
 import _ from 'lodash'
 import { unwindEdges } from '@good-idea/unwind-edges'
-import { useCreatePinMutation } from '../../queries/Pin'
+import { useCreatePinMutation } from '../../queries/pin'
 import { MapEvents } from './MapEvents'
 import { InspectorProvider, ItemInspector } from './ItemInspector'
 

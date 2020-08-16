@@ -1,5 +1,4 @@
 import { StateSchema } from 'xstate'
-import { ModeStateSchema } from '../../providers/CurrentMap/mapStateMachine'
 import { MapEventListeners, NamedEventListeners } from '../../types-ts'
 import { definitely } from '../../utils'
 import { mappedEventNames } from './eventNames'
@@ -42,8 +41,8 @@ interface HandlersForState<
 }
 
 export interface MapStateHandlers {
-	schema: ModeStateSchema
-	handlers: HandlersForState<ModeStateSchema, MapEventListeners>
+	schema: any
+	handlers: HandlersForState<any, MapEventListeners>
 }
 
 interface MarkerStateHandlers {}

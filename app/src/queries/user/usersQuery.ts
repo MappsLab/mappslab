@@ -27,6 +27,3 @@ export type UsersQueryInput = QueryUsersArgs['input']
 export interface UsersQueryResponse {
 	users: Paginated<User>
 }
-
-export const useUsersQuery = (variables?: Variables) =>
-	useQuery<UsersQueryResponse, Variables>(usersQuery, { variables })

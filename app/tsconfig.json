@@ -15,6 +15,7 @@
 		"types": ["node", "jest", "googlemaps"],
 		"resolveJsonModule": true,
 		"strictNullChecks": true,
+		"skipLibCheck": true,
 		"baseUrl": "src"
 	},
 	"include": ["./src"],
