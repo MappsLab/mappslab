@@ -1,7 +1,12 @@
 import * as React from 'react'
+import { useLazyQuery } from '@apollo/client'
 import { unwindEdges } from '@good-idea/unwind-edges'
 import { DataLayer } from '../../types-ts'
-import { useDataLayersQuery } from '../../queries/dataLayer'
+import {
+	dataLayersQuery,
+	DataLayersInput,
+	DataLayersResponse,
+} from '../../queries/dataLayer'
 import { ListOfTypeProps } from './utils'
 import { List } from './List'
 import { definitely } from '../../utils'
@@ -18,7 +23,12 @@ export const DataLayerList = ({
 	remove,
 	items,
 }: ListOfTypeProps<DataLayer>) => {
-	const { data, refetch } = useDataLayersQuery({ skip: true })
+	const [fetchDataLayers, { data }] = useLazyQuery<
+		DataLayersResponse,
+		DataLayersInput
+	>(dataLayersQuery)
+	console.log({ dataLayersQuery })
+
 	const [searchResults] = unwindEdges(data?.dataLayers)
 	const buttons = definitely([
 		remove
@@ -31,10 +41,12 @@ export const DataLayerList = ({
 
 	const search = (searchValue: string) => {
 		if (searchValue.length < 3) return
-		refetch({
-			where: {
-				title: {
-					contains: searchValue,
+		fetchDataLayers({
+			variables: {
+				where: {
+					title: {
+						contains: searchValue,
+					},
 				},
 			},
 		})

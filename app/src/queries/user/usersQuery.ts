@@ -3,7 +3,7 @@ import { Paginated } from '@good-idea/unwind-edges'
 import { useQuery } from '@apollo/client'
 import { User, QueryUsersArgs } from '../../types-ts'
 
-const usersQuery = gql`
+export const usersQuery = gql`
 	query UsersQuery($input: UsersListOptions) {
 		users(input: $input) {
 			pageInfo {
@@ -22,9 +22,9 @@ const usersQuery = gql`
 	}
 `
 
-type Variables = QueryUsersArgs['input']
+export type UsersQueryInput = QueryUsersArgs['input']
 
-interface UsersQueryResponse {
+export interface UsersQueryResponse {
 	users: Paginated<User>
 }
 

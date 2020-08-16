@@ -145,44 +145,48 @@ export const CurrentViewer = ({ children }: Props) => {
 
 	const loginUser = async (variables: Credentials) => {
 		dispatch({ type: LOGIN_ATTEMPT })
-		const result = await loginMutation({ variables })
-		if (result.errors) {
-			const message = result.errors[0].message.replace('[GraphQL]', '')
-			dispatch({ type: LOGIN_FAILURE, error: { message } })
-			return { success: false, message }
-		} else if (!result.data) {
-			const message = 'No data received'
-			dispatch({ type: LOGIN_FAILURE, error: { message } })
-			return { success: false, message }
-		} else {
-			const { loginViewer } = result.data
-			if ('resetToken' in loginViewer) {
-				dispatch({ type: REQUIRES_RESET, resetToken: loginViewer.resetToken })
+		try {
+			const result = await loginMutation({ variables })
+			if (!result.data) {
+				const message = 'No data received'
+				dispatch({ type: LOGIN_FAILURE, error: { message } })
+				return { success: false, message }
 			} else {
-				const { jwt, viewer } = loginViewer
-				setViewerCookie(jwt)
-				dispatch({ type: LOGIN_SUCCESS, viewer })
+				const { loginViewer } = result.data
+				if ('resetToken' in loginViewer) {
+					dispatch({ type: REQUIRES_RESET, resetToken: loginViewer.resetToken })
+				} else {
+					const { jwt, viewer } = loginViewer
+					setViewerCookie(jwt)
+					dispatch({ type: LOGIN_SUCCESS, viewer })
+				}
+				return { success: true }
 			}
-			return { success: true }
+		} catch (e) {
+			const message = e.message
+			dispatch({ type: LOGIN_FAILURE, error: { message } })
+			return { success: false, message }
 		}
 	}
 
 	const resetPassword = async (variables: ResetCredentials) => {
 		dispatch({ type: LOGIN_ATTEMPT })
-		const result = await resetMutation({ variables })
-		if (result.errors) {
-			const message = result.errors[0].message.replace('[GraphQL]', '')
+		try {
+			const result = await resetMutation({ variables })
+			if (!result.data) {
+				const message = 'No data received'
+				dispatch({ type: LOGIN_FAILURE, error: { message } })
+				return { success: false, message }
+			} else {
+				const { viewer, jwt } = result.data.resetPassword
+				setViewerCookie(jwt)
+				dispatch({ type: LOGIN_SUCCESS, viewer })
+				return { success: true }
+			}
+		} catch (e) {
+			const message = e.message
 			dispatch({ type: LOGIN_FAILURE, error: { message } })
 			return { success: false, message }
-		} else if (!result.data) {
-			const message = 'No data received'
-			dispatch({ type: LOGIN_FAILURE, error: { message } })
-			return { success: false, message }
-		} else {
-			const { viewer, jwt } = result.data.resetPassword
-			setViewerCookie(jwt)
-			dispatch({ type: LOGIN_SUCCESS, viewer })
-			return { success: true }
 		}
 	}
 	const logoutUser = () => {

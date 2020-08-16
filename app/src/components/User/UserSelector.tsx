@@ -1,7 +1,12 @@
 import React from 'react'
 import merge from 'deepmerge'
+import { useLazyQuery } from '@apollo/client'
 import { unwindEdges } from '@good-idea/unwind-edges'
-import { useUsersQuery } from '../../queries'
+import {
+	UsersQueryInput,
+	UsersQueryResponse,
+	usersQuery,
+} from '../../queries/user'
 import { QueryUsersArgs } from '../../types-ts'
 import { SelectorRenderProps, LiveSelector, SelectorItem } from '../Selector'
 
@@ -16,10 +21,14 @@ interface Props {
 }
 
 export const UserSelector = ({ disabled, onSelect, variables }: Props) => {
-	const { data, refetch } = useUsersQuery(variables)
+	const [fetchUsers, { data }] = useLazyQuery<
+		UsersQueryResponse,
+		UsersQueryInput
+	>(usersQuery)
+
 	const refetchQuery = (input: string) => {
 		if (input.length < 3) {
-			refetch(variables)
+			fetchUsers({ variables })
 			return
 		}
 		const nameFilter = {
@@ -30,7 +39,7 @@ export const UserSelector = ({ disabled, onSelect, variables }: Props) => {
 			},
 		}
 		const newVariables = merge(variables || {}, nameFilter)
-		refetch(newVariables)
+		fetchUsers({ variables: newVariables })
 	}
 	const items =
 		data && data.users
@@ -42,6 +51,7 @@ export const UserSelector = ({ disabled, onSelect, variables }: Props) => {
 					),
 			  }))
 			: []
+
 	return (
 		<LiveSelector
 			label="select your account"

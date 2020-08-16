@@ -39,7 +39,7 @@ interface CurrentMapContextValue extends MapReducer {
 	inspectedItem: Route | Pin | null
 
 	// API
-	createNewPin: (pinInput: NewPinInput) => Promise<Pin|undefined>
+	createNewPin: (pinInput: NewPinInput) => Promise<Pin | undefined>
 }
 
 const CurrentMapContext = React.createContext<
@@ -70,6 +70,7 @@ export const CurrentMapProvider = ({ children }: CurrentMapProps) => {
 	const { mapUid, mapType } = reducerState
 	const mapQuery = useMapQuery({
 		variables: { uid: mapUid },
+		skip: mapUid === null,
 	})
 
 	const { data, refetch } = mapQuery
