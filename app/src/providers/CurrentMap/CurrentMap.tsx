@@ -20,7 +20,7 @@ import { Interpreter, State } from 'xstate'
 import { getOptionsForState } from '../../views/Editor/mapOptions'
 import { useCallback } from 'react'
 
-const { useRef, useEffect } = React
+const { useEffect } = React
 
 interface CurrentMapContextValue extends MapReducer {
 	// Helper functions
@@ -70,7 +70,7 @@ export const CurrentMapProvider = ({ children }: CurrentMapProps) => {
 	const googleMap = useGoogleMap()
 	const [createPin] = useCreatePinMutation()
 	// state
-	const listenersRef = useRef<google.maps.MapsEventListener[]>([])
+	// const listenersRef = useRef<google.maps.MapsEventListener[]>([])
 	const reducerState = useMapReducer()
 	const { mapUid, mapType } = reducerState
 	const mapQuery = useMapQuery({
@@ -102,8 +102,9 @@ export const CurrentMapProvider = ({ children }: CurrentMapProps) => {
 
 	// effects
 	useEffect(() => {
+		if (mapUid === null) return
 		useMapSubscriptions(mapQuery)
-	}, [mapQuery])
+	}, [mapQuery, mapUid])
 
 	// auto-set base maps
 	useEffect(() => {

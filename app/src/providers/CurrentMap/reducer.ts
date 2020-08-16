@@ -75,7 +75,6 @@ export type MapReducer = MapReducerDispatchers & State
 
 export const useMapReducer = (): MapReducer => {
 	const [state, dispatch] = useReducer(reducer, initialState)
-	const { mapUid } = state
 
 	const setMapUid = (mapUid: string) => dispatch({ type: SET_MAP_UID, mapUid })
 	const setViewerLatLng = (latLng: LatLngType) =>
