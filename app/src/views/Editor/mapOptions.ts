@@ -1,4 +1,5 @@
 import { createObjectSearchByState } from '../../utils/statecharts'
+import newPinSvg from '../../assets/images/newPin.svg'
 
 const defaults = {
 	disableDefaultUI: true,
@@ -16,7 +17,7 @@ const defaults = {
 	clickableIcons: false,
 }
 
-const PIN_CURSOR = 'url("/images/newPin.svg") 18 49, crosshair'
+const PIN_CURSOR = `url(${newPinSvg}) 18 49, crosshair`
 
 const mapOptions = {
 	Welcome: {

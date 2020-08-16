@@ -13,7 +13,7 @@ interface NewPinConnection {
 
 export type ModeContext = {
 	inspectedItem: Pin | Route | null
-	connectToPin: NewPinConnection
+	connectToPin: NewPinConnection | undefined
 }
 
 interface ModeEventInterface {
@@ -91,22 +91,22 @@ export const modeSchema = {
 		},
 		CaptureView: { id: 'CaptureView', states: {} },
 	},
+}
+
+const options = {
 	actions: {
-		clearConnectToPin: assign({ connectToPin: undefined }),
-		setConnectToPin: assign((context, event: EnterEvent) => {
+		clearConnectToPin: assign<ModeContext>({ connectToPin: undefined }),
+		setConnectToPin: assign<ModeContext>((context, event: EnterEvent) => {
 			return {
 				connectToPin: event.context.connectToPin,
 			}
 		}),
 	},
+	// 	logger: debug,
 }
 
 export type ModeStateSchema = typeof modeSchema
 
-const mapMachine = createMachine<ModeContext, ModeEvent>(modeSchema)
-
-// const machineOptions = {
-// 	logger: debug,
-// }
+const mapMachine = createMachine<ModeContext, ModeEvent>(modeSchema, options)
 
 export const useMapStateMachine = () => useMachine(mapMachine)
