@@ -10,12 +10,17 @@ import {
 	useMapSubscriptions,
 } from '../../queries'
 import { applyBaseImage } from './baseImage'
-import { ModeContext, ModeEvent, useMapStateMachine } from './mapStateMachine'
+import {
+	ModeStateSchema,
+	ModeContext,
+	ModeEvent,
+	useMapStateMachine,
+} from './mapStateMachine'
 import { Interpreter, State } from 'xstate'
 import { getOptionsForState } from '../../views/Editor/mapOptions'
 import { useCallback } from 'react'
 
-const { useRef, useEffect } = React
+const { useEffect } = React
 
 interface CurrentMapContextValue extends MapReducer {
 	// Helper functions
@@ -29,7 +34,7 @@ interface CurrentMapContextValue extends MapReducer {
 
 	// Map Machine State
 	mode: State<ModeContext, ModeEvent>
-	transitionMode: Interpreter<ModeContext, any, ModeEvent>['send']
+	transitionMode: Interpreter<ModeContext, ModeStateSchema, ModeEvent>['send']
 	service: Interpreter<ModeContext, any, ModeEvent>
 
 	// Map State
@@ -39,7 +44,7 @@ interface CurrentMapContextValue extends MapReducer {
 	inspectedItem: Route | Pin | null
 
 	// API
-	createNewPin: (pinInput: NewPinInput) => Promise<Pin|undefined>
+	createNewPin: (pinInput: NewPinInput) => Promise<Pin | undefined>
 }
 
 const CurrentMapContext = React.createContext<
@@ -65,11 +70,12 @@ export const CurrentMapProvider = ({ children }: CurrentMapProps) => {
 	const googleMap = useGoogleMap()
 	const [createPin] = useCreatePinMutation()
 	// state
-	const listenersRef = useRef<google.maps.MapsEventListener[]>([])
+	// const listenersRef = useRef<google.maps.MapsEventListener[]>([])
 	const reducerState = useMapReducer()
 	const { mapUid, mapType } = reducerState
 	const mapQuery = useMapQuery({
 		variables: { uid: mapUid },
+		skip: mapUid === null,
 	})
 
 	const { data, refetch } = mapQuery
@@ -96,8 +102,9 @@ export const CurrentMapProvider = ({ children }: CurrentMapProps) => {
 
 	// effects
 	useEffect(() => {
+		if (mapUid === null) return
 		useMapSubscriptions(mapQuery)
-	}, [mapQuery])
+	}, [mapQuery, mapUid])
 
 	// auto-set base maps
 	useEffect(() => {

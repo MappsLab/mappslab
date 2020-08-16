@@ -1,12 +1,13 @@
 // @flow
 import React, { useMemo } from 'react'
 import styled, { css, DefaultTheme } from 'styled-components'
+import _ from 'lodash'
 import { State } from 'react-automata'
 import { RoundButton } from '../../../components/Buttons'
 import { useCurrentMap } from '../../../providers/CurrentMap'
-import _ from 'lodash'
+import newPinSvg from '../../../assets/images/newPin.svg'
 
-const PIN_CURSOR = 'url("/images/newPin.svg") 18 49, crosshair'
+const PIN_CURSOR = `url(${newPinSvg}) 18 49, crosshair`
 
 interface WrapperProps {
 	active: boolean
@@ -19,6 +20,7 @@ const Wrapper = styled.div`
 		}
 	`}
 `
+
 /**
  * NewPinButton
  */

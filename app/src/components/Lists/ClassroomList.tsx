@@ -1,7 +1,12 @@
 import * as React from 'react'
+import { useLazyQuery } from '@apollo/client'
 import { unwindEdges } from '@good-idea/unwind-edges'
 import { Classroom } from '../../types-ts'
-import { useClassroomsQuery } from '../../queries/classroom/classroomsQuery'
+import {
+	classroomsQuery,
+	ClassroomsInput,
+	ClassroomsResponse,
+} from '../../queries/classroom'
 import { List } from './List'
 import { ListOfTypeProps } from './utils'
 
@@ -17,14 +22,19 @@ export const ClassroomList = ({
 	onItemClick,
 	create,
 }: ListOfTypeProps<Classroom>) => {
-	const { data, refetch } = useClassroomsQuery({ skip: true })
+	const [fetchClassrooms, { data }] = useLazyQuery<
+		ClassroomsResponse,
+		ClassroomsInput
+	>(classroomsQuery)
 
 	const search = (searchValue: string) => {
 		if (searchValue.length < 3) return
-		refetch({
-			where: {
-				title: {
-					contains: searchValue,
+		fetchClassrooms({
+			variables: {
+				where: {
+					title: {
+						contains: searchValue,
+					},
 				},
 			},
 		})

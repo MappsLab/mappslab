@@ -1,7 +1,8 @@
 import * as React from 'react'
+import { useLazyQuery } from '@apollo/client'
 import { unwindEdges } from '@good-idea/unwind-edges'
 import { Map } from '../../types-ts'
-import { useMapsQuery } from '../../queries/map'
+import { MapsResponse, MapsInput, mapsQuery } from '../../queries/map'
 import { List } from './List'
 import { ListOfTypeProps } from './utils'
 
@@ -17,13 +18,15 @@ export const MapList = ({
 	onItemClick,
 	create,
 }: ListOfTypeProps<Map>) => {
-	const { data, refetch } = useMapsQuery({ skip: true })
+	const [fetchMaps, { data }] = useLazyQuery<MapsResponse, MapsInput>(mapsQuery)
 
 	const search = (searchValue: string) => {
-		refetch({
-			where: {
-				title: {
-					contains: searchValue,
+		fetchMaps({
+			variables: {
+				where: {
+					title: {
+						contains: searchValue,
+					},
 				},
 			},
 		})

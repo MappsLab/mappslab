@@ -1,9 +1,8 @@
 import gql from 'graphql-tag'
-import { useQuery, QueryHookOptions } from '@apollo/client'
 import { Paginated } from '@good-idea/unwind-edges'
 import { DataLayer, QueryDataLayersArgs } from '../../types-ts'
 
-const dataLayersQuery = gql`
+export const dataLayersQuery = gql`
 	query DataLayersQuery(
 		$first: Int
 		$after: String
@@ -28,12 +27,8 @@ const dataLayersQuery = gql`
 	}
 `
 
-export type Variables = QueryDataLayersArgs['input']
+export type DataLayersInput = QueryDataLayersArgs['input']
 
-interface Response {
+export interface DataLayersResponse {
 	dataLayers: Paginated<DataLayer>
 }
-
-export const useDataLayersQuery = (
-	options: QueryHookOptions<Response, Variables>,
-) => useQuery<Response, Variables>(dataLayersQuery, options)

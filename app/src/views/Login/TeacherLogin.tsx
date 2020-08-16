@@ -1,6 +1,12 @@
 import React from 'react'
+import { useLazyQuery } from '@apollo/client'
 import { State, Action, Transition } from 'react-automata'
-import { useUserQuery } from '../../queries'
+import {
+	userQuery,
+	UserQueryResponse,
+	UserQueryArgs,
+	useUserQuery,
+} from '../../queries'
 import { Form, Field } from '../../components/Forms'
 import {
 	FIND_TEACHER,
@@ -9,7 +15,7 @@ import {
 	DISABLE_INPUT,
 } from './statechart'
 
-const { useState } = React
+const { useEffect, useState } = React
 /**
  * TeacherLogin
  */
@@ -21,15 +27,24 @@ type Props = {
 
 export const TeacherLogin = ({ teacherEmail, transition }: Props) => {
 	const [isLoading, setIsLoading] = useState(false)
-	const { refetch } = useUserQuery({ email: teacherEmail })
+	// const result = useUserQuery({ email: teacherEmail })
+	const [getUser, { data, loading, called }] = useLazyQuery<
+		UserQueryResponse,
+		UserQueryArgs
+	>(userQuery)
 
-	const handleSubmit = async ({ email }) => {
-		setIsLoading(true)
-		transition(SUBMIT)
-		const { data } = await refetch({ email })
+	useEffect(() => {
+		if (!called || !data || loading) return
 		if (data?.user) {
 			transition(FETCHED_TEACHER, { userUid: data.user.uid })
 		}
+	}, [data, loading, called])
+
+	const handleSubmit = async (values: { email: string }) => {
+		const { email } = values
+		setIsLoading(true)
+		transition(SUBMIT)
+		getUser({ variables: { email } })
 	}
 
 	return (

@@ -1,6 +1,5 @@
 {
 	"compilerOptions": {
-		"plugins": [{ "name": "typescript-tslint-plugin" }],
 		"declaration": false,
 		"noImplicitAny": false,
 		"removeComments": true,
@@ -12,9 +11,11 @@
 		"lib": ["es6", "es7", "dom"],
 		"outDir": "./dist",
 		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
 		"types": ["node", "jest", "googlemaps"],
 		"resolveJsonModule": true,
 		"strictNullChecks": true,
+		"skipLibCheck": true,
 		"baseUrl": "src"
 	},
 	"include": ["./src"],

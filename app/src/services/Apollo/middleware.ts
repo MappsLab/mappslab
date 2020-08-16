@@ -1,5 +1,5 @@
 import { ApolloLink } from '@apollo/client'
-import { onError } from '@apollo/link-error'
+import { onError } from '@apollo/client/link/error'
 import { getCookie, VIEWER_COOKIE_TOKEN } from '../../utils/storage'
 import Debug from 'debug'
 

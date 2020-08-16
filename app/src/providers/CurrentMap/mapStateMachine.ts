@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import Debug from 'debug'
-import { assign, Machine } from 'xstate'
+import { assign, createMachine } from 'xstate'
 import { useMachine } from '@xstate/react'
 import { Pin, Route } from '../../types-ts'
 
@@ -13,30 +13,7 @@ interface NewPinConnection {
 
 export type ModeContext = {
 	inspectedItem: Pin | Route | null
-	connectToPin: NewPinConnection
-}
-
-export interface ModeStateSchema {
-	states: {
-		Welcome: {}
-		Lesson: {
-			states: {
-				Browse: {}
-				DropPin: {
-					states: {
-						DropMode: {
-							states: {
-								Drop: {}
-								Connect: {}
-							}
-						}
-					}
-				}
-				Inspect: {}
-			}
-		}
-		CaptureView: {}
-	}
+	connectToPin: NewPinConnection | undefined
 }
 
 interface ModeEventInterface {
@@ -44,13 +21,18 @@ interface ModeEventInterface {
 	context?: any
 }
 
+type EnterEvent = {
+	type: 'enterConnect'
+	context: Pick<ModeContext, 'connectToPin'>
+}
+
 export type ModeEvent = ModeEventInterface &
 	(
+		| { type: 'close' }
 		| { type: 'enterLesson' }
 		| { type: 'clickedItem' }
-		| { type: 'close'; context: any }
 		| { type: 'droppedPin' }
-		| { type: 'enterConnect'; context: Pick<ModeContext, 'connectToPin'> }
+		| EnterEvent
 		| { type: 'clickedDropPin' }
 	)
 
@@ -80,11 +62,11 @@ export const modeSchema = {
 					on: {
 						clickedDropPin: {
 							target: '#Browse',
-							actions: assign({ connectToPin: undefined }),
+							actions: ['clearConnectToPin'],
 						},
 						enterConnect: {
 							target: '#Connect',
-							actions: assign((_, event: ModeEvent) => event.context),
+							actions: ['setConnectToPin'],
 						},
 						droppedPin: {
 							target: '#Browse',
@@ -103,7 +85,7 @@ export const modeSchema = {
 			on: {
 				clickedDropPin: {
 					target: '#DropPin',
-					actions: assign({ connectToPin: undefined }),
+					actions: ['clearConnectToPin'],
 				},
 			},
 		},
@@ -111,10 +93,20 @@ export const modeSchema = {
 	},
 }
 
-const mapMachine = Machine<ModeContext, ModeStateSchema, ModeEvent>(modeSchema)
-
-const machineOptions = {
-	logger: debug,
+const options = {
+	actions: {
+		clearConnectToPin: assign<ModeContext>({ connectToPin: undefined }),
+		setConnectToPin: assign<ModeContext>((context, event: EnterEvent) => {
+			return {
+				connectToPin: event.context.connectToPin,
+			}
+		}),
+	},
+	// 	logger: debug,
 }
+
+export type ModeStateSchema = typeof modeSchema
+
+const mapMachine = createMachine<ModeContext, ModeEvent>(modeSchema, options)
 
 export const useMapStateMachine = () => useMachine(mapMachine)

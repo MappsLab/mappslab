@@ -1,7 +1,12 @@
 import * as React from 'react'
 import { unwindEdges } from '@good-idea/unwind-edges'
 import { User } from '../../types-ts'
-import { useUsersQuery } from '../../queries/user'
+import { useLazyQuery } from '@apollo/client'
+import {
+	UsersQueryInput,
+	UsersQueryResponse,
+	usersQuery,
+} from '../../queries/user'
 import { useQuestion } from '../Question'
 import { Prompt } from '../Forms'
 import { List } from './List'
@@ -25,17 +30,22 @@ export const UserList = ({
 	create,
 }: Props) => {
 	const { ask } = useQuestion()
-	const { data, refetch } = useUsersQuery()
+	const [fetchUsers, { data }] = useLazyQuery<
+		UsersQueryResponse,
+		UsersQueryInput
+	>(usersQuery)
 	const [searchResults] = unwindEdges(data?.users)
 
 	const search = (searchValue: string) => {
 		const roleFilter = userType ? { roles: { includes: userType } } : {}
-		refetch({
-			where: {
-				name: {
-					contains: searchValue,
+		fetchUsers({
+			variables: {
+				where: {
+					name: {
+						contains: searchValue,
+					},
+					...roleFilter,
 				},
-				...roleFilter,
 			},
 		})
 	}

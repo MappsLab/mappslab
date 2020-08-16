@@ -1,6 +1,11 @@
 import React from 'react'
 import { unwindEdges } from '@good-idea/unwind-edges'
-import { useClassroomsQuery } from '../../queries'
+import { useQuery } from '@apollo/client'
+import {
+	classroomsQuery,
+	ClassroomsResponse,
+	ClassroomsInput,
+} from '../../queries'
 import { LiveSelector, SelectorItem } from '../Selector'
 
 /**
@@ -9,16 +14,17 @@ import { LiveSelector, SelectorItem } from '../Selector'
 
 interface LiveClassroomSelectorProps {
 	disabled?: boolean
-	delayQuery?: boolean
 	onSelect: ({ value: string }) => void
 }
 
 export const LiveClassroomSelector = ({
 	disabled,
-	delayQuery,
 	onSelect,
 }: LiveClassroomSelectorProps) => {
-	const { data, refetch } = useClassroomsQuery({ variables: { first: 25 } })
+	const { data, refetch } = useQuery<ClassroomsResponse, ClassroomsInput>(
+		classroomsQuery,
+		{ variables: { first: 25 } },
+	)
 	const [classrooms] = unwindEdges(data?.classrooms)
 
 	const refetchQuery = (input: string) => {

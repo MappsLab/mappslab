@@ -20,19 +20,6 @@ interface Variables {
 	uid?: string | null
 }
 
-const skippable = (options: any): QueryResult<MapResponse, Variables> => {
-	return {
-		data: undefined,
-		loading: false,
-		// @ts-ignore
-		called: false,
-		networkStatus: 7,
-	}
-}
-
 export const useMapQuery = (
 	options: QueryHookOptions<MapResponse, Variables>,
-) =>
-	options.skip
-		? skippable(options)
-		: useQuery<MapResponse, Variables>(mapQuery, options)
+) => useQuery<MapResponse, Variables>(mapQuery, options)

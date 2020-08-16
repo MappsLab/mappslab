@@ -1,5 +1,5 @@
 import gql from 'graphql-tag'
-import { MutationFunctionOptions, useMutation } from '@apollo/client'
+import { MutationHookOptions, useMutation } from '@apollo/client'
 import { setCookie, VIEWER_COOKIE_TOKEN } from '../../utils/storage'
 import { Token, Viewer, MutationResetPasswordArgs } from '../../types-ts'
 import { currentViewerQuery } from '../viewer/currentViewerQuery'
@@ -29,7 +29,7 @@ export const resetPasswordMutation = gql`
 	}
 `
 
-const config: MutationFunctionOptions<Response, Variables> = {
+const config: MutationHookOptions<Response, Variables> = {
 	update: (cache, { data }) => {
 		if (!data) throw new Error('Did not recieve data')
 		const { resetPassword } = data

@@ -10,10 +10,7 @@ import { MapEventListeners } from '../../types-ts'
 const debug = require('debug')('app')
 
 export const useMapEvents = () => {
-	const {
-		addEventListeners,
-		setViewerLatLng
-	} = useCurrentMap()
+	const { addEventListeners, setViewerLatLng } = useCurrentMap()
 
 	const options: MapStateHandlers = {
 		schema: modeSchema,
