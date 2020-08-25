@@ -1,17 +1,17 @@
-// @flow
-import { makeExecutableSchema, addMockFunctionsToSchema } from 'graphql-tools'
+// import { makeExecutableSchema } from 'graphql-tools'
+import { makeExecutableSchema, addMockFunctionsToSchema } from 'apollo-server'
 // import mockTypeDefs from 'Shared/mockUtilsSchema'
 import { mocks, typeResolvers } from './mockResolvers'
-import typeDefs from '../../../../schema.graphql'
+import typeDefs from '../../../schema.graphql'
 
 type Mock = () => Promise<any>
 
 export type Mocks = {
-	[key: string]: Mock,
+	[key: string]: Mock
 }
 
 export type Context = {
-	[key: string]: any,
+	[key: string]: any
 }
 
 const createSchema = (customMocks: Mocks = {}, context: Context = {}) => {

@@ -1,9 +1,9 @@
 import faker from 'faker'
 import R from 'ramda'
-import { paginate, extractUid, generateUid, mostLikely } from './utils'
+import { MinMax, paginate, extractUid, generateUid, mostLikely } from './utils'
 import { classroomConnection } from './Classroom'
 
-export const generateUser = (role) => (parent, args) => {
+export const generateUser = (role: string) => (parent, args) => {
 	const uid = extractUid(parent, args)
 
 	return {
@@ -24,20 +24,29 @@ export const User = generateUser(mostLikely('student'))
 
 const getRandomUser = () => User(null, { input: { id: generateUid() } })
 
-export const userConnection = (count = { min: 1, max: 5 }) => {
-	const classroomCount = typeof count === 'number' ? count : faker.random.number(count)
+export const userConnection = (count: number | MinMax = { min: 1, max: 5 }) => {
+	const classroomCount =
+		typeof count === 'number' ? count : faker.random.number(count)
 	const classrooms = R.times(getRandomUser, classroomCount)
 	return paginate(classrooms)
 }
 
-export const studentConnection = (count = { min: 1, max: 5 }) => {
-	const studentCount = typeof count === 'number' ? count : faker.random.number(count)
+export const studentConnection = (
+	count: number | MinMax = { min: 1, max: 5 },
+) => {
+	const studentCount =
+		typeof count === 'number' ? count : faker.random.number(count)
+	// @ts-ignore
 	const students = R.times(generateUser('student'), studentCount)
 	return paginate(students)
 }
 
-export const teacherConnection = (count = { min: 1, max: 5 }) => {
-	const teacherCount = typeof count === 'number' ? count : faker.random.number(count)
+export const teacherConnection = (
+	count: number | MinMax = { min: 1, max: 5 },
+) => {
+	const teacherCount =
+		typeof count === 'number' ? count : faker.random.number(count)
+	// @ts-ignore
 	const teachers = R.times(generateUser('teacher'), teacherCount)
 	return paginate(teachers)
 }

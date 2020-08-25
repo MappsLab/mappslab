@@ -28,7 +28,7 @@ module.exports = {
 			repo: 'git@github.com:good-idea/mappslab',
 			path: '/home/mappy/mappslab',
 			'post-deploy':
-				'yarn install && yarn workspace @mappslab/mapp build && yarn workspace mappslab-api build && yarn workspace mappslab-app build && pm2 reload ecosystem.config.js --env staging && pm2 save && git checkout yarn.lock',
+				'yarn install && yarn workspace mappslab-api build && yarn workspace mappslab-app build && pm2 reload ecosystem.config.js --env staging && pm2 save && git checkout yarn.lock',
 			env: {
 				NODE_ENV: 'staging',
 				JWT_KEY: process.env.JWT_KEY,

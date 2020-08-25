@@ -1,6 +1,5 @@
 import * as React from 'react'
-import { render, fireEvent, wait } from '../../jest/utils'
-import { createMockProvider } from '../../jest/utils/mockServer'
+import { render, fireEvent, wait, createMockProvider } from '../test-utils'
 import { StaticRouter } from 'react-router-dom'
 import { InspectorProvider } from '../components/Inspector'
 import { act } from 'react-dom/test-utils'
@@ -91,17 +90,20 @@ const MockApolloProvider = createMockProvider(
 		Query: () => ({
 			user: () => mockViewer,
 			classrooms: () => mockClassrooms(),
-			currentViewer: () => ({
-				viewer: mockViewer,
+			currentViewer: () =>
+				async({
+					viewer: mockViewer,
+				}),
+		}),
+		Mutation: () =>
+			async({
+				updateUser,
+				createClassroom,
 			}),
-		}),
-		Mutation: () => ({
-			updateUser,
-			createClassroom,
-		}),
-		User: () => ({
-			classrooms: mockUserClassrooms,
-		}),
+		User: () =>
+			async({
+				classrooms: mockUserClassrooms,
+			}),
 	},
 	{
 		context: {
@@ -117,7 +119,9 @@ describe('List [integration test]', () => {
 		const { container, getByText, queryByText, debug, getByTestId } = render(
 			<StaticRouter location="/?inspect=User-0x123-Joseph" context={{}}>
 				<MockApolloProvider>
-					<InspectorProvider />
+					<InspectorProvider>
+						<div />
+					</InspectorProvider>
 				</MockApolloProvider>
 			</StaticRouter>,
 		)

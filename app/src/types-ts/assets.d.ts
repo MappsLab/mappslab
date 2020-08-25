@@ -6,3 +6,10 @@ declare module '\*.svg' {
 	const src: string
 	export default src
 }
+
+declare module '*.graphql' {
+	import { DocumentNode } from 'graphql'
+	const Schema: DocumentNode
+
+	export = Schema
+}
