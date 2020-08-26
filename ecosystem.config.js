@@ -24,8 +24,10 @@ module.exports = {
 		staging: {
 			user: 'mappy',
 			host: '165.232.50.103',
-			ref: 'origin/master',
-			repo: 'git@github.com:MappsLab/mappslab',
+			key: 'deploy.key',
+			ref: 'origin/main',
+			ssh_options: 'StrictHostKeyChecking=no',
+			repo: 'https://github.com/MappsLab/mappslab',
 			path: '/home/mappy/mappslab',
 			'post-deploy':
 				'yarn install && yarn workspace mappslab-api build && yarn workspace mappslab-app build && pm2 reload ecosystem.config.js --env staging && pm2 save && git checkout yarn.lock',

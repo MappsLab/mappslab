@@ -35,3 +35,6 @@ app/coverage
 !.env.example
 .localstack
 .cache
+
+# CI
+deploy.key
