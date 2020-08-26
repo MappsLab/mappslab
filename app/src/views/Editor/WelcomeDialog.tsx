@@ -1,11 +1,12 @@
-// @flow
 import React from 'react'
 import { Transition } from 'react-automata'
 import { Map } from '../../types-ts'
-import { Centered } from 'Components/Layout'
-import Pane from 'Components/Pane'
-import { Header2, P } from 'Components/Text'
-import { Button } from 'Components/Buttons'
+import { Centered } from '../../components/Layout'
+import { Pane } from '../../components/Pane'
+import { Header2, P } from '../../components/Text'
+import { Button } from '../../components/Buttons'
+import { useCurrentMap } from '../../providers/CurrentMap'
+import { useMapStateMachine } from '../../providers/CurrentMap/mapStateMachine'
 
 /**
  * WelcomeDialog
@@ -13,14 +14,22 @@ import { Button } from 'Components/Buttons'
 
 type Props = {
 	map: Map
-	transition: Transition
 }
 
-const WelcomeDialog = ({ map, transition }: Props) => {
+export const WelcomeDialog = ({ map }: Props) => {
+	const {mode, transitionMode} = useCurrentMap()
+
+	if (!mode.matches('Welcome')) return null
+
 	const enterLesson = (lessonUid?: string) => () => {
-		transition('enterLesson', { lessonUid })
+		transitionMode({
+			type: 'enterLesson'
+		})
 	}
+
 	const { title, description, classroom } = map
+	if (!classroom) throw new Error('No classroom')
+
 	return (
 		<Centered>
 			<Pane icon="🗺" size="normal" title={title} subtitle={classroom.title}>
@@ -31,5 +40,3 @@ const WelcomeDialog = ({ map, transition }: Props) => {
 		</Centered>
 	)
 }
-
-export default WelcomeDialog

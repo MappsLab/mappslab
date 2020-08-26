@@ -1,19 +1,12 @@
 import { Pin } from '../types-ts'
 import { unwindEdges } from '@good-idea/unwind-edges'
 import { GeoPosition } from 'geo-position.ts'
-// import { LatLngBounds } from 'googlemaps'
-import { getBounds } from 'mapp'
 import { Route } from '../types-ts'
 import { metersToMiles } from '@ericgio/distance-utils'
 
 interface LatLng {
 	lat: number
 	lng: number
-}
-
-export const getMapBounds = (pins: Pin[]) => {
-	const pinLatLngs = pins.map((p) => ({ lat: p.lat, lng: p.lng }))
-	return getBounds(pinLatLngs)
 }
 
 export const pinsToLatLngs = (pins: Pin[]) =>

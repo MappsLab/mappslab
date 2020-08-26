@@ -1,10 +1,10 @@
-export * from './classroom'
-export * from './dataLayer'
-export * from './graphql'
-export * from './map'
-export * from './media'
-export * from './pin'
-export * from './route'
-export * from './user'
-export * from './shared'
+import { Map, User, Classroom, DataLayer } from './generated'
 
+export * from './generated'
+export * from './googlemaps'
+
+export type Viewer = User
+
+export type NodeType = Map | User | Classroom | DataLayer
+
+export type Video = string

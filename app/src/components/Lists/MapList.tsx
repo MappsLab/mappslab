@@ -1,69 +1,50 @@
 import * as React from 'react'
-import { Map } from '../../types-ts'
+import { useLazyQuery } from '@apollo/client'
 import { unwindEdges } from '@good-idea/unwind-edges'
-import { MapsQuery } from '../../queries/Map'
+import { Map } from '../../types-ts'
+import { MapsResponse, MapsInput, mapsQuery } from '../../queries/map'
 import { List } from './List'
-import { ListOfTypeProps, ListOfTypeBaseProps } from './utils'
-
-const { useState } = React
+import { ListOfTypeProps } from './utils'
 
 /**
  * MapList
  */
 
-const MapListMain = ({
+export const MapList = ({
 	title,
-	searchQuery,
-	searchResults,
 	items,
 	viewerCanAdd,
 	update,
 	onItemClick,
 	create,
 }: ListOfTypeProps<Map>) => {
-	const [showResults, setShowResults] = useState(false)
+	const [fetchMaps, { data }] = useLazyQuery<MapsResponse, MapsInput>(mapsQuery)
 
 	const search = (searchValue: string) => {
-		if (searchValue.length < 3) {
-			setShowResults(false)
-		} else {
-			setShowResults(true)
-			searchQuery({
-				input: {
-					where: {
-						title: {
-							contains: searchValue,
-						},
+		fetchMaps({
+			variables: {
+				where: {
+					title: {
+						contains: searchValue,
 					},
 				},
-			})
-		}
+			},
+		})
 	}
+
+	const [searchResults] = unwindEdges(data?.maps)
 
 	return (
 		<List
 			title={title}
 			search={search}
-			searchResults={showResults ? searchResults : []}
+			searchResults={searchResults}
 			onSearchResultClick={update}
 			viewerCanAdd={viewerCanAdd}
 			type="Map"
-			// $FlowFixMe
 			items={items}
 			create={create}
 			onItemClick={onItemClick}
 		/>
 	)
 }
-
-export const MapList = (baseProps: ListOfTypeBaseProps<Map>) => (
-	<MapsQuery delayQuery>
-		{({ data, refetch }) => (
-			<MapListMain
-				searchQuery={refetch}
-				searchResults={data && data.maps ? unwindEdges(data.maps)[0] || [] : []}
-				{...baseProps}
-			/>
-		)}
-	</MapsQuery>
-)

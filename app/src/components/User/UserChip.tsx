@@ -1,13 +1,13 @@
 import React from 'react'
 import { User } from '../../types-ts'
-import { Chip } from 'Components/Generic'
-import { ChipProps } from 'Components/Generic/Chip'
+import { Chip } from '../Generic'
+import { ChipProps } from '../Generic/Chip'
 
 /**
  * UserChip
  */
 
-type Props = ChipProps & {
+type Props = Omit<ChipProps, 'title'> & {
 	user: User
 }
 

@@ -1,5 +1,5 @@
 import * as R from 'ramda'
-import { arrayify } from 'Utils/data'
+import { arrayify } from '../../utils/data'
 
 export type ValidatorFunction = (value: any, allValues?: object) => any
 // Chains a series of validators.
@@ -130,11 +130,7 @@ const arrayValuesMatch = (values: Array<string | number>): boolean => {
 
 const valuesMustMatch = (fields: string[]) => (values): boolean =>
 	// $FlowFixMe
-	R.pipe(
-		R.pickAll(fields),
-		Object.values,
-		arrayValuesMatch,
-	)(values)
+	R.pipe(R.pickAll(fields), Object.values, arrayValuesMatch)(values)
 
 export const passwordsMustMatch = (values: {
 	password: string

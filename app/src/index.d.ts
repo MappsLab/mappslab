@@ -1,2 +1,3 @@
-// import 'googlemaps'
+/// <reference types="@types/googlemaps" />
 declare module 'googlemaps'
+

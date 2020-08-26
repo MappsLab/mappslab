@@ -9,17 +9,18 @@ interface OptionConfig {
 	[key: string]: any // Allow for other props to be passed
 }
 
-type AnswerFn = (any) => void
+type AnswerFn<Value extends any> = (value?: Value) => Promise<void>
 
-export interface QuestionConfig {
+export interface QuestionConfig<AnswerValue extends any> {
 	message: string
 	options?: Array<OptionConfig>
 	returnOnCancel?: any
+	render?: (answer: AnswerFn<AnswerValue>) => React.ReactNode
 }
 
-export interface PromisedQuestionConfig {
+export interface PromisedQuestionConfig<AnswerValue extends any> {
 	message: string
-	render?: (AnswerFn) => React.ReactNode
+	render?: (fn: AnswerFn<AnswerValue>) => React.ReactNode
 	options?: Array<
 		OptionConfig & {
 			answerQuestion: () => any
@@ -28,22 +29,22 @@ export interface PromisedQuestionConfig {
 	[key: string]: any
 }
 
-export interface QuestionContext {
-	ask: (QuestionConfig) => Promise<any>
-	answer: AnswerFn
+export interface QuestionContext<AnswerValue extends any> {
+	ask: (config: QuestionConfig<AnswerValue>) => Promise<any>
+	answer: AnswerFn<AnswerValue>
 	cancelQuestion: () => any
-	currentQuestion?: PromisedQuestionConfig
+	currentQuestion?: PromisedQuestionConfig<AnswerValue>
 	answered: boolean
 }
 
 const defaultContext = {
-	ask: async () => {},
-	cancelQuestion: () => {},
-	answer: () => {},
+	ask: async () => undefined,
+	cancelQuestion: () => undefined,
+	answer: async () => undefined,
 	answered: false,
 }
 
-const Context = React.createContext<QuestionContext>(defaultContext)
+const Context = React.createContext<QuestionContext<any>>(defaultContext)
 const { Provider, Consumer } = Context
 
 export const QuestionConsumer = Consumer
@@ -57,14 +58,14 @@ interface Props {
 	children: React.ReactNode
 }
 
-interface State {
-	currentQuestion?: PromisedQuestionConfig
+interface State<AnswerValue> {
+	currentQuestion?: PromisedQuestionConfig<AnswerValue>
 	cancelQuestion: () => any
 	answered: boolean
-	answer: (any) => void
+	answer: (value: any) => Promise<void>
 }
 
-const noop = () => {}
+const noop = async () => undefined
 
 const defaultOptions = [
 	{
@@ -75,7 +76,10 @@ const defaultOptions = [
 	},
 ]
 
-export class QuestionProvider extends React.Component<Props, State> {
+export class QuestionProvider<AnswerValue = any> extends React.Component<
+	Props,
+	State<AnswerValue>
+> {
 	state = {
 		currentQuestion: undefined,
 		cancelQuestion: noop,
@@ -83,9 +87,9 @@ export class QuestionProvider extends React.Component<Props, State> {
 		answer: noop,
 	}
 
-	ask = (newQuestion: QuestionConfig) =>
+	ask = (newQuestion: QuestionConfig<AnswerValue>) =>
 		new Promise<any>((resolve) => {
-			const answer = (value: any) => {
+			const answer = async (value: any) => {
 				resolve(value)
 				this.setState({
 					answered: true,
@@ -117,7 +121,7 @@ export class QuestionProvider extends React.Component<Props, State> {
 			})
 		})
 
-	submitResult = async () => {}
+	submitResult = async () => undefined
 
 	render() {
 		const { children } = this.props

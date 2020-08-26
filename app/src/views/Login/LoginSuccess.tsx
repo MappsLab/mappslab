@@ -1,13 +1,14 @@
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect } from 'react'
 import { unwindEdges } from '@good-idea/unwind-edges'
 import { Action } from 'react-automata'
 import { Header1, Header2, Header4 } from '../../components/Text'
-import { ViewerType } from '../../types/User'
+import { Viewer } from '../../types-ts'
 import { MapChip } from '../../components/Map'
 import { Button } from '../../components/Buttons'
 import { useCurrentViewer } from '../../providers/CurrentViewer'
 import { SHOW_NEWPW_SUCCESS, LOGOUT } from './statechart'
 import { Classroom, Map } from '../../types-ts'
+import { definitely } from '../../utils'
 
 /**
  * LoginSuccess
@@ -15,7 +16,7 @@ import { Classroom, Map } from '../../types-ts'
 
 interface Props {
 	transition: (name: string, data?: any) => void
-	viewer: ViewerType
+	viewer: Viewer
 }
 
 export const LoginSuccess = ({ transition }: Props) => {
@@ -26,16 +27,15 @@ export const LoginSuccess = ({ transition }: Props) => {
 	}, [viewer])
 
 	if (!viewer) return null
-	const isTeacher = viewer.roles.includes('teacher')
-	const isAdmin = viewer.roles.includes('admin')
+	const isTeacher = viewer?.roles?.includes('teacher')
+	const isAdmin = viewer?.roles?.includes('admin')
 
 	const [classrooms] = unwindEdges<Classroom>(viewer.classrooms)
-	const maps = classrooms
-		.map((classroom) =>
+	const maps = definitely(
+		classrooms.map((classroom) =>
 			classroom.maps ? unwindEdges<Map>(classroom.maps) : [[]],
-		)
-		.reduce((acc, [maps]) => (maps ? [...acc, ...maps] : acc), [])
-		.filter(Boolean)
+		),
+	).reduce<Map[]>((acc, [maps]) => (maps ? [...acc, ...maps] : acc), [])
 
 	return (
 		<React.Fragment>
@@ -61,6 +61,7 @@ export const LoginSuccess = ({ transition }: Props) => {
 					))}
 				</React.Fragment>
 			) : null}
+
 			{isTeacher && (
 				<Button to="/dashboard" level="tertiary">
 					Manage my classrooms

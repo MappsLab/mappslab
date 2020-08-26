@@ -1,5 +1,5 @@
 import React from 'react'
-import styled, { DefaultTheme } from 'styled-components'
+import styled, { css, DefaultTheme } from 'styled-components'
 import { Link } from 'react-router-dom'
 
 interface WrapperProps {
@@ -11,23 +11,22 @@ interface WrapperProps {
 }
 
 const Wrapper = styled.div`
-	${({ theme, size, active, withBorders }: WrapperProps) => `
+	${({ theme, size, active, withBorders }: WrapperProps) => css`
 		height: ${theme.sizes.chip[size].height};
 		display: inline-flex;
 		justify-content: flex-start;
-		align-items: center;	
-		margin: ${
-			size === 'large' ? theme.layout.spacing.half : theme.layout.spacing.half
-		} 0;
-		padding: ${
-			withBorders
-				? `0 ${
-						size === 'large'
-							? theme.layout.spacing.single
-							: theme.layout.spacing.half
-				  }`
-				: ``
-		};
+		align-items: center;
+		margin: ${size === 'large'
+				? theme.layout.spacing.half
+				: theme.layout.spacing.half}
+			0;
+		padding: ${withBorders
+			? `0 ${
+					size === 'large'
+						? theme.layout.spacing.single
+						: theme.layout.spacing.half
+			  }`
+			: ``};
 		background-color: ${active ? theme.color.primary.muted : 'white'};
 		border: ${withBorders ? `1px solid ${theme.color.primary.normal}` : ''};
 		border-radius: 2px;
@@ -35,10 +34,10 @@ const Wrapper = styled.div`
 `
 
 const TitleWrapper = styled.div`
-	display: flex;
 	flex-direction: column;
-	justify-content: flex-center;
 	align-items: flex-start;
+	justify-content: flex-center;
+	display: flex;
 `
 
 interface TitleProps {
@@ -47,16 +46,16 @@ interface TitleProps {
 }
 
 const Title = styled.span`
-	${({ theme, size }: TitleProps) => `
+	${({ theme, size }: TitleProps) => css`
+		font-weight: ${size === 'small'
+			? theme.font.weight.semi
+			: theme.font.weight.semi};
 		font-size: ${size === 'small' ? theme.font.size.h5 : theme.font.size.h4};
-		font-weight: ${
-			size === 'small' ? theme.font.weight.semi : theme.font.weight.semi
-		};
 	`};
 `
 
 const Subtitle = styled.span`
-	${({ theme, size }: TitleProps) => `
+	${({ theme, size }: TitleProps) => css`
 		font-size: ${theme.font.size.h5};
 		display: ${size === 'large' ? 'block' : 'none'};
 		color: ${theme.color.middleGray};
@@ -68,11 +67,6 @@ const Subtitle = styled.span`
  */
 
 export interface ChipProps {
-	size?: 'small' | 'large' | 'full'
-	active?: boolean
-}
-
-interface Props {
 	size?: 'small' | 'large' | 'full'
 	active?: boolean
 	title: string
@@ -90,7 +84,7 @@ export const Chip = ({
 	active,
 	to,
 	onClick: onClickProp,
-}: Props) => {
+}: ChipProps) => {
 	const as = to
 		? // if 'to', use a Link
 		  Link

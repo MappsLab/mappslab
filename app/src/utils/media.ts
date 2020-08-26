@@ -1,12 +1,9 @@
 import parseUrl from 'url-parse'
 import { Image } from '../types-ts'
+import { definitely } from '../utils'
 
-type ParsedURL = {
-	hostname: string
-	pathname: string
-	query?: { [key: string]: string }
-	href: string
-}
+type ParsedURL = ReturnType<typeof parseUrl>
+
 const VIMEO = 'vimeo'
 const YOUTUBE = 'youtube'
 const DAILYMOTION = 'dailymotion'
@@ -104,10 +101,12 @@ export const getVideoInfo = (url: string): VideoInfo => {
  *
  * returns the next-largest image size
  */
-export const getBestSize = (image: Image, size: number) =>
+export const getBestSize = (image: Image, size: number) => {
+	const sizes = definitely(image.sizes)
 	// include the original size in the search
-	[...image.sizes, image.original]
-		// sort the sizes
+	const original = image.original
+	const allSizes = original ? [...sizes, original] : sizes
+	return allSizes
 		.sort((a, b) => a.width - b.width)
 		.reduce((prev, current) => {
 			if (
@@ -118,3 +117,4 @@ export const getBestSize = (image: Image, size: number) =>
 				return current
 			return prev
 		})
+}

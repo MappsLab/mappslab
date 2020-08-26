@@ -1,7 +1,6 @@
 // @flow
-import uuidv1 from 'uuid/v1'
+import { v1 as uuidv1 } from 'uuid'
 import { upload } from 'Services/aws'
-import { streamToBuffer } from 'Utils/media'
 import type { DataLayerType, NewDataLayerData } from 'Types/DataLayer'
 import { createNodeWithEdges } from 'Database'
 import { validateNew } from './dataLayerDBSchema'
@@ -15,7 +14,8 @@ export const createDataLayer = async ({
 	addToMaps,
 }: NewDataLayerData): Promise<DataLayerType> => {
 	const { filename, createReadStream } = await kml
-	const buffer = await streamToBuffer(createReadStream())
+	const buffer = await createReadStream()
+
 	const uuid = uuidv1()
 	const fileName = `${kmlDirectory}/${filename.replace(
 		/\.kml$/i,
@@ -36,4 +36,3 @@ export const createDataLayer = async ({
 	const dataLayer: DataLayerType = await createNodeWithEdges(validated, edges)
 	return dataLayer
 }
-

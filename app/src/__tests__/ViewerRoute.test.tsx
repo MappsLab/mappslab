@@ -2,8 +2,8 @@
 import * as React from 'react'
 import { render } from 'react-testing-library'
 import { StaticRouter } from 'react-router-dom'
-import { ApolloProvider } from 'react-apollo'
-import { ViewerRoute } from 'Components/Auth/ViewerRoute'
+import { ApolloProvider } from '@apollo/client'
+import { ViewerRoute } from '../components/Auth/ViewerRoute'
 // import mockClient from '../__tests__/setup/apolloMockClient'
 
 // const Wrapper = (path = '/', mocks = defaultMocks) => ({ children }) => (

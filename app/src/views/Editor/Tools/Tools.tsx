@@ -1,37 +1,30 @@
-// @flow
 import React from 'react'
-import { unwindEdges } from '@good-idea/unwind-edges'
-import { State } from 'react-automata'
-import { ProviderProps } from '../Provider'
+import { useCurrentMap } from '../../../providers/CurrentMap'
 import NewPinButton from './NewPinButton'
 import ZoomButton from './ZoomButton'
 import Toolbar from './Toolbar'
-import { LayersTool, DataLayerSelectorProps } from './LayersTool'
+import { DataLayerSelectorProps, LayersTool } from './LayersTool'
+import { useMapStateMachine } from '../../../providers/CurrentMap/mapStateMachine'
+import { useGoogleMap } from '@react-google-maps/api'
 
 /**
  * Tools
  */
 
-export interface ToolsProps extends ProviderProps, DataLayerSelectorProps {}
+export type ToolsProps = DataLayerSelectorProps
 
-const Tools = (props: ToolsProps) => {
-	const {
-		zoomIn,
-		zoomOut,
-		transition,
-		disableLayer,
-		enableLayer,
-		enabledLayers,
-		layers,
-		setMapType,
-		mapType,
-	} = props
+export const Tools = (props: ToolsProps) => {
+	const { zoomIn, zoomOut, mode, transitionMode } = useCurrentMap()
+	const { disableLayer, enableLayer, enabledLayers, layers } = props
+
 	const onNewPinClick = () => {
-		transition('clickedDropPin')
+		transitionMode({ type: 'clickedDropPin' })
 	}
 
+	if (!mode.matches('Lesson')) return null
+
 	return (
-		<State is="Lesson*">
+		<React.Fragment>
 			<Toolbar>
 				<NewPinButton onClick={onNewPinClick} />
 			</Toolbar>
@@ -40,15 +33,11 @@ const Tools = (props: ToolsProps) => {
 				enableLayer={enableLayer}
 				enabledLayers={enabledLayers}
 				layers={layers}
-				setMapType={setMapType}
-				mapType={mapType}
 			/>
 			<Toolbar align="right">
 				<ZoomButton direction="in" onClick={() => zoomIn()} />
 				<ZoomButton direction="out" onClick={() => zoomOut()} />
 			</Toolbar>
-		</State>
+		</React.Fragment>
 	)
 }
-
-export default Tools

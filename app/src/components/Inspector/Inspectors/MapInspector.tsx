@@ -1,38 +1,23 @@
 import * as React from 'react'
 import { unwindEdges } from '@good-idea/unwind-edges'
+import { Classroom, DataLayer } from '../../../types-ts'
 import {
-	Map,
-	Classroom,
-	Viewer,
-	Mutation,
-	QueryConfig,
-	DataLayer,
-} from '../../../types-ts'
-import { MapQuery, UpdateMapMutation } from '../../../queries/Map'
+	useMapQuery,
+	useUpdateMapMutation,
+	UseUpdateMapVariables,
+} from '../../../queries/map'
 import { Button } from '../../Buttons'
 import { DataLayerList, ClassroomList } from '../../Lists'
-import { InspectItem } from '../InspectorProvider'
+import { useInspector } from '../InspectorProvider'
 import { DataLayerUpload } from '../../DataLayer'
-import { Prompt } from '../../Forms'
-import EditableText from '../EditableText'
+import { EditableText } from '../EditableText'
 import { EditableMedia } from '../EditableMedia'
-import InspectorSkeleton from '../InspectorSkeleton'
 import { useQuestion } from '../../../components/Question'
+import { useCurrentViewer } from '../../../providers/CurrentViewer'
 
 /**
  * MapInspector
  */
-
-interface BaseProps {
-	viewer: null | Viewer
-	inspectItem: InspectItem
-}
-
-interface Props extends BaseProps {
-	map: Map
-	mapQueryConfig: QueryConfig
-	updateMap: Mutation
-}
 
 const validateImageDimensions = (file: File): Promise<string | void> =>
 	new Promise((resolve) => {
@@ -53,18 +38,21 @@ const validateImageDimensions = (file: File): Promise<string | void> =>
 		img.src = window.URL.createObjectURL(file)
 	})
 
-const MapInspectorMain = ({
-	map,
-	viewer,
-	inspectItem,
-	mapQueryConfig,
-	updateMap,
-}: Props) => {
+interface Props {
+	mapUid: string
+}
+
+export const MapInspector = ({ mapUid }: Props) => {
+	const { viewer } = useCurrentViewer()
+	const { inspectItem } = useInspector()
+	const [updateMap] = useUpdateMapMutation(mapUid)
+	const response = useMapQuery({ variables: { uid: mapUid } })
 	const { ask } = useQuestion()
-	const teachers =
-		map.classroom.teachers && map.classroom.teachers.edges
-			? unwindEdges(map.classroom.teachers)[0]
-			: []
+
+	const map = response?.data?.map
+	if (response.loading || !map) return null
+
+	const [teachers] = unwindEdges(map?.classroom?.teachers)
 	const dataLayers =
 		map.dataLayers && map.dataLayers.edges ? unwindEdges(map.dataLayers)[0] : []
 	const viewerIsOwner = Boolean(
@@ -73,12 +61,10 @@ const MapInspectorMain = ({
 
 	const updateMapClassrooms = (classroom: Classroom) => {
 		const variables = {
-			input: {
-				uid: map.uid,
-				addClassrooms: [classroom.uid],
-			},
+			uid: map.uid,
+			addClassrooms: [classroom.uid],
 		}
-		updateMap({ variables, refetchQueries: [mapQueryConfig] })
+		updateMap({ variables })
 	}
 
 	const addNewDataLayer = async (title: string) => {
@@ -90,7 +76,7 @@ const MapInspectorMain = ({
 					kml,
 				},
 			}
-			await updateMap({ variables, refetchQueries: [mapQueryConfig] })
+			await updateMap({ variables })
 		}
 
 		await ask({
@@ -107,7 +93,7 @@ const MapInspectorMain = ({
 			uid: map.uid,
 			associateDataLayer: { uid },
 		}
-		await updateMap({ variables, refetchQueries: [mapQueryConfig] })
+		await updateMap({ variables })
 	}
 
 	const removeDataLayer = async (dataLayer: DataLayer) => {
@@ -125,11 +111,11 @@ const MapInspectorMain = ({
 			],
 		})
 		if (confirm === true) {
-			await updateMap({ variables, refetchQueries: [mapQueryConfig] })
+			await updateMap({ variables })
 		}
 	}
 
-	const submitUpdate = async (args) => {
+	const submitUpdate = async (args: Omit<UseUpdateMapVariables, 'uid'>) => {
 		if (!viewerIsOwner) throw new Error('You can only update maps you own')
 		const variables = {
 			uid: map.uid,
@@ -142,24 +128,22 @@ const MapInspectorMain = ({
 					'Processing map tiles takes several minutes. You may navigate away from this page and the map will automatically update when the tiles are ready.',
 			})
 		}
-		return updateMap({ variables, refetchQueries: [mapQueryConfig] })
+		await updateMap({ variables })
+		return
 	}
+
+	const classroomItems = map?.classroom ? [map.classroom] : []
 
 	return (
 		<React.Fragment>
-			<EditableText
-				label="Description"
-				name="description"
-				initialValue={map.description}
-			/>
+			<EditableText name="description" initialValue={map.description || ''} />
 			<Button to={`/maps/${map.uid}`}>Go to map →</Button>
 			<ClassroomList
 				title="Classroom"
-				items={[map.classroom].filter(Boolean)}
+				items={classroomItems}
 				update={updateMapClassrooms}
 				onItemClick={inspectItem}
 				viewerCanAdd={false}
-				create={() => {}}
 			/>
 			<EditableMedia
 				submitUpdate={submitUpdate}
@@ -171,37 +155,13 @@ const MapInspectorMain = ({
 				viewerCanEdit={viewerIsOwner}
 			/>
 			<DataLayerList
-				dataLayers={dataLayers}
-				removeDataLayer={removeDataLayer}
-				addNewDataLayer={addNewDataLayer}
-				associateDataLayer={associateDataLayer}
-				viewerCanAdd={viewerIsOwner}
 				title="Data Layers"
+				items={dataLayers}
+				remove={removeDataLayer}
+				create={addNewDataLayer}
+				onSearchResultClick={associateDataLayer}
+				viewerCanAdd={viewerIsOwner}
 			/>
 		</React.Fragment>
 	)
 }
-
-export const MapInspector = ({
-	uid,
-	...baseProps
-}: BaseProps & { uid: string }) => (
-	<MapQuery LoadingComponent={false} variables={{ uid }}>
-		{({ data, loading, queryConfig }) =>
-			loading ? (
-				<InspectorSkeleton />
-			) : (
-				<UpdateMapMutation>
-					{(updateMap) => (
-						<MapInspectorMain
-							map={data.map}
-							mapQueryConfig={queryConfig}
-							updateMap={updateMap}
-							{...baseProps}
-						/>
-					)}
-				</UpdateMapMutation>
-			)
-		}
-	</MapQuery>
-)

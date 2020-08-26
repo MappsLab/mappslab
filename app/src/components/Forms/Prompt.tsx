@@ -5,7 +5,7 @@ import { Field } from './Field'
 type PromptProps = {
 	name: string
 	label: string
-	answer: (any) => Promise<void>
+	answer: (value: any) => Promise<void>
 	type?: string
 }
 

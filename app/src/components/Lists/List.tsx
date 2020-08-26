@@ -1,6 +1,6 @@
 import * as React from 'react'
-import { Node } from '../../types-ts'
-import ItemIcon from 'Components/ItemIcon'
+import { NodeType } from '../../types-ts'
+import { ItemIcon } from '../ItemIcon'
 import { ListAddEntry } from './ListAddEntry'
 import { ButtonConfig } from './ButtonDropdown'
 import { ListItem } from './ListItem'
@@ -11,29 +11,30 @@ import {
 	nodeToListItem,
 	ListItemHandler,
 } from './utils'
+import { definitely } from '../../utils'
 
 /**
  * List
  */
 
-interface Props<NodeType extends Node> {
-	items: NodeType[]
+interface Props<T extends NodeType> {
+	items?: T[]
 	title: string
 	type: string
 	viewerCanAdd?: boolean
 	addLabel?: string
 	search?: SearchForList
 	create?: CreateNewFn
-	onSearchResultClick?: ListItemHandler
-	searchResults?: NodeType[]
-	onItemClick?: ListItemHandler
-	buttons?: ButtonConfig<NodeType>[]
+	onSearchResultClick?: ListItemHandler<T>
+	searchResults?: T[]
+	onItemClick?: ListItemHandler<T>
+	buttons?: ButtonConfig<T>[]
 }
 
 const defaultAddLabel = 'Add'
-const defaultOnItemClick = async () => {}
+const defaultOnItemClick = async () => undefined
 
-export const List = <NodeType extends Node>({
+export const List = <T extends NodeType>({
 	items,
 	title,
 	type,
@@ -45,8 +46,8 @@ export const List = <NodeType extends Node>({
 	onSearchResultClick,
 	searchResults,
 	buttons,
-}: Props<NodeType>) => {
-	const itemToListItem = (node: NodeType) =>
+}: Props<T>) => {
+	const itemToListItem = (node: T) =>
 		nodeToListItem(node, onItemClick || defaultOnItemClick)
 	if (viewerCanAdd && (!search || !onSearchResultClick || !create))
 		throw new Error(
@@ -59,9 +60,11 @@ export const List = <NodeType extends Node>({
 				{title}
 			</ListTitle>
 			<ListItems>
-				{items.map(itemToListItem).map((item) => (
-					<ListItem key={item.key} {...item} buttons={buttons} />
-				))}
+				{definitely(items)
+					.map(itemToListItem)
+					.map((item) => (
+						<ListItem {...item} key={item.key} buttons={buttons} />
+					))}
 			</ListItems>
 			{viewerCanAdd && search && onSearchResultClick && create && (
 				<ListAddEntry
@@ -85,5 +88,5 @@ List.defaultProps = {
 	create: undefined,
 	onSearchResultClick: undefined,
 	searchResults: [],
-	onItemClick: async () => {},
+	onItemClick: async () => undefined,
 }

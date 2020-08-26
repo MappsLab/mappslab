@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 import React from 'react'
-import { render } from 'Jest/utils'
-import { Button } from 'Components/Buttons'
+import { render } from '../test-utils'
+import { Button } from '../components/Buttons'
 import { StaticRouter } from 'react-router-dom'
 
 const buttonText = 'Click Me!'

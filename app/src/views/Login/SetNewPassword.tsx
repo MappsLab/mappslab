@@ -3,7 +3,6 @@ import { Transition } from 'react-automata'
 import { FORM_ERROR } from 'final-form'
 import { Header4 } from '../../components/Text'
 import { Form, Field } from '../../components/Forms'
-import { ResetPasswordMutation } from '../../queries/User'
 import { SUCCESS, LOGOUT } from './statechart'
 import {
 	useCurrentViewer,

@@ -1,34 +1,45 @@
 import * as React from 'react'
+import { useLazyQuery } from '@apollo/client'
 import { unwindEdges } from '@good-idea/unwind-edges'
 import { Classroom } from '../../types-ts'
-import { ClassroomsQuery } from '../../queries/Classroom'
+import {
+	classroomsQuery,
+	ClassroomsInput,
+	ClassroomsResponse,
+} from '../../queries/classroom'
 import { List } from './List'
-import { ListOfTypeProps, ListOfTypeBaseProps } from './utils'
+import { ListOfTypeProps } from './utils'
 
 /**
  * ClassroomList
  */
 
-const ClassroomListMain = ({
+export const ClassroomList = ({
 	title,
-	searchQuery,
-	searchResults,
 	items,
 	viewerCanAdd,
 	update,
 	onItemClick,
 	create,
 }: ListOfTypeProps<Classroom>) => {
+	const [fetchClassrooms, { data }] = useLazyQuery<
+		ClassroomsResponse,
+		ClassroomsInput
+	>(classroomsQuery)
+
 	const search = (searchValue: string) => {
 		if (searchValue.length < 3) return
-		searchQuery({
-			where: {
-				title: {
-					contains: searchValue,
+		fetchClassrooms({
+			variables: {
+				where: {
+					title: {
+						contains: searchValue,
+					},
 				},
 			},
 		})
 	}
+	const [searchResults] = unwindEdges<Classroom>(data?.classrooms)
 
 	return (
 		<List
@@ -38,24 +49,9 @@ const ClassroomListMain = ({
 			onSearchResultClick={update}
 			viewerCanAdd={viewerCanAdd}
 			type="classroom"
-			// $FlowFixMe
-			items={items}
+			items={items || []}
 			create={create}
 			onItemClick={onItemClick}
 		/>
 	)
 }
-
-export const ClassroomList = (baseProps: ListOfTypeBaseProps<Classroom>) => (
-	<ClassroomsQuery delayQuery>
-		{({ data, refetch }) => (
-			<ClassroomListMain
-				searchQuery={refetch}
-				searchResults={
-					data && data.classrooms ? unwindEdges(data.classrooms)[0] || [] : []
-				}
-				{...baseProps}
-			/>
-		)}
-	</ClassroomsQuery>
-)

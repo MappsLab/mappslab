@@ -1,59 +1,26 @@
-const path = require('path')
-
 module.exports = {
 	parser: '@typescript-eslint/parser',
-	plugins: ['@typescript-eslint'],
-	env: {
-		browser: true,
-		node: true,
+	extends: [
+		'plugin:react/recommended',
+		'plugin:@typescript-eslint/recommended',
+		'prettier/@typescript-eslint',
+		'plugin:prettier/recommended',
+	],
+	rules: {
+		// Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
+		'no-unused-vars': 'off',
+		'@typescript-eslint/no-unused-vars': 1,
+		'@typescript-eslint/no-explicit-any': 'off',
+		'@typescript-eslint/explicit-member-accessibility': 'off',
+		'@typescript-eslint/ban-ts-ignore': 'off',
+		'@typescript-eslint/explicit-function-return-type': 'off',
+		'@typescript-eslint/explicit-module-boundary-types': 'off',
+		'react/display-name': 'off',
 	},
+	plugins: ['react', 'jsx-a11y', 'import'],
 	settings: {
-		'import/resolver': {
-			alias: {
-				map: [
-					['Constants', path.resolve(__dirname, 'src', 'constants')],
-					['Components', path.resolve(__dirname, 'src', 'components')],
-					['Views', path.resolve(__dirname, 'src', 'views')],
-					['Utils', path.resolve(__dirname, 'src', 'utils')],
-					['Providers', path.resolve(__dirname, 'src', 'providers')],
-					['Queries', path.resolve(__dirname, 'src', 'queries')],
-					['Types', path.resolve(__dirname, 'src', 'types')],
-					['Styles', path.resolve(__dirname, 'src', 'theme')],
-					['Jest', path.resolve(__dirname, 'jest')],
-					['Shared', path.resolve(__dirname, 'shared')],
-					['mapp', path.resolve(__dirname, '..', 'packages', 'mapp', 'src')],
-				],
-				extensions: ['.js', '.jsx', '.ts', '.tsx'],
-			},
-
-			node: {
-				extensions: ['.js'],
-			},
+		react: {
+			version: 'detect',
 		},
 	},
-	extends: ['airbnb', 'prettier', 'plugin:flowtype/recommended'],
-	rules: {
-		'no-underscore-dangle': 0,
-		'no-nested-ternary': 0,
-		'jsx-a11y/anchor-is-valid': 0,
-		'react/sort-comp': 0,
-		'react/destructuring-assignment': 0,
-		'react/jsx-indent': [2, 'tab'],
-		'react/jsx-indent-props': [2, 'tab'],
-		'react/jsx-one-expression-per-line': 0,
-		'react/jsx-filename-extension': [
-			1,
-			{
-				extensions: ['.js', '.jsx', '.tsx'],
-			},
-		],
-		'import/prefer-default-export': 0,
-		'import/no-extraneous-dependencies': [
-			'error',
-			{
-				devDependencies: true,
-			},
-		],
-	},
-	plugins: ['react', 'jsx-a11y', 'import', 'flowtype'],
 }

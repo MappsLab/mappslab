@@ -1,15 +1,11 @@
 import * as React from 'react'
-import { useMutation, useQuery, Context as ClientContext } from 'urql'
 import { Viewer } from '../../types-ts'
-import { setViewerCookie, removeViewerCookie } from 'Utils/storage'
+import { setViewerCookie, removeViewerCookie } from '../../utils/storage'
 import {
-	CURRENT_VIEWER_QUERY,
-	LOGIN_MUTATION,
-	RESET_MUTATION,
-	CurrentViewerResponse,
-	LoginResponse,
-	ResetResponse,
-} from './queries'
+	useCurrentViewerQuery,
+	useUserLoginMutation,
+	useResetPasswordMutation,
+} from '../../queries'
 
 const { useContext, useReducer, useEffect } = React
 
@@ -75,10 +71,6 @@ export const CurrentViewerConsumer = ViewerContext.Consumer
  * State
  */
 
-interface Action extends Partial<ViewerState> {
-	type: string
-}
-
 const NO_VIEWER = 'NO_VIEWER'
 const FETCHED_VIEWER = 'FETCHED_VIEWER'
 const LOGIN_ATTEMPT = 'LOGIN_ATTEMPT'
@@ -87,6 +79,26 @@ const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
 const REQUIRES_RESET = 'REQUIRES_RESET'
 const LOGOUT = 'LOGOUT'
 
+type NoViewerAction = { type: typeof NO_VIEWER }
+type FetchedViewerAction = { type: typeof FETCHED_VIEWER; viewer: Viewer }
+type LoginAttemptAction = { type: typeof LOGIN_ATTEMPT }
+type LoginFailureAction = {
+	type: typeof LOGIN_FAILURE
+	error: { message: string }
+}
+type LoginSuccessAction = { type: typeof LOGIN_SUCCESS; viewer: Viewer }
+type RequiresResetAction = { type: typeof REQUIRES_RESET; resetToken: string }
+type LogoutAction = { type: typeof LOGOUT }
+
+type Action =
+	| NoViewerAction
+	| FetchedViewerAction
+	| LoginAttemptAction
+	| LoginFailureAction
+	| LoginSuccessAction
+	| RequiresResetAction
+	| LogoutAction
+
 const reducer = (state: ViewerState, action: Action): ViewerState => {
 	switch (action.type) {
 		case NO_VIEWER:
@@ -94,15 +106,20 @@ const reducer = (state: ViewerState, action: Action): ViewerState => {
 		case FETCHED_VIEWER:
 			return { ...state, ready: true, viewer: action.viewer, loading: false }
 		case LOGIN_ATTEMPT:
-			return { ...state, loading: true, error: null }
+			return { ...state, loading: true, error: undefined }
 		case LOGIN_FAILURE:
 			return { ...state, error: action.error, loading: false }
 		case LOGIN_SUCCESS:
-			return { ...state, viewer: action.viewer, loading: false, error: null }
+			return {
+				...state,
+				viewer: action.viewer,
+				loading: false,
+				error: undefined,
+			}
 		case REQUIRES_RESET:
 			return { ...state, resetToken: action.resetToken, loading: false }
 		case LOGOUT:
-			return { ...state, viewer: null, loading: false, error: null }
+			return { ...state, viewer: null, loading: false, error: undefined }
 		default:
 			return state
 	}
@@ -110,19 +127,12 @@ const reducer = (state: ViewerState, action: Action): ViewerState => {
 
 export const CurrentViewer = ({ children }: Props) => {
 	const [state, dispatch] = useReducer(reducer, initialState)
-	const [currentViewerQuery] = useQuery<CurrentViewerResponse>({
-		query: CURRENT_VIEWER_QUERY,
-	})
-	const [loginMutationState, loginMutation] = useMutation<LoginResponse>(
-		LOGIN_MUTATION,
-	)
-	const [resetMutationState, resetMutation] = useMutation<ResetResponse>(
-		RESET_MUTATION,
-	)
-	const client = useContext(ClientContext)
-	/* Query for the current viewer on mount */
+	const currentViewerResponse = useCurrentViewerQuery()
+	const [loginMutation] = useUserLoginMutation()
+	const [resetMutation] = useResetPasswordMutation()
+
 	useEffect(() => {
-		const { data } = currentViewerQuery
+		const { data } = currentViewerResponse
 		if (!data) return
 		if (data.currentViewer && data.currentViewer.viewer) {
 			const { viewer, jwt } = data.currentViewer
@@ -131,43 +141,52 @@ export const CurrentViewer = ({ children }: Props) => {
 		} else {
 			dispatch({ type: NO_VIEWER })
 		}
-	}, [currentViewerQuery.data])
+	}, [currentViewerResponse.data])
 
 	const loginUser = async (variables: Credentials) => {
 		dispatch({ type: LOGIN_ATTEMPT })
-		const result = await loginMutation(variables)
-		if (result.error) {
-			const message = result.error.message.replace('[GraphQL]', '')
+		try {
+			const result = await loginMutation({ variables })
+			if (!result.data) {
+				const message = 'No data received'
+				dispatch({ type: LOGIN_FAILURE, error: { message } })
+				return { success: false, message }
+			} else {
+				const { loginViewer } = result.data
+				if ('resetToken' in loginViewer) {
+					dispatch({ type: REQUIRES_RESET, resetToken: loginViewer.resetToken })
+				} else {
+					const { jwt, viewer } = loginViewer
+					setViewerCookie(jwt)
+					dispatch({ type: LOGIN_SUCCESS, viewer })
+				}
+				return { success: true }
+			}
+		} catch (e) {
+			const message = e.message
 			dispatch({ type: LOGIN_FAILURE, error: { message } })
 			return { success: false, message }
-		} else {
-			const { viewer, jwt, resetToken } = result.data.loginViewer
-			if (resetToken) {
-				dispatch({ type: REQUIRES_RESET, resetToken })
-			} else {
-				setViewerCookie(jwt)
-				dispatch({ type: LOGIN_SUCCESS, viewer })
-			}
-			return { success: true }
 		}
 	}
 
 	const resetPassword = async (variables: ResetCredentials) => {
 		dispatch({ type: LOGIN_ATTEMPT })
-		const result = await resetMutation(variables)
-		if (result.error) {
-			const message = result.error.message.replace('[GraphQL]', '')
-			dispatch({ type: LOGIN_FAILURE, error: { message } })
-			return { success: false, message }
-		} else {
-			const { viewer, jwt, resetToken } = result.data.resetPassword
-			if (resetToken) {
-				dispatch({ type: REQUIRES_RESET, resetToken })
+		try {
+			const result = await resetMutation({ variables })
+			if (!result.data) {
+				const message = 'No data received'
+				dispatch({ type: LOGIN_FAILURE, error: { message } })
+				return { success: false, message }
 			} else {
+				const { viewer, jwt } = result.data.resetPassword
 				setViewerCookie(jwt)
 				dispatch({ type: LOGIN_SUCCESS, viewer })
+				return { success: true }
 			}
-			return { success: true }
+		} catch (e) {
+			const message = e.message
+			dispatch({ type: LOGIN_FAILURE, error: { message } })
+			return { success: false, message }
 		}
 	}
 	const logoutUser = () => {

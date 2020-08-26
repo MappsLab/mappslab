@@ -1,28 +1,29 @@
 import * as React from 'react'
 import NativeListener from 'react-native-listener'
-import { useQuestion } from 'Components/Question'
 import { FaPencilAlt, FaTrashAlt } from 'react-icons/fa'
-import { Viewer, Pin, Mutation } from '../../../types'
-import { EditableText, EditableMedia } from 'Components/Inspector'
-import { Button } from 'Components/Buttons'
-import { UpdatePinMutation, DeletePinMutation } from 'Queries/Pin'
-import { query as mapQuery } from 'Queries/Map/MapQuery'
+import { useQuestion } from '../../../components/Question'
+import { Pin } from '../../../types-ts'
+import { EditableText, EditableMedia } from '../../../components/Inspector'
+import { Button } from '../../../components/Buttons'
+import { useCurrentViewer } from '../../../providers/CurrentViewer'
+import {
+	useUpdatePinMutation,
+	UpdatePinVariables,
+	useDeletePinMutation,
+} from '../../../queries'
 import { useInspector } from './Provider'
 
 const { useState } = React
 
-interface BaseProps {
+interface Props {
 	pin: Pin
 	mapUid: string
-	viewer?: Viewer
 }
 
-type Props = BaseProps & {
-	updatePin: Mutation
-	deletePin: Mutation
-}
-
-const PinInspector = ({ pin, viewer, updatePin, deletePin, mapUid }: Props) => {
+export const PinInspector = ({ pin, mapUid }: Props) => {
+	const { viewer } = useCurrentViewer()
+	const [updatePin] = useUpdatePinMutation({ mapUid })
+	const [deletePin] = useDeletePinMutation()
 	const { closeInspector } = useInspector()
 	const { ask } = useQuestion()
 	const [editMode, setEditMode] = useState(false)
@@ -35,8 +36,7 @@ const PinInspector = ({ pin, viewer, updatePin, deletePin, mapUid }: Props) => {
 	const enterEdit = () => setEditMode(true)
 	const exitEdit = () => setEditMode(false)
 
-	const submitUpdate = async (args) => {
-		// @todo add a 'viewerOwnsPin' field to the GraphQL API
+	const submitUpdate = async (args: Omit<UpdatePinVariables, 'uid'>) => {
 		if (!viewerIsOwner) throw new Error('You can only update pins you own')
 		const variables = {
 			uid: pin.uid,
@@ -45,7 +45,6 @@ const PinInspector = ({ pin, viewer, updatePin, deletePin, mapUid }: Props) => {
 
 		updatePin({
 			variables,
-			refetchQueries: [{ query: mapQuery, variables: { uid: mapUid } }],
 		})
 	}
 
@@ -61,17 +60,15 @@ const PinInspector = ({ pin, viewer, updatePin, deletePin, mapUid }: Props) => {
 		if (answer === false) return
 		await deletePin({
 			variables: { uid: pin.uid },
-			refetchQueries: [{ query: mapQuery, variables: { uid: mapUid } }],
 		})
 
 		closeInspector()
 	}
 
 	return (
-		<React.Fragment>
+		<React.Fragment key={pin.uid}>
 			<EditableText
 				name="title"
-				label="Title"
 				updateFn={submitUpdate}
 				fontSize="h1"
 				placeholder="Untitled Pin"
@@ -80,13 +77,12 @@ const PinInspector = ({ pin, viewer, updatePin, deletePin, mapUid }: Props) => {
 				autoFocus
 			/>
 			<EditableText
-				label="Description"
 				name="description"
 				updateFn={submitUpdate}
 				multiline
 				placeholder="Describe your pin"
 				fontSize="p"
-				initialValue={pin.description}
+				initialValue={pin.description || ''}
 				viewerCanEdit={canEdit}
 			/>
 			<EditableMedia
@@ -123,21 +119,3 @@ const PinInspector = ({ pin, viewer, updatePin, deletePin, mapUid }: Props) => {
 PinInspector.defaultProps = {
 	viewer: undefined,
 }
-
-const PinInspectorWrapper = (baseProps: BaseProps) => (
-	<UpdatePinMutation>
-		{(updatePin) => (
-			<DeletePinMutation>
-				{(deletePin) => (
-					<PinInspector
-						{...baseProps}
-						deletePin={deletePin}
-						updatePin={updatePin}
-					/>
-				)}
-			</DeletePinMutation>
-		)}
-	</UpdatePinMutation>
-)
-
-export default PinInspectorWrapper

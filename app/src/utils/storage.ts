@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie'
-import { JWT } from '../types-ts'
+import { Token } from '../types-ts'
 
 const debug = require('debug')('app')
 
@@ -34,7 +34,7 @@ export const removeCookie = (key: string) => {
 
 export const getViewerCookie = () => getCookie(VIEWER_COOKIE_TOKEN)
 
-export const setViewerCookie = ({ token, expires }: JWT) => {
+export const setViewerCookie = ({ token, expires }: Token) => {
 	debug('Setting cookie')
 
 	const settings = {

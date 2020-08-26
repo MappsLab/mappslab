@@ -1,131 +1,61 @@
 import * as React from 'react'
-import { History } from 'history'
-import { Route } from 'react-router-dom'
-import { parseQueryString, buildQueryString } from 'Utils/url'
-import { findLastIndex } from 'Utils/data'
-import { Viewer } from '../../types'
-import { useCurrentViewer } from '../../providers/CurrentViewer'
-import Inspector from './Inspector'
+import { useLocation, useHistory } from 'react-router-dom'
+import { parseQueryString, getNodeTitle, buildQueryString } from '../../utils'
+import { NodeType } from '../../types-ts'
+import { Inspector } from './Inspector'
+import { Dispatchers, useInspectorState } from './state'
 
-const { useContext } = React
+const { useEffect } = React
 
-export interface InspectorItem {
-	uid: string
-	__typename: string
-	// __typename: 'User' | 'Classroom' | 'Map' | 'Pin' | 'Route',
-	title?: string
-	name?: string
+export type InspectItem<T extends NodeType> = (item: T) => Promise<void>
+
+interface InspectorContextValue extends Dispatchers {
+	inspectorHistory: NodeType[]
+	currentItem: NodeType | void
 }
 
-export type InspectItem = (item: InspectorItem) => Promise<void>
-
-interface ContextType {
-	inspectItem: InspectItem
-}
-
-const InspectorContext = React.createContext<ContextType | undefined>(undefined)
-
-export const useInspector = () => {
-	const ctx = useContext(InspectorContext)
-	if (!ctx)
-		throw new Error('`useInspector` must be used within a InspectorProvider')
-	return ctx
-}
+const InspectorContext = React.createContext<InspectorContextValue | undefined>(
+	undefined,
+)
 
 export const InspectorConsumer = InspectorContext.Consumer
 
-/**
- * InspectorProvider
- */
+export const useInspector = () => {
+	const ctx = React.useContext(InspectorContext)
+	if (!ctx)
+		throw new Error(
+			'useInspectorContext must be used within a InspectorProvider',
+		)
+	return ctx
+}
 
-interface BaseProps {
+interface InspectorProps {
 	children: React.ReactNode
+	initialItem?: NodeType
 }
 
-interface Props extends BaseProps {
-	viewer: Viewer
-	initialItem: null | InspectorItem
-	currentItem: null | InspectorItem
-	location: {
-		pathname: string
-		search: string
-	}
-	history: History
-}
+const last = <T extends any>(arr: T[]): T | undefined =>
+	arr.length ? arr[arr.length - 1] : undefined
 
-type State = {
-	inspectorHistory: Array<InspectorItem>
-}
+export const InspectorProvider = ({
+	children,
+	initialItem,
+}: InspectorProps) => {
+	const location = useLocation()
+	const history = useHistory()
+	const [state, actions] = useInspectorState(initialItem)
+	const { inspectorHistory } = state
 
-const getItemFromQueryString = (
-	locationSearch: string,
-): InspectorItem | null => {
-	if (!locationSearch.length) return null
-	const { inspect } = parseQueryString(decodeURI(locationSearch))
-	if (!inspect) return null
-	const [__typename, uid, title] = inspect.split('-')
-	return {
-		__typename,
-		uid,
-		title,
-	}
-}
+	const currentItem = last(inspectorHistory)
 
-class InspectorProviderBase extends React.Component<Props, State> {
-	constructor(props: Props) {
-		super(props)
-		const { initialItem } = props
-
-		/* Initialize the history with the first item, filtering out a `null` inspectorItem */
-		const inspectorHistory = initialItem ? [initialItem] : []
-		this.state = {
-			inspectorHistory,
-		}
-	}
-
-	componentDidUpdate(prevProps: Props) {
-		if (this.props.initialItem && !prevProps.initialItem) {
-			/* This is OK because we're wrapping it in a condition */
-			/* eslint-disable-next-line react/no-did-update-set-state */
-			this.setState({
-				inspectorHistory: [this.props.initialItem],
-			})
-		}
-	}
-
-	clearHistory = () => {
-		this.setState({
-			inspectorHistory: [],
-		})
-	}
-
-	inspectItem = async (nextItem: InspectorItem) => {
-		await this.setState(({ inspectorHistory }) => ({
-			inspectorHistory: [...inspectorHistory, nextItem],
-		}))
-		this.updateLocation(nextItem)
-	}
-
-	goBackTo = async (item: InspectorItem) => {
-		await this.setState(({ inspectorHistory }) => {
-			const index = findLastIndex<InspectorItem>(
-				inspectorHistory,
-				(i) => i.uid === item.uid,
-			)
-			return {
-				inspectorHistory: inspectorHistory.slice(0, index + 1),
-			}
-		})
-		this.updateLocation(item)
-	}
-
-	updateLocation(item: InspectorItem) {
-		const { location, history } = this.props
-		const { __typename, uid, title, name } = item
-		const { inspect, ...searchParams } = parseQueryString(location.search)
-		const label = title || name
-		if (!label)
+	useEffect(() => {
+		if (!currentItem) return
+		const { __typename, uid } = currentItem
+		const label = getNodeTitle(currentItem)
+		if (!label) {
 			throw new Error('The current item does not have a name or a title')
+		}
+		const { inspect, ...searchParams } = parseQueryString(location.search)
 		const newQueryString = buildQueryString({
 			inspect: `${__typename}-${uid}-${label}`,
 			...searchParams,
@@ -133,48 +63,18 @@ class InspectorProviderBase extends React.Component<Props, State> {
 
 		const newPath = `${location.pathname}${newQueryString}`
 		history.push(newPath)
+	}, [currentItem, location.search])
+
+	const value = {
+		...actions,
+		inspectorHistory,
+		currentItem,
 	}
 
-	render() {
-		const { children, currentItem, viewer } = this.props
-		const { inspectorHistory } = this.state
-		// const currentItem = inspectorHistory[inspectorHistory.length - 1]
-
-		const value = {
-			inspectItem: this.inspectItem,
-		}
-
-		return (
-			<InspectorContext.Provider value={value}>
-				{currentItem && (
-					<Inspector
-						viewer={viewer}
-						currentItem={currentItem}
-						inspectorHistory={inspectorHistory}
-						inspectItem={this.inspectItem}
-						goBackTo={this.goBackTo}
-					/>
-				)}
-				{children}
-			</InspectorContext.Provider>
-		)
-	}
-}
-
-export const InspectorProvider = (baseProps: BaseProps) => {
-	const { viewer } = useCurrentViewer()
 	return (
-		<Route
-			render={({ location, history }) => (
-				<InspectorProviderBase
-					{...baseProps}
-					location={location}
-					history={history}
-					viewer={viewer}
-					initialItem={getItemFromQueryString(location.search)}
-					currentItem={getItemFromQueryString(location.search)}
-				/>
-			)}
-		/>
+		<InspectorContext.Provider value={value}>
+			<Inspector />
+			{children}
+		</InspectorContext.Provider>
 	)
 }

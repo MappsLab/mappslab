@@ -1,0 +1,11 @@
+{
+	"name": "mappslab-beta",
+	"version": 2,
+	"alias": "mappslab-beta.now.sh",
+	"redirects": [
+		{
+			"source": "(.*)",
+			"destination": "https://mappslab-beta.good-idea.studio$1"
+		}
+	]
+}

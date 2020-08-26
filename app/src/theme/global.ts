@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-import { createGlobalStyle, DefaultTheme } from 'styled-components'
+import { createGlobalStyle, css, DefaultTheme } from 'styled-components'
 import normalized from './normalized'
 // import { DefaultTheme }
 
@@ -8,12 +8,16 @@ const GlobalStyle = createGlobalStyle`
 	${normalized}
 	@import url('https://fonts.googleapis.com/css?family=Work+Sans:400,500,600');
 
-	${({ theme }: { theme: DefaultTheme }) => `
+	${({ theme }: { theme: DefaultTheme }) => css`
 		html {
 			font-size: 10px;
 			font-family: ${theme.font.family.sans};
 			font-weight: 300;
 		}
+
+    html, body, #root {
+      height: 100%;
+    }
 
 		body {
 			background-color: #e2e2e2;

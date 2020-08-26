@@ -1,28 +1,33 @@
 import * as React from 'react'
-import { CustomPopup } from 'mapp'
+import { InfoWindow } from '@react-google-maps/api'
 import NativeListener from 'react-native-listener'
-import Pane from '../../../components/Pane'
+import { Pane } from '../../../components/Pane'
 import { UserChip } from '../../../components/User'
-import { useCurrentViewer } from '../../../providers/CurrentViewer'
 import { useInspector } from './Provider'
-import PinInspector from './PinInspector'
-import RouteInspector from './RouteInspector'
+import { PinInspector } from './PinInspector'
+import { RouteInspector } from './RouteInspector'
 import { Header, CloseButton } from './styled'
+import { createGlobalStyle } from 'styled-components'
+import { useCurrentMap } from '../../../providers/CurrentMap'
 
-const { useEffect } = React
+const GlobalStyles = createGlobalStyle`
+	.gm-style-iw {
+	  padding: 0 !important;
+    
+    .gm-style-iw-d {
+    	overflow: auto !important;
+    }
+		button[title='Close'] {
+			display: none !important;
+		}
+	}
+`
 
 export const ItemInspector = () => {
-	/* TODO: Set up a useMap() context to get the mapUID */
-	const { item, position, mapUid, closeInspector, panTo } = useInspector()
-	const { viewer } = useCurrentViewer()
+	const { mapUid } = useCurrentMap()
+	const { item, position, closeInspector } = useInspector()
 
-	useEffect(() => {
-		if (!item || !position) return
-		const yOffset = window.innerHeight / 2 - 150
-		panTo(position, { x: 0, y: -yOffset })
-	}, [item])
-
-	if (!item) return null
+	if (!item || !mapUid) return null
 
 	if (item.__typename !== 'Pin' && item.__typename !== 'Route') {
 		// @ts-ignore
@@ -30,20 +35,24 @@ export const ItemInspector = () => {
 	}
 
 	return (
-		<CustomPopup position={position}>
-			<Pane size="small">
-				<Header>
-					{item.owner && <UserChip size="small" user={item.owner} />}
-					<NativeListener onClick={closeInspector}>
-						<CloseButton level="tertiary" />
-					</NativeListener>
-				</Header>
-				{item.__typename === 'Pin' ? (
-					<PinInspector mapUid={mapUid} pin={item} viewer={viewer} />
-				) : item.__typename === 'Route' ? (
-					<RouteInspector route={item} mapUid={mapUid} viewer={viewer} />
-				) : null}
-			</Pane>
-		</CustomPopup>
+		<React.Fragment>
+			<GlobalStyles />
+			<InfoWindow position={position} onCloseClick={closeInspector}>
+				<Pane size="small">
+					<Header>
+						{item.owner && <UserChip size="small" user={item.owner} />}
+						<NativeListener onClick={closeInspector}>
+							<CloseButton level="tertiary" />
+						</NativeListener>
+					</Header>
+					{item.__typename === 'Pin' && (
+						<PinInspector mapUid={mapUid} pin={item} />
+					)}
+					{item.__typename === 'Route' && (
+						<RouteInspector route={item} mapUid={mapUid} />
+					)}
+				</Pane>
+			</InfoWindow>
+		</React.Fragment>
 	)
 }

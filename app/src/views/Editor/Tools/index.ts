@@ -1,5 +1,1 @@
-// @flow
-
-import Tools from './Tools'
-
-export default Tools
+export * from './Tools'
