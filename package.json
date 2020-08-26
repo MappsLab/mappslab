@@ -9,6 +9,7 @@
 		"docz:dev": "docz dev",
 		"dev:app": "yarn workspace mappslab-app dev",
 		"dev:api": "yarn workspace mappslab-api dev",
+		"build": "yarn build:app && yarn build:api",
 		"build:app": "yarn workspace mappslab-app build",
 		"build:api": "yarn workspace mappslab-api build",
 		"build:mapp": "yarn workspace @mappslab/map build",
@@ -18,7 +19,8 @@
 		"test:api": "yarn workspace mappslab-api ci-test",
 		"test:api:watch": "yarn workspace mappslab-api test:watch",
 		"install:clean": "rimraf node_modules ./api/node_modules ./app/node_modules ./packages/mapp/node_modules && yarn install",
-		"deploy": "env $(cat ./api/.env.staging | grep -v \"#\" | xargs) pm2 deploy ecosystem.config.js staging"
+		"deploy:local": "env $(cat ./api/.env.staging | grep -v \"#\" | xargs) pm2 deploy ecosystem.config.js staging",
+		"deploy": "git status && pm2 deploy ecosystem.config.js staging"
 	},
 	"repository": {
 		"type": "git",
@@ -62,6 +64,7 @@
 		"flow-mono-cli": "^1.5.3",
 		"flow-typed": "^3.1.0",
 		"husky": "^4.2.5",
+		"pm2": "^4.4.1",
 		"rimraf": "^3.0.2"
 	},
 	"resolutions": {
