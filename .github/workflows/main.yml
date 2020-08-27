@@ -53,4 +53,11 @@ jobs:
 
       - name: Deploy
         run: yarn deploy
+        env:
+          DATABASE_ADDRESS: ${{secrets.DATABASE_ADDRESS}}
+          JWT_KEY: ${{secrets.JWT_KEY}}
+          AWS_ACCESS_KEY: ${{secrets.AWS_ACCESS_KEY}}
+          AWS_SECRET_KEY: ${{secrets.AWS_SECRET_KEY}}
+          AWS_BUCKET_NAME: ${{secrets.AWS_BUCKET_NAME}}
+
 
