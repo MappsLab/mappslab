@@ -20,7 +20,7 @@
 		"test:api:watch": "yarn workspace mappslab-api test:watch",
 		"install:clean": "rimraf node_modules ./api/node_modules ./app/node_modules ./packages/mapp/node_modules && yarn install",
 		"deploy:local": "env $(cat ./api/.env.staging | grep -v \"#\" | xargs) pm2 deploy ecosystem.config.js staging",
-		"deploy": "git status && git stash && pm2 deploy ecosystem.config.js staging"
+		"deploy": "git status && git stash && env $(cat .env | grep -v \"#\" | xargs) pm2 deploy ecosystem.config.js staging"
 	},
 	"repository": {
 		"type": "git",
