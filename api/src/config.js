@@ -10,6 +10,12 @@ require('dotenv').config({
 	path: path.resolve(__dirname, '..', envFile),
 })
 
+console.log(process.env.DATABASE_ADDRESS)
+console.log(process.env.JWT_KEY)
+console.log(process.env.AWS_ACCESS_KEY)
+console.log(process.env.AWS_SECRET_KEY)
+console.log(process.env.AWS_BUCKET_NAME)
+
 const config = convict({
 	env: {
 		doc: 'The application environment',
