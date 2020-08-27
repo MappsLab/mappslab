@@ -6,7 +6,7 @@
   "author": "Joseph Thomas | Good Idea Studio",
   "license": "ISC",
   "scripts": {
-    "start": "cross-env NODE_ENV=staging cross-env DEBUG=api node ./dist/server.js",
+    "start": "cross-env NODE_ENV=staging cross-env DEBUG=api,db node ./dist/server.js",
     "build": "yarn build:clean && yarn build:compile",
     "build:clean": "rimraf ./dist",
     "build:compile": "cross-env NODE_ENV=production cross-env ENV=production babel ./src -d ./dist",
