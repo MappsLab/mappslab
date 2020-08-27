@@ -1,11 +1,11 @@
 const apiRoot =
 	process.env.NODE_ENV === 'development'
 		? 'http://localhost:3000/graphql'
-		: 'https://mappslab-beta-api.good-idea.studio/graphql'
+		: 'https://api.mappslab.org/graphql'
 const wsUri =
 	process.env.NODE_ENV === 'development'
 		? 'ws://localhost:3000/graphql'
-		: 'wss://mappslab-beta-api.good-idea.studio/graphql'
+		: 'wss://api.mappslab.org/graphql'
 const imageBucketRoot =
 	process.env.AWS_BUCKET_ROOT || process.env.NODE_ENV === 'development'
 		? 'http://mappslab-beta.localhost:4572/'
