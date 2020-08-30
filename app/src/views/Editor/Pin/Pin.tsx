@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { Marker, OverlayView, useGoogleMap } from '@react-google-maps/api'
 import { Pin as PinType } from '../../../types-ts'
 import { useCurrentMap } from '../../../providers/CurrentMap'
@@ -27,10 +27,16 @@ export const Pin = ({ pin }: PinProps) => {
 		return inspectedItem?.__typename === 'Pin' && inspectedItem?.uid === pin.uid
 	}, [inspectedItem, pin])
 
-	const position = {
+	const [position, setPosition] = useState({
 		lat: pin.lat,
 		lng: pin.lng,
-	}
+	})
+	useEffect(() => {
+		setPosition({
+			lat: pin.lat,
+			lng: pin.lng,
+		})
+	}, [pin.lat, pin.lng])
 
 	const onMouseOver = () => setIsHovered(true)
 	const onMouseOut = () => setIsHovered(false)
@@ -68,6 +74,10 @@ export const Pin = ({ pin }: PinProps) => {
 				lng: e.latLng.lng(),
 			},
 		})
+		setPosition({
+			lat: e.latLng.lat(),
+			lng: e.latLng.lng(),
+		})
 		setIsDragging(false)
 	}
 
@@ -81,6 +91,10 @@ export const Pin = ({ pin }: PinProps) => {
 		return true
 	}, [mode, viewer, pin])
 
+	const isDraggable = Boolean(
+		viewer && pin && pin.owner && viewer.uid === pin.owner.uid,
+	)
+
 	return (
 		<Marker
 			onMouseOver={onMouseOver}
@@ -91,7 +105,7 @@ export const Pin = ({ pin }: PinProps) => {
 			position={position}
 			clickable={isClickable}
 			opacity={isClickable ? 1 : 0.3}
-			draggable={true}
+			draggable={isDraggable}
 		>
 			<OverlayView
 				mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
@@ -102,7 +116,11 @@ export const Pin = ({ pin }: PinProps) => {
 				})}
 			>
 				<React.Fragment>
-					{isHovered && !isDragging && !isInspected ? <PinHoverPopup pin={pin} /> : <div />}
+					{isHovered && !isDragging && !isInspected ? (
+						<PinHoverPopup pin={pin} />
+					) : (
+						<div />
+					)}
 				</React.Fragment>
 			</OverlayView>
 		</Marker>

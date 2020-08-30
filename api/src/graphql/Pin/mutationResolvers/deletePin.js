@@ -20,7 +20,7 @@ export const deletePin = async (
 		ctx.viewer,
 	)
 	if (pin && success) {
-		pubsub.publish(PIN_DELETED, { [PIN_DELETED]: pin })
+		pubsub.publish(PIN_DELETED, { [PIN_DELETED]: { pin } })
 	}
 	return { success, messages }
 }

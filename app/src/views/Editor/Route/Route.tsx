@@ -61,7 +61,7 @@ export const Route = ({ route, active, clickable }: RouteProps) => {
 	}
 
 	const [pins] = unwindEdges(route.pins)
-	const path = getPathFromPins(pins)
+	const path = useMemo(() => getPathFromPins(pins), [pins])
 
 	return (
 		<React.Fragment>

@@ -1,17 +1,25 @@
 import gql from 'graphql-tag'
 import { SubscribeToMoreOptions, QueryResult } from '@apollo/client'
 import * as R from 'ramda'
+import _ from 'lodash'
 import { Pin, Map } from '../../types-ts'
 import { MapResponse } from './mapQuery'
 import { pinFragment } from '../pin/fragments'
 import { mapFragment } from '../map/fragments'
-import { definitely } from '../../utils'
 
 interface MapUpdatedResponse {
 	mapUpdated: { map: Map }
 }
 
-export const mapUpdated: SubscribeToMoreOptions = {
+interface MapUpdatedSubscriptionVariables {
+	mapUid: string
+}
+
+const mapUpdated: GetSubscriptionConfig<
+	MapResponse,
+	MapUpdatedSubscriptionVariables,
+	MapUpdatedResponse
+> = (query) => ({
 	document: gql`
 		subscription mapUpdated($mapUid: String!) {
 			mapUpdated(input: { mapUid: $mapUid }) {
@@ -22,18 +30,36 @@ export const mapUpdated: SubscribeToMoreOptions = {
 		}
 		${mapFragment}
 	`,
+	variables: {
+		mapUid: query?.variables?.uid,
+	},
 	updateQuery: (previous, { subscriptionData }) => {
 		console.log(subscriptionData)
 		alert('TODO -merge')
 		return previous
 	},
-}
+})
 
 interface PinAddedResponse {
 	pinAddedToMap: { pin: Pin }
 }
 
-export const pinAddedToMap: SubscribeToMoreOptions = {
+interface PinAddedSubscriptionVariables {
+	mapUid: string
+}
+
+const addPin = (o, pinUid, updatedPin) =>
+	_.transform(o, (result, v, k) => {
+		if (_.isObject(v) && v.uid === pinUid) result[k] = { ...v, ...updatedPin }
+		else if (_.isObject(v)) result[k] = updatePin(v, pinUid, updatedPin)
+		else result[k] = v
+	})
+
+const pinAddedToMap: GetSubscriptionConfig<
+	MapResponse,
+	PinAddedSubscriptionVariables,
+	PinAddedResponse
+> = (query) => ({
 	document: gql`
 		subscription pinAddedToMap($mapUid: String!) {
 			pinAddedToMap(input: { mapUid: $mapUid }) {
@@ -44,6 +70,11 @@ export const pinAddedToMap: SubscribeToMoreOptions = {
 		}
 		${pinFragment}
 	`,
+
+	variables: {
+		mapUid: query?.variables?.uid,
+	},
+
 	updateQuery: (previous, { subscriptionData }) => {
 		const newPin = subscriptionData.data.pinAddedToMap.pin
 		const { edges } = previous.map.pins
@@ -55,18 +86,34 @@ export const pinAddedToMap: SubscribeToMoreOptions = {
 		])
 		// update it into the previous map
 		const map = R.assocPath(['pins', 'edges'], newEdges)(previous.map)
+
 		return {
 			...previous,
 			map,
 		}
 	},
-}
+})
 
 interface PinUpdatedResponse {
 	pinUpdated: { pin: Pin }
 }
 
-export const pinUpdated: SubscribeToMoreOptions = {
+interface PinUpdatedSubscriptionVariables {
+	mapUid: string
+}
+
+const updatePin = (o, pinUid, updatedPin) =>
+	_.transform(o, (result, v, k) => {
+		if (_.isObject(v) && v.uid === pinUid) result[k] = { ...v, ...updatedPin }
+		else if (_.isObject(v)) result[k] = updatePin(v, pinUid, updatedPin)
+		else result[k] = v
+	})
+
+const pinUpdated: GetSubscriptionConfig<
+	MapResponse,
+	PinUpdatedSubscriptionVariables,
+	PinUpdatedResponse
+> = (query) => ({
 	document: gql`
 		subscription pinUpdated($mapUid: String!) {
 			pinUpdated(input: { mapUid: $mapUid }) {
@@ -77,28 +124,20 @@ export const pinUpdated: SubscribeToMoreOptions = {
 		}
 		${pinFragment}
 	`,
-	updateQuery: (previous, { subscriptionData }) => {
-		const updatedPin = subscriptionData.data.pinUpdated
-		const { edges } = previous.map.pins
-		const updatedEdges = edges.map((e) =>
-			e.node.uid === updatedPin.uid
-				? {
-						node: {
-							...e.node,
-							...updatedPin,
-						},
-						...e,
-				  }
-				: e,
-		)
-		const map = R.assocPath(['pins', 'edges'], updatedEdges)(previous.map)
 
+	variables: {
+		mapUid: query?.variables?.uid,
+	},
+
+	updateQuery: (previous, { subscriptionData }) => {
+		const updatedPin = subscriptionData.data.pinUpdated.pin
+		const updatedMap = updatePin(previous.map, updatedPin.uid, updatedPin)
 		return {
 			...previous,
-			map,
+			map: updatedMap,
 		}
 	},
-}
+})
 
 interface PinDeletedSubscriptionVariables {
 	mapUid: string
@@ -124,6 +163,13 @@ interface MapSubscritionConfig {
 	mapUid: string
 }
 
+const deletePin = (o, pinUid) =>
+	_.transform(o, (result, v, k) => {
+		if (_.isObject(v) && v.uid === pinUid) return
+		else if (_.isObject(v)) result[k] = deletePin(v, pinUid)
+		else result[k] = v
+	})
+
 const pinDeleted: GetSubscriptionConfig<
 	MapResponse,
 	PinDeletedSubscriptionVariables,
@@ -145,28 +191,16 @@ const pinDeleted: GetSubscriptionConfig<
 	},
 
 	updateQuery: (previous, { subscriptionData }) => {
-		const deletedPin = subscriptionData?.data?.pinDeleted.pin
-		const previousPins = previous?.map?.pins
-		if (!deletedPin || !previousPins) return previous
-
-		const updatedEdges = definitely(previous.map?.pins?.edges).filter(
-			(edge) => edge?.node?.uid && edge.node.uid !== deletedPin.uid,
-		)
-
-		const updatedMap: Map = {
-			...previous.map,
-			pins: {
-				...previousPins,
-				edges: updatedEdges,
-			},
-		}
+		const deletedPin = subscriptionData.data.pinDeleted.pin
+		console.log(`DELETED PIN: ${deletedPin.uid}`)
+		const updatedMap = deletePin(previous.map, deletedPin.uid)
 		return { map: updatedMap }
 	},
 })
 
 const mapSubscriptions: GetSubscriptionConfig[] = [
-	// pinAddedToMap,
-	// pinUpdated,
+	pinAddedToMap,
+	pinUpdated,
 	pinDeleted,
 	// mapUpdated,
 ]

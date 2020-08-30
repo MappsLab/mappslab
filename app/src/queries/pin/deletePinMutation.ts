@@ -5,7 +5,6 @@ import { Pin, MutationDeletePinArgs } from '../../types-ts'
 export const deletePinMutation = gql`
 	mutation deletePin($uid: String!) {
 		deletePin(input: { uid: $uid }) {
-			uid
 			success
 		}
 	}
