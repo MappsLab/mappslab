@@ -6,6 +6,7 @@ import { useCurrentMap } from '../../../providers/CurrentMap'
 import { useCurrentViewer } from '../../../providers/CurrentViewer'
 import { PinHoverPopup } from './PinHoverPopup'
 import { useInspector } from '../ItemInspector'
+import { useUpdatePinMutation } from '../../../queries/pin'
 
 const { useState } = React
 
@@ -15,11 +16,13 @@ interface PinProps {
 
 export const Pin = ({ pin }: PinProps) => {
 	const googleMap = useGoogleMap()
-	const { mode, transitionMode } = useCurrentMap()
+	const { mode, transitionMode, mapUid } = useCurrentMap()
 	const { viewer } = useCurrentViewer()
 	const { inspectItem, item: inspectedItem } = useInspector()
+	const [updatePin] = useUpdatePinMutation({ mapUid: mapUid || '' })
 
 	const [isHovered, setIsHovered] = useState(false)
+	const [isDragging, setIsDragging] = useState(false)
 	const isInspected = useMemo(() => {
 		return inspectedItem?.__typename === 'Pin' && inspectedItem?.uid === pin.uid
 	}, [inspectedItem, pin])
@@ -53,6 +56,21 @@ export const Pin = ({ pin }: PinProps) => {
 		}
 	}
 
+	const onDragStart = () => {
+		setIsDragging(true)
+	}
+
+	const onDragEnd = async (e: google.maps.MouseEvent) => {
+		await updatePin({
+			variables: {
+				uid: pin.uid,
+				lat: e.latLng.lat(),
+				lng: e.latLng.lng(),
+			},
+		})
+		setIsDragging(false)
+	}
+
 	const isClickable = useMemo(() => {
 		if (mode.matches('Lesson.DropPin.DropMode.Connect')) return false
 		if (mode.matches('')) {
@@ -68,9 +86,12 @@ export const Pin = ({ pin }: PinProps) => {
 			onMouseOver={onMouseOver}
 			onMouseOut={onMouseOut}
 			onClick={onMouseClick}
+			onDragStart={onDragStart}
+			onDragEnd={onDragEnd}
 			position={position}
 			clickable={isClickable}
 			opacity={isClickable ? 1 : 0.3}
+			draggable={true}
 		>
 			<OverlayView
 				mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
@@ -81,7 +102,7 @@ export const Pin = ({ pin }: PinProps) => {
 				})}
 			>
 				<React.Fragment>
-					{isHovered && !isInspected ? <PinHoverPopup pin={pin} /> : <div />}
+					{isHovered && !isDragging && !isInspected ? <PinHoverPopup pin={pin} /> : <div />}
 				</React.Fragment>
 			</OverlayView>
 		</Marker>
