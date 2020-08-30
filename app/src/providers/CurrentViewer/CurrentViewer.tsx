@@ -6,6 +6,7 @@ import {
 	useUserLoginMutation,
 	useResetPasswordMutation,
 } from '../../queries'
+import { SUCCESS } from '../../views/Login/statechart'
 
 const { useContext, useReducer, useEffect } = React
 
@@ -189,6 +190,7 @@ export const CurrentViewer = ({ children }: Props) => {
 			return { success: false, message }
 		}
 	}
+
 	const logoutUser = () => {
 		removeViewerCookie()
 		dispatch({ type: LOGOUT })
