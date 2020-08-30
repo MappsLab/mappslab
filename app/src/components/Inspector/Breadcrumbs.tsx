@@ -23,6 +23,8 @@ export const Breadcrumbs = () => {
 	if (inspectorHistory.length < 2) return null
 	const previousItem = inspectorHistory[inspectorHistory.length - 2]
 
+	if (!previousItem) return null
+
 	const title = getNodeTitle(previousItem)
 
 	return (

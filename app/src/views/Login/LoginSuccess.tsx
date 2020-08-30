@@ -37,6 +37,11 @@ export const LoginSuccess = ({ transition }: Props) => {
 		),
 	).reduce<Map[]>((acc, [maps]) => (maps ? [...acc, ...maps] : acc), [])
 
+	const handleLogout = () => {
+		logoutUser()
+		transition(LOGOUT)
+	}
+
 	return (
 		<React.Fragment>
 			<Header1>
@@ -67,7 +72,7 @@ export const LoginSuccess = ({ transition }: Props) => {
 					Manage my classrooms
 				</Button>
 			)}
-			<Button level="tertiary" onClick={logoutUser}>
+			<Button level="tertiary" onClick={handleLogout}>
 				Not you? Log in as someone else →
 			</Button>
 		</React.Fragment>
