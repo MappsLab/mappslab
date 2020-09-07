@@ -4,8 +4,7 @@ import NewPinButton from './NewPinButton'
 import ZoomButton from './ZoomButton'
 import Toolbar from './Toolbar'
 import { DataLayerSelectorProps, LayersTool } from './LayersTool'
-import { useMapStateMachine } from '../../../providers/CurrentMap/mapStateMachine'
-import { useGoogleMap } from '@react-google-maps/api'
+import { SearchBox } from './SearchBox'
 
 /**
  * Tools
@@ -25,6 +24,7 @@ export const Tools = (props: ToolsProps) => {
 
 	return (
 		<React.Fragment>
+			<SearchBox />
 			<Toolbar>
 				<NewPinButton onClick={onNewPinClick} />
 			</Toolbar>

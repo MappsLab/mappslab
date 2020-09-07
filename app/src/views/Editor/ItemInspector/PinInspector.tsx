@@ -3,7 +3,11 @@ import NativeListener from 'react-native-listener'
 import { FaPencilAlt, FaTrashAlt } from 'react-icons/fa'
 import { useQuestion } from '../../../components/Question'
 import { Pin } from '../../../types-ts'
-import { EditableText, EditableMedia } from '../../../components/Inspector'
+import {
+	EditableText,
+	EditableMedia,
+	linkifyDecorator,
+} from '../../../components/Inspector'
 import { Button } from '../../../components/Buttons'
 import { useCurrentViewer } from '../../../providers/CurrentViewer'
 import {
@@ -12,6 +16,7 @@ import {
 	useDeletePinMutation,
 } from '../../../queries'
 import { useInspector } from './Provider'
+import { useGoogleMap } from '@react-google-maps/api'
 
 const { useState } = React
 
@@ -21,6 +26,7 @@ interface Props {
 }
 
 export const PinInspector = ({ pin, mapUid }: Props) => {
+	const googleMap = useGoogleMap()
 	const { viewer } = useCurrentViewer()
 	const [updatePin] = useUpdatePinMutation({ mapUid })
 	const [deletePin] = useDeletePinMutation()
@@ -67,6 +73,11 @@ export const PinInspector = ({ pin, mapUid }: Props) => {
 
 	return (
 		<React.Fragment key={pin.uid}>
+			{linkifyDecorator(
+				`http://www.google.com/maps/place/${pin.lat},${pin.lng}/@${pin.lat},${pin.lng},${googleMap?.getZoom()}z`,
+				'Open in Google Maps',
+				'pin-map-link',
+			)}
 			<EditableText
 				name="title"
 				updateFn={submitUpdate}

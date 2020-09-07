@@ -33,7 +33,7 @@ const defaultOptions = {
 }
 
 export const MappsLab = () => (
-	<LoadScript googleMapsApiKey={apiKey}>
+	<LoadScript googleMapsApiKey={apiKey} libraries={['places']}>
 		<GoogleMap {...defaultOptions}>
 			<CurrentMapProvider>
 				<NotificationsProvider>
