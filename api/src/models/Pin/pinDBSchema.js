@@ -27,6 +27,9 @@ export const pinSchema = (isNew: boolean = true) =>
 			video: Joi.string()
 				.uri()
 				.trim(),
+			imageUrl: Joi.string()
+			.uri()
+			.trim(),
 			deleted: isNew ? Joi.boolean().default(false) : Joi.boolean(),
 			draft: Joi.boolean().default(false),
 		})
@@ -49,6 +52,7 @@ export const publicFields = [
 	'updatedAt',
 	'type',
 	'video',
+	'imageUrl',
 	`maps: ~has_pin {
 		uid
 		title

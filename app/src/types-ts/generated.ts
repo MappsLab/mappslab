@@ -392,6 +392,7 @@ export type NewPinInput = {
 	lessonUids?: Maybe<Array<Maybe<Scalars['String']>>>
 	addToRoute?: Maybe<AddPinToRouteInput>
 	image?: Maybe<Scalars['Upload']>
+	imageUrl?: Maybe<Scalars['String']>
 	video?: Maybe<Scalars['String']>
 }
 
@@ -445,6 +446,7 @@ export interface Pin extends Node {
 	draft?: Maybe<Scalars['Boolean']>
 	image?: Maybe<Image>
 	video?: Maybe<Scalars['String']>
+	imageUrl?: Maybe<Scalars['String']>
 }
 
 export interface PinConnection extends Connection {
@@ -598,6 +600,7 @@ export interface Route extends Node {
 	pins?: Maybe<PinConnection>
 	maps?: Maybe<MapConnection>
 	image?: Maybe<Image>
+	imageUrl?: Maybe<Scalars['String']>
 	video?: Maybe<Scalars['String']>
 }
 
@@ -723,6 +726,7 @@ export type UpdatePinInput = {
 	addToRoute?: Maybe<AddPinToRouteInput>
 	image?: Maybe<Scalars['Upload']>
 	video?: Maybe<Scalars['String']>
+	imageUrl?: Maybe<Scalars['String']>
 }
 
 export type UpdateRouteInput = {
@@ -732,6 +736,7 @@ export type UpdateRouteInput = {
 	description?: Maybe<Scalars['String']>
 	image?: Maybe<Scalars['Upload']>
 	video?: Maybe<Scalars['String']>
+	imageUrl?: Maybe<Scalars['String']>
 }
 
 export type UpdateUserInput = {

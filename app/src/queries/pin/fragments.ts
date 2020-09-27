@@ -26,6 +26,7 @@ export const pinFragment = gql`
 			roles
 		}
 		video
+		imageUrl
 		image {
 			...ImageFragment
 		}

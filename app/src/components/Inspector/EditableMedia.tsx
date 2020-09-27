@@ -1,6 +1,6 @@
 import * as React from 'react'
 import styled, { css } from 'styled-components'
-import { FaVideo, FaRegImage, FaTrashAlt } from 'react-icons/fa'
+import { FaVideo, FaRegImage, FaTrashAlt, FaFileUpload } from 'react-icons/fa'
 import NativeListener from 'react-native-listener'
 import { useQuestion } from '../Question'
 import { FileUpload } from '../FileUpload'
@@ -18,7 +18,8 @@ const { useState } = React
 
 const MediaWrapper = styled.div`
 	${({ theme }) => css`
-		background-color: ${theme.color.lightGray};
+		border: 1px solid ${theme.color.lightGray};
+		border-radius: 2px;
 		min-height: 30px;
 		position: relative;
 	`}
@@ -43,6 +44,7 @@ const ButtonWrapper = styled.div`
 const MediaButtons = styled.div`
 	display: flex;
 	justify-content: center;
+	flex-direction: column;
 `
 
 /**
@@ -59,6 +61,9 @@ interface Props {
 	video?: VideoType | null
 	videoName: string
 	enableVideo?: boolean
+	enableImageUrl?: boolean
+	imageUrl?: string | null
+	imageUrlName: string
 	submitUpdate: (formData: any) => void | Promise<void>
 	viewerCanEdit?: boolean
 	alt?: string
@@ -73,12 +78,15 @@ export const EditableMedia = ({
 	video,
 	videoName,
 	enableVideo,
+	imageUrl,
+	imageUrlName,
+	enableImageUrl,
 	viewerCanEdit,
 	submitUpdate,
 	alt,
 	label,
 }: Props) => {
-	if (!viewerCanEdit && !image && !video) return null
+	if (!viewerCanEdit && !image && !video && !imageUrl) return null
 	const { ask } = useQuestion()
 	const [loading, setLoading] = useState(false)
 
@@ -98,6 +106,17 @@ export const EditableMedia = ({
 		await submitUpdate({ [videoName]: result.video })
 	}
 
+	const askForIamgeUrl = async () => {
+		const result = await ask({
+			message: 'Enter the URL of an image',
+			render: (answer: () => Promise<void>) => (
+				<Prompt answer={answer} name="image" label="Image URL" type="url" />
+			),
+		})
+		if (!result.image) return
+		await submitUpdate({ [imageUrlName]: result.image })
+	}
+
 	const remove = (key: string) => async () => {
 		await submitUpdate({ [key]: null })
 	}
@@ -109,7 +128,7 @@ export const EditableMedia = ({
 		<React.Fragment>
 			{label && <Header2>{label}</Header2>}
 			<MediaWrapper>
-				{viewerCanEdit && (image || video) ? (
+				{viewerCanEdit && (image || video || imageUrl) ? (
 					<ButtonWrapper>
 						<NativeListener onClick={removeFn}>
 							<Button tooltip={removeLabel} level="tertiary">
@@ -118,22 +137,27 @@ export const EditableMedia = ({
 						</NativeListener>
 					</ButtonWrapper>
 				) : null}
-				{image && enableImage ? (
-					<Image image={image} alt={alt} size={600} />
-				) : video && enableVideo ? (
-					<Video video={video} />
-				) : null}
-				{viewerCanEdit && !video && !image ? (
+				{image && enableImage && <Image image={image} alt={alt} size={600} />}
+				{video && enableVideo && <Video video={video} />}
+				{imageUrl && enableImageUrl && <img src={imageUrl} alt={alt} />}
+				{viewerCanEdit && !video && !image && !imageUrl && (
 					<MediaButtons>
 						{enableImage && (
 							<FileUpload
 								onSubmit={handleImageSubmit}
 								accept="image/*"
 								name={imageName}
-								icon={FaRegImage}
+								icon={FaFileUpload}
 								validate={validateImage}
-								label={loading ? 'Loading..' : 'Add Image'}
+								label={loading ? 'Loading..' : 'Upload Image'}
 							/>
+						)}
+						{enableImageUrl && (
+							<NativeListener onClick={askForIamgeUrl}>
+								<Button level="tertiary">
+									<FaRegImage /> Add Image
+								</Button>
+							</NativeListener>
 						)}
 						{enableVideo && (
 							<NativeListener onClick={askForVideo}>
@@ -143,7 +167,7 @@ export const EditableMedia = ({
 							</NativeListener>
 						)}
 					</MediaButtons>
-				) : null}
+				)}
 			</MediaWrapper>
 		</React.Fragment>
 	)
@@ -157,5 +181,7 @@ EditableMedia.defaultProps = {
 	videoName: 'video',
 	enableVideo: true,
 	viewerCanEdit: false,
+	enableImageUrl: true,
+	imageUrlName: 'imageUrl',
 	alt: undefined,
 }

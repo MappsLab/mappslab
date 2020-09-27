@@ -288,6 +288,7 @@ input NewPinInput {
   lessonUids: [String]
   addToRoute: AddPinToRouteInput
   image: Upload
+  imageUrl: String
   video: String
 }
 
@@ -341,6 +342,7 @@ type Pin implements Node {
   route: PinInRoute
   draft: Boolean
   image: Image
+  imageUrl: String
   video: String
 }
 
@@ -433,6 +435,7 @@ type Route implements Node {
   pins: PinConnection
   maps: MapConnection
   image: Image
+  imageUrl: String
   video: String
 }
 
@@ -536,6 +539,7 @@ input UpdatePinInput {
   addToRoute: AddPinToRouteInput
   image: Upload
   video: String
+  imageUrl: String
 }
 
 input UpdateRouteInput {
@@ -545,6 +549,7 @@ input UpdateRouteInput {
   description: String
   image: Upload
   video: String
+  imageUrl: String
 }
 
 input UpdateUserInput {

@@ -69,6 +69,7 @@ export const mapFragment = gql`
 					title
 					description
 					video
+					imageUrl
 					image {
 						...ImageFragment
 					}

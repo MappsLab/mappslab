@@ -14,6 +14,7 @@ const updatePinMutation = gql`
 		$addToMaps: [String]
 		$image: Upload
 		$video: String
+		$imageUrl: String
 	) {
 		updatePin(
 			input: {
@@ -25,6 +26,7 @@ const updatePinMutation = gql`
 				addToMaps: $addToMaps
 				image: $image
 				video: $video
+				imageUrl: $imageUrl
 			}
 		) {
 			...PinFragment

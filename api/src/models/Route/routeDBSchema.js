@@ -26,6 +26,9 @@ export const routeSchema = (isNew: boolean = true) =>
 			video: Joi.string()
 				.uri()
 				.trim(),
+			imageUrl: Joi.string()
+				.uri()
+				.trim(),
 			type: Joi.any().only('route'),
 		})
 		.options({ stripUnknown: true })
@@ -46,6 +49,7 @@ export const publicFields = [
 	'title',
 	'updatedAt',
 	'video',
+	'imageUrl',
 	'description',
 	`pins: includes_pin @facets(order) @filter((eq(deleted, false))) {
 		uid

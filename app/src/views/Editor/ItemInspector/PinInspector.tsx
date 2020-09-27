@@ -100,6 +100,7 @@ export const PinInspector = ({ pin, mapUid }: Props) => {
 				submitUpdate={submitUpdate}
 				image={pin.image}
 				video={pin.video}
+				imageUrl={pin.imageUrl}
 				viewerCanEdit={canEdit}
 			/>
 			{viewerIsOwner && canEdit === false ? (
