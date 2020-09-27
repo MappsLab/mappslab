@@ -12,6 +12,7 @@ const Pin = /* GraphQL */ `
 		route: PinInRoute
 		draft: Boolean
 		image: Image
+		imageUrl: String
 		video: String
 	}
 
@@ -48,6 +49,7 @@ const Pin = /* GraphQL */ `
 		lessonUids: [String]
 		addToRoute: AddPinToRouteInput
 		image: Upload
+		imageUrl: String
 		video: String
 	}
 
@@ -77,6 +79,7 @@ const Pin = /* GraphQL */ `
 		lessonUids: [String]
 		addToRoute: AddPinToRouteInput
 		image: Upload
+		imageUrl: String
 		video: String
 	}
 

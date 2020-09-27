@@ -35,6 +35,9 @@ export const updateRoute = async (
 	if (args.video === null)
 		await removeEdge({ fromUid: uid, pred: 'video', toUid: '*' })
 
+	if (args.imageUrl === null)
+		await removeEdge({ fromUid: uid, pred: 'imageUrl', toUid: '*' })
+
 	if (image) {
 		const pinImage = await Image.createImage(image)
 		await createEdge(

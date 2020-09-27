@@ -9,6 +9,7 @@ const Route = /* GraphQL */ `
 		pins: PinConnection
 		maps: MapConnection
 		image: Image
+		imageUrl: String
 		video: String
 	}
 
@@ -24,6 +25,7 @@ const Route = /* GraphQL */ `
 		addPin: String
 		description: String
 		image: Upload
+		imageUrl: String
 		video: String
 	}
 

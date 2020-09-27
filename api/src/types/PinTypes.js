@@ -26,6 +26,7 @@ export type PinType = {
 		isLast: boolean,
 	},
 	image: ImageType,
+	imageUrl: string
 }
 
 export type NewPinData = {
@@ -57,5 +58,6 @@ export type UpdatePinData = {
 	},
 	deleted: boolean,
 	video: string,
+	imageUrl: string,
 	image: ImageUpload,
 }
