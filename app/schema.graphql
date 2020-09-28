@@ -280,6 +280,7 @@ input NewClassroomInput {
 input NewPinInput {
   title: String
   draft: Boolean
+  color: String
   lat: Float!
   lng: Float!
   description: String
@@ -344,6 +345,7 @@ type Pin implements Node {
   image: Image
   imageUrl: String
   video: String
+  color: String
 }
 
 type PinConnection implements Connection {
@@ -437,6 +439,7 @@ type Route implements Node {
   image: Image
   imageUrl: String
   video: String
+  color: String
 }
 
 type RouteConnection implements Connection {
@@ -540,6 +543,7 @@ input UpdatePinInput {
   image: Upload
   video: String
   imageUrl: String
+  color: String
 }
 
 input UpdateRouteInput {
@@ -550,6 +554,7 @@ input UpdateRouteInput {
   image: Upload
   video: String
   imageUrl: String
+  color: String
 }
 
 input UpdateUserInput {

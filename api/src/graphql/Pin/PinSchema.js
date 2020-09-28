@@ -14,6 +14,7 @@ const Pin = /* GraphQL */ `
 		image: Image
 		imageUrl: String
 		video: String
+		color: String
 	}
 
 	type PinInRoute {
@@ -51,6 +52,7 @@ const Pin = /* GraphQL */ `
 		image: Upload
 		imageUrl: String
 		video: String
+		color: String
 	}
 
 	enum Position {
@@ -81,6 +83,7 @@ const Pin = /* GraphQL */ `
 		image: Upload
 		imageUrl: String
 		video: String
+		color: String
 	}
 
 	input PinSortParameter {

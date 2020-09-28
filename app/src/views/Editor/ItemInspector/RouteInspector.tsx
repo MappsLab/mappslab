@@ -8,6 +8,7 @@ import { Button } from '../../../components/Buttons'
 import { useUpdateRouteMutation, UpdateRouteVariables } from '../../../queries'
 import { getRouteDistance } from '../../../utils/maps'
 import { useCurrentViewer } from '../../../providers/CurrentViewer'
+import { EditableColor } from '../../../components/Inspector/EditableColor'
 
 const { useState } = React
 
@@ -62,6 +63,12 @@ export const RouteInspector = ({ route, mapUid }: Props) => {
 				initialValue={route.description || ''}
 				viewerCanEdit={canEdit}
 				autoFocus
+			/>
+			<EditableColor
+				name="color"
+				initialValue={route.color || '#F44336'}
+				viewerCanEdit={canEdit}
+				updateFn={submitUpdate}
 			/>
 			<EditableMedia
 				submitUpdate={submitUpdate}

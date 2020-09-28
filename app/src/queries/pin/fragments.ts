@@ -27,6 +27,7 @@ export const pinFragment = gql`
 		}
 		video
 		imageUrl
+		color
 		image {
 			...ImageFragment
 		}
