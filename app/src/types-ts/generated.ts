@@ -384,6 +384,7 @@ export type NewClassroomInput = {
 export type NewPinInput = {
 	title?: Maybe<Scalars['String']>
 	draft?: Maybe<Scalars['Boolean']>
+	color?: Maybe<Scalars['String']>
 	lat: Scalars['Float']
 	lng: Scalars['Float']
 	description?: Maybe<Scalars['String']>
@@ -440,6 +441,7 @@ export interface Pin extends Node {
 	lat: Scalars['Float']
 	lng: Scalars['Float']
 	description?: Maybe<Scalars['String']>
+	color?: Maybe<Scalars['String']>
 	owner?: Maybe<User>
 	maps?: Maybe<MapConnection>
 	route?: Maybe<PinInRoute>
@@ -597,6 +599,7 @@ export interface Route extends Node {
 	title?: Maybe<Scalars['String']>
 	description?: Maybe<Scalars['String']>
 	owner: User
+	color?: Maybe<Scalars['String']>
 	pins?: Maybe<PinConnection>
 	maps?: Maybe<MapConnection>
 	image?: Maybe<Image>
@@ -718,6 +721,7 @@ export type UpdatePasswordInput = {
 export type UpdatePinInput = {
 	uid?: Maybe<Scalars['String']>
 	title?: Maybe<Scalars['String']>
+	color?: Maybe<Scalars['String']>
 	lat?: Maybe<Scalars['Float']>
 	lng?: Maybe<Scalars['Float']>
 	description?: Maybe<Scalars['String']>
@@ -732,6 +736,7 @@ export type UpdatePinInput = {
 export type UpdateRouteInput = {
 	uid: Scalars['String']
 	title?: Maybe<Scalars['String']>
+	color?: Maybe<Scalars['String']>
 	addPin?: Maybe<Scalars['String']>
 	description?: Maybe<Scalars['String']>
 	image?: Maybe<Scalars['Upload']>

@@ -32,4 +32,5 @@ export type UpdateRouteData = NewRouteData & {
 	video: String,
 	image: ImageUpload,
 	imageUrl: String,
+	color: String,
 }

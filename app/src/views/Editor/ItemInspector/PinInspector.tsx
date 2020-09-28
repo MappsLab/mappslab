@@ -17,6 +17,7 @@ import {
 } from '../../../queries'
 import { useInspector } from './Provider'
 import { useGoogleMap } from '@react-google-maps/api'
+import { EditableColor } from '../../../components/Inspector/EditableColor'
 
 const { useState } = React
 
@@ -71,13 +72,13 @@ export const PinInspector = ({ pin, mapUid }: Props) => {
 		closeInspector()
 	}
 
+	const googleMapsLink = `http://www.google.com/maps/place/${pin.lat},${
+		pin.lng
+	}/@${pin.lat},${pin.lng},${googleMap?.getZoom()}z`
+
 	return (
 		<React.Fragment key={pin.uid}>
-			{linkifyDecorator(
-				`http://www.google.com/maps/place/${pin.lat},${pin.lng}/@${pin.lat},${pin.lng},${googleMap?.getZoom()}z`,
-				'Open in Google Maps',
-				'pin-map-link',
-			)}
+			{linkifyDecorator(googleMapsLink, 'Open in Google Maps', 'pin-map-link')}
 			<EditableText
 				name="title"
 				updateFn={submitUpdate}
@@ -95,6 +96,12 @@ export const PinInspector = ({ pin, mapUid }: Props) => {
 				fontSize="p"
 				initialValue={pin.description || ''}
 				viewerCanEdit={canEdit}
+			/>
+			<EditableColor
+				name="color"
+				initialValue={pin.color || '#F44336'}
+				viewerCanEdit={canEdit}
+				updateFn={submitUpdate}
 			/>
 			<EditableMedia
 				submitUpdate={submitUpdate}

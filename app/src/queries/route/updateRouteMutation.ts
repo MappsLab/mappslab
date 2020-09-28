@@ -11,6 +11,7 @@ export const updateRouteMutation = gql`
 		$image: Upload
 		$imageUrl: String
 		$video: String
+		$color: String
 	) {
 		updateRoute(
 			input: {
@@ -20,12 +21,14 @@ export const updateRouteMutation = gql`
 				image: $image
 				imageUrl: $imageUrl
 				video: $video
+				color: $color
 			}
 		) {
 			uid
 			title
 			description
 			imageUrl
+			color
 			image {
 				uid
 				original {

@@ -15,6 +15,7 @@ const updatePinMutation = gql`
 		$image: Upload
 		$video: String
 		$imageUrl: String
+		$color: String
 	) {
 		updatePin(
 			input: {
@@ -27,6 +28,7 @@ const updatePinMutation = gql`
 				image: $image
 				video: $video
 				imageUrl: $imageUrl
+				color: $color
 			}
 		) {
 			...PinFragment

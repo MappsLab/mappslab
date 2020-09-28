@@ -11,6 +11,7 @@ const Route = /* GraphQL */ `
 		image: Image
 		imageUrl: String
 		video: String
+		color: String
 	}
 
 	input NewRouteInput {
@@ -27,6 +28,7 @@ const Route = /* GraphQL */ `
 		image: Upload
 		imageUrl: String
 		video: String
+		color: String
 	}
 
 	input GetRouteInput {
