@@ -113,7 +113,7 @@ export const Pin = ({ pin }: PinProps) => {
 				fillColor: pin.color || '#F44336',
 				fillOpacity: 1,
 				strokeColor: '#000000',
-				strokeWeight: 1,
+				strokeWeight: isHovered ? 2 : 1,
 				scale: 0.075,
 				anchor: new google.maps.Point(384 / 2, 512),
 			}}

@@ -39,9 +39,15 @@ export const EditableColor = ({
 		submitChange(color.hex)
 	}
 
+	const colors = ['#f44336', '#2196f3', '#4caf50', '#ffeb3b', '#ff9800']
+
 	return (
 		<Wrapper>
-			<CirclePicker color={value || undefined} onChange={handleChange} />
+			<CirclePicker
+				color={value || undefined}
+				onChange={handleChange}
+				colors={colors}
+			/>
 		</Wrapper>
 	)
 }

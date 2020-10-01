@@ -85,8 +85,8 @@ export const Route = ({ route, active, clickable }: RouteProps) => {
 				options={{
 					path,
 					strokeColor: route.color || '#F44336',
-					strokeOpacity: active || isHovered ? 0.8 : 0.4,
-					strokeWeight: active || isHovered ? 6 : 4,
+					strokeOpacity: active || isHovered ? 1 : 0.8,
+					strokeWeight: active || isHovered ? 8 : 5,
 					clickable: clickable,
 				}}
 			/>
