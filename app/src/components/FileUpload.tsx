@@ -50,8 +50,12 @@ export const FileUpload = ({
 		if (!e || !e.target || !e.target.files) return
 		setIsLoading(true)
 		const inputFile = e.target.files[0]
+		const tooBig = inputFile.size > 5242880
 		const error = validate ? await validate(inputFile) : undefined
-		if (error) {
+		if (tooBig) {
+			setValidationError('File too large. Uploads must be less than 5mb')
+			setIsLoading(false)
+		} else if (error) {
 			setValidationError(error)
 			setIsLoading(false)
 		} else {
