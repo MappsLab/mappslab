@@ -15,20 +15,26 @@ const parseAndUpload = async (
 	name: string,
 	size?: number,
 ): Promise<ImageSize> => {
-	const parsed = size
-		? await resizeImage(source, size)
-		: await parseImage(source)
-	const { info, data } = parsed
-	const fileName = `${imageDirectory}/${name}/w_${size || 'original'}.${
-		info.format
-	}`
-	const uploaded = await upload(data, fileName)
-	const { width, height, format } = info
-	return {
-		uri: uploaded.Key,
-		width,
-		height,
-		format,
+	try {
+		const parsed = size
+			? await resizeImage(source, size)
+			: await parseImage(source)
+		const { info, data } = parsed
+		const fileName = `${imageDirectory}/${name}/w_${size || 'original'}.${
+			info.format
+		}`
+		const uploaded = await upload(data, fileName)
+		const { width, height, format } = info
+		return {
+			uri: uploaded.Key,
+			width,
+			height,
+			format,
+		}
+	} catch (err) {
+		console.error('Error uploading image')
+		console.log(err)
+		throw err
 	}
 }
 

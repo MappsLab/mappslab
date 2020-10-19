@@ -33,6 +33,7 @@ export const updatePin = async (args: UpdatePinData): Promise<PinType> => {
 		await removeEdge({ fromUid: uid, pred: 'color', toUid: '*' })
 
 	if (image) {
+		console.log({ image })
 		const pinImage = await Image.createImage(image)
 		await createEdge(
 			{ fromUid: uid, pred: 'has_image', toUid: pinImage.uid },
