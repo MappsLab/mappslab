@@ -13,7 +13,6 @@ export const updatePin = async (
 		throw Error(
 			'You must be logged in to create new pins. Please log in and try again.',
 		)
-	console.log({ input })
 	const existingPin = await ctx.models.Pin.getPin(input.uid)
 	if (!existingPin) throw new Error('This pin does not exist')
 	if (existingPin.owner.uid !== ctx.viewer.uid)

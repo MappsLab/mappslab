@@ -28,11 +28,6 @@ const server = new ApolloServer({
 const app = express()
 app.use(cors())
 
-app.use((req, res, next) => {
-	if (req.method === 'POST' && req.body) console.log(req.body)
-	next()
-})
-
 app.use(path, getCurrentViewer)
 
 server.applyMiddleware({ app, path })

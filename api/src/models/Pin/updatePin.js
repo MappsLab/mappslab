@@ -5,53 +5,43 @@ import { clean, validateUpdate } from './pinDBSchema'
 import Image from '../Image'
 
 export const updatePin = async (args: UpdatePinData): Promise<PinType> => {
-	try {
-		const { uid, addToMaps, image, ...pinData } = args
-		console.log(args)
-		const cleaned = await clean(pinData)
-		// $FlowFixMe --- this is kind of a mess. Make separate out addPinToMaps / addPinToClassrooms
-		const validatedPinData = await validateUpdate(cleaned)
-		// $FlowFixMe
-		const updatedPin: PinType = await mutateNode(uid, {
-			data: validatedPinData,
-		})
+	const { uid, addToMaps, image, ...pinData } = args
+	const cleaned = await clean(pinData)
+	// $FlowFixMe --- this is kind of a mess. Make separate out addPinToMaps / addPinToClassrooms
+	const validatedPinData = await validateUpdate(cleaned)
+	// $FlowFixMe
+	const updatedPin: PinType = await mutateNode(uid, {
+		data: validatedPinData,
+	})
 
-		if (addToMaps) {
-			await Promise.all(
-				addToMaps.map((mapUid) =>
-					createEdge(
-						{ fromUid: mapUid, pred: 'has_pin', toUid: updatedPin.uid },
-						{},
-					),
+	if (addToMaps) {
+		await Promise.all(
+			addToMaps.map((mapUid) =>
+				createEdge(
+					{ fromUid: mapUid, pred: 'has_pin', toUid: updatedPin.uid },
+					{},
 				),
-			)
-		}
-
-		if (args.video === null)
-			await removeEdge({ fromUid: uid, pred: 'video', toUid: '*' })
-
-		if (args.imageUrl === null)
-			await removeEdge({ fromUid: uid, pred: 'imageUrl', toUid: '*' })
-
-		if (args.color === null)
-			await removeEdge({ fromUid: uid, pred: 'color', toUid: '*' })
-
-		console.log({ image })
-
-		if (image) {
-			console.log({ image })
-			const pinImage = await Image.createImage(image)
-			await createEdge(
-				{ fromUid: uid, pred: 'has_image', toUid: pinImage.uid },
-				{ unique: true },
-			)
-		} else if (image === null) {
-			await removeEdge({ fromUid: uid, pred: 'has_image', toUid: '*' })
-		}
-		return updatedPin
-	} catch (err) {
-		console.log('updatePin err')
-		console.log(err)
-		throw err
+			),
+		)
 	}
+
+	if (args.video === null)
+		await removeEdge({ fromUid: uid, pred: 'video', toUid: '*' })
+
+	if (args.imageUrl === null)
+		await removeEdge({ fromUid: uid, pred: 'imageUrl', toUid: '*' })
+
+	if (args.color === null)
+		await removeEdge({ fromUid: uid, pred: 'color', toUid: '*' })
+
+	if (image) {
+		const pinImage = await Image.createImage(image)
+		await createEdge(
+			{ fromUid: uid, pred: 'has_image', toUid: pinImage.uid },
+			{ unique: true },
+		)
+	} else if (image === null) {
+		await removeEdge({ fromUid: uid, pred: 'has_image', toUid: '*' })
+	}
+	return updatedPin
 }

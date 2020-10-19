@@ -40,9 +40,7 @@ export const upload = async (
 			(err, response) => {
 				if (err) throw err
 				debug(`Uploaded file: ${name}`)
-				console.log(response)
 				resolve(response)
 			},
 		)
 	})
-

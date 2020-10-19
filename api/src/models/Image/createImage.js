@@ -32,8 +32,6 @@ const parseAndUpload = async (
 			format,
 		}
 	} catch (err) {
-		console.error('Error uploading image')
-		console.log(err)
 		throw err
 	}
 }

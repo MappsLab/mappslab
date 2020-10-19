@@ -19,8 +19,6 @@ const debug = require('debug')('api:images')
 
 const createSlices = async (file: string, outputDir: string): Promise<void> =>
 	new Promise((resolve) => {
-		console.log(file)
-		console.log(outputDir)
 		const mapSlicer = new MapSlicer({
 			file, // (required) Huge image to slice
 			output: `${outputDir}/{z}/{x}/{y}.png`, // Output file pattern
@@ -36,7 +34,6 @@ const createSlices = async (file: string, outputDir: string): Promise<void> =>
 			// autoStart: false,                  // (default: false) Automatically runs .start() if true
 			// gm, // (optional) Alternative way to specify the GraphicsMagic library
 		})
-		console.log('??')
 
 		mapSlicer.on('start', (files) =>
 			debug(`Starting to process ${files} files.`),
