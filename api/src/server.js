@@ -29,7 +29,7 @@ const app = express()
 app.use(cors())
 
 app.use((req, res, next) => {
-	console.log(req)
+	if (req.method === 'POST' && req.body) console.log(req.body)
 	next()
 })
 
