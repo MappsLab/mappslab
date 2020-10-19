@@ -24,8 +24,15 @@ const server = new ApolloServer({
 	playground: !isProduction,
 	introspection: !isProduction,
 })
+
 const app = express()
 app.use(cors())
+
+app.use((req, res, next) => {
+	console.log(req)
+	next()
+})
+
 app.use(path, getCurrentViewer)
 
 server.applyMiddleware({ app, path })
