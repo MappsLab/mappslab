@@ -9,7 +9,7 @@ const wsUri =
 const imageBucketRoot =
 	process.env.AWS_BUCKET_ROOT || process.env.NODE_ENV === 'development'
 		? 'http://mappslab-beta.localhost:4572/'
-		: 'https://mappslab-beta.s3.amazonaws.com/'
+		: 'https://s3.amazonaws.com/'
 
 // TODO: This doesn't actually work on localhost, the KML must
 // be on a public URL.
@@ -18,7 +18,7 @@ const imageBucketRoot =
 const dataLayerRoot =
 	process.env.AWS_BUCKET_ROOT || process.env.NODE_ENV === 'development'
 		? 'http://mappslab-beta.localhost:4572/'
-		: 'https://mappslab-beta.s3.amazonaws.com/'
+		: 'https://s3.amazonaws.com/'
 
 export const config = {
 	apiRoot,
