@@ -18,7 +18,7 @@ const imageBucketRoot =
 const dataLayerRoot =
 	process.env.AWS_BUCKET_ROOT || process.env.NODE_ENV === 'development'
 		? 'http://mappslab-beta.localhost:4572/'
-		: 'https://s3.amazonaws.com/'
+		: 'https://s3.amazonaws.com/mappslab-beta'
 
 export const config = {
 	apiRoot,

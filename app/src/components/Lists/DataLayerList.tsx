@@ -19,6 +19,7 @@ export const DataLayerList = ({
 	title,
 	viewerCanAdd,
 	onItemClick,
+	onSearchResultClick,
 	create,
 	remove,
 	items,
@@ -27,7 +28,6 @@ export const DataLayerList = ({
 		DataLayersResponse,
 		DataLayersInput
 	>(dataLayersQuery)
-	console.log({ dataLayersQuery })
 
 	const [searchResults] = unwindEdges(data?.dataLayers)
 	const buttons = definitely([
@@ -53,7 +53,8 @@ export const DataLayerList = ({
 	}
 
 	const handleSearchResultClick = (result: DataLayer) => {
-		if (onItemClick) onItemClick(result)
+		console.log(onSearchResultClick, result)
+		if (onSearchResultClick) onSearchResultClick(result)
 	}
 
 	return (

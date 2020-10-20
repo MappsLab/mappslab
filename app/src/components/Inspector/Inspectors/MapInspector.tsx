@@ -93,7 +93,8 @@ export const MapInspector = ({ mapUid }: Props) => {
 			uid: map.uid,
 			associateDataLayer: { uid },
 		}
-		await updateMap({ variables })
+		const r = await updateMap({ variables })
+		console.log({ r })
 	}
 
 	const removeDataLayer = async (dataLayer: DataLayer) => {
@@ -134,11 +135,12 @@ export const MapInspector = ({ mapUid }: Props) => {
 
 	const classroomItems = map?.classroom ? [map.classroom] : []
 
-
 	return (
 		<React.Fragment>
 			<EditableText name="description" initialValue={map.description || ''} />
-			<Button to={`/maps/${map.uid}`} onClick={() => inspectItem(null)}>Go to map →</Button>
+			<Button to={`/maps/${map.uid}`} onClick={() => inspectItem(null)}>
+				Go to map →
+			</Button>
 			<ClassroomList
 				title="Classroom"
 				items={classroomItems}
