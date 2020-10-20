@@ -4,7 +4,6 @@ import fs from 'fs'
 import batchPromises from 'batch-promises'
 import uuidv1 from 'uuid/v1'
 import rimraf from 'rimraf'
-
 import path from 'path'
 import { walkDir } from 'smart-fs'
 import { createNodeWithEdges } from 'Database'
@@ -18,12 +17,12 @@ import config from '../../config'
 const debug = require('debug')('api:images')
 
 const createSlices = async (file: string, outputDir: string): Promise<void> =>
-	new Promise((resolve) => {
+	new Promise((resolve, reject) => {
 		const mapSlicer = new MapSlicer({
 			file, // (required) Huge image to slice
 			output: `${outputDir}/{z}/{x}/{y}.png`, // Output file pattern
 			imageMagick: true, // (default: false) If (true) then use ImageMagick instead of GraphicsMagick
-			background: '#0000000', // (default: '#FFFFFFFF') Background color to be used for the tiles. More: http://ow.ly/rsluD
+			background: '#000000', // (default: '#FFFFFFFF') Background color to be used for the tiles. More: http://ow.ly/rsluD
 			tmp: '.tmp', // (default: '.tmp') Temporary directory to be used to store helper files
 			parallelLimit: 3, // (default: 5) Maximum parallel tasks to be run at the same time (warning: processes can consume a lot of memory!)
 			minWidth: 200, // See explanation about Size detection below
@@ -38,16 +37,24 @@ const createSlices = async (file: string, outputDir: string): Promise<void> =>
 		mapSlicer.on('start', (files) =>
 			debug(`Starting to process ${files} files.`),
 		)
-		mapSlicer.on('error', (err) => debug(err))
-		mapSlicer.on('warning', (err) => debug(err))
-		mapSlicer.on('progress', (progress) =>
-			debug(`Progress: ${Math.round(progress * 100)}%`),
-		)
+		mapSlicer.on('error', (err) => {
+			debug(err)
+		})
+		mapSlicer.on('warning', (err) => {
+			debug(err)
+		})
+		mapSlicer.on('progress', (progress) => {
+			debug(`Progress: ${Math.round(progress * 100)}%`)
+			if (progress === 1) resolve()
+		})
 		mapSlicer.on('end', () => {
 			debug('Finished processing slices.')
 			resolve()
 		})
-		mapSlicer.start()
+		mapSlicer.start().catch((err) => {
+			debug(err)
+			reject(err)
+		})
 	})
 
 const tileDir = config.get('aws.tileDirectory')
@@ -63,7 +70,6 @@ const uploadSlices = async (
 		const filename = path.join(baseUri, file)
 		return upload(buffer, filename)
 	})
-	//
 }
 
 const isDirectory = (source) => fs.lstatSync(source).isDirectory()
@@ -102,7 +108,6 @@ export const createTileSet = async (
 	const uploadTo = [tileDir, uuid].join('/')
 	await uploadSlices(tempFileDir, uploadTo)
 	const maxZoom = await getMaxZoom(path.join(tempDir, uuid))
-	// const { maxZoom,}
 	await cleanup(path.join(tempDir, uuid))
 	const baseUri = path.join(bucketName, uploadTo)
 
@@ -119,6 +124,6 @@ export const createTileSet = async (
 		{},
 	]
 	const newTileset = await createNodeWithEdges(validated, [imageEdge])
-	// return { uid }
+
 	return newTileset
 }
