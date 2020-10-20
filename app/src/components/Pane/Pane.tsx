@@ -10,7 +10,7 @@ interface WrapperProps {
 }
 
 const Wrapper = styled.div`
-	${({ theme, allowOverflow }: WrapperProps) => css`
+	${({ allowOverflow }: WrapperProps) => css`
 		background-color: white;
 		border-radius: 2px;
 		position: relative;

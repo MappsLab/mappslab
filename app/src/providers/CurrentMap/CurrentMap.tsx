@@ -32,6 +32,8 @@ interface CurrentMapContextValue extends MapReducer {
 	zoomOut: () => void
 	setBaseImage: (tileset: Tileset | null) => void
 
+	applyDataLayer: (src: string) => () => void
+
 	// Map Machine State
 	mode: State<ModeContext, ModeEvent>
 	transitionMode: Interpreter<ModeContext, ModeStateSchema, ModeEvent>['send']
@@ -154,6 +156,17 @@ export const CurrentMapProvider = ({ children }: CurrentMapProps) => {
 		removeListeners(listeners)
 	}
 
+	const applyDataLayer = (src: string) => {
+		const layer = new google.maps.KmlLayer({
+			url: src,
+			// suppressInfoWindows: true,
+			preserveViewport: false,
+			map: googleMap,
+		})
+		console.log(layer)
+		return () => layer.setMap(null)
+	}
+
 	const value: CurrentMapContextValue = {
 		zoomIn,
 		zoomOut,
@@ -165,6 +178,7 @@ export const CurrentMapProvider = ({ children }: CurrentMapProps) => {
 		service,
 		setBaseImage,
 		createNewPin,
+		applyDataLayer,
 		...reducerState,
 	}
 

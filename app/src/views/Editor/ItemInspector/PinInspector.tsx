@@ -24,9 +24,10 @@ const { useState } = React
 interface Props {
 	pin: Pin
 	mapUid: string
+	openMedia: () => void
 }
 
-export const PinInspector = ({ pin, mapUid }: Props) => {
+export const PinInspector = ({ pin, openMedia, mapUid }: Props) => {
 	const googleMap = useGoogleMap()
 	const { viewer } = useCurrentViewer()
 	const [updatePin] = useUpdatePinMutation({ mapUid })
@@ -34,7 +35,6 @@ export const PinInspector = ({ pin, mapUid }: Props) => {
 	const { closeInspector } = useInspector()
 	const { ask } = useQuestion()
 	const [editMode, setEditMode] = useState(false)
-
 	const viewerIsOwner = Boolean(
 		viewer && pin.owner && pin.owner.uid === viewer.uid,
 	)
@@ -109,6 +109,7 @@ export const PinInspector = ({ pin, mapUid }: Props) => {
 				video={pin.video}
 				imageUrl={pin.imageUrl}
 				viewerCanEdit={canEdit}
+				onClick={editMode ? undefined : openMedia}
 			/>
 			{viewerIsOwner && canEdit === false ? (
 				<NativeListener onClick={enterEdit}>

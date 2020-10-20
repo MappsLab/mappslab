@@ -1,19 +1,16 @@
 import * as React from 'react'
-import { useState } from 'react'
 import { useCurrentMap } from '../../providers/CurrentMap'
 import { unwindEdges } from '@good-idea/unwind-edges'
 import { Pin } from './Pin'
 import { Route } from './Route'
 import { DataLayer } from './DataLayer'
 
-const { useEffect } = React
-
 interface MapDataProps {
 	enabledLayers: string[]
 }
 
-export const MapData = ({enabledLayers}: MapDataProps) => {
-	const { mapData, setMapUid } = useCurrentMap()
+export const MapData = ({ enabledLayers }: MapDataProps) => {
+	const { mapData } = useCurrentMap()
 
 	if (!mapData) return null
 
@@ -23,19 +20,12 @@ export const MapData = ({enabledLayers}: MapDataProps) => {
 
 	return (
 		<React.Fragment>
-			{pins && pins.map((p) => <Pin key={p.uid} pin={p}/>)}
-			{routes && routes.map((r) => <Route key={r.uid} route={r}/>)}
+			{pins && pins.map((p) => <Pin key={p.uid} pin={p} />)}
+			{routes && routes.map((r) => <Route key={r.uid} route={r} />)}
 			{dataLayers &&
 				dataLayers
 					.filter((l) => enabledLayers.includes(l.uid))
-					.map((l) => (
-						<DataLayer
-							key={l.uid}
-							dataLayer={l}
-							applyDataLayer={this.props.applyDataLayer}
-						/>
-					))
-			}
+					.map((l) => <DataLayer key={l.uid} dataLayer={l} />)}
 		</React.Fragment>
 	)
 }

@@ -9,6 +9,9 @@ import { RouteInspector } from './RouteInspector'
 import { Header, CloseButton } from './styled'
 import { createGlobalStyle } from 'styled-components'
 import { useCurrentMap } from '../../../providers/CurrentMap'
+import { MediaModal } from './MediaModal'
+
+const { useState } = React
 
 const GlobalStyles = createGlobalStyle`
 	.gm-style-iw {
@@ -27,6 +30,11 @@ export const ItemInspector = () => {
 	const { mapUid } = useCurrentMap()
 	const { item, position, closeInspector } = useInspector()
 
+	const [mediaOpen, setMediaOpen] = useState(false)
+
+	const openMedia = () => setMediaOpen(true)
+	const closeMedia = () => setMediaOpen(false)
+
 	if (!item || !mapUid) return null
 
 	if (item.__typename !== 'Pin' && item.__typename !== 'Route') {
@@ -34,6 +42,7 @@ export const ItemInspector = () => {
 		throw new Error(`There is no inspector for item type "${item.__typename}"`)
 	}
 
+	console.log({ mediaOpen })
 	return (
 		<React.Fragment>
 			<GlobalStyles />
@@ -46,13 +55,17 @@ export const ItemInspector = () => {
 						</NativeListener>
 					</Header>
 					{item.__typename === 'Pin' && (
-						<PinInspector mapUid={mapUid} pin={item} />
+						<PinInspector openMedia={openMedia} mapUid={mapUid} pin={item} />
 					)}
 					{item.__typename === 'Route' && (
 						<RouteInspector route={item} mapUid={mapUid} />
 					)}
 				</Pane>
 			</InfoWindow>
+
+			{mediaOpen && item.__typename === 'Pin' ? (
+				<MediaModal pin={item} close={closeMedia} />
+			) : null}
 		</React.Fragment>
 	)
 }

@@ -16,12 +16,21 @@ const { useState } = React
  * Styles
  */
 
+interface MediaWrapperProps {
+	onClick?: () => void
+}
+
 const MediaWrapper = styled.div`
-	${({ theme }) => css`
+	${({ theme, onClick }) => css`
 		border: 1px solid ${theme.color.lightGray};
 		border-radius: 2px;
 		min-height: 30px;
 		position: relative;
+		cursor: ${onClick ? 'pointer' : 'inherit'};
+		img,
+		video {
+			display: block;
+		}
 	`}
 `
 
@@ -68,6 +77,7 @@ interface Props {
 	viewerCanEdit?: boolean
 	alt?: string
 	label?: string
+	onClick?: () => void
 }
 
 export const EditableMedia = ({
@@ -85,6 +95,7 @@ export const EditableMedia = ({
 	submitUpdate,
 	alt,
 	label,
+	onClick,
 }: Props) => {
 	if (!viewerCanEdit && !image && !video && !imageUrl) return null
 	const { ask } = useQuestion()
@@ -127,7 +138,7 @@ export const EditableMedia = ({
 	return (
 		<React.Fragment>
 			{label && <Header2>{label}</Header2>}
-			<MediaWrapper>
+			<MediaWrapper onClick={onClick}>
 				{viewerCanEdit && (image || video || imageUrl) ? (
 					<ButtonWrapper>
 						<NativeListener onClick={removeFn}>

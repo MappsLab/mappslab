@@ -8,9 +8,7 @@ import { MapData } from './MapData'
 import { useCurrentViewer } from '../../providers/CurrentViewer'
 import { Tools } from './Tools'
 import { NotLoggedIn } from './NotLoggedIn'
-import _ from 'lodash'
 import { unwindEdges } from '@good-idea/unwind-edges'
-import { useCreatePinMutation } from '../../queries/pin'
 import { MapEvents } from './MapEvents'
 import { InspectorProvider, ItemInspector } from './ItemInspector'
 
@@ -23,7 +21,7 @@ interface MapEditorProps {
 type MapEvent<EventType> = {
 	payload: EventType
 	actions: {
-		[key: string]: (any) => void
+		[key: string]: (arg: any) => void
 	}
 }
 
@@ -56,7 +54,7 @@ export const MapEditor = ({ mapUid }: MapEditorProps) => {
 							setEnabledLayers((prevState) => [...prevState, id])
 						}
 						disableLayer={(id) =>
-							setEnabledLayers((prevState) => _.omit(prevState, id))
+							setEnabledLayers((prevState) => prevState.filter((l) => l !== id))
 						}
 						layers={layers || []}
 					/>
