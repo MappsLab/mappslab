@@ -11,6 +11,7 @@ interface DataLayerProps {
 
 export const DataLayer = ({ dataLayer }: DataLayerProps) => {
 	const { applyDataLayer } = useCurrentMap()
+	console.log(dataLayer)
 	useEffect(() => {
 		const url = `${config.dataLayerRoot}${dataLayer.uri}`
 		const removeLayer = applyDataLayer(url)
