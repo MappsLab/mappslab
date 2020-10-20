@@ -163,7 +163,6 @@ export const CurrentMapProvider = ({ children }: CurrentMapProps) => {
 			preserveViewport: false,
 			map: googleMap,
 		})
-		console.log(layer)
 		return () => layer.setMap(null)
 	}
 
